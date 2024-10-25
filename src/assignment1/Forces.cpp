@@ -1,19 +1,18 @@
 #include <array>
-#include <iterator>
 #include <vector>
 
 #include "../Particle.h"
 #include "../utils/ArrayUtils.h"
 
-void computeForceSinglePlanet(int planetIdx, std::vector<Particle>& planets);
+void computeGravitySinglePlanet(int planetIdx, std::vector<Particle>& planets);
 
-void computeForces(std::vector<Particle>& planets) {
+void computeGravity(std::vector<Particle>& planets) {
     for (int planetIdx = 0; planetIdx < planets.size(); planetIdx++) {
-        computeForceSinglePlanet(planetIdx, planets);
+        computeGravitySinglePlanet(planetIdx, planets);
     }  
 }
 
-void computeForceSinglePlanet(int planetIdx, std::vector<Particle>& planets) {
+void computeGravitySinglePlanet(int planetIdx, std::vector<Particle>& planets) {
     std::array<double, 3> newForce;
     Particle planet = planets[planetIdx];  
 
