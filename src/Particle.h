@@ -65,6 +65,10 @@ public:
 
   const std::array<double, 3> &getOldF() const;
 
+  void setF(std::array<double, 3> newF);
+
+  void setOldF(std::array<double, 3> newF);
+
   double getM() const;
 
   int getType() const;
