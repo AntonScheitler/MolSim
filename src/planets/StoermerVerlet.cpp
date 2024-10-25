@@ -4,10 +4,10 @@
 #include <cmath>
 #include <functional>
 
-// computes the updated positions for the given array of planets in-place
+// computes the updated positions for the given vector of planets in-place
 // @param planets the planets to compute the positions of
 // @param deltaT the size of timesteps used in the simulation
-void computePositions(std::array<Particle, 3> &planets, double deltaT) {
+void computePositions(std::vector<Particle> &planets, double deltaT) {
   for (Particle &planet : planets) {
     std::array<double, 3> posFromVel = ArrayUtils::elementWiseScalarOp(
         deltaT, planet.getV(), std::multiplies<>());
@@ -26,10 +26,10 @@ void computePositions(std::array<Particle, 3> &planets, double deltaT) {
   }
 }
 
-// computes the updated velocities for the given array of planets in-place
+// computes the updated velocities for the given vector of planets in-place
 // @param planets the planets to compute the velocities of
 // @param deltaT the size of timesteps used in the simulation
-void computeVelocities(std::array<Particle, 3> &planets, double deltaT) {
+void computeVelocities(std::vector<Particle> &planets, double deltaT) {
   for (Particle &planet : planets) {
     double coefficient = deltaT / (2 * planet.getM());
     std::array<double, 3> deltaV = ArrayUtils::elementWiseScalarOp(

@@ -1,27 +1,12 @@
-
 #include "FileReader.h"
-#include "outputWriter/XYZWriter.h"
-#include "utils/ArrayUtils.h"
-
+#include "planets/Gravity.h"
+#include "planets/StoermerVerlet.h"
+#include "outputWriter/VTKWriter.h"
 #include <iostream>
 #include <list>
+#include <vector>
 
 /**** forward declaration of the calculation functions ****/
-
-/**
- * calculate the force for all particles
- */
-void calculateF();
-
-/**
- * calculate the position for all particles
- */
-void calculateX();
-
-/**
- * calculate the position for all particles
- */
-void calculateV();
 
 /**
  * plot the particles to a xyz-file
@@ -33,7 +18,8 @@ constexpr double end_time = 1000;
 constexpr double delta_t = 0.014;
 
 // TODO: what data structure to pick?
-std::list<Particle> particles;
+std::vector<Particle> particles;
+std::list<Particle> particlesList;
 
 int main(int argc, char *argsv[]) {
 
@@ -44,7 +30,11 @@ int main(int argc, char *argsv[]) {
   }
 
   FileReader fileReader;
-  fileReader.readFile(particles, argsv[1]);
+  // todo rebuild list to vector?
+  fileReader.readFile(particlesList, argsv[1]);
+  for (Particle planet : particlesList) {
+    particles.push_back(planet);
+  }
 
   double current_time = start_time;
 
@@ -53,11 +43,11 @@ int main(int argc, char *argsv[]) {
   // for this loop, we assume: current x, current f and current v are known
   while (current_time < end_time) {
     // calculate new x
-    calculateX();
+    computePositions(particles, delta_t);
     // calculate new f
-    calculateF();
+    computeGravity(particles);
     // calculate new v
-    calculateV();
+    computeVelocities(particles, delta_t);
 
     iteration++;
     if (iteration % 10 == 0) {
@@ -72,33 +62,13 @@ int main(int argc, char *argsv[]) {
   return 0;
 }
 
-void calculateF() {
-  std::list<Particle>::iterator iterator;
-  iterator = particles.begin();
-
-  for (auto &p1 : particles) {
-    for (auto &p2 : particles) {
-      // @TODO: insert calculation of forces here!
-    }
-  }
-}
-
-void calculateX() {
-  for (auto &p : particles) {
-    // @TODO: insert calculation of position updates here!
-  }
-}
-
-void calculateV() {
-  for (auto &p : particles) {
-    // @TODO: insert calculation of veclocity updates here!
-  }
-}
-
 void plotParticles(int iteration) {
-
   std::string out_name("MD_vtk");
 
-  outputWriter::XYZWriter writer;
-  writer.plotParticles(particles, out_name, iteration);
+  outputWriter::VTKWriter writer;
+  writer.initializeOutput(particles.size());
+  for (Particle planet : particles) {
+      writer.plotParticle(planet);
+  }
+  writer.writeFile(out_name, iteration);
 }
