@@ -7,9 +7,9 @@
 
 #include "Particle.h"
 
+#include "utils/ArrayUtils.h"
 #include <array>
 #include <iostream>
-#include "utils/ArrayUtils.h"
 
 Particle::Particle(int type_arg) {
   type = type_arg;
@@ -44,7 +44,11 @@ Particle::~Particle() { std::cout << "Particle destructed!" << std::endl; }
 
 const std::array<double, 3> &Particle::getX() const { return x; }
 
+void Particle::setX(std::array<double, 3> newX) { x = newX; }
+
 const std::array<double, 3> &Particle::getV() const { return v; }
+
+void Particle::setV(std::array<double, 3> newV) { v = newV; }
 
 const std::array<double, 3> &Particle::getF() const { return f; }
 

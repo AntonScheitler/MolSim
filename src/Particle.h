@@ -59,7 +59,11 @@ public:
 
   const std::array<double, 3> &getX() const;
 
+  void setX(std::array<double, 3> newX);
+
   const std::array<double, 3> &getV() const;
+
+  void setV(std::array<double, 3> newV);
 
   const std::array<double, 3> &getF() const;
 

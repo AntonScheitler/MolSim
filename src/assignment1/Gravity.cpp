@@ -1,4 +1,5 @@
 #include <array>
+#include <cmath>
 #include <vector>
 
 #include "../Particle.h"
@@ -22,7 +23,8 @@ void computeGravitySinglePlanet(int planetIdx, std::vector<Particle>& planets) {
         }
         Particle otherPlanet = planets[otherPlanetIdx];
         std::array<double, 3> distanceVector = ArrayUtils::elementWisePairOp(otherPlanet.getX(), planet.getX(), std::minus<>());
-        double coefficient = (planet.getM() * otherPlanet.getM()) / ArrayUtils::L2Norm(distanceVector);
+        // todo better way to take exponential
+        double coefficient = (planet.getM() * otherPlanet.getM()) / std::exp(std::log(ArrayUtils::L2Norm(distanceVector)) * 3);
         std::array<double, 3> partialNewForce =  ArrayUtils::elementWiseScalarOp(coefficient, distanceVector, std::multiplies<>());
         newForce = ArrayUtils::elementWisePairOp(newForce, partialNewForce, std::plus<>());
     }
