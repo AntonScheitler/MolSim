@@ -56,7 +56,7 @@ const std::array<double, 3> &Particle::getOldF() const { return old_f; }
 
 void Particle::setF(std::array<double, 3> newF) { f = newF; }
 
-void Particle::setOldF(std::array<double, 3> newF) { f = newF; }
+void Particle::setOldF(std::array<double, 3> newF) { old_f = newF; }
 
 double Particle::getM() const { return m; }
 

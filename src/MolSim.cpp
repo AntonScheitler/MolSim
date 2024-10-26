@@ -23,6 +23,8 @@ std::list<Particle> particlesList;
 
 int main(int argc, char *argsv[]) {
 
+    // todo proper input handling
+    // todo include t_end and delta_t
   std::cout << "Hello from MolSim for PSE!" << std::endl;
   if (argc != 2) {
     std::cout << "Erroneous programme call! " << std::endl;

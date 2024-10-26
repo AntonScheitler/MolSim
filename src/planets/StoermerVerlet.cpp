@@ -16,7 +16,7 @@ void computePositions(std::vector<Particle> &planets, double deltaT) {
         (1.0 / 2 * planet.getM()), planet.getOldF(), std::multiplies<>());
 
     std::array<double, 3> posFromAcc = ArrayUtils::elementWiseScalarOp(
-        std::exp(std::log(deltaT) * 2), acc, std::multiplies<>());
+        std::pow(deltaT, 2), acc, std::multiplies<>());
 
     std::array<double, 3> deltaX =
         ArrayUtils::elementWisePairOp(posFromVel, posFromAcc, std::plus<>());
