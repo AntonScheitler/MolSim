@@ -1,39 +1,68 @@
 #include "FileReader.h"
+#include "outputWriter/VTKWriter.h"
 #include "planets/Gravity.h"
 #include "planets/StoermerVerlet.h"
-#include "outputWriter/VTKWriter.h"
+#include <bits/getopt_core.h>
+#include <cstdlib>
 #include <iostream>
 #include <list>
+#include <string>
+#include <unistd.h>
 #include <vector>
 
-/**** forward declaration of the calculation functions ****/
-
-/**
- * plot the particles to a xyz-file
- */
+// plots particles and writes the result to a vtk file
+// @param interation the number of the current iteration
 void plotParticles(int iteration);
 
+std::string usageText =
+    "Usage: ./MolSim inputFile [-d delta_t] [-e t_end]\n"
+    "-d: size of each timestep. defaults to 0.014\n"
+    "-e time at which to stop the simulation. defaults to 1000";
+
 constexpr double start_time = 0;
-constexpr double end_time = 1000;
-constexpr double delta_t = 0.014;
+double end_time = 1000;
+double delta_t = 0.014;
 
 // TODO: what data structure to pick?
 std::vector<Particle> particles;
 std::list<Particle> particlesList;
 
 int main(int argc, char *argsv[]) {
-
-    // todo proper input handling
-    // todo include t_end and delta_t
-  std::cout << "Hello from MolSim for PSE!" << std::endl;
-  if (argc != 2) {
-    std::cout << "Erroneous programme call! " << std::endl;
-    std::cout << "./molsym filename" << std::endl;
+  // input/options handling
+  int c;
+  while ((c = getopt(argc, argsv, "d:e:h")) != -1) {
+    switch (c) {
+    case 'd':
+      delta_t = std::stod(optarg);
+      if (delta_t <= 0) {
+        std::cerr << "delta t must be positive!" << std::endl;
+        exit(EXIT_FAILURE);
+      }
+      break;
+    case 'e':
+      end_time = std::stod(optarg);
+      if (end_time <= 0) {
+        std::cerr << "end time must be positive!" << std::endl;
+        exit(EXIT_FAILURE);
+      }
+      break;
+    case 'h':
+      std::cout << usageText << std::endl;
+      exit(EXIT_SUCCESS);
+    case '?':
+      std::cerr << usageText << std::endl;
+      exit(EXIT_FAILURE);
+    }
+  }
+  // check if an input file has been supplied
+  if (argc - optind != 1) {
+    std::cerr << usageText << std::endl;
+    exit(EXIT_FAILURE);
   }
 
   FileReader fileReader;
   // todo rebuild list to vector?
-  fileReader.readFile(particlesList, argsv[1]);
+  fileReader.readFile(particlesList, argsv[optind]);
   for (Particle planet : particlesList) {
     particles.push_back(planet);
   }
@@ -70,7 +99,7 @@ void plotParticles(int iteration) {
   outputWriter::VTKWriter writer;
   writer.initializeOutput(particles.size());
   for (Particle planet : particles) {
-      writer.plotParticle(planet);
+    writer.plotParticle(planet);
   }
   writer.writeFile(out_name, iteration);
 }
