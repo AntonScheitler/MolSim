@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "Particle.h"
+#include "particle/Particle.h"
 
 #include <list>
 
@@ -16,6 +16,5 @@ class FileReader {
 public:
   FileReader();
   virtual ~FileReader();
-
   void readFile(std::list<Particle> &particles, char *filename);
 };

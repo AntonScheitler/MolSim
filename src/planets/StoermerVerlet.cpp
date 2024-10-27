@@ -1,4 +1,4 @@
-#include "Particle.h"
+#include "particle/Particle.h"
 #include "utils/ArrayUtils.h"
 #include <array>
 #include <cmath>

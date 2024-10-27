@@ -1,4 +1,4 @@
-#include "Particle.h"
+#include "particle/Particle.h"
 #include <vector>
 
 void computePositions(std::vector<Particle> &planets, double deltaT);

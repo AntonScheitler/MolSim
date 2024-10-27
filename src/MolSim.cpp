@@ -9,6 +9,7 @@
 #include <string>
 #include <unistd.h>
 #include <vector>
+#include "particle/ParticleContainer.h"
 
 // plots particles and writes the result to a vtk file
 // @param interation the number of the current iteration
@@ -87,6 +88,12 @@ int main(int argc, char *argsv[]) {
     std::cout << "Iteration " << iteration << " finished." << std::endl;
 
     current_time += delta_t;
+  }
+
+  ParticleContainer pc{std::vector<Particle>{Particle{2}, Particle{6}}};
+
+  for(const auto &p : pc) {
+      std::cout << p.toString();
   }
 
   std::cout << "output written. Terminating..." << std::endl;

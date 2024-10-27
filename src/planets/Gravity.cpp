@@ -2,7 +2,7 @@
 #include <cmath>
 #include <vector>
 
-#include "../Particle.h"
+#include "particle/Particle.h"
 #include "../utils/ArrayUtils.h"
 
 void computeGravitySinglePlanet(long unsigned int planetIdx,
