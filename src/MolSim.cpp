@@ -63,7 +63,7 @@ int main(int argc, char *argsv[]) {
   FileReader fileReader;
   // todo rebuild list to vector?
   fileReader.readFile(particlesList, argsv[optind]);
-  for (Particle planet : particlesList) {
+  for (const Particle& planet : particlesList) {
     particles.push_back(planet);
   }
 
