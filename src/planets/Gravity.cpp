@@ -22,9 +22,16 @@ void computeGravitySinglePlanet(long unsigned int planetIdx, std::vector<Particl
   for (long unsigned int otherPlanetIdx = 0; otherPlanetIdx < planets.size(); otherPlanetIdx++) {
     if (planetIdx != otherPlanetIdx) {
       Particle otherPlanet = planets[otherPlanetIdx];
-      std::array<double, 3> distanceVector = ArrayUtils::elementWisePairOp( otherPlanet.getX(), planet.getX(), std::minus<>());
-      double coefficient = (planet.getM() * otherPlanet.getM()) / std::pow(ArrayUtils::L2Norm(distanceVector), 3);
-      std::array<double, 3> partialNewForce = ArrayUtils::elementWiseScalarOp( coefficient, distanceVector, std::multiplies<>());
+      std::array<double, 3> distanceVector =
+              ArrayUtils::elementWisePairOp( otherPlanet.getX(), planet.getX(), std::minus<>());
+
+      double distance = ArrayUtils::L2Norm(distanceVector);
+      if(distance == 0) continue;
+
+      double coefficient = (planet.getM() * otherPlanet.getM()) / std::pow(distance, 3);
+
+      std::array<double, 3> partialNewForce =
+              ArrayUtils::elementWiseScalarOp( coefficient, distanceVector, std::multiplies<>());
       newForce = ArrayUtils::elementWisePairOp(newForce, partialNewForce, std::plus<>());
     }
   }
