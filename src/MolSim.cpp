@@ -85,12 +85,6 @@ int main(int argc, char *argsv[]) {
     current_time += delta_t;
   }
 
-  ParticleContainer pc{std::vector<Particle>{Particle{2}, Particle{6}}};
-
-  for (const auto &p : pc) {
-    std::cout << p.toString();
-  }
-
   std::cout << "output written. Terminating..." << std::endl;
   return 0;
 }
