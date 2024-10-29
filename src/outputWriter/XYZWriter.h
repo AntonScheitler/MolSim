@@ -8,21 +8,18 @@
 #pragma once
 
 #include "particle/Particle.h"
+#include "./FileWriter.h"
 
 #include <fstream>
 #include <list>
+#include <vector>
 
 namespace outputWriter {
+    class XYZWriter : public FileWriter {
 
-class XYZWriter {
-
-public:
-  XYZWriter();
-
-  virtual ~XYZWriter();
-
-  void plotParticles(std::list<Particle> particles, const std::string &filename,
-                     int iteration);
-};
+        public:
+            void plotParticles(std::vector<Particle> &particles, const std::string &filename,
+                    int iteration);
+    };
 
 } // namespace outputWriter

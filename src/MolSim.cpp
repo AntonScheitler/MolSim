@@ -1,21 +1,22 @@
-#include "FileReader.h"
 #include "outputWriter/VTKWriter.h"
-#include "planets/Gravity.h"
 #include "planets/StoermerVerlet.h"
 #include <bits/getopt_core.h>
 #include <cstdlib>
 #include <iostream>
+#include <iterator>
 #include <list>
 #include <string>
 #include <unistd.h>
 #include <vector>
 #include "particle/ParticleContainer.h"
+#include "forces/Forces.h"
+#include "inputReaders/TxtFileReader.h"
 
 // plots particles and writes the result to a vtk file
 // @param interation the number of the current iteration
 void plotParticles(int iteration);
 
-std::string usageText =
+const std::string usageText =
     "Usage: ./MolSim inputFile [-d delta_t] [-e t_end]\n"
     "-d: size of each timestep. defaults to 0.014\n"
     "-e time at which to stop the simulation. defaults to 1000";
@@ -61,7 +62,7 @@ int main(int argc, char *argsv[]) {
     exit(EXIT_FAILURE);
   }
 
-  FileReader fileReader;
+  inputReader::TxtFileReader fileReader;
   // todo rebuild list to vector?
   fileReader.readFile(particlesList, argsv[optind]);
   for (const Particle& planet : particlesList) {
@@ -77,7 +78,7 @@ int main(int argc, char *argsv[]) {
     // calculate new x
     computePositions(particles, delta_t);
     // calculate new f
-    computeGravity(particles);
+    forces::computeGravity(particles);
     // calculate new v
     computeVelocities(particles, delta_t);
 
@@ -102,11 +103,6 @@ int main(int argc, char *argsv[]) {
 
 void plotParticles(int iteration) {
   std::string out_name("MD_vtk");
-
   outputWriter::VTKWriter writer;
-  writer.initializeOutput(particles.size());
-  for (Particle planet : particles) {
-    writer.plotParticle(planet);
-  }
-  writer.writeFile(out_name, iteration);
+  writer.plotParticles(particles, out_name, iteration);
 }

@@ -15,9 +15,14 @@
 
 namespace outputWriter {
 
-VTKWriter::VTKWriter() = default;
-
-VTKWriter::~VTKWriter() = default;
+void VTKWriter::plotParticles(std::vector<Particle> &particles,
+                              const std::string &filename, int iteration) {
+    initializeOutput(particles.size());
+    for (Particle &particle : particles) {
+        plotParticle(particle);
+    }
+    writeFile(filename, iteration);
+}
 
 void VTKWriter::initializeOutput(int numParticles) {
 
@@ -54,7 +59,8 @@ void VTKWriter::initializeOutput(int numParticles) {
 
 void VTKWriter::writeFile(const std::string &filename, int iteration) {
   std::stringstream strstr;
-  strstr << filename << "_" << std::setfill('0') << std::setw(4) << iteration << ".vtu";
+  strstr << filename << "_" << std::setfill('0') << std::setw(4) << iteration
+         << ".vtu";
 
   std::ofstream file(strstr.str().c_str());
   VTKFile(file, *vtkFile);

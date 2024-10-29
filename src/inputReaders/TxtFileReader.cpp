@@ -1,22 +1,12 @@
-/*
- * FileReader.cpp
- *
- *  Created on: 23.02.2010
- *      Author: eckhardw
- */
-
-#include "FileReader.h"
-
-#include <cstdlib>
+#include "TxtFileReader.h"
 #include <fstream>
 #include <iostream>
+#include <list>
 #include <sstream>
 
-FileReader::FileReader() = default;
+namespace inputReader {
 
-FileReader::~FileReader() = default;
-
-void FileReader::readFile(std::list<Particle> &particles, char *filename) {
+void TxtFileReader::readFile(std::list<Particle> &particles, char *filename) {
   std::array<double, 3> x;
   std::array<double, 3> v;
   double m;
@@ -67,3 +57,4 @@ void FileReader::readFile(std::list<Particle> &particles, char *filename) {
     exit(-1);
   }
 }
+} // namespace inputReader
