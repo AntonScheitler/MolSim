@@ -18,8 +18,7 @@ namespace outputWriter {
      */
     class VTKWriter : public FileWriter {
         public:
-            void plotParticles(std::vector<Particle> &particles, const std::string &filename,
-                    int iteration);
+            void plotParticles(std::vector<Particle> &particles, int iteration);
 
         private:
             /**

@@ -9,7 +9,7 @@
 
 #include "particle/Particle.h"
 
-#include <list>
+#include <vector>
 
 
 namespace inputReader {
@@ -23,6 +23,6 @@ public:
   FileReader() = default;
   virtual ~FileReader() = default;
   // todo rebuild to use particlecontainer
-  virtual void readFile(std::list<Particle> &particles, char *filename) = 0;
+  virtual void readFile(std::vector<Particle> &particles, char *filename) = 0;
 };
 }

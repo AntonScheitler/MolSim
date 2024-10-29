@@ -18,8 +18,7 @@ namespace outputWriter {
     class XYZWriter : public FileWriter {
 
         public:
-            void plotParticles(std::vector<Particle> &particles, const std::string &filename,
-                    int iteration);
+            void plotParticles(std::vector<Particle> &particles, int iteration);
     };
 
 } // namespace outputWriter

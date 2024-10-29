@@ -12,11 +12,11 @@
 
 namespace outputWriter {
 
-void XYZWriter::plotParticles(std::vector<Particle> &particles,
-                              const std::string &filename, int iteration) {
+void XYZWriter::plotParticles(std::vector<Particle> &particles, int iteration) {
+  std::string out_name("MD_vtk");
   std::ofstream file;
   std::stringstream strstr;
-  strstr << filename << "_" << std::setfill('0') << std::setw(4) << iteration << ".xyz";
+  strstr << out_name << "_" << std::setfill('0') << std::setw(4) << iteration << ".xyz";
 
   file.open(strstr.str().c_str());
   file << particles.size() << std::endl;

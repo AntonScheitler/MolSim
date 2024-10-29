@@ -3,18 +3,13 @@
 #include <bits/getopt_core.h>
 #include <cstdlib>
 #include <iostream>
-#include <iterator>
 #include <list>
 #include <string>
 #include <unistd.h>
 #include <vector>
 #include "particle/ParticleContainer.h"
 #include "forces/Forces.h"
-#include "inputReaders/TxtFileReader.h"
-
-// plots particles and writes the result to a vtk file
-// @param interation the number of the current iteration
-void plotParticles(int iteration);
+#include "inputReader/TxtFileReader.h"
 
 const std::string usageText =
     "Usage: ./MolSim inputFile [-d delta_t] [-e t_end]\n"
@@ -64,10 +59,7 @@ int main(int argc, char *argsv[]) {
 
   inputReader::TxtFileReader fileReader;
   // todo rebuild list to vector?
-  fileReader.readFile(particlesList, argsv[optind]);
-  for (const Particle& planet : particlesList) {
-    particles.push_back(planet);
-  }
+  fileReader.readFile(particles, argsv[optind]);
 
   double current_time = start_time;
 
@@ -84,7 +76,8 @@ int main(int argc, char *argsv[]) {
 
     iteration++;
     if (iteration % 10 == 0) {
-      plotParticles(iteration);
+      outputWriter::VTKWriter writer;
+      writer.plotParticles(particles, iteration);
     }
     std::cout << "Iteration " << iteration << " finished." << std::endl;
 
@@ -99,10 +92,4 @@ int main(int argc, char *argsv[]) {
 
   std::cout << "output written. Terminating..." << std::endl;
   return 0;
-}
-
-void plotParticles(int iteration) {
-  std::string out_name("MD_vtk");
-  outputWriter::VTKWriter writer;
-  writer.plotParticles(particles, out_name, iteration);
 }

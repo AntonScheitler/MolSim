@@ -1,12 +1,12 @@
 #include "TxtFileReader.h"
 #include <fstream>
 #include <iostream>
-#include <list>
 #include <sstream>
+#include <vector>
 
 namespace inputReader {
 
-void TxtFileReader::readFile(std::list<Particle> &particles, char *filename) {
+void TxtFileReader::readFile(std::vector<Particle> &particles, char *filename) {
   std::array<double, 3> x;
   std::array<double, 3> v;
   double m;
