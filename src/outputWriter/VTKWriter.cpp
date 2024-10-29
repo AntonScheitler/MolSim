@@ -16,12 +16,12 @@
 namespace outputWriter {
 
 void VTKWriter::plotParticles(std::vector<Particle> &particles, int iteration) {
-      std::string out_name("MD_vtk");
-    initializeOutput(particles.size());
-    for (Particle &particle : particles) {
-        plotParticle(particle);
-    }
-    writeFile(out_name, iteration);
+  std::string out_name("MD_vtk");
+  initializeOutput(particles.size());
+  for (Particle &particle : particles) {
+    plotParticle(particle);
+  }
+  writeFile(out_name, iteration);
 }
 
 void VTKWriter::initializeOutput(int numParticles) {
@@ -47,7 +47,7 @@ void VTKWriter::initializeOutput(int numParticles) {
   points.DataArray().push_back(pointCoordinates);
 
   Cells cells; // we don't have cells, => leave it empty
-  // for some reasons, we have to add a dummy entry for paraview
+               // for some reasons, we have to add a dummy entry for paraview
   DataArray_t cells_data(type::Float32, "types", 0);
   cells.DataArray().push_back(cells_data);
 

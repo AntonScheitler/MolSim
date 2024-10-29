@@ -2,7 +2,7 @@
 #include <cmath>
 #include <vector>
 
-#include "../utils/ArrayUtils.h"
+#include "../../utils/ArrayUtils.h"
 #include "particle/Particle.h"
 
 namespace forces {

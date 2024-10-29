@@ -1,5 +1,9 @@
+#include "computations/forces/Forces.h"
+#include "computations/positions/Positions.h"
+#include "computations/velocities/Velocities.h"
+#include "inputReader/TxtFileReader.h"
 #include "outputWriter/VTKWriter.h"
-#include "planets/StoermerVerlet.h"
+#include "particle/ParticleContainer.h"
 #include <bits/getopt_core.h>
 #include <cstdlib>
 #include <iostream>
@@ -7,9 +11,6 @@
 #include <string>
 #include <unistd.h>
 #include <vector>
-#include "particle/ParticleContainer.h"
-#include "forces/Forces.h"
-#include "inputReader/TxtFileReader.h"
 
 const std::string usageText =
     "Usage: ./MolSim inputFile [-d delta_t] [-e t_end]\n"
@@ -68,11 +69,11 @@ int main(int argc, char *argsv[]) {
   // for this loop, we assume: current x, current f and current v are known
   while (current_time < end_time) {
     // calculate new x
-    computePositions(particles, delta_t);
+    positions::stoermerVerlet(particles, delta_t);
     // calculate new f
     forces::computeGravity(particles);
     // calculate new v
-    computeVelocities(particles, delta_t);
+    velocities::stoermerVerlet(particles, delta_t);
 
     iteration++;
     if (iteration % 10 == 0) {
@@ -86,8 +87,8 @@ int main(int argc, char *argsv[]) {
 
   ParticleContainer pc{std::vector<Particle>{Particle{2}, Particle{6}}};
 
-  for(const auto &p : pc) {
-      std::cout << p.toString();
+  for (const auto &p : pc) {
+    std::cout << p.toString();
   }
 
   std::cout << "output written. Terminating..." << std::endl;
