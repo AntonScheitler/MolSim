@@ -10,3 +10,11 @@ cd build
 cmake ..
 make
 ```
+
+
+#### How to run
+
+To run the project, run the following command
+```
+./MolSim ../input/eingabe-sonne.txt  
+```
