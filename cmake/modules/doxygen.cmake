@@ -1,9 +1,14 @@
-# make doc_doxygen optional if someone does not have / like doxygen
-option(BUILD_DOCUMENTATION "Enable for building documentation with doxygen.")
+# enable the optional DOC_TARGET option for creating a make target "doc_doxygen" for building the documentation
+# using doxygen
+option(DOC_TARGET "Enable for creating make target for building documentation with doxygen.")
 
-find_package(Doxygen)
-if (DOXYGEN_FOUND)
-    if(BUILD_DOCUMENTATION)
+if(DOC_TARGET)
+    find_package(Doxygen)
+
+    if (DOXYGEN_FOUND)
+
+        message("Building with doxygen documentation generation target")
+
         set(DOXYFILE_IN ${PROJECT_SOURCE_DIR}/Doxyfile)
 
         configure_file(${DOXYFILE_IN} ${DOXYFILE_OUT} @ONLY)
@@ -17,9 +22,11 @@ if (DOXYGEN_FOUND)
         set_target_properties(doc_doxygen
                 PROPERTIES EXCLUDE_FROM_ALL TRUE
         )
-    else(BUILD_DOCUMENTATION)
-        message("building without document target")
-    endif(BUILD_DOCUMENTATION)
-else (DOXYGEN_FOUND)
-    message("Doxygen is not installed")
-endif (DOXYGEN_FOUND)
+
+    else (DOXYGEN_FOUND)
+        message("Doxygen is not installed")
+    endif (DOXYGEN_FOUND)
+
+else(DOC_TARGET)
+    message("Building without doxygen documentation generation target")
+endif(DOC_TARGET)
