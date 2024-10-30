@@ -4,16 +4,16 @@
 #include "inputReader/TxtFileReader.h"
 #include "outputWriter/VTKWriter.h"
 #include "particle/ParticleContainer.h"
-#include <bits/getopt_core.h>
 #include <cstdlib>
 #include <iostream>
 #include <string>
 #include <unistd.h>
+#include <getopt.h>
 
 const std::string usageText =
-        "Usage: ./MolSim inputFile [-d delta_t] [-e t_end]\n"
-        "-d: size of each timestep. defaults to 0.014\n"
-        "-e time at which to stop the simulation. defaults to 1000";
+        "Usage: ./MolSim [OPTIONS] INPUT_FILE\n"
+        "-d, --delta_t\t\tsize of each timestep. defaults to 0.014\n"
+        "-e, --t_end\t\ttime at which to stop the simulation. defaults to 1000";
 
 constexpr double start_time = 0;
 double end_time = 1000;
@@ -24,7 +24,14 @@ ParticleContainer particles;
 int main(int argc, char *argsv[]) {
     // input/options handling
     int c;
-    while ((c = getopt(argc, argsv, "d:e:h")) != -1) {
+    const char* const shortOpts = "d:e:h";
+    const option longOpts[] = {
+        {"t_end", required_argument, nullptr, 'e'},
+        {"delta_t", required_argument, nullptr, 'd'},
+        {"help", no_argument, nullptr, 'h'},
+        {nullptr, no_argument, nullptr, 0}
+   };
+    while ((c = getopt_long(argc, argsv, shortOpts, longOpts, nullptr)) != -1) {
         switch (c) {
             case 'd':
                 delta_t = std::stod(optarg);
