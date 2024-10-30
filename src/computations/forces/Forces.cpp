@@ -22,10 +22,10 @@ namespace forces {
                 continue;
             }
             std::array<double, 3> distanceVector = ArrayUtils::elementWisePairOp(otherPlanet.getX(), planet.getX(),
-                                                                                 std::minus<>());
+                    std::minus<>());
             double coefficient = (planet.getM() * otherPlanet.getM()) / std::pow(ArrayUtils::L2Norm(distanceVector), 3);
             std::array<double, 3> partialNewForce = ArrayUtils::elementWiseScalarOp(coefficient, distanceVector,
-                                                                                    std::multiplies<>());
+                    std::multiplies<>());
             newForce = ArrayUtils::elementWisePairOp(newForce, partialNewForce, std::plus<>());
         }
 

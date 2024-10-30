@@ -1,5 +1,4 @@
 #include "particle/ParticleContainer.h"
-#include <vector>
 
 namespace forces {
     /**

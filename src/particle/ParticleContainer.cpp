@@ -1,9 +1,6 @@
-#include <list>
 #include <vector>
 #include "ParticleContainer.h"
 
-
-// ParticleContainer implementations
 ParticleContainer::ParticleContainer() {
     this->particles = std::vector<Particle>{};
 }
@@ -32,7 +29,6 @@ int ParticleContainer::size() {
     return particles.size();
 }
 
-// ParticleContainer: single Iterator
 ParticleContainer::Iterator::Iterator(std::vector<Particle>::iterator it) {
     this->it = it;
 }
@@ -47,10 +43,7 @@ bool ParticleContainer::Iterator::operator!=(const Iterator &other) const { retu
 Particle &ParticleContainer::Iterator::operator*() { return *it; }
 
 
-// ParticleContainer: pair Iterator
-ParticleContainer::PairIterator::PairIterator(std::vector<Particle>::iterator it1, std::vector<Particle>::iterator it2)
-        :
-        it1(it1), it2(it2) {
+ParticleContainer::PairIterator::PairIterator(std::vector<Particle>::iterator it1, std::vector<Particle>::iterator it2) : it1(it1), it2(it2) {
     nextPair();
 }
 
@@ -77,8 +70,3 @@ void ParticleContainer::PairIterator::nextPair() {
         ++it2;
     }
 }
-
-
-
-
-

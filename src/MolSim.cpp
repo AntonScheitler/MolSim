@@ -7,10 +7,8 @@
 #include <bits/getopt_core.h>
 #include <cstdlib>
 #include <iostream>
-#include <list>
 #include <string>
 #include <unistd.h>
-#include <vector>
 
 const std::string usageText =
         "Usage: ./MolSim inputFile [-d delta_t] [-e t_end]\n"
@@ -56,33 +54,29 @@ int main(int argc, char *argsv[]) {
         exit(EXIT_FAILURE);
     }
 
+    // read input from .txt file
     inputReader::TxtFileReader fileReader;
-
     fileReader.readFile(particles, argsv[optind]);
 
+    // prepare for iteration
     double current_time = start_time;
-
     int iteration = 0;
 
-    // for this loop, we assume: current x, current f and current v are known
+    // compute position, force and velocity for all particles each iteration
     while (current_time < end_time) {
-        // calculate new x
         positions::stoermerVerlet(particles, delta_t);
-        // calculate new f
         forces::computeGravity(particles);
-        // calculate new v
         velocities::stoermerVerlet(particles, delta_t);
 
         iteration++;
         if (iteration % 10 == 0) {
+            // write output on every 10th iteration
             outputWriter::VTKWriter writer;
             writer.plotParticles(particles, iteration);
         }
         std::cout << "Iteration " << iteration << " finished." << std::endl;
-
         current_time += delta_t;
     }
-
     std::cout << "output written. Terminating..." << std::endl;
     return 0;
 }

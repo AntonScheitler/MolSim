@@ -9,7 +9,7 @@ namespace velocities {
             std::array<double, 3> deltaV = ArrayUtils::elementWiseScalarOp(
                     coefficient,
                     ArrayUtils::elementWisePairOp(planet.getF(), planet.getOldF(),
-                                                  std::plus<>()),
+                        std::plus<>()),
                     std::multiplies<>());
             planet.setV(
                     ArrayUtils::elementWisePairOp(planet.getV(), deltaV, std::plus<>()));

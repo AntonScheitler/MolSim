@@ -1,8 +1,10 @@
 #include "FileReader.h"
-#include <vector>
 #include "particle/ParticleContainer.h"
 
 namespace inputReader {
+    /**
+     * @brief a filereader specifically for txt files following a certain format
+     */
     class TxtFileReader : public FileReader {
         /**
          * @brief reads particle information from a .txt file and stores it in a list

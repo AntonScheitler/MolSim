@@ -9,20 +9,22 @@
 
 #include "particle/ParticleContainer.h"
 
-#include <vector>
-
-
 namespace inputReader {
 
-/**
- * @brief superclass for all file readers
- */
+    /**
+     * @brief superclass for all file readers
+     */
     class FileReader {
 
-    public:
-        FileReader() = default;
+        public:
+            FileReader() = default;
 
-        virtual ~FileReader() = default;
-        virtual void readFile(ParticleContainer &particles, char *filename) = 0;
+            virtual ~FileReader() = default;
+            /**
+             * @brief reads a file and fills a ParticleContainer accordingly
+             * @param particles the particles to be filled up
+             * @param filename the file to read the particle information from
+             */
+            virtual void readFile(ParticleContainer &particles, char *filename) = 0;
     };
-}
+} // namespace inputReader

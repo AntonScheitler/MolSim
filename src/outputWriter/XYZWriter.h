@@ -10,15 +10,17 @@
 #include "particle/ParticleContainer.h"
 #include "./FileWriter.h"
 
-#include <fstream>
-#include <list>
-#include <vector>
-
 namespace outputWriter {
+    /**
+     * @brief file writer, which specializes in xyz outputs
+     */
     class XYZWriter : public FileWriter {
 
-    public:
-        void plotParticles(ParticleContainer &particles, int iteration);
+        public:
+            /** 
+             * @brief plots the particles and writes them to an xyz file
+             */
+            void plotParticles(ParticleContainer &particles, int iteration);
     };
 
 } // namespace outputWriter
