@@ -10,7 +10,7 @@ void stoermerVerlet(std::vector<Particle> &planets, double deltaT) {
         deltaT, planet.getV(), std::multiplies<>());
 
     std::array<double, 3> acc = ArrayUtils::elementWiseScalarOp(
-        (1.0 / 2 * planet.getM()), planet.getOldF(), std::multiplies<>());
+        (1.0 / (2 * planet.getM())), planet.getOldF(), std::multiplies<>());
 
     std::array<double, 3> posFromAcc = ArrayUtils::elementWiseScalarOp(
         std::pow(deltaT, 2), acc, std::multiplies<>());
