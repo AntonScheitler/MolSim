@@ -9,6 +9,9 @@
 
 #include "particle/ParticleContainer.h"
 
+/**
+ * namespace that wraps different readers which parse input from a file. All of those readers inherit from the abstract FileReader
+ */
 namespace inputReader {
 
     /**

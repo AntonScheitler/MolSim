@@ -1,5 +1,8 @@
 #include "particle/ParticleContainer.h"
 
+/**
+ * namespace that wraps different writers which write simulation data into file. All of those writers inherit from the abstract FileWriter
+ */
 namespace outputWriter {
     /**
      * @brief a superclass for all filewriters, which are each specialized in different output formats

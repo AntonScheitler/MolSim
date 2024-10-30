@@ -1,5 +1,8 @@
 #include "particle/ParticleContainer.h"
 
+/**
+ * namespace which wraps computation different functions for velocities
+ */
 namespace velocities {
     /**
      * @brief computes the updated velocities for the ParticleContainer of planets

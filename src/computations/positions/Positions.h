@@ -1,5 +1,8 @@
 #include "particle/ParticleContainer.h"
 
+/**
+ * namespace which wraps computation different functions for positions
+ */
 namespace positions {
     /**
      * @brief computes the updated positions for the given particleContainer of planets in-place

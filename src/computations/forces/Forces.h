@@ -1,5 +1,8 @@
 #include "particle/ParticleContainer.h"
 
+/**
+ * namespace which wraps computation functions for different forces
+ */
 namespace forces {
     /**
      * @brief computes the gravitational forces between the planets and changes them in-place

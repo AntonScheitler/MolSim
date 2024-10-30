@@ -3,14 +3,12 @@
 #include "computations/velocities/Velocities.h"
 #include "inputReader/TxtFileReader.h"
 #include "outputWriter/VTKWriter.h"
-#include "particle/Particle.h"
 #include "particle/ParticleContainer.h"
 #include <bits/getopt_core.h>
 #include <cstdlib>
 #include <iostream>
 #include <string>
 #include <unistd.h>
-#include <utility>
 
 const std::string usageText =
         "Usage: ./MolSim inputFile [-d delta_t] [-e t_end]\n"
@@ -21,7 +19,7 @@ constexpr double start_time = 0;
 double end_time = 1000;
 double delta_t = 0.014;
 
-ParticleContainer particles{};
+ParticleContainer particles;
 
 int main(int argc, char *argsv[]) {
     // input/options handling
@@ -64,10 +62,6 @@ int main(int argc, char *argsv[]) {
     double current_time = start_time;
     int iteration = 0;
 
-    //for (auto it = particles.beginPairParticle(); it != particles.endPairParticle(); ++it) {
-    //    std::pair<Particle&, Particle&> pair = *it;
-    //    std:: cout << "first: " << pair.first.getM() << ", second: " << pair.second.getM() << std::endl;
-    //}
     // compute position, force and velocity for all particles each iteration
     while (current_time < end_time) {
         positions::stoermerVerlet(particles, delta_t);
