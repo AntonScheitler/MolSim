@@ -1,72 +1,91 @@
+#include "particle/ParticleContainer.h"
 #include <vector>
-#include "ParticleContainer.h"
 
 ParticleContainer::ParticleContainer() {
-    this->particles = std::vector<Particle>{};
+    particles = std::vector<Particle>{};
 }
 
-ParticleContainer::ParticleContainer(const std::vector<Particle> &particles) {
-    this->particles = particles;
+ParticleContainer::ParticleContainer(const std::vector<Particle> &particles_arg) {
+    particles = particles_arg;
 }
 
 void ParticleContainer::addParticle(const Particle &particle) {
-    this->particles.push_back(particle);
-}
-
-ParticleContainer::Iterator ParticleContainer::begin() { return Iterator(particles.begin()); }
-
-ParticleContainer::Iterator ParticleContainer::end() { return Iterator(particles.end()); }
-
-ParticleContainer::PairIterator ParticleContainer::pairBegin() {
-    return {particles.begin(), std::next(particles.begin())};
-}
-
-ParticleContainer::PairIterator ParticleContainer::pairEnd() {
-    return {particles.end(), particles.end()};
+    particles.push_back(particle);
 }
 
 int ParticleContainer::size() {
     return particles.size();
+} 
+
+ParticleContainer::ParticleIterator ParticleContainer::begin() {
+    return particles.begin();
 }
 
-ParticleContainer::Iterator::Iterator(std::vector<Particle>::iterator it) {
-    this->it = it;
+ParticleContainer::ParticleIterator ParticleContainer::end() {
+    return particles.end();
 }
 
-ParticleContainer::Iterator &ParticleContainer::Iterator::operator++() {
-    ++it;
+ParticleContainer::ParticleIterator ParticleContainer::beginParticle() {
+    return particles.begin();
+}
+
+ParticleContainer::ParticleIterator ParticleContainer::endParticle() {
+    return particles.end();
+}
+
+ParticleContainer::PairParticleIterator ParticleContainer::beginPairParticle() {
+    if (particles.empty()) {
+        return {particles.begin(), particles.begin(), particles.end()};
+    }
+    return {particles.begin(), ++(particles.begin()), particles.end()};
+}
+
+ParticleContainer::PairParticleIterator ParticleContainer::endPairParticle() {
+    if (particles.empty()) {
+        return {particles.end(), particles.end(), particles.end()};
+    }
+    return {--(particles.end()), particles.end(), particles.end()};
+}
+
+ParticleContainer::ParticleIterator::ParticleIterator(std::vector<Particle>::iterator it) {
+    current = it;
+}
+
+
+ParticleContainer::ParticleIterator::reference ParticleContainer::ParticleIterator::operator*() {
+    return *current;
+}
+
+ParticleContainer::ParticleIterator& ParticleContainer::ParticleIterator::operator++() {
+    ++current;
     return *this;
 }
 
-bool ParticleContainer::Iterator::operator!=(const Iterator &other) const { return it != other.it; }
-
-Particle &ParticleContainer::Iterator::operator*() { return *it; }
-
-
-ParticleContainer::PairIterator::PairIterator(std::vector<Particle>::iterator it1, std::vector<Particle>::iterator it2) : it1(it1), it2(it2) {
-    nextPair();
+bool ParticleContainer::ParticleIterator::operator!=(const ParticleContainer::ParticleIterator& other) {
+    return current != other.current;
 }
 
-ParticleContainer::PairIterator &ParticleContainer::PairIterator::operator++() {
-    ++it2;
-    if (it2 == particles.end()) {
-        ++it1;
-        it2 = std::next(it1);
+ParticleContainer::PairParticleIterator::PairParticleIterator(std::vector<Particle>::iterator first_arg,
+        std::vector<Particle>::iterator second_arg,
+        std::vector<Particle>::iterator end_arg) {
+    first = first_arg;
+    second = second_arg;
+    end = end_arg;
+}
+
+ParticleContainer::PairParticleIterator::reference ParticleContainer::PairParticleIterator::operator*() {
+    return {*first, *second};
+}
+
+ParticleContainer::PairParticleIterator& ParticleContainer::PairParticleIterator::operator++() {
+    if (second == (end - 1)) {
+        first++;
+        second = first;
     }
-    nextPair();
+    second++;
     return *this;
 }
 
-bool ParticleContainer::PairIterator::operator!=(const PairIterator &other) const {
-    return it1 != other.it1 || it2 != other.it2;
-}
-
-std::pair<Particle, Particle> ParticleContainer::PairIterator::operator*() const {
-    return std::make_pair(*it1, *it2);
-}
-
-void ParticleContainer::PairIterator::nextPair() {
-    while (it2 != particles.end() && it1 == it2) {
-        ++it2;
-    }
+bool ParticleContainer::PairParticleIterator::operator!=(const ParticleContainer::PairParticleIterator& other) {
+    return first != other.first || second != other.second || end != other.end;
 }

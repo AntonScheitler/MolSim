@@ -1,81 +1,64 @@
-#include <vector>
 #include "Particle.h"
+#include <iterator>
+#include <vector>
 
 #pragma once
 
 /**
- *  The class ParticleContainer groups multiple Particles together and allows single iteration as well as
- *  iteration over all Particle pairs.
+ * @brief wrapper for a vector of particles, enabling iteration over separate particles and particle pairs
  */
 class ParticleContainer {
 
     public:
         ParticleContainer();
-        /**
-         * Constructs a ParticleContainer with the given Particle vector as elements.
-         * @param particles Elements of the ParticleContainer.
-         */
-        explicit ParticleContainer(const std::vector<Particle> &particles);
+        ParticleContainer(const std::vector<Particle> &particles);
 
         void addParticle(const Particle &particle);
         int size();
 
-        /**
-         * Iteration over single elements of the ParticleContainer.
-         */
-        class Iterator : public std::iterator<std::forward_iterator_tag, Particle> {
+        class ParticleIterator {
 
             public:
-                /**
-                 * Creates a single Iterator to iterate over all elements of the ParticleContainer one at a time.
-                 * @param it
-                 */
-                explicit Iterator(std::vector<Particle>::iterator it);
+                using iterator_category = std::forward_iterator_tag;
+                using reference = Particle&;
 
-                Iterator &operator++();
+                ParticleIterator(std::vector<Particle>::iterator it);
 
-                bool operator!=(const Iterator &other) const;
-
-                Particle &operator*();
-
+                reference operator*();
+                ParticleIterator& operator++();
+                bool operator!=(const ParticleIterator& other);
             private:
-                std::vector<Particle>::iterator it;
+                std::vector<Particle>::iterator current;
+        };
 
-        }; // class Iterator
+        ParticleIterator begin();
+        ParticleIterator end();
 
-        Iterator begin();
-        Iterator end();
+        ParticleIterator beginParticle();
+        ParticleIterator endParticle();
 
-        /**
-         * Iteration over all pairs of the elements of the ParticleContainer.
-         */
-        class PairIterator : std::iterator<std::forward_iterator_tag, std::pair<Particle, Particle>> {
+        class PairParticleIterator {
 
             public:
-                /**
-                 * Creates a pair iterator to iterate over all pairs of elements.
-                 * @param it1
-                 * @param it2
-                 */
-                PairIterator(std::vector<Particle>::iterator it1, std::vector<Particle>::iterator it2);
+                using iterator_category = std::forward_iterator_tag;
+                using reference = std::pair<Particle&, Particle&>;
 
-                PairIterator &operator++();
+                PairParticleIterator(std::vector<Particle>::iterator first,
+                        std::vector<Particle>::iterator second,
+                        std::vector<Particle>::iterator end);
 
-                bool operator!=(const PairIterator &other) const;
-
-                std::pair<Particle, Particle> operator*() const;
-
+                reference operator*();
+                PairParticleIterator& operator++();
+                bool operator!=(const PairParticleIterator& other);
             private:
-                void nextPair();
-                std::vector<Particle>::iterator it1, it2;
-                std::vector<Particle> particles;
+                std::vector<Particle>::iterator first;
+                std::vector<Particle>::iterator second;
+                std::vector<Particle>::iterator end;
+        };
 
-        }; // class PairIterator
+        PairParticleIterator beginPairParticle();
+        PairParticleIterator endPairParticle();
 
-        PairIterator pairBegin();
-        PairIterator pairEnd();
-
-    private:
+    protected:
         std::vector<Particle> particles;
-
-}; // class ParticleContainer
+};

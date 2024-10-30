@@ -1,0 +1,142 @@
+\doxysection{Iterator Struct Reference}
+\hypertarget{structIterator}{}\label{structIterator}\index{Iterator@{Iterator}}
+
+
+{\ttfamily \#include $<$Particle\+Container.\+h$>$}
+
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{structIterator_ab0b4065a87c8b0903d6ab09c7126b608}{iterator\+\_\+categor}} = std\+::forward\+\_\+iterator\+\_\+tag
+\item 
+using \mbox{\hyperlink{structIterator_a0f96345c69ae0454c5dc9c35dd3782bf}{difference\+\_\+type}} = std\+::ptrdiff\+\_\+t
+\item 
+using \mbox{\hyperlink{structIterator_a40b7596265729f852993894631789224}{value\+\_\+type}} = \mbox{\hyperlink{classParticle}{Particle}}
+\item 
+using \mbox{\hyperlink{structIterator_a4fe59f8e837a80cced51e46f37c97df3}{pointer}} = \mbox{\hyperlink{classParticle}{Particle}}\texorpdfstring{$\ast$}{*}
+\item 
+using \mbox{\hyperlink{structIterator_a483d5ae4b26557581c45c85390646a04}{reference}} = \mbox{\hyperlink{classParticle}{Particle}}\&
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structIterator_ae1a8e6b8126ed6b56844391fd5e901c1}{Iterator}} (\mbox{\hyperlink{structIterator_a4fe59f8e837a80cced51e46f37c97df3}{pointer}} ptr)
+\item 
+\mbox{\hyperlink{structIterator_a483d5ae4b26557581c45c85390646a04}{reference}} \mbox{\hyperlink{structIterator_aea0debeb120bf666524faf6d81dd4d36}{operator\texorpdfstring{$\ast$}{*}}} () const
+\item 
+\mbox{\hyperlink{structIterator_a4fe59f8e837a80cced51e46f37c97df3}{pointer}} \mbox{\hyperlink{structIterator_a7ddd232916d538e333b821f1b33f2046}{operator-\/$>$}} ()
+\item 
+\mbox{\hyperlink{structIterator}{Iterator}} \& \mbox{\hyperlink{structIterator_a091c7cf45883f9196ebcda0ad97b59f8}{operator++}} ()
+\item 
+\mbox{\hyperlink{structIterator}{Iterator}} \mbox{\hyperlink{structIterator_a414cf35511fbddfbf40d00f9618f4fc3}{operator++}} (int)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structIterator_a4fe59f8e837a80cced51e46f37c97df3}{pointer}} \mbox{\hyperlink{structIterator_a0d1ebd4068ca262c0b1bec92f82d2895}{m\+\_\+ptr}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{structIterator_adf9a9358b475317bd816d7b47a0f5cd1}{operator==}} (const \mbox{\hyperlink{structIterator}{Iterator}} \&a, const \mbox{\hyperlink{structIterator}{Iterator}} \&b)
+\item 
+bool \mbox{\hyperlink{structIterator_a27aed9f3ea67a677964fa51de28a5824}{operator!=}} (const \mbox{\hyperlink{structIterator}{Iterator}} \&a, const \mbox{\hyperlink{structIterator}{Iterator}} \&b)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Typedef Documentation}
+\Hypertarget{structIterator_a0f96345c69ae0454c5dc9c35dd3782bf}\index{Iterator@{Iterator}!difference\_type@{difference\_type}}
+\index{difference\_type@{difference\_type}!Iterator@{Iterator}}
+\doxysubsubsection{\texorpdfstring{difference\_type}{difference\_type}}
+{\footnotesize\ttfamily \label{structIterator_a0f96345c69ae0454c5dc9c35dd3782bf} 
+using \mbox{\hyperlink{structIterator_a0f96345c69ae0454c5dc9c35dd3782bf}{Iterator\+::difference\+\_\+type}} = std\+::ptrdiff\+\_\+t}
+
+\Hypertarget{structIterator_ab0b4065a87c8b0903d6ab09c7126b608}\index{Iterator@{Iterator}!iterator\_categor@{iterator\_categor}}
+\index{iterator\_categor@{iterator\_categor}!Iterator@{Iterator}}
+\doxysubsubsection{\texorpdfstring{iterator\_categor}{iterator\_categor}}
+{\footnotesize\ttfamily \label{structIterator_ab0b4065a87c8b0903d6ab09c7126b608} 
+using \mbox{\hyperlink{structIterator_ab0b4065a87c8b0903d6ab09c7126b608}{Iterator\+::iterator\+\_\+categor}} = std\+::forward\+\_\+iterator\+\_\+tag}
+
+\Hypertarget{structIterator_a4fe59f8e837a80cced51e46f37c97df3}\index{Iterator@{Iterator}!pointer@{pointer}}
+\index{pointer@{pointer}!Iterator@{Iterator}}
+\doxysubsubsection{\texorpdfstring{pointer}{pointer}}
+{\footnotesize\ttfamily \label{structIterator_a4fe59f8e837a80cced51e46f37c97df3} 
+using \mbox{\hyperlink{structIterator_a4fe59f8e837a80cced51e46f37c97df3}{Iterator\+::pointer}} = \mbox{\hyperlink{classParticle}{Particle}}\texorpdfstring{$\ast$}{*}}
+
+\Hypertarget{structIterator_a483d5ae4b26557581c45c85390646a04}\index{Iterator@{Iterator}!reference@{reference}}
+\index{reference@{reference}!Iterator@{Iterator}}
+\doxysubsubsection{\texorpdfstring{reference}{reference}}
+{\footnotesize\ttfamily \label{structIterator_a483d5ae4b26557581c45c85390646a04} 
+using \mbox{\hyperlink{structIterator_a483d5ae4b26557581c45c85390646a04}{Iterator\+::reference}} = \mbox{\hyperlink{classParticle}{Particle}}\&}
+
+\Hypertarget{structIterator_a40b7596265729f852993894631789224}\index{Iterator@{Iterator}!value\_type@{value\_type}}
+\index{value\_type@{value\_type}!Iterator@{Iterator}}
+\doxysubsubsection{\texorpdfstring{value\_type}{value\_type}}
+{\footnotesize\ttfamily \label{structIterator_a40b7596265729f852993894631789224} 
+using \mbox{\hyperlink{structIterator_a40b7596265729f852993894631789224}{Iterator\+::value\+\_\+type}} = \mbox{\hyperlink{classParticle}{Particle}}}
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{structIterator_ae1a8e6b8126ed6b56844391fd5e901c1}\index{Iterator@{Iterator}!Iterator@{Iterator}}
+\index{Iterator@{Iterator}!Iterator@{Iterator}}
+\doxysubsubsection{\texorpdfstring{Iterator()}{Iterator()}}
+{\footnotesize\ttfamily \label{structIterator_ae1a8e6b8126ed6b56844391fd5e901c1} 
+Iterator\+::\+Iterator (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structIterator_a4fe59f8e837a80cced51e46f37c97df3}{pointer}}}]{ptr}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{structIterator_aea0debeb120bf666524faf6d81dd4d36}\index{Iterator@{Iterator}!operator\texorpdfstring{$\ast$}{*}@{operator\texorpdfstring{$\ast$}{*}}}
+\index{operator\texorpdfstring{$\ast$}{*}@{operator\texorpdfstring{$\ast$}{*}}!Iterator@{Iterator}}
+\doxysubsubsection{\texorpdfstring{operator\texorpdfstring{$\ast$}{*}()}{operator*()}}
+{\footnotesize\ttfamily \label{structIterator_aea0debeb120bf666524faf6d81dd4d36} 
+\mbox{\hyperlink{structIterator_a483d5ae4b26557581c45c85390646a04}{reference}} Iterator\+::operator\texorpdfstring{$\ast$}{*} (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{structIterator_a091c7cf45883f9196ebcda0ad97b59f8}\index{Iterator@{Iterator}!operator++@{operator++}}
+\index{operator++@{operator++}!Iterator@{Iterator}}
+\doxysubsubsection{\texorpdfstring{operator++()}{operator++()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{structIterator_a091c7cf45883f9196ebcda0ad97b59f8} 
+\mbox{\hyperlink{structIterator}{Iterator}} \& Iterator\+::operator++ (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{structIterator_a414cf35511fbddfbf40d00f9618f4fc3}\index{Iterator@{Iterator}!operator++@{operator++}}
+\index{operator++@{operator++}!Iterator@{Iterator}}
+\doxysubsubsection{\texorpdfstring{operator++()}{operator++()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{structIterator_a414cf35511fbddfbf40d00f9618f4fc3} 
+\mbox{\hyperlink{structIterator}{Iterator}} Iterator\+::operator++ (\begin{DoxyParamCaption}\item[{int}]{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\Hypertarget{structIterator_a7ddd232916d538e333b821f1b33f2046}\index{Iterator@{Iterator}!operator-\/$>$@{operator-\/$>$}}
+\index{operator-\/$>$@{operator-\/$>$}!Iterator@{Iterator}}
+\doxysubsubsection{\texorpdfstring{operator-\/$>$()}{operator->()}}
+{\footnotesize\ttfamily \label{structIterator_a7ddd232916d538e333b821f1b33f2046} 
+\mbox{\hyperlink{structIterator_a4fe59f8e837a80cced51e46f37c97df3}{pointer}} Iterator\+::operator-\/$>$ (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\doxysubsection{Friends And Related Symbol Documentation}
+\Hypertarget{structIterator_a27aed9f3ea67a677964fa51de28a5824}\index{Iterator@{Iterator}!operator"!=@{operator"!=}}
+\index{operator"!=@{operator"!=}!Iterator@{Iterator}}
+\doxysubsubsection{\texorpdfstring{operator"!=}{operator!=}}
+{\footnotesize\ttfamily \label{structIterator_a27aed9f3ea67a677964fa51de28a5824} 
+bool operator!= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structIterator}{Iterator}} \&}]{a}{, }\item[{const \mbox{\hyperlink{structIterator}{Iterator}} \&}]{b}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+\Hypertarget{structIterator_adf9a9358b475317bd816d7b47a0f5cd1}\index{Iterator@{Iterator}!operator==@{operator==}}
+\index{operator==@{operator==}!Iterator@{Iterator}}
+\doxysubsubsection{\texorpdfstring{operator==}{operator==}}
+{\footnotesize\ttfamily \label{structIterator_adf9a9358b475317bd816d7b47a0f5cd1} 
+bool operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structIterator}{Iterator}} \&}]{a}{, }\item[{const \mbox{\hyperlink{structIterator}{Iterator}} \&}]{b}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structIterator_a0d1ebd4068ca262c0b1bec92f82d2895}\index{Iterator@{Iterator}!m\_ptr@{m\_ptr}}
+\index{m\_ptr@{m\_ptr}!Iterator@{Iterator}}
+\doxysubsubsection{\texorpdfstring{m\_ptr}{m\_ptr}}
+{\footnotesize\ttfamily \label{structIterator_a0d1ebd4068ca262c0b1bec92f82d2895} 
+\mbox{\hyperlink{structIterator_a4fe59f8e837a80cced51e46f37c97df3}{pointer}} Iterator\+::m\+\_\+ptr\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/particle/\mbox{\hyperlink{ParticleContainer_8h}{Particle\+Container.\+h}}\end{DoxyCompactItemize}

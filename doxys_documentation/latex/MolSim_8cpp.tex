@@ -1,0 +1,91 @@
+\doxysection{src/\+Mol\+Sim.cpp File Reference}
+\hypertarget{MolSim_8cpp}{}\label{MolSim_8cpp}\index{src/MolSim.cpp@{src/MolSim.cpp}}
+{\ttfamily \#include "{}computations/forces/\+Forces.\+h"{}}\newline
+{\ttfamily \#include "{}computations/positions/\+Positions.\+h"{}}\newline
+{\ttfamily \#include "{}computations/velocities/\+Velocities.\+h"{}}\newline
+{\ttfamily \#include "{}input\+Reader/\+Txt\+File\+Reader.\+h"{}}\newline
+{\ttfamily \#include "{}output\+Writer/\+VTKWriter.\+h"{}}\newline
+{\ttfamily \#include "{}particle/\+Particle\+Container.\+h"{}}\newline
+{\ttfamily \#include $<$bits/getopt\+\_\+core.\+h$>$}\newline
+{\ttfamily \#include $<$cstdlib$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$list$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$unistd.\+h$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{MolSim_8cpp_a329c95e85f063f49b0daaed5c5b56335}{main}} (int argc, char \texorpdfstring{$\ast$}{*}argsv\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const std\+::string \mbox{\hyperlink{MolSim_8cpp_a9ee50d30d23a8de0c460aaecc69a88b4}{usage\+Text}}
+\item 
+constexpr double \mbox{\hyperlink{MolSim_8cpp_a638f9bb439eac914b175531577dfa7da}{start\+\_\+time}} = 0
+\item 
+double \mbox{\hyperlink{MolSim_8cpp_a8c7ea5e69ce954c1d81db1732f9f426a}{end\+\_\+time}} = 1000
+\item 
+double \mbox{\hyperlink{MolSim_8cpp_a4cfc079302fe9a34fe24637c4e44303a}{delta\+\_\+t}} = 0.\+014
+\item 
+std\+::vector$<$ \mbox{\hyperlink{classParticle}{Particle}} $>$ \mbox{\hyperlink{MolSim_8cpp_a6fd86b366445e4d60abc8b006e2c89eb}{particles}}
+\item 
+std\+::list$<$ \mbox{\hyperlink{classParticle}{Particle}} $>$ \mbox{\hyperlink{MolSim_8cpp_a268997db9bd81c10537b2263027c6a92}{particles\+List}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{MolSim_8cpp_a329c95e85f063f49b0daaed5c5b56335}\index{MolSim.cpp@{MolSim.cpp}!main@{main}}
+\index{main@{main}!MolSim.cpp@{MolSim.cpp}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily \label{MolSim_8cpp_a329c95e85f063f49b0daaed5c5b56335} 
+int main (\begin{DoxyParamCaption}\item[{int}]{argc}{, }\item[{char \texorpdfstring{$\ast$}{*}}]{argsv}{\mbox{[}$\,$\mbox{]}}\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{MolSim_8cpp_a4cfc079302fe9a34fe24637c4e44303a}\index{MolSim.cpp@{MolSim.cpp}!delta\_t@{delta\_t}}
+\index{delta\_t@{delta\_t}!MolSim.cpp@{MolSim.cpp}}
+\doxysubsubsection{\texorpdfstring{delta\_t}{delta\_t}}
+{\footnotesize\ttfamily \label{MolSim_8cpp_a4cfc079302fe9a34fe24637c4e44303a} 
+double delta\+\_\+t = 0.\+014}
+
+\Hypertarget{MolSim_8cpp_a8c7ea5e69ce954c1d81db1732f9f426a}\index{MolSim.cpp@{MolSim.cpp}!end\_time@{end\_time}}
+\index{end\_time@{end\_time}!MolSim.cpp@{MolSim.cpp}}
+\doxysubsubsection{\texorpdfstring{end\_time}{end\_time}}
+{\footnotesize\ttfamily \label{MolSim_8cpp_a8c7ea5e69ce954c1d81db1732f9f426a} 
+double end\+\_\+time = 1000}
+
+\Hypertarget{MolSim_8cpp_a6fd86b366445e4d60abc8b006e2c89eb}\index{MolSim.cpp@{MolSim.cpp}!particles@{particles}}
+\index{particles@{particles}!MolSim.cpp@{MolSim.cpp}}
+\doxysubsubsection{\texorpdfstring{particles}{particles}}
+{\footnotesize\ttfamily \label{MolSim_8cpp_a6fd86b366445e4d60abc8b006e2c89eb} 
+std\+::vector$<$\mbox{\hyperlink{classParticle}{Particle}}$>$ particles}
+
+\Hypertarget{MolSim_8cpp_a268997db9bd81c10537b2263027c6a92}\index{MolSim.cpp@{MolSim.cpp}!particlesList@{particlesList}}
+\index{particlesList@{particlesList}!MolSim.cpp@{MolSim.cpp}}
+\doxysubsubsection{\texorpdfstring{particlesList}{particlesList}}
+{\footnotesize\ttfamily \label{MolSim_8cpp_a268997db9bd81c10537b2263027c6a92} 
+std\+::list$<$\mbox{\hyperlink{classParticle}{Particle}}$>$ particles\+List}
+
+\Hypertarget{MolSim_8cpp_a638f9bb439eac914b175531577dfa7da}\index{MolSim.cpp@{MolSim.cpp}!start\_time@{start\_time}}
+\index{start\_time@{start\_time}!MolSim.cpp@{MolSim.cpp}}
+\doxysubsubsection{\texorpdfstring{start\_time}{start\_time}}
+{\footnotesize\ttfamily \label{MolSim_8cpp_a638f9bb439eac914b175531577dfa7da} 
+double start\+\_\+time = 0\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+\Hypertarget{MolSim_8cpp_a9ee50d30d23a8de0c460aaecc69a88b4}\index{MolSim.cpp@{MolSim.cpp}!usageText@{usageText}}
+\index{usageText@{usageText}!MolSim.cpp@{MolSim.cpp}}
+\doxysubsubsection{\texorpdfstring{usageText}{usageText}}
+{\footnotesize\ttfamily \label{MolSim_8cpp_a9ee50d30d23a8de0c460aaecc69a88b4} 
+const std\+::string usage\+Text}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}Usage:\ ./MolSim\ inputFile\ [-\/d\ delta\_t]\ [-\/e\ t\_end]\(\backslash\)n"{}}}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}-\/d:\ size\ of\ each\ timestep.\ defaults\ to\ 0.014\(\backslash\)n"{}}}
+\DoxyCodeLine{\ \ \ \ \textcolor{stringliteral}{"{}-\/e\ time\ at\ which\ to\ stop\ the\ simulation.\ defaults\ to\ 1000"{}}}
+
+\end{DoxyCode}
