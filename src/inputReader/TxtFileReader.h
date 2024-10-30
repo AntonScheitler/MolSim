@@ -1,5 +1,6 @@
 #include "FileReader.h"
 #include <vector>
+#include "particle/ParticleContainer.h"
 
 namespace inputReader {
     class TxtFileReader : public FileReader {
@@ -9,6 +10,6 @@ namespace inputReader {
          * @param filename the name of the file to read from
          */
         public:
-            void readFile(std::vector<Particle> &particles, char *filename) override;
+            void readFile(ParticleContainer &particles, char *filename) override;
     };
 } // namespace inputReader

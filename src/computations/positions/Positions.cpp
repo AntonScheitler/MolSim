@@ -1,10 +1,10 @@
 #include "../../utils/ArrayUtils.h"
 #include "particle/Particle.h"
-#include <vector>
+#include "particle/ParticleContainer.h"
 
 namespace positions {
 
-void stoermerVerlet(std::vector<Particle> &planets, double deltaT) {
+void stoermerVerlet(ParticleContainer &planets, double deltaT) {
   for (Particle &planet : planets) {
     std::array<double, 3> posFromVel = ArrayUtils::elementWiseScalarOp(
         deltaT, planet.getV(), std::multiplies<>());

@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "particle/Particle.h"
+#include "particle/ParticleContainer.h"
 
 #include <vector>
 
@@ -17,12 +17,12 @@ namespace inputReader {
 /**
  * @brief superclass for all file readers
  */
-class FileReader {
+    class FileReader {
 
-public:
-  FileReader() = default;
-  virtual ~FileReader() = default;
-  // todo rebuild to use particlecontainer
-  virtual void readFile(std::vector<Particle> &particles, char *filename) = 0;
-};
+    public:
+        FileReader() = default;
+
+        virtual ~FileReader() = default;
+        virtual void readFile(ParticleContainer &particles, char *filename) = 0;
+    };
 }

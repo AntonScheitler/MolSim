@@ -2,13 +2,12 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include <vector>
 
 namespace inputReader {
 
-void TxtFileReader::readFile(std::vector<Particle> &particles, char *filename) {
-  std::array<double, 3> x;
-  std::array<double, 3> v;
+void TxtFileReader::readFile(ParticleContainer &particles, char *filename) {
+  std::array<double, 3> x{};
+  std::array<double, 3> v{};
   double m;
   int num_particles = 0;
 
@@ -47,7 +46,7 @@ void TxtFileReader::readFile(std::vector<Particle> &particles, char *filename) {
         exit(-1);
       }
       datastream >> m;
-      particles.emplace_back(x, v, m);
+      particles.addParticle(Particle(x, v, m));
 
       getline(input_file, tmp_string);
       std::cout << "Read line: " << tmp_string << std::endl;
