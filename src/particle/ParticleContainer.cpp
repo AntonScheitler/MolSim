@@ -15,21 +15,13 @@ void ParticleContainer::addParticle(const Particle &particle) {
 
 int ParticleContainer::size() {
     return particles.size();
-} 
+}
 
 ParticleContainer::ParticleIterator ParticleContainer::begin() {
     return particles.begin();
 }
 
 ParticleContainer::ParticleIterator ParticleContainer::end() {
-    return particles.end();
-}
-
-ParticleContainer::ParticleIterator ParticleContainer::beginParticle() {
-    return particles.begin();
-}
-
-ParticleContainer::ParticleIterator ParticleContainer::endParticle() {
     return particles.end();
 }
 
@@ -51,23 +43,22 @@ ParticleContainer::ParticleIterator::ParticleIterator(std::vector<Particle>::ite
     current = it;
 }
 
-
 ParticleContainer::ParticleIterator::reference ParticleContainer::ParticleIterator::operator*() {
     return *current;
 }
 
-ParticleContainer::ParticleIterator& ParticleContainer::ParticleIterator::operator++() {
+ParticleContainer::ParticleIterator &ParticleContainer::ParticleIterator::operator++() {
     ++current;
     return *this;
 }
 
-bool ParticleContainer::ParticleIterator::operator!=(const ParticleContainer::ParticleIterator& other) {
+bool ParticleContainer::ParticleIterator::operator!=(const ParticleContainer::ParticleIterator &other) {
     return current != other.current;
 }
 
 ParticleContainer::PairParticleIterator::PairParticleIterator(std::vector<Particle>::iterator first_arg,
-        std::vector<Particle>::iterator second_arg,
-        std::vector<Particle>::iterator end_arg) {
+                                                              std::vector<Particle>::iterator second_arg,
+                                                              std::vector<Particle>::iterator end_arg) {
     first = first_arg;
     second = second_arg;
     end = end_arg;
@@ -77,7 +68,7 @@ ParticleContainer::PairParticleIterator::reference ParticleContainer::PairPartic
     return {*first, *second};
 }
 
-ParticleContainer::PairParticleIterator& ParticleContainer::PairParticleIterator::operator++() {
+ParticleContainer::PairParticleIterator &ParticleContainer::PairParticleIterator::operator++() {
     if (second == (end - 1)) {
         first++;
         second = first;
@@ -86,6 +77,6 @@ ParticleContainer::PairParticleIterator& ParticleContainer::PairParticleIterator
     return *this;
 }
 
-bool ParticleContainer::PairParticleIterator::operator!=(const ParticleContainer::PairParticleIterator& other) {
+bool ParticleContainer::PairParticleIterator::operator!=(const ParticleContainer::PairParticleIterator &other) {
     return first != other.first || second != other.second || end != other.end;
 }

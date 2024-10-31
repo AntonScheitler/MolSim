@@ -10,8 +10,9 @@ cd build
 cmake ..
 make
 ```
+
 ### Documentation
-To enable the make target for building a documentation using doxygen, run cmake with the option
+To enable the make target for building a documentation with doxygen, run cmake with the option
 ```
 -DDOC_TARGET=ON
 ```
@@ -22,9 +23,14 @@ make doc_doxygen
 The doxygen documentation will be generated in the directory `doxys_documentation`
 
 
-### How to run
+### Execution
 
 To run the program, execute the following command
 ```
-./MolSim ../input/eingabe-sonne.txt  
+./MolSim <input_file> [OPTIONS]
 ```
+For the input file use for example `input/eingabe-sonne.txt`.
+
+The executable offers the following options:
+- `-d, --delta_t`: The size of each timestep in seconds. Default value: 0.014
+- `-e, --t_end`: Time in seconds at which to stop the simulation. Default value: 1000

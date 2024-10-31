@@ -12,8 +12,8 @@
 
 const std::string usageText =
         "Usage: ./MolSim [OPTIONS] INPUT_FILE\n"
-        "-d, --delta_t\t\tsize of each timestep. defaults to 0.014\n"
-        "-e, --t_end\t\ttime at which to stop the simulation. defaults to 1000";
+        "-d, --delta_t\t\tsize of each timestep in seconds. defaults to 0.014\n"
+        "-e, --t_end\t\ttime in seconds at which to stop the simulation. defaults to 1000";
 
 constexpr double start_time = 0;
 double end_time = 1000;
