@@ -37,10 +37,17 @@ target_include_directories(MolSim
             ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
+# spdlog
+set(spdlog_DIR ${PROJECT_SOURCE_DIR}/spdlog/build)
+find_package(spdlog PATHS ${spdlog_DIR} REQUIRED)
+
 target_link_libraries(MolSim
         # stuff that is used in headers and source files
         PUBLIC
             xerces-c
+        PRIVATE
+            spdlog::spdlog
+
 )
 
 # activate all compiler warnings. Clean up your code :P
@@ -53,6 +60,7 @@ target_compile_options(MolSim
 )
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
+
 
 # doxygen
 include(doxygen)
