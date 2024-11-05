@@ -12,16 +12,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: configure
-      run: ./configure
+      - name: install dependencies
+        run:
+          apt-get update && apt-get install -y 
+          build-essential 
+          cmake 
+          gcc 
+          g++ 
+          gdb 
+          clang
+          libeigen3-dev 
+          libxerces-c-dev
+          && apt-get clean
 
-    - name: Install dependencies
-      run: make
+      - name: build and run the project
+        run:
+          mkdir build
+          && cd build
+          && cmake ..
+          && make
 
-    - name: Run check
-      run: make check
 
-    - name: Run distcheck
-      run: make distcheck
+
+
