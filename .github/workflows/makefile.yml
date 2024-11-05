@@ -27,11 +27,11 @@ jobs:
           libxerces-c-dev
           && sudo apt-get clean
 
-      - name: build and run the project
+      - name: build the project with fsanitize=address
         run:
           mkdir build
           && cd build
-          && cmake ..
+          && cmake -E env CXXFLAGS="-fsanitize=address" cmake ..
           && make
 
 
