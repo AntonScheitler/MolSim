@@ -6,7 +6,8 @@ project(PSEMolDyn_GroupF VERSION 0.0.1)
 # let ccmake and cmake-gui offer the default build type options
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug;Release;RelWithDebInfo;MinSizeRel")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # set Release as the default build type if it is not yet set.
 if(NOT CMAKE_BUILD_TYPE)
@@ -58,10 +59,6 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
 include(doxygen)
 
 # install google test
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
 include(FetchContent)
 FetchContent_Declare(
     googletest
@@ -70,28 +67,10 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
-
 # set up testing
-file(GLOB_RECURSE TESTFILES
-    "${CMAKE_CURRENT_SOURCE_DIR}/test/*.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/test/*.h"
-)
+add_library(src_lib ${MY_SRC})
 
-add_executable(tests "${TESTFILES}")
+file(GLOB_RECURSE TEST_FILES "${CMAKE_CURRENT_SOURCE_DIR}/test/*.cpp")
+add_executable(test ${TEST_FILES})
 
-target_include_directories(tests
-    PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs/libxsd
-    PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
-    PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/test
-)
-
-target_link_libraries(tests 
-    gtest_main
-)
-
-enable_testing()
-
-add_test(NAME tests COMMAND tests)
+target_link_libraries(test PRIVATE src_lib gtest_main)
