@@ -16,7 +16,7 @@ jobs:
 
       - name: install dependencies
         run:
-          apt-get update && apt-get install -y 
+          sudo apt-get update && sudo apt-get install -y 
           build-essential 
           cmake 
           gcc 
@@ -25,7 +25,7 @@ jobs:
           clang
           libeigen3-dev 
           libxerces-c-dev
-          && apt-get clean
+          && sudo apt-get clean
 
       - name: build and run the project
         run:
