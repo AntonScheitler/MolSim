@@ -1,4 +1,5 @@
 #include "particle/ParticleContainer.h"
+#include "spdlogConfig.h"
 
 /**
  * namespace that wraps different writers which write simulation data into file. All of those writers inherit from the abstract FileWriter
@@ -17,5 +18,7 @@ namespace outputWriter {
              * @param iteration the iteration the simulation is currently in
              */
             virtual void plotParticles(ParticleContainer &particles, int iteration) = 0;
+        private:
+            std::shared_ptr<spdlog::logger> logger;
     };
 } // namespace outputWriter

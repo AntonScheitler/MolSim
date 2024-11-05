@@ -7,7 +7,7 @@
 
 #include "VTKWriter.h"
 #include "particle/ParticleContainer.h"
-#include "spdlog/spdlog.h"
+#include "spdlogConfig.h"
 
 #include <fstream>
 #include <iomanip>
@@ -15,6 +15,11 @@
 #include <string>
 
 namespace outputWriter {
+
+    VTKWriter::VTKWriter() {
+        this->logger = spdlog::stdout_color_st("VTKWriter");
+        SPDLOG_LOGGER_DEBUG(logger, "Initialized VTKWriter");
+    }
 
     void VTKWriter::plotParticles(ParticleContainer &particles, int iteration) {
         std::string out_name("MD_vtk");
@@ -70,9 +75,9 @@ namespace outputWriter {
 
     void VTKWriter::plotParticle(Particle &p) {
         if (vtkFile->UnstructuredGrid().present()) {
-            spdlog::debug("UnstructuredGrid is present");
+            SPDLOG_LOGGER_DEBUG(logger, "UnstructuredGrid is present");
         } else {
-            spdlog::error("No UnstructuredGrid present");
+            SPDLOG_LOGGER_ERROR(logger, "No UnstructuredGrid present");
         }
 
         PointData::DataArray_sequence &pointDataSequence =
