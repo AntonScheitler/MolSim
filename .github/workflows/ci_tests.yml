@@ -23,7 +23,6 @@ jobs:
           g++ 
           gdb 
           clang
-          libeigen3-dev 
           libxerces-c-dev
           && sudo apt-get clean
 
