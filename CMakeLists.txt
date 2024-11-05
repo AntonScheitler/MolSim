@@ -69,8 +69,19 @@ FetchContent_MakeAvailable(googletest)
 
 # set up testing
 add_library(src_lib ${MY_SRC})
+target_include_directories(src_lib 
+    PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/libxsd
+    PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+target_link_libraries(src_lib 
+    PUBLIC
+    xerces-c
+)
 
 file(GLOB_RECURSE TEST_FILES "${CMAKE_CURRENT_SOURCE_DIR}/test/*.cpp")
 add_executable(test ${TEST_FILES})
 
-target_link_libraries(test PRIVATE src_lib gtest_main)
+target_link_libraries(test PUBLIC src_lib gtest_main)
+target_include_directories(test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
