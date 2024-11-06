@@ -1,12 +1,19 @@
 #include "particle/ParticleContainer.h"
 
 /**
- * namespace which wraps computation functions for different forces
+ * @brief a class wrapping force-computing functions and their utility functions
  */
-namespace forces {
-    /**
-     * @brief computes the gravitational forces between the planets and changes them in-place
-     * @param planets the planets, for which the gravitational forces need to be computed
-     */
-    void computeGravity(ParticleContainer &planets);
-}
+class ForceComputations {
+    public:
+        /**
+         * @brief computes the gravitational forces between the planets and changes them in-place
+         * @param particles the planets, for which the gravitational forces need to be computed
+         */
+        static void computeGravity(ParticleContainer& particles);
+
+    private:
+        /**
+         * @brief sets the oldF of every particle to that particle's current force. The current force is then reset
+         */
+        static void resetForces(ParticleContainer& particles);
+};

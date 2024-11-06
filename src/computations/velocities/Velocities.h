@@ -1,14 +1,18 @@
 #include "particle/ParticleContainer.h"
 
 /**
- * namespace which wraps computation different functions for velocities
+ * @brief a class wrapping position-computing functions and their utility
+ * functions
  */
-namespace velocities {
-    /**
-     * @brief computes the updated velocities for the ParticleContainer of planets
-     * in-place
-     * @param planets the planets to compute the velocities of
-     * @param deltaT the size of timesteps used in the simulation
-     */
-    void stoermerVerlet(ParticleContainer &planets, double deltaT);
-} // namespace velocities
+class VelocityComputations {
+    public:
+        /**
+         * @brief computes the updated velocities for the ParticleContainer of planets
+         * in-place
+         * @param particles_arg the particles to compute the velocities of
+         * @param deltaT_arg the timestep size used by the simulation
+         */
+        static void stoermerVerlet(ParticleContainer &particles, double deltaT);
+
+    private:
+};
