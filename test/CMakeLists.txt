@@ -1,4 +1,3 @@
-enable_testing()
 file(GLOB_RECURSE TESTFILES
     "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/*.h"
@@ -10,5 +9,6 @@ target_link_libraries(mytests
     gtest_main
 )
 
+enable_testing()
 include(GoogleTest)
 gtest_discover_tests(mytests)
