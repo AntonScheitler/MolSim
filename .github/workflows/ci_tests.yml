@@ -33,6 +33,10 @@ jobs:
           && cmake -E env CXXFLAGS="-fsanitize=address" cmake ..
           && make
 
+      - name: run unit tests
+        run:
+          cd test/
+          && ctest
 
 
 
