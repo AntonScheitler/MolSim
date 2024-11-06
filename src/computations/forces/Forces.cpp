@@ -22,9 +22,7 @@ namespace forces {
 
             double distance = ArrayUtils::L2Norm(distanceVector);
             if(distance == 0) continue;
-
-            double coefficient =
-                    (pair.first.getM() * pair.second.getM()) / std::pow(distance, 3);
+            double coefficient = (pair.first.getM() * pair.second.getM()) / std::pow(distance, 3);
             newForce = ArrayUtils::elementWiseScalarOp(coefficient, distanceVector, std::multiplies<>());
             pair.first.setF(ArrayUtils::elementWisePairOp(pair.first.getF(), newForce, std::plus<>()));
 
