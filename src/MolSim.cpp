@@ -69,10 +69,10 @@ int main(int argc, char *argsv[]) {
     double current_time = start_time;
     int iteration = 0;
 
-    // compute position, force and velocity for all particles each iteration
+    // compute force, position and velocity for all particles each iteration
     while (current_time < end_time) {
-        positions::stoermerVerlet(particles, delta_t);
         forces::computeGravity(particles);
+        positions::stoermerVerlet(particles, delta_t);
         velocities::stoermerVerlet(particles, delta_t);
 
         iteration++;
