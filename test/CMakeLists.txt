@@ -11,5 +11,4 @@ target_link_libraries(mytests
 )
 
 include(GoogleTest)
-gtest_discover_tests(mytests WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-add_test(NAME all COMMAND mytests)
+gtest_discover_tests(mytests)
