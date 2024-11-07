@@ -12,7 +12,7 @@ make
 ```
 
 ### Documentation
-To enable the make target for building a documentation with doxygen, run cmake with the option
+To enable the make target for building a documentation with doxygen, run cmake with the option (this option is turned `OFF` by default)
 ```
 -DDOC_TARGET=ON
 ```

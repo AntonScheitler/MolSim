@@ -10,6 +10,11 @@
 #include <array>
 #include <string>
 
+/**
+ * Class for modeling particles, where each Particle has three-dimensional position, velocity and force that is
+ * effective on it. Mass of a Particle can also be specified. Use the class ParticleContainer for storing multiple
+ * particles and iterating over them.
+ */
 class Particle {
 
     private:
@@ -57,24 +62,64 @@ class Particle {
 
         virtual ~Particle();
 
+        /**
+        * @brief Returns the position of the particle
+        * @return position of the particle
+        */
         const std::array<double, 3> &getX() const;
 
+        /**
+         * @brief Set the position of the particle
+         * @param newX new position of the particle
+         */
         void setX(std::array<double, 3> newX);
 
+        /**
+         * @brief Get the velocity of the particle
+         * @return velocity of particle
+         */
         const std::array<double, 3> &getV() const;
 
+        /**
+         * @brief Set the new velocity of the particle
+         * @param newV new velocity
+         */
         void setV(std::array<double, 3> newV);
 
+        /**
+         * @brief Get the force acting on this particle
+         * @return force of particle
+         */
         const std::array<double, 3> &getF() const;
 
+        /**
+         * @brief Get the old force that was acting on this particle
+         * @return old force of particle
+         */
         const std::array<double, 3> &getOldF() const;
 
+        /**
+         * @brief Set the force of this particle
+         * @param newF new force
+         */
         void setF(std::array<double, 3> newF);
 
+        /**
+         * @brief Set the old force of this particle
+         * @param newF old force
+         */
         void setOldF(std::array<double, 3> newF);
 
+        /**
+         * @brief Get the mass of this particle
+         * @return mass of this particle
+         */
         double getM() const;
 
+        /**
+         * @brief Get the type of this particle
+         * @return type of this particle
+         */
         int getType() const;
 
         bool operator==(Particle &other);

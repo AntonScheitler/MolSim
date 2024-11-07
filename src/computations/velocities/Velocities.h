@@ -1,7 +1,7 @@
 #include "particle/ParticleContainer.h"
 
 /**
- * namespace which wraps computation different functions for velocities
+ * @brief namespace which wraps computation different functions for velocities
  */
 namespace velocities {
     /**

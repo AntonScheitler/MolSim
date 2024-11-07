@@ -1,7 +1,7 @@
 #include "particle/ParticleContainer.h"
 
 /**
- * namespace which wraps computation different functions for positions
+ * @brief namespace which wraps computation different functions for positions
  */
 namespace positions {
     /**

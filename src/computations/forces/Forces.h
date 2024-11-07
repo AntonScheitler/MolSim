@@ -1,7 +1,7 @@
 #include "particle/ParticleContainer.h"
 
 /**
- * namespace which wraps computation functions for different forces
+ * @brief namespace which wraps computation functions for different forces
  */
 namespace forces {
     /**
