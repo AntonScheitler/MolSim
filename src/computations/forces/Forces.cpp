@@ -6,9 +6,8 @@
 
 namespace forces {
     void computeGravity(ParticleContainer &planets) {
-        // set the old forces for all planets and reset their new forces  
+        // reset all planets forces
         for (Particle &planet: planets) {
-            planet.setOldF(planet.getF());
             planet.setF({0, 0, 0});
         }
 
