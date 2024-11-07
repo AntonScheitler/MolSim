@@ -15,9 +15,9 @@ const std::string usageText =
         "-d, --delta_t\t\tsize of each timestep in seconds. defaults to 0.014\n"
         "-e, --t_end\t\ttime in seconds at which to stop the simulation. defaults to 1000";
 
-constexpr double start_time = 0;
-double end_time = 1000;
-double delta_t = 0.014;
+constexpr double startTime = 0;
+double endTime = 1000;
+double deltaT = 0.014;
 
 ParticleContainer particles;
 
@@ -34,15 +34,15 @@ int main(int argc, char *argsv[]) {
     while ((c = getopt_long(argc, argsv, shortOpts, longOpts, nullptr)) != -1) {
         switch (c) {
             case 'd':
-                delta_t = std::stod(optarg);
-                if (delta_t <= 0) {
+                deltaT = std::stod(optarg);
+                if (deltaT <= 0) {
                     std::cerr << "delta t must be positive!" << std::endl;
                     exit(EXIT_FAILURE);
                 }
                 break;
             case 'e':
-                end_time = std::stod(optarg);
-                if (end_time <= 0) {
+                endTime = std::stod(optarg);
+                if (endTime <= 0) {
                     std::cerr << "end time must be positive!" << std::endl;
                     exit(EXIT_FAILURE);
                 }
@@ -66,14 +66,14 @@ int main(int argc, char *argsv[]) {
     fileReader.readFile(particles, argsv[optind]);
 
     // prepare for iteration
-    double current_time = start_time;
+    double currentTime = startTime;
     int iteration = 0;
 
     // compute position, force and velocity for all particles each iteration
-    while (current_time < end_time) {
-        positions::stoermerVerlet(particles, delta_t);
+    while (currentTime < endTime) {
+        positions::stoermerVerlet(particles, deltaT);
         forces::computeGravity(particles);
-        velocities::stoermerVerlet(particles, delta_t);
+        velocities::stoermerVerlet(particles, deltaT);
 
         iteration++;
         if (iteration % 10 == 0) {
@@ -82,7 +82,7 @@ int main(int argc, char *argsv[]) {
             writer.plotParticles(particles, iteration);
         }
         std::cout << "Iteration " << iteration << " finished." << std::endl;
-        current_time += delta_t;
+        currentTime += deltaT;
     }
     std::cout << "output written. Terminating..." << std::endl;
     return 0;

@@ -16,15 +16,15 @@ public:
 
     /**
      * @brief create an instance of a PairParticleIterator
-     * @param first the vector iterator which will be used to generate the first element in the pair
-     * @param second the vector iterator which will be used to generate the second element in the pair
-     * @param end a vector iterator pointing to the end of the particle vector, which is needed to determine when the
+     * @param firstArg the vector iterator which will be used to generate the first element in the pair
+     * @param secondArg the vector iterator which will be used to generate the second element in the pair
+     * @param endArg a vector iterator pointing to the end of the particle vector, which is needed to determine when the
      * final pair has been reached
      * @return an instance of a PairParticleIterator
      */
-    PairParticleIterator(std::vector<Particle>::iterator first,
-                         std::vector<Particle>::iterator second,
-                         std::vector<Particle>::iterator end);
+    PairParticleIterator(std::vector<Particle>::iterator firstArg,
+                         std::vector<Particle>::iterator secondArg,
+                         std::vector<Particle>::iterator endArg);
 
     /**
      * @brief Dereference this PairParticleIterator, i.e. get the current pair of Particles

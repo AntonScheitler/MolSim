@@ -13,10 +13,10 @@
 namespace outputWriter {
 
     void XYZWriter::plotParticles(ParticleContainer &particles, int iteration) {
-        std::string out_name("MD_xyz");
+        std::string outName("MD_xyz");
         std::ofstream file;
         std::stringstream strstr;
-        strstr << out_name << "_" << std::setfill('0') << std::setw(4) << iteration << ".xyz";
+        strstr << outName << "_" << std::setfill('0') << std::setw(4) << iteration << ".xyz";
 
         file.open(strstr.str().c_str());
         file << particles.size() << std::endl;

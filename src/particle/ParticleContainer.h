@@ -20,10 +20,10 @@ public:
 
     /**
      * @brief wraps a vector in a ParticleContainer
-     * @param particles the particle vector to be wrapped
+     * @param particlesArg the particle vector to be wrapped
      * @return the object of the ParticleContainer
      */
-    explicit ParticleContainer(const std::vector<Particle> &particles);
+    explicit ParticleContainer(const std::vector<Particle> &particlesArg);
 
     /**
      * @brief adds a particle to the container

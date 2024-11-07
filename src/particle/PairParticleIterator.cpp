@@ -1,12 +1,12 @@
 #include "PairParticleIterator.h"
 
 
-PairParticleIterator::PairParticleIterator(std::vector<Particle>::iterator first_arg,
-                                           std::vector<Particle>::iterator second_arg,
-                                           std::vector<Particle>::iterator end_arg) {
-    first = first_arg;
-    second = second_arg;
-    end = end_arg;
+PairParticleIterator::PairParticleIterator(std::vector<Particle>::iterator firstArg,
+                                           std::vector<Particle>::iterator secondArg,
+                                           std::vector<Particle>::iterator endArg) {
+    first = firstArg;
+    second = secondArg;
+    end = endArg;
 }
 
 PairParticleIterator::reference PairParticleIterator::operator*() {

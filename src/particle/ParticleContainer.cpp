@@ -5,8 +5,8 @@ ParticleContainer::ParticleContainer() {
     particles = std::vector<Particle>{};
 }
 
-ParticleContainer::ParticleContainer(const std::vector<Particle> &particles_arg) {
-    particles = particles_arg;
+ParticleContainer::ParticleContainer(const std::vector<Particle> &particlesArg) {
+    particles = particlesArg;
 }
 
 void ParticleContainer::addParticle(const Particle &particle) {

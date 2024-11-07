@@ -36,7 +36,7 @@ class Particle {
         /**
          * Force which was effective on this particle
          */
-        std::array<double, 3> old_f;
+        std::array<double, 3> oldF;
 
         /**
          * Mass of this particle
@@ -50,15 +50,15 @@ class Particle {
         int type;
 
     public:
-        explicit Particle(int type = 0);
+        explicit Particle(int typeArg = 0);
 
         Particle(const Particle &other);
 
         Particle(
                 // for visualization, we need always 3 coordinates
                 // -> in case of 2d, we use only the first and the second
-                std::array<double, 3> x_arg, std::array<double, 3> v_arg, double m_arg,
-                int type = 0);
+                std::array<double, 3> xArg, std::array<double, 3> vArg, double mArg,
+                int typeArg = 0);
 
         virtual ~Particle();
 
