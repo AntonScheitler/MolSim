@@ -98,15 +98,16 @@ int main(int argc, char *argsv[]) {
     int iteration = 0;
 
     // compute position, force and velocity for all particles each iteration
+    outputWriter::VTKWriter writer{};
     while (current_time < end_time) {
         positions::stoermerVerlet(particles, delta_t);
         forces::computeGravity(particles);
         velocities::stoermerVerlet(particles, delta_t);
 
         iteration++;
+
         if (iteration % 10 == 0) {
             // write output on every 10th iteration
-            outputWriter::VTKWriter writer{};
             writer.plotParticles(particles, iteration);
         }
         SPDLOG_LOGGER_INFO(logger, "Iteration {0} finished.", iteration);
