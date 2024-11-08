@@ -1,4 +1,5 @@
 #include "particle/ParticleContainer.h"
+#include "spdlogConfig.h"
 
 enum simTypes: int {
     comet = 0,
@@ -27,4 +28,6 @@ class Simulator {
         void (*velocityCompute)(ParticleContainer& particles, double deltaT);
 
         void prepareSimulation();
+
+        std::shared_ptr<spdlog::logger> logger;
 };

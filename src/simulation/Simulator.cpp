@@ -19,11 +19,13 @@ Simulator::Simulator(simTypes simType, double startTimeArg, double endTimeArg,
             positionCompute = PositionComputations::stoermerVerlet;
             forceCompute = ForceComputations::computeGravity;
             velocityCompute = VelocityComputations::stoermerVerlet;
+            logger = spdlog::stdout_color_mt("CometSimulation");
         // use lennard-jones for the molecule collision
         case collision: 
             positionCompute = PositionComputations::stoermerVerlet;
             forceCompute = ForceComputations::computeLennardJonesPotential;
             velocityCompute = VelocityComputations::stoermerVerlet;
+            logger = spdlog::stdout_color_mt("CollisionSimulation");
 
             // initialize velocity via brownian motion
             VelocityComputations::applyBrownianMotion(particles, averageVelocity);
@@ -48,7 +50,7 @@ void Simulator::simulate() {
             // write output on every 10th iteration
             writer.plotParticles(particles, iteration);
         }
-        SPDLOG_INFO("Iteration {0} finished.", iteration);
+        SPDLOG_LOGGER_INFO(logger, "Iteration {0} finished.", iteration);
         currentTime += deltaT;
     }
 }
