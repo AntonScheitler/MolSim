@@ -10,10 +10,8 @@ class ForceComputations {
          * @param particles the planets, for which the gravitational forces need to be computed
          */
         static void computeGravity(ParticleContainer& particles);
-
-    private:
         /**
-         * @brief sets the oldF of every particle to that particle's current force. The current force is then reset
+         * @brief updates the old force and resets the current force for all particles
          */
         static void resetForces(ParticleContainer& particles);
 };

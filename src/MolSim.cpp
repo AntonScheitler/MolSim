@@ -4,6 +4,7 @@
 #include "inputReader/TxtFileReader.h"
 #include "outputWriter/VTKWriter.h"
 #include "particle/ParticleContainer.h"
+#include "gtest/gtest.h"
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -69,10 +70,12 @@ int main(int argc, char *argsv[]) {
     double currentTime = startTime;
     int iteration = 0;
 
-    // compute force, position and velocity for all particles each iteration
+    // compute position, force and velocity for all particles each iteration
     while (currentTime < endTime) {
-        ForceComputations::computeGravity(particles);
+        ForceComputations::resetForces(particles);
+
         PositionComputations::stoermerVerlet(particles, deltaT);
+        ForceComputations::computeGravity(particles);
         VelocityComputations::stoermerVerlet(particles, deltaT);
 
         iteration++;

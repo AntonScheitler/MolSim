@@ -6,7 +6,6 @@
 #include "Forces.h"
 
 void ForceComputations::computeGravity(ParticleContainer& particles) {
-    resetForces(particles);
     for (auto it = particles.beginPairParticle(); it != particles.endPairParticle(); ++it) {
         std::pair<Particle &, Particle &> pair = *it;
         std::array<double, 3> newForce = {0, 0, 0};
