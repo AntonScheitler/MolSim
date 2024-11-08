@@ -4,6 +4,7 @@
 #include "inputReader/TxtFileReader.h"
 #include "outputWriter/VTKWriter.h"
 #include "particle/ParticleContainer.h"
+#include "simulation/PlanetSimulation.h"
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -18,17 +19,19 @@ const std::string usageText =
 constexpr double start_time = 0;
 double end_time = 1000;
 double delta_t = 0.014;
+int simType = 0;
 
 ParticleContainer particles;
 
 int main(int argc, char *argsv[]) {
     // input/options handling
     int c;
-    const char* const shortOpts = "d:e:h";
+    const char* const shortOpts = "d:e:h:s";
     const option longOpts[] = {
         {"t_end", required_argument, nullptr, 'e'},
         {"delta_t", required_argument, nullptr, 'd'},
         {"help", no_argument, nullptr, 'h'},
+        {"simType", required_argument, nullptr, 's'},
         {nullptr, no_argument, nullptr, 0}
    };
     while ((c = getopt_long(argc, argsv, shortOpts, longOpts, nullptr)) != -1) {
@@ -47,6 +50,13 @@ int main(int argc, char *argsv[]) {
                     exit(EXIT_FAILURE);
                 }
                 break;
+            case 's':
+                simType = std::stoi(optarg);
+                if (simType < 0 || simType > 1) {
+                    std::cerr << "simulation type must be between 0-1!" << std::endl;
+                    exit(EXIT_FAILURE);
+                }
+                break;
             case 'h':
                 std::cout << usageText << std::endl;
                 exit(EXIT_SUCCESS);
@@ -61,29 +71,24 @@ int main(int argc, char *argsv[]) {
         exit(EXIT_FAILURE);
     }
 
-    // read input from .txt file
-    inputReader::TxtFileReader fileReader;
-    fileReader.readFile(particles, argsv[optind]);
+    switch (simType) {
+        case 0: {
+            // read input from .txt file
+            inputReader::TxtFileReader fileReader;
+            fileReader.readFile(particles, argsv[optind]);
 
-    // prepare for iteration
-    double current_time = start_time;
-    int iteration = 0;
+            planetSimulation::runPlanetSimulation(start_time, end_time, delta_t, particles);
 
-    // compute position, force and velocity for all particles each iteration
-    while (current_time < end_time) {
-        positions::stoermerVerlet(particles, delta_t);
-        forces::computeGravity(particles);
-        velocities::stoermerVerlet(particles, delta_t);
-
-        iteration++;
-        if (iteration % 10 == 0) {
-            // write output on every 10th iteration
-            outputWriter::VTKWriter writer;
-            writer.plotParticles(particles, iteration);
+            break;
         }
-        std::cout << "Iteration " << iteration << " finished." << std::endl;
-        current_time += delta_t;
+        case 1: {
+            // assignment 2
+            std::cout << "in second case" << std::endl;
+            break;
+        }
     }
+
+
     std::cout << "output written. Terminating..." << std::endl;
     return 0;
 }
