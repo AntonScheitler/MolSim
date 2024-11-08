@@ -6,25 +6,21 @@
 #include "particle/ParticleContainer.h"
 #include <cstdlib>
 #include <iostream>
-#include <string>
 #include <unistd.h>
 
 namespace planetSimulation{
 
-    void runPlanetSimulation( double start_time, double end_time, double delta_t, ParticleContainer &particles){
-
-
-
-
+    void runPlanetSimulation( double startTime, double endTime, double deltaT, ParticleContainer &particles){
         // prepare for iteration
-        double current_time = start_time;
+        double current_time = startTime;
         int iteration = 0;
 
         // compute position, force and velocity for all particles each iteration
-        while (current_time < end_time) {
-            positions::stoermerVerlet(particles, delta_t);
-            forces::computeGravity(particles);
-            velocities::stoermerVerlet(particles, delta_t);
+        while (current_time < endTime) {
+            ForceComputations::resetForces(particles);
+            PositionComputations::stoermerVerlet(particles, deltaT);
+            ForceComputations::computeGravity(particles);
+            VelocityComputations::stoermerVerlet(particles, deltaT);
 
             iteration++;
             if (iteration % 10 == 0) {
@@ -33,9 +29,7 @@ namespace planetSimulation{
                 writer.plotParticles(particles, iteration);
             }
             std::cout << "Iteration " << iteration << " finished." << std::endl;
-            current_time += delta_t;
+            current_time += deltaT;
         }
-
     }
-
 }
