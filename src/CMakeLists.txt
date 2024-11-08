@@ -21,7 +21,10 @@ target_link_libraries(src
 # create molsim executable
 add_executable(molsim MolSim.cpp)
 # link the executable to the src library
-target_link_libraries(molsim src)
+target_link_libraries(molsim
+        src
+        spdlog::spdlog
+)
 
 # activate all compiler warnings. Clean up your code :P
 # depending on the compiler different flags are used

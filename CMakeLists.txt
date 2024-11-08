@@ -21,10 +21,16 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
 
 # custom modules
 include(doxygen)
-include(spdlog)
+
+include(FetchContent)
+FetchContent_Declare(
+        spdlog
+        GIT_REPOSITORY https://github.com/gabime/spdlog.git
+        GIT_TAG v1.14.1
+)
+FetchContent_MakeAvailable(spdlog)
 
 # install google test
-include(FetchContent)
 FetchContent_Declare(
     googletest
     GIT_REPOSITORY https://github.com/google/googletest.git

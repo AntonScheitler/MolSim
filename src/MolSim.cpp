@@ -96,7 +96,7 @@ int main(int argc, char *argsv[]) {
         exit(EXIT_FAILURE);
     }
 
-    SPDLOG_LOGGER_INFO(logger, "MolSim program started with delta_t={0} and end_time={1}", delta_t, end_time);
+    SPDLOG_LOGGER_INFO(logger, "MolSim program started with delta_t={0} and end_time={1}", deltaT, endTime);
 
     switch (simType) {
         case 0: {
@@ -108,13 +108,13 @@ int main(int argc, char *argsv[]) {
         }
         case 1: {
             // assignment 2
-            std::cout << "in second case" << std::endl;
+            SPDLOG_LOGGER_DEBUG(logger, "In second case.");
             break;
         }
     }
 
 
-    std::cout << "output written. Terminating..." << std::endl;
+    SPDLOG_LOGGER_INFO(logger, "output written. Terminating...");
     return 0;
 }
 

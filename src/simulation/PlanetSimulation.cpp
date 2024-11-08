@@ -4,6 +4,7 @@
 #include "inputReader/TxtFileReader.h"
 #include "outputWriter/VTKWriter.h"
 #include "particle/ParticleContainer.h"
+#include "spdlogConfig.h"
 #include <cstdlib>
 #include <iostream>
 #include <unistd.h>
@@ -28,7 +29,7 @@ namespace planetSimulation{
                 outputWriter::VTKWriter writer;
                 writer.plotParticles(particles, iteration);
             }
-            std::cout << "Iteration " << iteration << " finished." << std::endl;
+            SPDLOG_INFO("Iteration {0} finished.", iteration);
             current_time += deltaT;
         }
     }
