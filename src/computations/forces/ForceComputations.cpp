@@ -4,6 +4,7 @@
 #include "../../utils/ArrayUtils.h"
 #include "particle/ParticleContainer.h"
 #include "ForceComputations.h"
+#include "spdlogConfig.h"
 
 void ForceComputations::computeGravity(ParticleContainer& particles) {
     for (auto it = particles.beginPairParticle(); it != particles.endPairParticle(); ++it) {
@@ -27,9 +28,35 @@ void ForceComputations::computeGravity(ParticleContainer& particles) {
     }
 }
 
+void ForceComputations::computeLennardJonesPotential(ParticleContainer &particles) {
+
+    // hardcoded for now (later dynamic)
+    int epsilon = 5;
+    int sigma = 1;
+
+    // iterate through all pairs of particles and calculate lennard-jones potential
+    for(auto it = particles.beginPairParticle(); it != particles.endPairParticle(); ++it) {
+        std::pair<Particle &, Particle &> pair = *it;
+
+        std::array<double, 3> distanceVector = ArrayUtils::elementWisePairOp(pair.first.getX(), pair.second.getF(), std::minus<>());
+        double distance = ArrayUtils::L2Norm(distanceVector);
+        if(distance == 0) continue;
+
+        double factor = -24 * epsilon / std::pow(distance, 2) * (std::pow(sigma / distance, 6)
+                - 2 * std::pow(sigma / distance, 12));
+
+        std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(factor, distanceVector, std::multiplies<>());
+        pair.first.setF(force);
+        pair.second.setF(ArrayUtils::elementWiseScalarOp(-1, force, std::multiplies<>()));
+    }
+}
+
 void ForceComputations::resetForces(ParticleContainer& particles) {
     for (Particle &planet: particles) {
         planet.setOldF(planet.getF());
         planet.setF({0, 0, 0});
     }
 }
+
+
+
