@@ -2,7 +2,7 @@
 #include "spdlogConfig.h"
 
 /**
- * namespace that wraps different writers which write simulation data into file. All of those writers inherit from the abstract FileWriter
+ * @brief namespace that wraps different writers which write simulation data into file. All of those writers inherit from the abstract FileWriter
  */
 namespace outputWriter {
     /**

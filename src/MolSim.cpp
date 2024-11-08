@@ -1,5 +1,4 @@
 #include "spdlogConfig.h"
-
 #include "computations/forces/Forces.h"
 #include "computations/positions/Positions.h"
 #include "computations/velocities/Velocities.h"
@@ -66,7 +65,7 @@ int main(int argc, char *argsv[]) {
             case 's':
                 simType = std::stoi(optarg);
                 if (simType < 0 || simType > 1) {
-                    std::cerr << "simulation type must be between 0-1!" << std::endl;
+                    SPDLOG_LOGGER_ERROR(logger, "simulation type must be between 0-1!");
                     exit(EXIT_FAILURE);
                 }
                 break;
@@ -112,8 +111,6 @@ int main(int argc, char *argsv[]) {
             break;
         }
     }
-
-
     SPDLOG_LOGGER_INFO(logger, "output written. Terminating...");
     return 0;
 }

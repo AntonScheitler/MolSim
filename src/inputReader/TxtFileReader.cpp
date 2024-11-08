@@ -24,7 +24,6 @@ namespace inputReader {
 
             getline(inputFile, tmpString);
             SPDLOG_LOGGER_DEBUG(logger, "Read line: {0}", tmpString);
-
             while (tmpString.empty() or tmpString[0] == '#') {
                 getline(inputFile, tmpString);
                 SPDLOG_LOGGER_DEBUG(logger, "Read line: {0}", tmpString);
@@ -32,8 +31,8 @@ namespace inputReader {
 
             std::istringstream numstream(tmpString);
             numstream >> numParticles;
-            getline(inputFile, tmpString);
             SPDLOG_LOGGER_DEBUG(logger, "Reading {0}.", numParticles);
+            getline(inputFile, tmpString);
             SPDLOG_LOGGER_DEBUG(logger, "Read line: {0}", tmpString);
 
             for (int i = 0; i < numParticles; i++) {
@@ -51,7 +50,6 @@ namespace inputReader {
                 }
                 datastream >> m;
                 particles.addParticle(Particle(x, v, m));
-
                 getline(inputFile, tmpString);
                 SPDLOG_LOGGER_DEBUG(logger, "Read line: {0}", tmpString);
             }

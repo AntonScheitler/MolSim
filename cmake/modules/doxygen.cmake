@@ -2,6 +2,11 @@
 # using doxygen
 option(DOC_TARGET "Enable for creating make target for building documentation with doxygen.")
 
+# default value of DOC_TARGET is off
+if(NOT DOC_TARGET)
+    set(DOC_TARGET OFF)
+endif ()
+
 if(DOC_TARGET)
     find_package(Doxygen)
 
@@ -30,3 +35,5 @@ if(DOC_TARGET)
 else(DOC_TARGET)
     message("Building without doxygen documentation generation target")
 endif(DOC_TARGET)
+
+unset(DOC_TARGET CACHE)

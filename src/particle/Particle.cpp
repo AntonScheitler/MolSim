@@ -31,7 +31,7 @@ Particle::Particle(const Particle &other) {
 
 // Todo: maybe use initializater list instead of copy?
 Particle::Particle(std::array<double, 3> xArg, std::array<double, 3> vArg,
-        double mArg, int typeArg) {
+                   double mArg, int typeArg) {
     x = xArg;
     v = vArg;
     m = mArg;
@@ -65,8 +65,7 @@ int Particle::getType() const { return type; }
 
 std::string Particle::toString() const {
     std::stringstream stream;
-    stream << "Particle: X:" << x << " v: " << v << " f: " << f
-        << " oldF: " << oldF << " type: " << type;
+    stream << "Particle: X:" << x << " v: " << v << " f: " << f << " oldF: " << oldF << " type: " << type;
     return stream.str();
 }
 

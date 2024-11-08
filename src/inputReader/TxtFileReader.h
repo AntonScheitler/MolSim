@@ -4,7 +4,7 @@
 
 namespace inputReader {
     /**
-     * @brief a filereader specifically for txt files following a certain format
+     * @brief a file reader specifically for txt files following a certain format
      */
     class TxtFileReader : public FileReader {
         /**

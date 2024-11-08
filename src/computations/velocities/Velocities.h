@@ -1,8 +1,7 @@
 #include "particle/ParticleContainer.h"
 
 /**
- * @brief a class wrapping position-computing functions and their utility
- * functions
+ * @brief a class wrapping position-computing functions and their utility functions
  */
 class VelocityComputations {
     public:
