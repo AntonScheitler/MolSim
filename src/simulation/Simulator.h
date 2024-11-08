@@ -12,7 +12,7 @@ enum simTypes: int {
 class Simulator {
     public:
         Simulator(simTypes simType, double startTimeArg, double endTimeArg, 
-                double deltaTArg, ParticleContainer& particlesArg, double averageVelocity);
+                double deltaTArg, ParticleContainer& particlesArg, double averageVelocity = 0.1);
 
         void simulate();
     private:

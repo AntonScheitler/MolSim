@@ -6,7 +6,7 @@
 
 
 Simulator::Simulator(simTypes simType, double startTimeArg, double endTimeArg, 
-        double deltaTArg, ParticleContainer &particlesArg, double averageVelocity = 0.1) {
+        double deltaTArg, ParticleContainer &particlesArg, double averageVelocity) {
     particles = particlesArg;
     startTime = startTimeArg;
     endTime = endTimeArg;
@@ -22,8 +22,7 @@ Simulator::Simulator(simTypes simType, double startTimeArg, double endTimeArg,
         // use lennard-jones for the molecule collision
         case collision: 
             positionCompute = PositionComputations::stoermerVerlet;
-            // TODO force compute
-            //forceCompute = ForceComputations::computeGravity;
+            forceCompute = ForceComputations::computeLennardJonesPotential;
             velocityCompute = VelocityComputations::stoermerVerlet;
 
             // initialize velocity via brownian motion
