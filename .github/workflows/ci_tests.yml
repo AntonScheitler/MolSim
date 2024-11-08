@@ -34,8 +34,9 @@ jobs:
           && make
 
       - name: run unit tests
-        run:
-          cd test/
+        run: 
+          cd build
+          && cd test
           && ctest
 
 
