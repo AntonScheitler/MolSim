@@ -1,4 +1,3 @@
-#include <iterator>
 #include <vector>
 #include "Particle.h"
 #include "ParticleIterator.h"

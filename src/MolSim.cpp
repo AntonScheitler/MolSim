@@ -4,24 +4,25 @@
 #include "computations/velocities/VelocityComputations.h"
 #include "inputReader/TxtFileReader.h"
 #include "particle/ParticleContainer.h"
-#include "simulation/PlanetSimulation.h"
 #include <cstdlib>
 #include <iostream>
 #include <string>
 #include <unistd.h>
 #include <getopt.h>
+#include "simulation/Simulator.h"
 
 const std::string usageText =
         "Usage: ./MolSim [OPTIONS] INPUT_FILE\n"
         "-d, --delta_t\t\tsize of each timestep. defaults to 0.014\n"
         "-e, --t_end\t\ttime at which to stop the simulation. defaults to 1000\n"
         "-l, --log\t\tlog level, default value: 'info'. valid values (high to low):\n\t\t\t\t'trace', 'debug', 'info', 'warn', 'err', 'critical', 'off'\n\t\t\t\t (using any other string will result in logging turned 'off')\n"
-        "-s, --sim_type\t\ttype of simulation to run:\n\t\t\t\t0 - Planets\n\t\t\t\t1 - Molecules. Defaults to 0";
+        "-s, --sim_type\t\ttype of simulation to run:\n\t\t\t\t0 - Planets\n\t\t\t\t1 - Collision. Defaults to 0";
 
+simTypes simType = simTypes::collision;
 constexpr double startTime = 0;
 double endTime = 1000;
 double deltaT = 0.014;
-int simType = 0;
+double averageVelocity = 0.1;
 spdlog::level::level_enum level;
 
 ParticleContainer particles;
@@ -44,7 +45,7 @@ int main(int argc, char *argsv[]) {
     spdlog::set_level(spdlog::level::info);
 
     auto logger = spdlog::stdout_color_mt("MolSim");
-
+    int simTypeNum;
     while ((c = getopt_long(argc, argsv, shortOpts, longOpts, nullptr)) != -1) {
         switch (c) {
             case 'd':
@@ -62,11 +63,12 @@ int main(int argc, char *argsv[]) {
                 }
                 break;
             case 's':
-                simType = std::stoi(optarg);
-                if (simType < 0 || simType > 1) {
+                simTypeNum = std::stoi(optarg);
+                if (simTypeNum < 0 || simTypeNum > 1) {
                     SPDLOG_LOGGER_ERROR(logger, "simulation type must be between 0-1!");
                     exit(EXIT_FAILURE);
                 }
+                simType = simTypes(simTypeNum);
                 break;
             case 'h':
                 SPDLOG_LOGGER_INFO(logger, usageText);
@@ -95,21 +97,8 @@ int main(int argc, char *argsv[]) {
     }
 
     SPDLOG_LOGGER_INFO(logger, "MolSim program started with delta_t={0} and end_time={1}", deltaT, endTime);
+    // TODO simulate here
 
-    switch (simType) {
-        case 0: {
-            // read input from .txt file
-            inputReader::TxtFileReader fileReader;
-            fileReader.readFile(particles, argsv[optind]);
-            planetSimulation::runPlanetSimulation(startTime, endTime, deltaT, particles);
-            break;
-        }
-        case 1: {
-            // assignment 2
-            SPDLOG_LOGGER_DEBUG(logger, "In second case.");
-            break;
-        }
-    }
     SPDLOG_LOGGER_INFO(logger, "output written. Terminating...");
     return 0;
 }
