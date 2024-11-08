@@ -2,7 +2,6 @@
 #include "computations/positions/Positions.h"
 #include "computations/velocities/Velocities.h"
 #include "inputReader/TxtFileReader.h"
-#include "outputWriter/VTKWriter.h"
 #include "particle/ParticleContainer.h"
 #include "simulation/PlanetSimulation.h"
 #include <cstdlib>
@@ -13,12 +12,12 @@
 
 const std::string usageText =
         "Usage: ./MolSim [OPTIONS] INPUT_FILE\n"
-        "-d, --delta_t\t\tsize of each timestep in seconds. defaults to 0.014\n"
+        "-d, --deltaT\t\tsize of each timestep in seconds. defaults to 0.014\n"
         "-e, --t_end\t\ttime in seconds at which to stop the simulation. defaults to 1000";
 
-constexpr double start_time = 0;
-double end_time = 1000;
-double delta_t = 0.014;
+constexpr double startTime = 0;
+double endTime = 1000;
+double deltaT = 0.014;
 int simType = 0;
 
 ParticleContainer particles;
@@ -37,15 +36,15 @@ int main(int argc, char *argsv[]) {
     while ((c = getopt_long(argc, argsv, shortOpts, longOpts, nullptr)) != -1) {
         switch (c) {
             case 'd':
-                delta_t = std::stod(optarg);
-                if (delta_t <= 0) {
+                deltaT = std::stod(optarg);
+                if (deltaT <= 0) {
                     std::cerr << "delta t must be positive!" << std::endl;
                     exit(EXIT_FAILURE);
                 }
                 break;
             case 'e':
-                end_time = std::stod(optarg);
-                if (end_time <= 0) {
+                endTime = std::stod(optarg);
+                if (endTime <= 0) {
                     std::cerr << "end time must be positive!" << std::endl;
                     exit(EXIT_FAILURE);
                 }
@@ -76,9 +75,7 @@ int main(int argc, char *argsv[]) {
             // read input from .txt file
             inputReader::TxtFileReader fileReader;
             fileReader.readFile(particles, argsv[optind]);
-
-            planetSimulation::runPlanetSimulation(start_time, end_time, delta_t, particles);
-
+            planetSimulation::runPlanetSimulation(startTime, endTime, deltaT, particles);
             break;
         }
         case 1: {

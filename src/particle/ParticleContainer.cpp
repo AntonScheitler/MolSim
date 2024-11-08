@@ -5,8 +5,8 @@ ParticleContainer::ParticleContainer() {
     particles = std::vector<Particle>{};
 }
 
-ParticleContainer::ParticleContainer(const std::vector<Particle> &particles_arg) {
-    particles = particles_arg;
+ParticleContainer::ParticleContainer(const std::vector<Particle> &particlesArg) {
+    particles = particlesArg;
 }
 
 void ParticleContainer::addParticle(const Particle &particle) {
@@ -56,12 +56,12 @@ bool ParticleContainer::ParticleIterator::operator!=(const ParticleContainer::Pa
     return current != other.current;
 }
 
-ParticleContainer::PairParticleIterator::PairParticleIterator(std::vector<Particle>::iterator first_arg,
-                                                              std::vector<Particle>::iterator second_arg,
-                                                              std::vector<Particle>::iterator end_arg) {
-    first = first_arg;
-    second = second_arg;
-    end = end_arg;
+ParticleContainer::PairParticleIterator::PairParticleIterator(std::vector<Particle>::iterator firstArg,
+                                                              std::vector<Particle>::iterator secondArg,
+                                                              std::vector<Particle>::iterator endArg) {
+    first = firstArg;
+    second = secondArg;
+    end = endArg;
 }
 
 ParticleContainer::PairParticleIterator::reference ParticleContainer::PairParticleIterator::operator*() {

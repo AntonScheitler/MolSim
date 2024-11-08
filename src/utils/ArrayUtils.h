@@ -28,52 +28,52 @@ namespace ArrayUtils {
      * Collection of structs that define what we consider a container. Remove / add
      * whatever you need.
      */
-    namespace is_container_impl {
+    namespace isContainerImpl {
         /**
          * Default case: T is not a container.
          * @tparam T
          */
-        template <typename T> struct is_container : std::false_type {};
+        template <typename T> struct isContainer : std::false_type {};
         /**
          * Specialization to allow std::array.
          * @tparam T
          * @tparam N
          */
         template <typename T, std::size_t N>
-            struct is_container<std::array<T, N>> : std::true_type {};
+            struct isContainer<std::array<T, N>> : std::true_type {};
         /**
          * Specialization to allow std::vector.
          * @tparam Args
          */
         template <typename... Args>
-            struct is_container<std::vector<Args...>> : std::true_type {};
+            struct isContainer<std::vector<Args...>> : std::true_type {};
         /**
          * Specialization to allow std::list.
          * @tparam Args
          */
         template <typename... Args>
-            struct is_container<std::list<Args...>> : std::true_type {};
+            struct isContainer<std::list<Args...>> : std::true_type {};
         /**
          * Specialization to allow std::set.
          * @tparam Args
          */
         template <typename... Args>
-            struct is_container<std::set<Args...>> : std::true_type {};
+            struct isContainer<std::set<Args...>> : std::true_type {};
         /**
          * Specialization to allow std::unordered_set
          * @tparam Args
          */
         template <typename... Args>
-            struct is_container<std::unordered_set<Args...>> : std::true_type {};
-    } // namespace is_container_impl
+            struct isContainer<std::unordered_set<Args...>> : std::true_type {};
+    } // namespace isContainerImpl
 
     /**
      * Type trait to check if a given type is a container.
      * @tparam T Type to check.
      */
-    template <typename T> struct is_container {
+    template <typename T> struct isContainer {
         static constexpr bool const value =
-            is_container_impl::is_container<std::decay_t<T>>::value;
+            isContainerImpl::isContainer<std::decay_t<T>>::value;
     };
 
     /**
@@ -88,7 +88,7 @@ namespace ArrayUtils {
      */
     template <class Container>
         [[nodiscard]] std::string
-        to_string(const Container &container, const std::string &delimiter = ", ",
+        toString(const Container &container, const std::string &delimiter = ", ",
                 const std::array<std::string, 2> &surround = {"[", "]"}) {
             auto iter = std::cbegin(container);
             const auto end = std::cend(container);
@@ -177,7 +177,7 @@ namespace ArrayUtils {
 /**
  * Stream operator for containers.
  *
- * This function actually checks if the given Template parameter satisfies is_container.
+ * This function actually checks if the given Template parameter satisfies isContainer.
  *
  * @tparam Container
  * @param os
@@ -185,9 +185,9 @@ namespace ArrayUtils {
  * @return
  */
 template <class Container>
-std::enable_if_t<ArrayUtils::is_container<Container>::value, std::ostream &>
+std::enable_if_t<ArrayUtils::isContainer<Container>::value, std::ostream &>
 operator<<(std::ostream &os, const Container &container) {
-    os << ArrayUtils::to_string(container);
+    os << ArrayUtils::toString(container);
     return os;
 }
 
@@ -199,7 +199,7 @@ operator<<(std::ostream &os, const Container &container) {
  * @return For all i lhs[i] + rhs[i].
  */
 template <class Container>
-std::enable_if_t<ArrayUtils::is_container<Container>::value, Container>
+std::enable_if_t<ArrayUtils::isContainer<Container>::value, Container>
 operator+(const Container &lhs, const Container &rhs) {
     return ArrayUtils::elementWisePairOp(lhs, rhs, std::plus<>());
 }
@@ -212,7 +212,7 @@ operator+(const Container &lhs, const Container &rhs) {
  * @return For all i lhs[i] - rhs[i].
  */
 template <class Container>
-std::enable_if_t<ArrayUtils::is_container<Container>::value, Container>
+std::enable_if_t<ArrayUtils::isContainer<Container>::value, Container>
 operator-(const Container &lhs, const Container &rhs) {
     return ArrayUtils::elementWisePairOp(lhs, rhs, std::minus<>());
 }
@@ -225,7 +225,7 @@ operator-(const Container &lhs, const Container &rhs) {
  * @return For all i lhs[i] * rhs[i].
  */
 template <class Container>
-std::enable_if_t<ArrayUtils::is_container<Container>::value, Container>
+std::enable_if_t<ArrayUtils::isContainer<Container>::value, Container>
 operator*(const Container &lhs, const Container &rhs) {
     return ArrayUtils::elementWisePairOp(lhs, rhs, std::multiplies<>());
 }
@@ -238,7 +238,7 @@ operator*(const Container &lhs, const Container &rhs) {
  * @return For all i lhs * rhs[i].
  */
 template <class Scalar, class Container>
-std::enable_if_t<ArrayUtils::is_container<Container>::value, Container>
+std::enable_if_t<ArrayUtils::isContainer<Container>::value, Container>
 operator*(const Scalar &lhs, const Container &rhs) {
     return ArrayUtils::elementWiseScalarOp(lhs, rhs, std::multiplies<>());
 }
@@ -252,7 +252,7 @@ operator*(const Scalar &lhs, const Container &rhs) {
  * and in the same order.
  */
 template <class Container>
-std::enable_if_t<ArrayUtils::is_container<Container>::value, bool>
+std::enable_if_t<ArrayUtils::isContainer<Container>::value, bool>
 operator==(const Container &lhs, const Container &rhs) {
     if (lhs.size() != rhs.size()) {
         return false;

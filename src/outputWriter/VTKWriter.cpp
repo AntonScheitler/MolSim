@@ -16,12 +16,12 @@
 namespace outputWriter {
 
     void VTKWriter::plotParticles(ParticleContainer &particles, int iteration) {
-        std::string out_name("MD_vtk");
+        std::string outName("MD_vtk");
         initializeOutput(particles.size());
         for (Particle &particle: particles) {
             plotParticle(particle);
         }
-        writeFile(out_name, iteration);
+        writeFile(outName, iteration);
     }
 
     void VTKWriter::initializeOutput(int numParticles) {
@@ -48,8 +48,8 @@ namespace outputWriter {
 
         Cells cells; // we don't have cells, => leave it empty
                      // for some reasons, we have to add a dummy entry for paraview
-        DataArray_t cells_data(type::Float32, "types", 0);
-        cells.DataArray().push_back(cells_data);
+        DataArray_t cellsData(type::Float32, "types", 0);
+        cells.DataArray().push_back(cellsData);
 
         PieceUnstructuredGrid_t piece(pointData, cellData, points, cells,
                 numParticles, 0);
