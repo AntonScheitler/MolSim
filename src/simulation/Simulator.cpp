@@ -20,6 +20,7 @@ Simulator::Simulator(simTypes simType, double startTimeArg, double endTimeArg,
             forceCompute = ForceComputations::computeGravity;
             velocityCompute = VelocityComputations::stoermerVerlet;
             logger = spdlog::stdout_color_mt("CometSimulation");
+            break;
         // use lennard-jones for the molecule collision
         case collision: 
             positionCompute = PositionComputations::stoermerVerlet;
@@ -29,6 +30,7 @@ Simulator::Simulator(simTypes simType, double startTimeArg, double endTimeArg,
 
             // initialize velocity via brownian motion
             VelocityComputations::applyBrownianMotion(particles, averageVelocity);
+            break;
     }
 }
 
