@@ -15,6 +15,7 @@ namespace planetSimulation{
         // prepare for iteration
         double current_time = startTime;
         int iteration = 0;
+        outputWriter::VTKWriter writer;
 
         // compute position, force and velocity for all particles each iteration
         while (current_time < endTime) {
@@ -26,7 +27,6 @@ namespace planetSimulation{
             iteration++;
             if (iteration % 10 == 0) {
                 // write output on every 10th iteration
-                outputWriter::VTKWriter writer;
                 writer.plotParticles(particles, iteration);
             }
             SPDLOG_INFO("Iteration {0} finished.", iteration);
