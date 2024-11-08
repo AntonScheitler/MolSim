@@ -1,6 +1,6 @@
-#include "computations/forces/Forces.h"
-#include "computations/positions/Positions.h"
-#include "computations/velocities/Velocities.h"
+#include "computations/forces/ForceComputations.h"
+#include "computations/positions/PositionComputations.h"
+#include "computations/velocities/VelocityComputations.h"
 #include "inputReader/TxtFileReader.h"
 #include "outputWriter/VTKWriter.h"
 #include "particle/ParticleContainer.h"
@@ -16,6 +16,7 @@ namespace planetSimulation{
         double current_time = startTime;
         int iteration = 0;
 
+        outputWriter::VTKWriter writer;
         // compute position, force and velocity for all particles each iteration
         while (current_time < endTime) {
             ForceComputations::resetForces(particles);
@@ -26,7 +27,6 @@ namespace planetSimulation{
             iteration++;
             if (iteration % 10 == 0) {
                 // write output on every 10th iteration
-                outputWriter::VTKWriter writer;
                 writer.plotParticles(particles, iteration);
             }
             SPDLOG_INFO("Iteration {0} finished.", iteration);

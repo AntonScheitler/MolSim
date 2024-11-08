@@ -3,7 +3,7 @@
 
 #include "../../utils/ArrayUtils.h"
 #include "particle/ParticleContainer.h"
-#include "Forces.h"
+#include "ForceComputations.h"
 
 void ForceComputations::computeGravity(ParticleContainer& particles) {
     for (auto it = particles.beginPairParticle(); it != particles.endPairParticle(); ++it) {

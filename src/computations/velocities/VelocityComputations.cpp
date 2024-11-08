@@ -1,6 +1,6 @@
 #include "../../utils/ArrayUtils.h"
 #include "particle/ParticleContainer.h"
-#include "Velocities.h"
+#include "VelocityComputations.h"
 
 void VelocityComputations::stoermerVerlet(ParticleContainer& particles, double deltaT) {
     for (Particle &planet: particles) {

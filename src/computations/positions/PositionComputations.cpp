@@ -1,6 +1,6 @@
 #include "../../utils/ArrayUtils.h"
 #include "particle/Particle.h"
-#include "Positions.h"
+#include "PositionComputations.h"
 
 void PositionComputations::stoermerVerlet(ParticleContainer& particles, double deltaT) {
     for (Particle &planet : particles) {
