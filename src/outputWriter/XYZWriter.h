@@ -7,22 +7,20 @@
 
 #pragma once
 
-#include "Particle.h"
-
-#include <fstream>
-#include <list>
+#include "particle/ParticleContainer.h"
+#include "./FileWriter.h"
 
 namespace outputWriter {
+    /**
+     * @brief file writer, which specializes in xyz outputs
+     */
+    class XYZWriter : public FileWriter {
 
-class XYZWriter {
-
-public:
-  XYZWriter();
-
-  virtual ~XYZWriter();
-
-  void plotParticles(std::list<Particle> particles, const std::string &filename,
-                     int iteration);
-};
+        public:
+            /** 
+             * @brief plots the particles and writes them to an xyz file
+             */
+            void plotParticles(ParticleContainer &particles, int iteration);
+    };
 
 } // namespace outputWriter
