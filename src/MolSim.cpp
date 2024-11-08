@@ -15,9 +15,8 @@ const std::string usageText =
         "Usage: ./MolSim [OPTIONS] INPUT_FILE\n"
         "-d, --delta_t\t\tsize of each timestep. defaults to 0.014\n"
         "-e, --t_end\t\ttime at which to stop the simulation. defaults to 1000\n"
-        "-l, --log\t\tlog level, default value: 'info'. valid values (high to low): 'trace', 'debug', 'info', 'warn',"
-        " 'err', 'critical', 'off'.  "
-        "(using any other string will result in logging turned 'off')";
+        "-l, --log\t\tlog level, default value: 'info'. valid values (high to low):\n\t\t\t\t'trace', 'debug', 'info', 'warn', 'err', 'critical', 'off'\n\t\t\t\t (using any other string will result in logging turned 'off')\n"
+        "-s, --sim_type\t\ttype of simulation to run:\n\t\t\t\t0 - Planets\n\t\t\t\t1 - Molecules. Defaults to 0";
 
 constexpr double startTime = 0;
 double endTime = 1000;
