@@ -19,8 +19,9 @@ endif(NOT CMAKE_BUILD_TYPE)
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
 
-# doxygen
+# custom modules
 include(doxygen)
+include(spdlog)
 
 # install google test
 include(FetchContent)

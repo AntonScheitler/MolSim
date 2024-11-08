@@ -1,5 +1,6 @@
 #include "FileReader.h"
 #include "particle/ParticleContainer.h"
+#include "spdlogConfig.h"
 
 namespace inputReader {
     /**
@@ -12,6 +13,9 @@ namespace inputReader {
          * @param filename the name of the file to read from
          */
         public:
+            TxtFileReader();
             void readFile(ParticleContainer &particles, char *filename) override;
+        private:
+            std::shared_ptr<spdlog::logger> logger;
     };
 } // namespace inputReader

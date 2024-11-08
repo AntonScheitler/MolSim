@@ -18,12 +18,14 @@ namespace outputWriter {
      */
     class VTKWriter : public FileWriter {
         public:
+            VTKWriter();
             /**
              * @brief plots particles and writes them to a vtk file 
              */
             void plotParticles(ParticleContainer &particles, int iteration);
 
         private:
+            std::shared_ptr<spdlog::logger> logger;
             /**
              * set up internal data structures and prepare to plot a particle.
              */
@@ -45,7 +47,7 @@ namespace outputWriter {
              */
             void writeFile(const std::string &filename, int iteration);
 
-            VTKFile_t *vtkFile;
+            VTKFile_t *vtkFile{};
     };
 
 } // namespace outputWriter
