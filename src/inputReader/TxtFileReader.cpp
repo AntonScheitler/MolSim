@@ -23,11 +23,11 @@ namespace inputReader {
         if (inputFile.is_open()) {
 
             getline(inputFile, tmpString);
-            SPDLOG_LOGGER_DEBUG(logger, "Read line: {0}", tmp_string);
+            SPDLOG_LOGGER_DEBUG(logger, "Read line: {0}", tmpString);
 
             while (tmpString.empty() or tmpString[0] == '#') {
                 getline(inputFile, tmpString);
-                SPDLOG_LOGGER_DEBUG(logger, "Read line: {0}", tmp_string);
+                SPDLOG_LOGGER_DEBUG(logger, "Read line: {0}", tmpString);
             }
 
             std::istringstream numstream(tmpString);
@@ -53,7 +53,7 @@ namespace inputReader {
                 particles.addParticle(Particle(x, v, m));
 
                 getline(inputFile, tmpString);
-                SPDLOG_LOGGER_DEBUG(logger, "Read line: {0}", tmp_string);
+                SPDLOG_LOGGER_DEBUG(logger, "Read line: {0}", tmpString);
             }
         } else {
             SPDLOG_LOGGER_ERROR(logger, "Error: could not open file {0}", filename);

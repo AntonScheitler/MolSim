@@ -16,6 +16,7 @@ target_include_directories(src
 )
 target_link_libraries(src
     xerces-c
+    spdlog::spdlog
 )
 
 # create molsim executable
@@ -23,7 +24,6 @@ add_executable(molsim MolSim.cpp)
 # link the executable to the src library
 target_link_libraries(molsim
         src
-        spdlog::spdlog
 )
 
 # activate all compiler warnings. Clean up your code :P
