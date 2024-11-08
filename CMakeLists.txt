@@ -33,7 +33,7 @@ target_compile_features(MolSim
 target_include_directories(MolSim
         PUBLIC
             ${CMAKE_CURRENT_SOURCE_DIR}/libs/libxsd
-            ${CMAKE_CURRENT_SOURCE_DIR}/libs/spdlog/include
+#            ${CMAKE_CURRENT_SOURCE_DIR}/libs/spdlog/include
         PRIVATE
             ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
@@ -42,6 +42,7 @@ target_link_libraries(MolSim
         # stuff that is used in headers and source files
         PUBLIC
             xerces-c
+            spdlog::spdlog
 )
 
 # activate all compiler warnings. Clean up your code :P

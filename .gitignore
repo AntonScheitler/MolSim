@@ -41,3 +41,6 @@
 
 .cache
 doxys_documentation
+.cmake
+CMakeFiles
+Testing
