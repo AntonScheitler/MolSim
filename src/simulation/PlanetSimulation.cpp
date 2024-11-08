@@ -15,6 +15,7 @@ namespace planetSimulation{
         // prepare for iteration
         double current_time = startTime;
         int iteration = 0;
+        outputWriter::VTKWriter writer;
 
         outputWriter::VTKWriter writer;
         // compute position, force and velocity for all particles each iteration
