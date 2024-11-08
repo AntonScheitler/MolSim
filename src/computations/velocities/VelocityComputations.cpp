@@ -3,6 +3,7 @@
 #include "VelocityComputations.h"
 #include "utils/MaxwellBoltzmannDistribution.h"
 #include <array>
+#include <functional>
 
 void VelocityComputations::stoermerVerlet(ParticleContainer& particles, double deltaT) {
     for (Particle &planet: particles) {
@@ -15,7 +16,8 @@ void VelocityComputations::stoermerVerlet(ParticleContainer& particles, double d
 
 void VelocityComputations::applyBrownianMotion(ParticleContainer &particles, double averageVelocity) {
     for (Particle& particle : particles) {
-        std::array<double, 3> initialVelocity = maxwellBoltzmannDistributedVelocity(averageVelocity, 3);
-        particle.setV(initialVelocity);
+        std::array<double, 3> maxBoltzVelocity = maxwellBoltzmannDistributedVelocity(averageVelocity, 3);
+        // add the velocity from the brownian motion to the initial velocity
+        particle.setV(ArrayUtils::elementWisePairOp(particle.getV(), maxBoltzVelocity, std::plus<>()));
     }
 }
