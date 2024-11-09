@@ -25,6 +25,31 @@ class SimulationData {
          * @param fileName the name of the file to read the particle information from
          */
         void readParticles(char* fileName);
+
+        /**
+         * @brief returns the simType of the simulation
+         */
+        simTypes getSimType();
+        /**
+         * @brief returns the start time of the simulation
+         */
+        double getStartTime();
+        /**
+         * @brief returns the end time of the simulation
+         */
+        double getEndTime();
+        /**
+         * @brief returns the time step size of the simulation
+         */
+        double getDeltaT();
+        /**
+         * @brief returns the average velocity based on the Brownian motion of the simulation
+         */
+        double getAverageVelocity();
+        /**
+         * @brief returns the particles to be simulated
+         */
+        ParticleContainer& getParticles();
     private:
         simTypes simType;
         double startTime;
@@ -33,5 +58,4 @@ class SimulationData {
         double averageVelocity;
         spdlog::level::level_enum level;
         ParticleContainer particles;
-        std::shared_ptr<spdlog::logger> logger;
 };

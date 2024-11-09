@@ -29,7 +29,6 @@ void ForceComputations::computeGravity(ParticleContainer& particles) {
 }
 
 void ForceComputations::computeLennardJonesPotential(ParticleContainer &particles) {
-
     // hardcoded for now (later dynamic)
     int epsilon = 5;
     int sigma = 1;
