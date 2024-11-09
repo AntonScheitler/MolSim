@@ -7,7 +7,7 @@
 
 SimulationData::SimulationData() {
     // set default values
-    simType = simTypes::comet;
+    simType = simTypes::collision;
     startTime = 0;
     endTime = 1000;
     deltaT = 0.014;
