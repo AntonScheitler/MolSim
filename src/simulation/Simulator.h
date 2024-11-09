@@ -1,10 +1,7 @@
 #include "particle/ParticleContainer.h"
 #include "spdlogConfig.h"
+#include <simulation/SimulationData.h>
 
-enum simTypes: int {
-    comet = 0,
-    collision = 1
-};
 
 /**
  * @brief a wrapper for all possible simulations.
