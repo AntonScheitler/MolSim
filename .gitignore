@@ -46,3 +46,4 @@ test/Testing
 Testing
 .cmake
 CMakeFiles
+.DS_Store
