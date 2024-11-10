@@ -17,6 +17,7 @@ target_include_directories(src
 target_link_libraries(src
     xerces-c
     spdlog::spdlog
+    nlohmann_json::nlohmann_json
 )
 
 # create molsim executable

@@ -27,9 +27,9 @@ namespace inputReader {
         if (inputFile.is_open()) {
             for (const auto& planet : data["planets"]) {
 
-                x = cuboid["coordinates"].get<std::array<double, 3>>();
-                v = cuboid["velocity"].get<std::array<double, 3>>();
-                m = cuboid["mass"].get<double>();
+                x = planet["coordinates"].get<std::array<double, 3>>();
+                v = planet["velocity"].get<std::array<double, 3>>();
+                m = planet["mass"].get<double>();
 
                 particles.addParticle(Particle(x, v, m));
 

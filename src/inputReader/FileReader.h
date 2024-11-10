@@ -9,6 +9,7 @@
 
 #include "particle/ParticleContainer.h"
 #include "spdlogConfig.h"
+#include "simulation/SimulationData.h"
 #include <memory>
 
 /**
@@ -22,17 +23,19 @@ namespace inputReader {
     class FileReader {
 
         public:
-            FileReader() = default;
-
+            FileReader(SimulationData& simDataArg);
+            void readFile(ParticleContainer &particles, char *filename);
             virtual ~FileReader() = default;
             /**
              * @brief reads a file and fills a ParticleContainer accordingly
              * @param particles the particles to be filled up
              * @param filename the file to read the particle information from
              */
-            virtual void readFile(ParticleContainer &particles, char *filename) = 0;
-        private:
-            std::shared_ptr<spdlog::logger> logger;
 
+        private:
+            SimulationData simData;
+            std::shared_ptr<spdlog::logger> logger;
+            void readJson(ParticleContainer &particles, char *filename);
+            void readTxt(ParticleContainer &particles, char *filename);
     };
 } // namespace inputReader

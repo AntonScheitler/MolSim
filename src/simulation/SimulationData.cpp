@@ -3,7 +3,8 @@
 #include <simulation/SimulationData.h>
 #include <getopt.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
-#include <inputReader/TxtFileReader.h>
+#include <inputReader/FileReader.h>
+
 
 SimulationData::SimulationData() {
     // set default values
@@ -90,8 +91,8 @@ int SimulationData::parseOptions(int argc, char* argsv[]) {
     return optind;
 }
 
-void SimulationData::readParticles(char* fileName) {
-    inputReader::TxtFileReader fileReader;
+void SimulationData::readParticles(simTypes, char* fileName) {
+    inputReader::FileReader fileReader(*this);
     fileReader.readFile(particles, fileName);
 }
 

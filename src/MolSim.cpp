@@ -16,7 +16,7 @@ int main(int argc, char *argsv[]) {
 
     SimulationData simData = SimulationData();
     int fileIdx = simData.parseOptions(argc, argsv);
-    simData.readParticles(argsv[fileIdx]);
+    simData.readParticles(simData.getSimType(), argsv[fileIdx]);
 
     SPDLOG_LOGGER_INFO(logger, "MolSim program started with delta_t={0} and end_time={1}", simData.getDeltaT(), simData.getEndTime());
     Simulator simulator{simData};

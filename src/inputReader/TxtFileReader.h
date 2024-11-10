@@ -6,7 +6,7 @@ namespace inputReader {
     /**
      * @brief a file reader specifically for txt files following a certain format
      */
-    class TxtFileReader : public FileReader {
+    class TxtFileReader{
         /**
          * @brief reads particle information from a .txt file and stores it in a list
          * @param particles the particles to store the information in
@@ -14,7 +14,8 @@ namespace inputReader {
          */
         public:
             TxtFileReader();
-            void readFile(ParticleContainer &particles, char *filename) override;
+            void readCometFile(ParticleContainer &particles, char *filename) ;
+            void readCollisionFile(ParticleContainer &particles, char *filename) ;
         private:
             std::shared_ptr<spdlog::logger> logger;
     };

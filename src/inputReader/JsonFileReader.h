@@ -7,7 +7,7 @@ namespace inputReader {
     /**
      * @brief a file reader specifically for json files following a certain format
      */
-    class JsonFileReader : public FileReader{
+    class JsonFileReader {
         /**
          * @brief reads particle information from a .json file and stores it in a list
          * @param particles the particles to store the information in
@@ -16,8 +16,8 @@ namespace inputReader {
     public:
 
         JsonFileReader();
-        void readCollisionFile(ParticleContainer &particles, char *filename) override;
-        void readCometFile(ParticleContainer &particles, char *filename) override;
+        void readCollisionFile(ParticleContainer &particles, char *filename);
+        void readCometFile(ParticleContainer &particles, char *filename);
 
     private:
 

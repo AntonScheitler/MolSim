@@ -1,3 +1,5 @@
+#pragma once
+
 #include <spdlog/common.h>
 #include <spdlog/spdlog.h>
 #include <particle/ParticleContainer.h>
@@ -24,7 +26,7 @@ class SimulationData {
          * @brief reads a file and adds particles to the SimulationData Object based on it's content
          * @param fileName the name of the file to read the particle information from
          */
-        void readParticles(char* fileName);
+        void readParticles(simTypes, char* fileName);
 
         /**
          * @brief returns the simType of the simulation
