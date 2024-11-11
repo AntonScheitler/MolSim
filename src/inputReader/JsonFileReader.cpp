@@ -59,6 +59,7 @@ namespace inputReader {
                 m = cuboid["mass"].get<double>();
                 h = cuboid["meshWidth"].get<double>();
                 bm = cuboid["brownianMotion"].get<double>();
+                particles.setAverageVelocity(bm);
 
                 std::array<double, 3> tempx{};
                 for (int j = 1; j <= d[0]; ++j) {
