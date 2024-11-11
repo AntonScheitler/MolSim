@@ -3,7 +3,13 @@
 #include "computations/positions/PositionComputations.h"
 #include "computations/velocities/VelocityComputations.h"
 #include "outputWriter/VTKWriter.h"
+#include <ctime>
 
+
+void tmp () {
+    int x = 5;
+    int y = x - 2;
+}
 
 Simulator::Simulator(SimulationData& simDataArg) {
     simData = simDataArg;
@@ -12,35 +18,45 @@ Simulator::Simulator(SimulationData& simDataArg) {
     switch (simData.getSimType()) {
         // use gravity for the comet simulation
         case comet: 
-            positionCompute = PositionComputations::stoermerVerlet;
-            forceCompute = ForceComputations::computeGravity;
-            velocityCompute = VelocityComputations::stoermerVerlet;
+            before = [this]() {};
+            step = [this]() {
+                ForceComputations::resetForces(simData.getParticles());
+                PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
+                ForceComputations::computeGravity(simData.getParticles());
+                VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
+            };
+            after = [this]() {};
             logger = spdlog::stdout_color_mt("CometSimulation");
             break;
-        // use lennard-jones for the molecule collision
+            // use lennard-jones for the molecule collision
         case collision: 
-            positionCompute = PositionComputations::stoermerVerlet;
-            forceCompute = ForceComputations::computeLennardJonesPotential;
-            velocityCompute = VelocityComputations::stoermerVerlet;
+            before = [this]() {
+                VelocityComputations::applyBrownianMotion(simData.getParticles(), 
+                        simData.getParticles().getAverageVelocity());
+            };
+            step = [this]() {
+                ForceComputations::resetForces(simData.getParticles());
+                PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
+                ForceComputations::computeLennardJonesPotential(simData.getParticles());
+                VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
+            };
+            after = [this]() {};
             logger = spdlog::stdout_color_mt("CollisionSimulation");
-            // initialize velocity via brownian motion
-            VelocityComputations::applyBrownianMotion(simData.getParticles(), simData.getAverageVelocity());
             break;
     }
 }
+
 
 void Simulator::simulate() {
     // prepare for iteration
     double currentTime = simData.getStartTime();
     int iteration = 0;
     outputWriter::VTKWriter writer;
+    before();
 
     // compute position, force and velocity for all particles each iteration
     while (currentTime < simData.getEndTime()) {
-        ForceComputations::resetForces(simData.getParticles());
-        positionCompute(simData.getParticles(), simData.getDeltaT());
-        forceCompute(simData.getParticles());
-        velocityCompute(simData.getParticles(), simData.getDeltaT());
+        step();
 
         iteration++;
         if (iteration % 10 == 0) {
@@ -50,4 +66,5 @@ void Simulator::simulate() {
         SPDLOG_LOGGER_INFO(logger, "Iteration {0} finished.", iteration);
         currentTime += simData.getDeltaT();
     }
+    after();
 }

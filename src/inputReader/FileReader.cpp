@@ -2,15 +2,12 @@
 #include "JsonFileReader.h"
 #include "TxtFileReader.h"
 #include "spdlogConfig.h"
-#include <stdexcept>
 
 namespace inputReader {
-
         FileReader::FileReader(SimulationData& simDataArg) {
             simData = simDataArg;
             this->logger = spdlog::stdout_color_st("FileReader");
             SPDLOG_LOGGER_DEBUG(logger, "Initialized FileReader");
-
         }
 
         void FileReader::readFile(ParticleContainer &particles, char *filename) {

@@ -12,7 +12,6 @@ SimulationData::SimulationData() {
     startTime = 0;
     endTime = 1000;
     deltaT = 0.014;
-    averageVelocity = 0.1;
 }
 
 int SimulationData::parseOptions(int argc, char* argsv[]) {
@@ -110,10 +109,6 @@ double SimulationData::getEndTime() {
 
 double SimulationData::getDeltaT() {
     return deltaT;
-}
-
-double SimulationData::getAverageVelocity() {
-    return averageVelocity;
 }
 
 ParticleContainer& SimulationData::getParticles() {

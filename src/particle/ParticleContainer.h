@@ -22,7 +22,7 @@ public:
      * @param particlesArg the particle vector to be wrapped
      * @return the object of the ParticleContainer
      */
-    explicit ParticleContainer(const std::vector<Particle> &particlesArg);
+    explicit ParticleContainer(const std::vector<Particle> &particlesArg, double averageVelocityArg);
 
     /**
      * @brief adds a particle to the container
@@ -35,14 +35,22 @@ public:
      * @return the number of particles in the ParticleContainer
      */
     int size();
-
+    /**
+     * @brief returns the average velocity that exists due to brownian motion
+     * @return the average velocity that exists due to brownian motion
+     */
+    double getAverageVelocity();
+    /**
+     * @brief sets the average velocity that exists due to brownian motion
+     * @param averageVelocityArg the velocity to set the average velocity to
+     */
+    void setAverageVelocity(double averageVelocityArg);
     /**
      * @brief returns a ParticleIterator which points to the beginning of the ParticleContainer. This makes iteration over
      * separate particles the default when using a for-each loop
      * @return a ParticleIterator which points to the beginning of the ParticleContainer
      */
     ParticleIterator begin();
-
     /**
      * @brief returns a ParticleIterator which points to the end of the ParticleContainer. This makes iteration over
      * separate particles the default when using a for-each loop
@@ -64,4 +72,5 @@ public:
 
 protected:
     std::vector<Particle> particles;
+    double averageVelocity;
 };

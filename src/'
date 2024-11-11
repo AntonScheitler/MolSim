@@ -1,5 +1,5 @@
+#include "particle/ParticleContainer.h"
 #include "spdlogConfig.h"
-#include <functional>
 #include <simulation/SimulationData.h>
 
 
@@ -15,7 +15,11 @@ class Simulator {
         SimulationData simData;
         std::shared_ptr<spdlog::logger> logger;
 
-        std::function<void(void)> before;
-        std::function<void(void)> step;
-        std::function<void(void)> after;
+        // todo perform a single compute function
+        void (*forceCompute)(ParticleContainer& particles);
+        void (*positionCompute)(ParticleContainer& particles, double deltaT);
+        void (*velocityCompute)(ParticleContainer& particles, double deltaT);
+        void (*before)();
+        void (*step)();
+        void (*after)();
 };

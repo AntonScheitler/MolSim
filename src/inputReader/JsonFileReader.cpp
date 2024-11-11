@@ -53,7 +53,6 @@ namespace inputReader {
 
         if (inputFile.is_open()) {
             for (const auto& cuboid : data["cuboids"]) {
-
                 x = cuboid["cornerCoordinates"].get<std::array<double, 3>>();
                 v = cuboid["velocity"].get<std::array<double, 3>>();
                 d = cuboid["dimensions"].get<std::array<int, 3>>();
@@ -78,6 +77,5 @@ namespace inputReader {
             exit(-1);
         }
     }
-
 
 } // namespace inputReader

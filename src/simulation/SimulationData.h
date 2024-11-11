@@ -45,10 +45,6 @@ class SimulationData {
          */
         double getDeltaT();
         /**
-         * @brief returns the average velocity based on the Brownian motion of the simulation
-         */
-        double getAverageVelocity();
-        /**
          * @brief returns the particles to be simulated
          */
         ParticleContainer& getParticles();
@@ -57,7 +53,6 @@ class SimulationData {
         double startTime;
         double endTime;
         double deltaT;
-        double averageVelocity;
         spdlog::level::level_enum level;
         ParticleContainer particles;
 };
