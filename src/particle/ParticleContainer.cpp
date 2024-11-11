@@ -3,18 +3,29 @@
 
 ParticleContainer::ParticleContainer() {
     particles = std::vector<Particle>{};
+    averageVelocity = 0.1;
 }
 
-ParticleContainer::ParticleContainer(const std::vector<Particle> &particlesArg) {
+ParticleContainer::ParticleContainer(const std::vector<Particle> &particlesArg, double averageVelocityArg=0.1) {
     particles = particlesArg;
+    averageVelocity = averageVelocityArg;
 }
 
 void ParticleContainer::addParticle(const Particle &particle) {
     particles.push_back(particle);
+    averageVelocity = 0.1;
 }
 
 int ParticleContainer::size() {
     return particles.size();
+}
+
+double ParticleContainer::getAverageVelocity() {
+    return averageVelocity;
+}
+
+void ParticleContainer::setAverageVelocity(double averageVelocityArg) {
+    averageVelocity = averageVelocityArg;
 }
 
 // single particle iterator

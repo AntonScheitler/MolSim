@@ -2,10 +2,8 @@
 #include "JsonFileReader.h"
 #include "TxtFileReader.h"
 #include "spdlogConfig.h"
-#include <stdexcept>
 
 namespace inputReader {
-
         FileReader::FileReader(SimulationData& simDataArg) {
             simData = simDataArg;
             this->logger = spdlog::stdout_color_st("FileReader");

@@ -58,13 +58,13 @@ namespace inputReader {
 
         if (inputFile.is_open()) {
             for (const auto& cuboid : data["cuboids"]) {
-
                 x = cuboid["cornerCoordinates"].get<std::array<double, 3>>();
                 v = cuboid["velocity"].get<std::array<double, 3>>();
                 d = cuboid["dimensions"].get<std::array<int, 3>>();
                 m = cuboid["mass"].get<double>();
                 h = cuboid["meshWidth"].get<double>();
                 bm = cuboid["brownianMotion"].get<double>();
+                particles.setAverageVelocity(bm);
 
                 std::array<double, 3> tempx{};
                 for (int j = 1; j <= d[0]; ++j) {
@@ -85,6 +85,5 @@ namespace inputReader {
             exit(-1);
         }
     }
-
 
 } // namespace inputReader

@@ -1,4 +1,5 @@
 #include "TxtFileReader.h"
+#include <execution>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -106,6 +107,7 @@ namespace inputReader {
                     datastream >> dj;
                 }
                 datastream >> bm;
+                particles.setAverageVelocity(bm);
 
                 //particles.addParticle(Particle(x, v, m));
                 std::array<double, 3> tempx{};
