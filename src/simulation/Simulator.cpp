@@ -16,6 +16,7 @@ Simulator::Simulator(SimulationData& simDataArg) {
             forceCompute = ForceComputations::computeGravity;
             velocityCompute = VelocityComputations::stoermerVerlet;
             logger = spdlog::stdout_color_mt("CometSimulation");
+            SPDLOG_LOGGER_INFO(logger, "Simulating planets and Halley's Comet");
             break;
         // use lennard-jones for the molecule collision
         case collision: 
@@ -23,6 +24,7 @@ Simulator::Simulator(SimulationData& simDataArg) {
             forceCompute = ForceComputations::computeLennardJonesPotential;
             velocityCompute = VelocityComputations::stoermerVerlet;
             logger = spdlog::stdout_color_mt("CollisionSimulation");
+            SPDLOG_LOGGER_INFO(logger, "Simulating 2-body collision");
             // initialize velocity via brownian motion
             VelocityComputations::applyBrownianMotion(simData.getParticles(), simData.getAverageVelocity());
             break;

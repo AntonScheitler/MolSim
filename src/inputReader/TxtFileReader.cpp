@@ -53,6 +53,7 @@ namespace inputReader {
                 getline(inputFile, tmpString);
                 SPDLOG_LOGGER_DEBUG(logger, "Read line: {0}", tmpString);
             }
+            SPDLOG_LOGGER_DEBUG(logger, "Successfully read {0} particles", particles.size());
         } else {
             SPDLOG_LOGGER_ERROR(logger, "Error: could not open file {0}", filename);
             exit(-1);
@@ -114,6 +115,7 @@ namespace inputReader {
                         tempx[1] = k * h + x[1];
                         for (int l = 1; l <= d[2]; ++l) {
                             tempx[2] = l * h + x[2];
+                            SPDLOG_LOGGER_DEBUG(logger, "adding particle at coords {0}, {1}, {2}", tempx[0], tempx[1], tempx[2]);
                             particles.addParticle(Particle(tempx, v, m));
                         }
                     }
@@ -121,6 +123,7 @@ namespace inputReader {
                 getline(inputFile, tmpString);
                 SPDLOG_LOGGER_DEBUG(logger, "Read line: {0}", tmpString);
             }
+            SPDLOG_LOGGER_DEBUG(logger, "Successfully read {0} particles", particles.size());
         } else {
             SPDLOG_LOGGER_ERROR(logger, "Error: could not open file {0}", filename);
             exit(-1);

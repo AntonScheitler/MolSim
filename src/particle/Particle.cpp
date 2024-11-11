@@ -14,9 +14,9 @@
 
 Particle::Particle(int typeArg) {
     type = typeArg;
-    SPDLOG_DEBUG("Particle generated!"); // using default logger, do not create logger for each particle
     f = {0., 0., 0.};
     oldF = {0., 0., 0.};
+    SPDLOG_DEBUG("Particle generated!"); // using default logger, do not create logger for each particle
 }
 
 Particle::Particle(const Particle &other) {
@@ -41,7 +41,7 @@ Particle::Particle(std::array<double, 3> xArg, std::array<double, 3> vArg,
     SPDLOG_DEBUG("Particle generated!");
 }
 
-Particle::~Particle() { SPDLOG_DEBUG("Particle destructed!"); }
+Particle::~Particle() { SPDLOG_TRACE("Particle destructed!"); }
 
 const std::array<double, 3> &Particle::getX() const { return x; }
 

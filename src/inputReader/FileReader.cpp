@@ -10,7 +10,6 @@ namespace inputReader {
             simData = simDataArg;
             this->logger = spdlog::stdout_color_st("FileReader");
             SPDLOG_LOGGER_DEBUG(logger, "Initialized FileReader");
-
         }
 
         void FileReader::readFile(ParticleContainer &particles, char *filename) {
