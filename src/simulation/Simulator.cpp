@@ -3,8 +3,10 @@
 #include "computations/positions/PositionComputations.h"
 #include "computations/velocities/VelocityComputations.h"
 #include "outputWriter/VTKWriter.h"
+#include "spdlog/sinks/stdout_color_sinks.h"
+#include "spdlog/spdlog.h"
+#include <chrono>
 #include <ctime>
-
 
 void tmp () {
     int x = 5;
@@ -47,20 +49,20 @@ Simulator::Simulator(SimulationData& simDataArg) {
     }
 }
 
-
 void Simulator::simulate() {
+    SPDLOG_LOGGER_INFO(logger, "Starting Simulation with delta_t={0} and end_time={1}", simData.getDeltaT(), simData.getEndTime());
     // prepare for iteration
     double currentTime = simData.getStartTime();
     int iteration = 0;
     outputWriter::VTKWriter writer;
-    before();
 
+    before();
     // compute position, force and velocity for all particles each iteration
     while (currentTime < simData.getEndTime()) {
         step();
 
         iteration++;
-        if (iteration % 10 == 0) {
+        if (iteration % 10 == 0 && !simData.getBench()) {
             // write output on every 10th iteration
             writer.plotParticles(simData.getParticles(), iteration);
         }
@@ -68,4 +70,42 @@ void Simulator::simulate() {
         currentTime += simData.getDeltaT();
     }
     after();
+    SPDLOG_LOGGER_INFO(logger, "output written. Terminating...");
+}
+
+void Simulator::simulateBench() {
+    // overwrite logging settings
+    spdlog::set_level(spdlog::level::info);
+    logger = spdlog::stdout_color_mt("Benchmarking");
+    SPDLOG_LOGGER_INFO(logger, "=========================BENCH=========================");
+    SPDLOG_LOGGER_INFO(logger, "Benchmarking with delta_t={0}, t_end={1}, sim_type={2}", simData.getDeltaT(), simData.getEndTime(), (int) simData.getSimType());
+    SPDLOG_LOGGER_INFO(logger, "Commencing Simulation...");
+
+    std::chrono::high_resolution_clock::rep totalDuration = 0;
+    int numIterations = 10;
+    ParticleContainer particlesBefore = simData.getParticles();
+
+    for (int i = 0; i < numIterations; i++) {
+        // turn off logging before starting simulation
+        spdlog::set_level(spdlog::level::info);
+        simData.setParticlesCopy(particlesBefore);
+        auto start = std::chrono::high_resolution_clock::now();
+
+        double currentTime = simData.getStartTime();
+        before();
+        while (currentTime < simData.getEndTime()) {
+            step();
+            currentTime += simData.getDeltaT();
+        }
+        after();
+
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
+        // turn logging back on
+        spdlog::set_level(spdlog::level::info);
+        SPDLOG_LOGGER_INFO(logger, "Simulation no. {0} took {1} ms", i, duration.count());
+        totalDuration += duration.count();
+    }
+
+    SPDLOG_LOGGER_INFO(logger, "Simulation took {0} ms on average", (totalDuration / numIterations));
+    SPDLOG_LOGGER_INFO(logger, "=========================BENCH=========================");
 }

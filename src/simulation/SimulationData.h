@@ -53,11 +53,23 @@ class SimulationData {
          * @brief returns the particles to be simulated
          */
         ParticleContainer& getParticles();
+
+        /**
+         * @brief sets particles to a copy of particlesArg
+         * @param particlesArg the particles to copy
+         */
+        void setParticlesCopy(ParticleContainer particlesArg);
+
+        /**
+         * @brief returns whether or not benchmarking is switched on
+         */
+        bool getBench();
     private:
         simulationType simType;
         double startTime;
         double endTime;
         double deltaT;
+        bool bench;
         spdlog::level::level_enum level;
         ParticleContainer particles;
 };

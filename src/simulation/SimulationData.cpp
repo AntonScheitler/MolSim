@@ -1,4 +1,5 @@
 #include "particle/ParticleContainer.h"
+#include "spdlog/spdlog.h"
 #include <iostream>
 #include <simulation/SimulationData.h>
 #include <getopt.h>
@@ -12,6 +13,7 @@ SimulationData::SimulationData() {
     startTime = 0;
     endTime = 1000;
     deltaT = 0.014;
+    bench = false;
 }
 
 int SimulationData::parseOptions(int argc, char* argsv[]) {
@@ -25,13 +27,14 @@ int SimulationData::parseOptions(int argc, char* argsv[]) {
     // setup option parsing
     int c;
     int simTypeNum;
-    const char* const shortOpts = "d:e:l:s:h";
+    const char* const shortOpts = "d:e:l:s:hb";
     const option longOpts[] = {
-        {"t_end", required_argument, nullptr, 'e'},
         {"delta_t", required_argument, nullptr, 'd'},
-        {"help", no_argument, nullptr, 'h'},
-        {"sim_type", required_argument, nullptr, 's'},
+        {"t_end", required_argument, nullptr, 'e'},
         {"log", required_argument, nullptr, 'l'},
+        {"sim_type", required_argument, nullptr, 's'},
+        {"bench", no_argument, nullptr, 'b'},
+        {"help", no_argument, nullptr, 'h'},
         {nullptr, no_argument, nullptr, 0}
     };
 
@@ -76,9 +79,13 @@ int SimulationData::parseOptions(int argc, char* argsv[]) {
                     exit(EXIT_FAILURE);
                 }
                 break;
+            case 'b':
+                bench = true;
+                break;
             case '?':
                 SPDLOG_LOGGER_INFO(logger, usageText);
                 exit(EXIT_FAILURE);
+                break;
         }
     }
     // check if an input file has been supplied
@@ -111,10 +118,18 @@ double SimulationData::getDeltaT() {
     return deltaT;
 }
 
+bool SimulationData::getBench() {
+    return bench;
+}
+
 ParticleContainer& SimulationData::getParticles() {
     return particles;
 }
 
 void SimulationData::setSimType(simulationType s) {
     this->simType = s;
+}
+
+void SimulationData::setParticlesCopy(ParticleContainer particlesArg) {
+    particles = particlesArg;
 }
