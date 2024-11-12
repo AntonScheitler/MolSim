@@ -25,7 +25,7 @@ namespace inputReader {
         public:
             FileReader(SimulationData& simDataArg);
             void readFile(ParticleContainer &particles, char *filename);
-            virtual ~FileReader() = default;
+            ~FileReader();
             /**
              * @brief reads a file and fills a ParticleContainer accordingly
              * @param particles the particles to be filled up

@@ -4,7 +4,7 @@
 #include <spdlog/spdlog.h>
 #include <particle/ParticleContainer.h>
 
-enum simTypes: int {
+enum simulationType: int {
     comet = 0,
     collision = 1
 };
@@ -26,12 +26,17 @@ class SimulationData {
          * @brief reads a file and adds particles to the SimulationData Object based on it's content
          * @param fileName the name of the file to read the particle information from
          */
-        void readParticles(simTypes, char* fileName);
+        void readParticles(simulationType, char* fileName);
 
         /**
-         * @brief returns the simType of the simulation
+         * @brief set simulation type
+         * @param s new sim type
          */
-        simTypes getSimType();
+        void setSimType(simulationType s);
+        /**
+         * @brief returns the type of the simulation
+         */
+        simulationType getSimType();
         /**
          * @brief returns the start time of the simulation
          */
@@ -49,7 +54,7 @@ class SimulationData {
          */
         ParticleContainer& getParticles();
     private:
-        simTypes simType;
+        simulationType simType;
         double startTime;
         double endTime;
         double deltaT;

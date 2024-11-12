@@ -15,6 +15,10 @@ namespace inputReader {
         SPDLOG_LOGGER_DEBUG(logger, "Initialized JsonFileReader");
     }
 
+    JsonFileReader::~JsonFileReader() {
+        spdlog::drop("JsonFileReader");
+    }
+
     void JsonFileReader::readCometFile(ParticleContainer &particles, char *filename) {
         std::array<double, 3> x{};
         std::array<double, 3> v{};
@@ -85,5 +89,7 @@ namespace inputReader {
             exit(-1);
         }
     }
+
+
 
 } // namespace inputReader

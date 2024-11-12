@@ -14,7 +14,7 @@ void tmp () {
 Simulator::Simulator(SimulationData& simDataArg) {
     simData = simDataArg;
 
-    // choose computation functions based on the simType
+    // choose computation functions based on the type
     switch (simData.getSimType()) {
         // use gravity for the comet simulation
         case comet: 

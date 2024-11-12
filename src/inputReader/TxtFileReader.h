@@ -14,6 +14,7 @@ namespace inputReader {
          */
         public:
             TxtFileReader();
+            ~TxtFileReader();
             void readCometFile(ParticleContainer &particles, char *filename) ;
             void readCollisionFile(ParticleContainer &particles, char *filename) ;
         private:

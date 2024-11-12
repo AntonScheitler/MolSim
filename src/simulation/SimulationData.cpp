@@ -8,7 +8,7 @@
 
 SimulationData::SimulationData() {
     // set default values
-    simType = simTypes::collision;
+    simType = simulationType::collision;
     startTime = 0;
     endTime = 1000;
     deltaT = 0.014;
@@ -59,7 +59,7 @@ int SimulationData::parseOptions(int argc, char* argsv[]) {
                     SPDLOG_LOGGER_ERROR(logger, "simulation type must be between 0-1!");
                     exit(EXIT_FAILURE);
                 }
-                simType = simTypes(simTypeNum);
+                simType = simulationType(simTypeNum);
                 break;
             case 'h':
                 SPDLOG_LOGGER_INFO(logger, usageText);
@@ -90,12 +90,12 @@ int SimulationData::parseOptions(int argc, char* argsv[]) {
     return optind;
 }
 
-void SimulationData::readParticles(simTypes, char* fileName) {
+void SimulationData::readParticles(simulationType, char* fileName) {
     inputReader::FileReader fileReader(*this);
     fileReader.readFile(particles, fileName);
 }
 
-simTypes SimulationData::getSimType() {
+simulationType SimulationData::getSimType() {
     return simType;
 }
 
@@ -113,4 +113,8 @@ double SimulationData::getDeltaT() {
 
 ParticleContainer& SimulationData::getParticles() {
     return particles;
+}
+
+void SimulationData::setSimType(simulationType s) {
+    this->simType = s;
 }

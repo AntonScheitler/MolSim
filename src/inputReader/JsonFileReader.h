@@ -16,6 +16,7 @@ namespace inputReader {
     public:
 
         JsonFileReader();
+        ~JsonFileReader();
         void readCollisionFile(ParticleContainer &particles, char *filename);
         void readCometFile(ParticleContainer &particles, char *filename);
 

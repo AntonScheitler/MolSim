@@ -50,12 +50,12 @@ TEST_F(VelocityComputationsTest, StoermerVerletVelocityCalcTest) {
     VelocityComputations::stoermerVerlet(particles, 0.1);
 
     // particle a
-    ASSERT_NEAR(particles.getParticle(0).getV()[0], 7.083333333, 0.00000001);
-    ASSERT_NEAR(particles.getParticle(0).getV()[1], 1.05, 0.00000001);
-    ASSERT_NEAR(particles.getParticle(0).getV()[2], 9.133333333, 0.00000001);
+    EXPECT_NEAR(particles.getParticle(0).getV()[0], 7.083333333, 0.00000001);
+    EXPECT_NEAR(particles.getParticle(0).getV()[1], 1.05, 0.00000001);
+    EXPECT_NEAR(particles.getParticle(0).getV()[2], 9.133333333, 0.00000001);
     // particle b
-    ASSERT_NEAR(particles.getParticle(1).getV()[0], 5.3, 0.00000001);
-    ASSERT_NEAR(particles.getParticle(1).getV()[1], 10.85, 0.00000001);
-    ASSERT_NEAR(particles.getParticle(1).getV()[2], 5.55, 0.00000001);
+    EXPECT_NEAR(particles.getParticle(1).getV()[0], 5.3, 0.00000001);
+    EXPECT_NEAR(particles.getParticle(1).getV()[1], 10.85, 0.00000001);
+    EXPECT_NEAR(particles.getParticle(1).getV()[2], 5.55, 0.00000001);
 }
 

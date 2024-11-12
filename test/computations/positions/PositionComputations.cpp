@@ -45,12 +45,12 @@ TEST_F(PositionComputationsTest, StoermerVerletPositionCalcTest) {
 
     PositionComputations::stoermerVerlet(particles, 0.1);
     // particle a
-    ASSERT_NEAR(particles.getParticle(0).getX()[0], 3.7075, 0.00000001);
-    ASSERT_NEAR(particles.getParticle(0).getX()[1], 5.1, 0.00000001);
-    ASSERT_NEAR(particles.getParticle(0).getX()[2], 4.905833333, 0.00000001);
+    EXPECT_NEAR(particles.getParticle(0).getX()[0], 3.7075, 0.00000001);
+    EXPECT_NEAR(particles.getParticle(0).getX()[1], 5.1, 0.00000001);
+    EXPECT_NEAR(particles.getParticle(0).getX()[2], 4.905833333, 0.00000001);
     // particle b
-    ASSERT_NEAR(particles.getParticle(1).getX()[0], 7.51, 0.00000001);
-    ASSERT_NEAR(particles.getParticle(1).getX()[1], 4.05, 0.00000001);
-    ASSERT_NEAR(particles.getParticle(1).getX()[2], 0.53, 0.00000001);
+    EXPECT_NEAR(particles.getParticle(1).getX()[0], 7.51, 0.00000001);
+    EXPECT_NEAR(particles.getParticle(1).getX()[1], 4.05, 0.00000001);
+    EXPECT_NEAR(particles.getParticle(1).getX()[2], 0.53, 0.00000001);
 }
 
