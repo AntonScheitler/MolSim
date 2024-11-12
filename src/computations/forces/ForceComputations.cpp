@@ -37,17 +37,16 @@ void ForceComputations::computeLennardJonesPotential(ParticleContainer &particle
     for (auto it = particles.beginPairParticle(); it != particles.endPairParticle(); ++it) {
         std::pair<Particle &, Particle &> pair = *it;
 
-        std::array<double, 3> distanceVector = ArrayUtils::elementWisePairOp(pair.first.getX(), pair.second.getF(),
-                                                                             std::minus<>());
+        std::array<double, 3> distanceVector = ArrayUtils::elementWisePairOp(pair.second.getX(), pair.first.getX(), std::minus<>());
         double distance = ArrayUtils::L2Norm(distanceVector);
         if (distance == 0) continue;
 
-        double factor = -24 * epsilon / std::pow(distance, 2) * (std::pow(sigma / distance, 6)
-                                                                 - 2 * std::pow(sigma / distance, 12));
+        double factor = (-24 * epsilon) / std::pow(distance, 2) * (std::pow(sigma / distance, 6) - 2 * std::pow(sigma / distance, 12));
 
         std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(factor, distanceVector, std::multiplies<>());
-        pair.first.setF(force);
-        pair.second.setF(ArrayUtils::elementWiseScalarOp(-1, force, std::multiplies<>()));
+        pair.first.setF(ArrayUtils::elementWisePairOp(pair.first.getF(), force, std::plus<>()));
+        std::array<double, 3> revForce = ArrayUtils::elementWiseScalarOp(-1, force, std::multiplies<>());
+        pair.second.setF(ArrayUtils::elementWisePairOp(pair.second.getF(), revForce, std::plus<>()));
     }
 }
 
