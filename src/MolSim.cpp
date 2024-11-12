@@ -12,7 +12,6 @@ int main(int argc, char *argsv[]) {
     // default logging level
     spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%^%l%$] [%n] %v");
     spdlog::set_level(spdlog::level::info);
-    auto logger = spdlog::stdout_color_mt("MolSim");
 
     SimulationData simData = SimulationData();
     int fileIdx = simData.parseOptions(argc, argsv);
