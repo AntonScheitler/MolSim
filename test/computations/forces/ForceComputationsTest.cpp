@@ -2,6 +2,9 @@
 #include "../../../../src/computations/forces/ForceComputations.h"
 #include <gtest/gtest.h>
 
+/**
+ * @brief Tests the force computations (src/computations/forces) via analytically calculated examples
+ */
 class ForceComputationsTest : public testing::Test {
 protected:
 

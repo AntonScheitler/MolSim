@@ -2,6 +2,9 @@
 #include "../../../../src/computations/velocities/VelocityComputations.h"
 #include <gtest/gtest.h>
 
+/**
+ * @brief Tests the velocity computations (src/computations/velocities) via analytically calculated examples
+ */
 class VelocityComputationsTest : public testing::Test {
 protected:
 

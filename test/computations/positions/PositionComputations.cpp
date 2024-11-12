@@ -2,6 +2,9 @@
 #include "../../../../src/computations/positions/PositionComputations.h"
 #include <gtest/gtest.h>
 
+/**
+ * @brief Tests the position computations (src/computations/positions) via analytically calculated examples
+ */
 class PositionComputationsTest : public testing::Test {
 protected:
 
