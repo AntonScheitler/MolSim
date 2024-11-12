@@ -43,8 +43,6 @@ void ForceComputations::computeLennardJonesPotential(ParticleContainer &particle
 
         double factor = (-24.0 * epsilon) / std::pow(distance, 2) * (std::pow(sigma / distance, 6) - 2 * std::pow(sigma / distance, 12));
 
-
-
         std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(factor, distanceVector, std::multiplies<>());
         pair.first.setF(ArrayUtils::elementWisePairOp(pair.first.getF(), force, std::plus<>()));
         std::array<double, 3> revForce = ArrayUtils::elementWiseScalarOp(-1, force, std::multiplies<>());

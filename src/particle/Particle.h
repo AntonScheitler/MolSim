@@ -111,6 +111,11 @@ class Particle {
         void setOldF(std::array<double, 3> newF);
 
         /**
+         * @brief Set the new mass of this particle
+         * @param newM new mass
+         */
+        void setM(double newM);
+        /**
          * @brief Get the mass of this particle
          * @return mass of this particle
          */

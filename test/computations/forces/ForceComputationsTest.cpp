@@ -1,13 +1,13 @@
 #include "../../../../src/particle/ParticleContainer.h"
-#include "../../../../src/computations/forces/ForceComputations.cpp"
+#include "../../../../src/computations/forces/ForceComputations.h"
 #include <gtest/gtest.h>
 
 class ForceComputationsTest : public testing::Test {
 protected:
 
-    // variables
     ParticleContainer particles;
 
+    // executed before each test
     void SetUp() override {
 
         Particle a{0};
@@ -17,7 +17,12 @@ protected:
         a.setX({{3, 5, 4}});
         b.setX({{7, 3, 0}});
 
+        // init mass
+        a.setM(6);
+        b.setM(1);
+
         particles = ParticleContainer({{a,b}}, 0.1);
+        std::cout << "inited tests" << std::endl;
     }
 };
 
@@ -30,11 +35,33 @@ TEST_F(ForceComputationsTest, LennardJonesForceCalcTest) {
     ForceComputations::computeLennardJonesPotential(particles);
 
     // the analytical solution F_ij calculates the force for j (for i is inverted)
-    ASSERT_NEAR(particles.getParticle(1).getF()[0], 0.000285767, 0.0000001);
-    ASSERT_NEAR(particles.getParticle(1).getF()[1], -0.000142883, 0.0000001);
-    ASSERT_NEAR(particles.getParticle(1).getF()[2], -0.000285767, 0.0000001);
-
-    ASSERT_NEAR(particles.getParticle(0).getF()[0], -0.000285767, 0.0000001);
-    ASSERT_NEAR(particles.getParticle(0).getF()[1], 0.000142883, 0.0000001);
-    ASSERT_NEAR(particles.getParticle(0).getF()[2], 0.000285767, 0.0000001);
+    // particle a
+    ASSERT_NEAR(particles.getParticle(0).getF()[0], 0.000285767, 0.00000001);
+    ASSERT_NEAR(particles.getParticle(0).getF()[1], -0.000142883, 0.00000001);
+    ASSERT_NEAR(particles.getParticle(0).getF()[2], -0.000285767, 0.00000001);
+    // particle b
+    ASSERT_NEAR(particles.getParticle(1).getF()[0], -0.000285767, 0.00000001);
+    ASSERT_NEAR(particles.getParticle(1).getF()[1], 0.000142883, 0.00000001);
+    ASSERT_NEAR(particles.getParticle(1).getF()[2], 0.000285767, 0.00000001);
 }
+
+/**
+ * @brief checks if the stoermer verlet gravity force calculation is equivalent to the analytical solution
+ * (modulo rounding/discretization errors)
+ */
+TEST_F(ForceComputationsTest, GravityCalcTest) {
+
+    ForceComputations::computeGravity(particles);
+
+    // the analytical solution F_ij calculates the force for j (for i is inverted)
+    // particle a
+    ASSERT_NEAR(particles.getParticle(0).getF()[0], 0.111111111, 0.00000001);
+    ASSERT_NEAR(particles.getParticle(0).getF()[1], -0.055555555, 0.00000001);
+    ASSERT_NEAR(particles.getParticle(0).getF()[2], -0.111111111, 0.00000001);
+    // particle b
+    ASSERT_NEAR(particles.getParticle(1).getF()[0], -0.111111111, 0.00000001);
+    ASSERT_NEAR(particles.getParticle(1).getF()[1], 0.055555555, 0.00000001);
+    ASSERT_NEAR(particles.getParticle(1).getF()[2], 0.111111111, 0.00000001);
+}
+
+

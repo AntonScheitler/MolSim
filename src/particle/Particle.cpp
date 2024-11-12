@@ -74,6 +74,10 @@ bool Particle::operator==(Particle &other) {
         (type == other.type) and (m == other.m) and (oldF == other.oldF);
 }
 
+void Particle::setM(double newM) {
+    this->m = newM;
+}
+
 std::ostream &operator<<(std::ostream &stream, Particle &p) {
     stream << p.toString();
     return stream;
