@@ -32,8 +32,7 @@ Simulator::Simulator(SimulationData& simDataArg) {
             // use lennard-jones for the molecule collision
         case collision: 
             before = [this]() {
-                VelocityComputations::applyBrownianMotion(simData.getParticles(), 
-                        simData.getParticles().getAverageVelocity());
+                VelocityComputations::applyBrownianMotion(simData.getParticles(), simData.getParticles().getAverageVelocity());
             };
             step = [this]() {
                 ForceComputations::resetForces(simData.getParticles());
