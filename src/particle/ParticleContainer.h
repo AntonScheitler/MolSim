@@ -45,6 +45,7 @@ public:
      * @param averageVelocityArg the velocity to set the average velocity to
      */
     void setAverageVelocity(double averageVelocityArg);
+    Particle& getParticle(int index);
     /**
      * @brief returns a ParticleIterator which points to the beginning of the ParticleContainer. This makes iteration over
      * separate particles the default when using a for-each loop

@@ -20,6 +20,10 @@ int ParticleContainer::size() {
     return particles.size();
 }
 
+Particle& ParticleContainer::getParticle(int index) {
+    return particles.at(index);
+}
+
 double ParticleContainer::getAverageVelocity() {
     return averageVelocity;
 }
