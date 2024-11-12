@@ -30,18 +30,20 @@ void ForceComputations::computeGravity(ParticleContainer &particles) {
 
 void ForceComputations::computeLennardJonesPotential(ParticleContainer &particles) {
     // hardcoded for now (later dynamic)
-    int epsilon = 5;
-    int sigma = 1;
+    double epsilon = 5;
+    double sigma = 1;
 
     // iterate through all pairs of particles and calculate lennard-jones potential
     for (auto it = particles.beginPairParticle(); it != particles.endPairParticle(); ++it) {
         std::pair<Particle &, Particle &> pair = *it;
 
-        std::array<double, 3> distanceVector = ArrayUtils::elementWisePairOp(pair.second.getX(), pair.first.getX(), std::minus<>());
+        std::array<double, 3> distanceVector = ArrayUtils::elementWisePairOp(pair.first.getX(), pair.second.getX(), std::minus<>());
         double distance = ArrayUtils::L2Norm(distanceVector);
         if (distance == 0) continue;
 
-        double factor = (-24 * epsilon) / std::pow(distance, 2) * (std::pow(sigma / distance, 6) - 2 * std::pow(sigma / distance, 12));
+        double factor = (-24.0 * epsilon) / std::pow(distance, 2) * (std::pow(sigma / distance, 6) - 2 * std::pow(sigma / distance, 12));
+
+
 
         std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(factor, distanceVector, std::multiplies<>());
         pair.first.setF(ArrayUtils::elementWisePairOp(pair.first.getF(), force, std::plus<>()));
