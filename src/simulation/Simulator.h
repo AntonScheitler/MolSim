@@ -10,7 +10,8 @@
 class Simulator {
     public:
         Simulator(SimulationData& simDataArg);
-        void simulate();
+       void simulate();
+       void simulateBench();
     private:
         SimulationData simData;
         std::shared_ptr<spdlog::logger> logger;
