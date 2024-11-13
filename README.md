@@ -27,10 +27,26 @@ The doxygen documentation will be generated in the directory `doxys_documentatio
 
 To run the program, execute the following command
 ```
-./MolSim <input_file> [OPTIONS]
+./src/molSim <input_file> [OPTIONS]
 ```
-For the input file use for example `input/eingabe-sonne.txt`.
+For the input file use for example `../input/eingabe-sonne.txt`.
 
 The executable offers the following options:
 - `-d, --delta_t`: The size of each timestep in seconds. Default value: 0.014
 - `-e, --t_end`: Time in seconds at which to stop the simulation. Default value: 1000
+- `-l, --log`: Log level. Valid values (high to low):
+  'trace', 'debug', 'info', 'warn', 'err', 'critical', 'off'
+  (using any other string will result in logging turned 'off'). Default value: 'info'
+- `-s, --sim_type`: Type of simulation to run (default: 1):
+  - 0 - Planet Simulation
+  - 1 - Collision of Cuboids
+- `-b, --bench`: Activate benchmarking
+
+
+### Unit Tests
+
+To run the unit test, execute the following commands (assuming current directory is build/):
+
+```
+cd test/ && ctest
+```
