@@ -1,0 +1,21 @@
+{
+    "cuboids": [
+      {
+        "cornerCoordinates": [0.0, 0.0, 0.0],
+        "dimensions": [2, 1, 1],
+        "meshWidth": 1.1225,
+        "mass": 1.0,
+        "velocity": [0.0, 0.0, 7.4],
+        "brownianMotion": 0.1
+      },
+      {
+        "cornerCoordinates": [15.0, 15.0, 0.0],
+        "dimensions": [1, 2, 1],
+        "meshWidth": 1.1225,
+        "mass": 3.0,
+        "velocity": [0.0, -10.0, 0.0],
+        "brownianMotion": 0.1
+      }
+    ]
+  }
+  

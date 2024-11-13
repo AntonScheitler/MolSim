@@ -8,6 +8,11 @@ namespace inputReader {
             simData = simDataArg;
             this->logger = spdlog::stdout_color_st("FileReader");
             SPDLOG_LOGGER_DEBUG(logger, "Initialized FileReader");
+
+        }
+
+        FileReader::~FileReader() {
+            spdlog::drop("FileReader");
         }
 
         void FileReader::readFile(ParticleContainer &particles, char *filename) {
@@ -43,4 +48,6 @@ namespace inputReader {
                 txtReader.readCollisionFile(particles, filename);
             }
         }
+
+
 } // namespace inputReader

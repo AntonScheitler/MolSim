@@ -1,4 +1,5 @@
 #include "particle/ParticleContainer.h"
+#include "spdlog/spdlog.h"
 #include <iostream>
 #include <simulation/SimulationData.h>
 #include <getopt.h>
@@ -8,10 +9,11 @@
 
 SimulationData::SimulationData() {
     // set default values
-    simType = simTypes::collision;
+    simType = simulationType::collision;
     startTime = 0;
     endTime = 1000;
     deltaT = 0.014;
+    bench = false;
 }
 
 int SimulationData::parseOptions(int argc, char* argsv[]) {
@@ -25,13 +27,14 @@ int SimulationData::parseOptions(int argc, char* argsv[]) {
     // setup option parsing
     int c;
     int simTypeNum;
-    const char* const shortOpts = "d:e:l:s:h";
+    const char* const shortOpts = "d:e:l:s:hb";
     const option longOpts[] = {
-        {"t_end", required_argument, nullptr, 'e'},
         {"delta_t", required_argument, nullptr, 'd'},
-        {"help", no_argument, nullptr, 'h'},
-        {"sim_type", required_argument, nullptr, 's'},
+        {"t_end", required_argument, nullptr, 'e'},
         {"log", required_argument, nullptr, 'l'},
+        {"sim_type", required_argument, nullptr, 's'},
+        {"bench", no_argument, nullptr, 'b'},
+        {"help", no_argument, nullptr, 'h'},
         {nullptr, no_argument, nullptr, 0}
     };
 
@@ -59,7 +62,7 @@ int SimulationData::parseOptions(int argc, char* argsv[]) {
                     SPDLOG_LOGGER_ERROR(logger, "simulation type must be between 0-1!");
                     exit(EXIT_FAILURE);
                 }
-                simType = simTypes(simTypeNum);
+                simType = simulationType(simTypeNum);
                 break;
             case 'h':
                 SPDLOG_LOGGER_INFO(logger, usageText);
@@ -76,9 +79,13 @@ int SimulationData::parseOptions(int argc, char* argsv[]) {
                     exit(EXIT_FAILURE);
                 }
                 break;
+            case 'b':
+                bench = true;
+                break;
             case '?':
                 SPDLOG_LOGGER_INFO(logger, usageText);
                 exit(EXIT_FAILURE);
+                break;
         }
     }
     // check if an input file has been supplied
@@ -90,12 +97,12 @@ int SimulationData::parseOptions(int argc, char* argsv[]) {
     return optind;
 }
 
-void SimulationData::readParticles(simTypes, char* fileName) {
+void SimulationData::readParticles(simulationType, char* fileName) {
     inputReader::FileReader fileReader(*this);
     fileReader.readFile(particles, fileName);
 }
 
-simTypes SimulationData::getSimType() {
+simulationType SimulationData::getSimType() {
     return simType;
 }
 
@@ -111,6 +118,18 @@ double SimulationData::getDeltaT() {
     return deltaT;
 }
 
+bool SimulationData::getBench() {
+    return bench;
+}
+
 ParticleContainer& SimulationData::getParticles() {
     return particles;
+}
+
+void SimulationData::setSimType(simulationType s) {
+    this->simType = s;
+}
+
+void SimulationData::setParticlesCopy(ParticleContainer particlesArg) {
+    particles = particlesArg;
 }

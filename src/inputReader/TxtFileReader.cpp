@@ -11,6 +11,10 @@ namespace inputReader {
         this->logger = spdlog::stdout_color_st("TxtFileReader");
         SPDLOG_LOGGER_DEBUG(logger, "Initialized TxtFileReader");
     }
+    TxtFileReader::~TxtFileReader() {
+        spdlog::drop("TxtFileReader");
+    }
+
 
     void TxtFileReader::readCometFile(ParticleContainer &particles, char *filename) {
         std::array<double, 3> x{};
