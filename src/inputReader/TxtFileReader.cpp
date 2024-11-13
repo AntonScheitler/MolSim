@@ -69,6 +69,7 @@ namespace inputReader {
         double h;
         double bm;
         int numContainer = 0;
+        int type = 0;
 
         std::ifstream inputFile(filename);
         std::string tmpString;
@@ -111,19 +112,20 @@ namespace inputReader {
 
                 //particles.addParticle(Particle(x, v, m));
                 std::array<double, 3> tempx{};
-                for (int j = 1; j <= d[0]; ++j) {
+                for (int j = 0; j < d[0]; ++j) {
                     tempx[0] = j * h + x[0];
-                    for (int k = 1; k <= d[1]; ++k) {
+                    for (int k = 0; k < d[1]; ++k) {
                         tempx[1] = k * h + x[1];
-                        for (int l = 1; l <= d[2]; ++l) {
+                        for (int l = 0; l < d[2]; ++l) {
                             tempx[2] = l * h + x[2];
                             SPDLOG_LOGGER_DEBUG(logger, "adding particle at coords {0}, {1}, {2}", tempx[0], tempx[1], tempx[2]);
-                            particles.addParticle(Particle(tempx, v, m));
+                            particles.addParticle(Particle(tempx, v, m, type));
                         }
                     }
                 }
                 getline(inputFile, tmpString);
                 SPDLOG_LOGGER_DEBUG(logger, "Read line: {0}", tmpString);
+                type++;
             }
             SPDLOG_LOGGER_DEBUG(logger, "Successfully read {0} particles", particles.size());
         } else {

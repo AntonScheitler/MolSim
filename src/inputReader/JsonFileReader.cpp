@@ -50,6 +50,7 @@ namespace inputReader {
         double m;
         double h;
         double bm;
+        int type = 0;
 
         SPDLOG_LOGGER_DEBUG(logger, "Reading collision json file");
 
@@ -74,10 +75,13 @@ namespace inputReader {
                         for (int l = 0; l < d[2]; ++l) {
                             tempx[2] = l * h + x[2];
                             SPDLOG_LOGGER_DEBUG(logger, "adding particle at coords {0}, {1}, {2}", tempx[0], tempx[1], tempx[2]);
-                            particles.addParticle(Particle(tempx, v, m));
+                            particles.addParticle(Particle(tempx, v, m, type));
                         }
                     }
                 }
+
+                type++;
+
             }
             SPDLOG_LOGGER_DEBUG(logger, "Successfully read {0} particles", particles.size());
         } else {
