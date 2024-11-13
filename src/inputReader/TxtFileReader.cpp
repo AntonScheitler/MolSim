@@ -114,7 +114,6 @@ namespace inputReader {
                 datastream >> bm;
                 particles.setAverageVelocity(bm);
 
-                //particles.addParticle(Particle(x, v, m));
                 std::array<double, 3> tempx{};
                 for (int j = 0; j < d[0]; ++j) {
                     tempx[0] = j * h + x[0];

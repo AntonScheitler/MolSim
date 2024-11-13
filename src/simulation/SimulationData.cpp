@@ -22,7 +22,8 @@ int SimulationData::parseOptions(int argc, char* argsv[]) {
         "-d, --delta_t\t\tsize of each timestep. defaults to 0.014\n"
         "-e, --t_end\t\ttime at which to stop the simulation. defaults to 1000\n"
         "-l, --log\t\tlog level, default value: 'info'. valid values (high to low):\n\t\t\t\t'trace', 'debug', 'info', 'warn', 'err', 'critical', 'off'\n\t\t\t\t (using any other string will result in logging turned 'off')\n"
-        "-s, --sim_type\t\ttype of simulation to run:\n\t\t\t\t0 - Planets\n\t\t\t\t1 - Collision. Defaults to 1";
+        "-s, --sim_type\t\ttype of simulation to run:\n\t\t\t\t0 - Planets\n\t\t\t\t1 - Collision. Defaults to 1"
+        "-b, --bench\t\tactivates benchmarking";
 
     // setup option parsing
     int c;

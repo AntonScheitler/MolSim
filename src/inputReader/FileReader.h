@@ -24,13 +24,14 @@ namespace inputReader {
 
         public:
             FileReader(SimulationData& simDataArg);
-            void readFile(ParticleContainer &particles, char *filename);
-            ~FileReader();
             /**
              * @brief reads a file and fills a ParticleContainer accordingly
              * @param particles the particles to be filled up
              * @param filename the file to read the particle information from
              */
+            void readFile(ParticleContainer &particles, char *filename);
+            ~FileReader();
+
 
         private:
             SimulationData simData;

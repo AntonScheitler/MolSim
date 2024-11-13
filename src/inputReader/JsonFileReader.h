@@ -17,7 +17,13 @@ namespace inputReader {
 
         JsonFileReader();
         ~JsonFileReader();
+        /**
+         * @brief json file reader specifically for the Collision simulation
+         */
         void readCollisionFile(ParticleContainer &particles, char *filename);
+        /**
+         * @brief json file reader specifically for the Comet simulation
+         */
         void readCometFile(ParticleContainer &particles, char *filename);
 
     private:

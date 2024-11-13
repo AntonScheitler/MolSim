@@ -9,6 +9,9 @@
 # * xyz-coordinates (3 double values)
 # * velocities (2 or 3 double values)
 # * mass (1 double value)
+# * mesh width (1 double value)
+# * number of particles per dimension (3 integer values)
+# * mean-value of the velocity of the Brownian Motion (1 double value)
 #
 # xyz-coord     velocity        mass    mesh-width  dimensions  Brownian Motion
 2

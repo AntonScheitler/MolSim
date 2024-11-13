@@ -15,7 +15,13 @@ namespace inputReader {
         public:
             TxtFileReader();
             ~TxtFileReader();
+            /**
+             * @brief json file reader specifically for the Comet Simulation
+             */
             void readCometFile(ParticleContainer &particles, char *filename) ;
+            /**
+             * @brief json file reader specifically for the Collision Simulation
+             */
             void readCollisionFile(ParticleContainer &particles, char *filename) ;
         private:
             std::shared_ptr<spdlog::logger> logger;
