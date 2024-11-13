@@ -4,15 +4,21 @@
 #include <spdlog/spdlog.h>
 #include <particle/ParticleContainer.h>
 
+/**
+ * @brief an enum which describes the type of simulation to run
+ */
 enum simulationType: int {
     comet = 0,
     collision = 1
 };
 
+/**
+ * @brief a class which wraps all simulation information from command line arguments and files
+ */
 class SimulationData {
     public:
         /**
-         * @brief creates an instance of SimulationData which draws all information from commandline-arguments and files
+         * @brief creates an instance of the SimulationData class
          */
         SimulationData();
         /**

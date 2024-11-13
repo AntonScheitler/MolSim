@@ -127,8 +127,15 @@ class Particle {
          */
         int getType() const;
 
+        /**
+         * @brief checks if two particles are equal
+         * @param other the particle to compare with
+         */
         bool operator==(Particle &other);
 
+        /**
+         * @brief converts information about this particle into a string
+         */
         std::string toString() const;
 };
 

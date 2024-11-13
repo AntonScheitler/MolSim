@@ -1,5 +1,4 @@
 #include "TxtFileReader.h"
-#include <execution>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -17,6 +16,7 @@ namespace inputReader {
 
 
     void TxtFileReader::readCometFile(ParticleContainer &particles, char *filename) {
+        particles.setAverageVelocity(0);
         std::array<double, 3> x{};
         std::array<double, 3> v{};
         double m;

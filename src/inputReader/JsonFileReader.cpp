@@ -1,7 +1,5 @@
 #include "JsonFileReader.h"
 #include <fstream>
-#include <iostream>
-#include <sstream>
 #include "spdlogConfig.h"
 #include <nlohmann/json.hpp>
 
@@ -20,6 +18,7 @@ namespace inputReader {
     }
 
     void JsonFileReader::readCometFile(ParticleContainer &particles, char *filename) {
+        particles.setAverageVelocity(0);
         std::array<double, 3> x{};
         std::array<double, 3> v{};
 

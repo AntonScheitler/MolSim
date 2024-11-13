@@ -13,10 +13,12 @@ int main(int argc, char *argsv[]) {
     spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%^%l%$] [%n] %v");
     spdlog::set_level(spdlog::level::info);
 
+    // setup data for the simulation
     SimulationData simData = SimulationData();
     int fileIdx = simData.parseOptions(argc, argsv);
     simData.readParticles(simData.getSimType(), argsv[fileIdx]);
 
+    // perform the simulation/benchmark it
     Simulator simulator{simData};
     if (simData.getBench()) {
         simulator.simulateBench();

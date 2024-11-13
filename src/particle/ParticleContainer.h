@@ -72,6 +72,12 @@ public:
     PairParticleIterator endPairParticle();
 
 protected:
+    /**
+     * the particles wrapped by this container
+     */
     std::vector<Particle> particles;
+    /**
+     * the average brownian velocity of the particles
+     */
     double averageVelocity;
 };
