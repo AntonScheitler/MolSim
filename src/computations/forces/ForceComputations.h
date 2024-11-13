@@ -13,8 +13,10 @@ class ForceComputations {
         /**
          * @brief computes the lennard jones potential between each pair of molecules in the given ParticleContainer
          * @param particles the ParticleContainer containing the molecules
+         * @param epsilonArg epsilon for computation of Lennard Jones Potential
+         * @param sigmaArg sigma for computation of Lennard Jones Potential
          */
-        static void computeLennardJonesPotential(ParticleContainer& particles);
+        static void computeLennardJonesPotential(ParticleContainer& particles, double epsilonArg, double sigmaArg);
 
         /**
          * @brief updates the old force and resets the current force for all particles

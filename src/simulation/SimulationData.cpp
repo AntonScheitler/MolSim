@@ -13,6 +13,8 @@ SimulationData::SimulationData() {
     startTime = 0;
     endTime = 1000;
     deltaT = 0.014;
+    epsilon = 5;
+    sigma = 1;
     bench = false;
 }
 
@@ -22,13 +24,15 @@ int SimulationData::parseOptions(int argc, char* argsv[]) {
         "-d, --delta_t\t\tsize of each timestep. defaults to 0.014\n"
         "-e, --t_end\t\ttime at which to stop the simulation. defaults to 1000\n"
         "-l, --log\t\tlog level, default value: 'info'. valid values (high to low):\n\t\t\t\t'trace', 'debug', 'info', 'warn', 'err', 'critical', 'off'\n\t\t\t\t (using any other string will result in logging turned 'off')\n"
-        "-s, --sim_type\t\ttype of simulation to run:\n\t\t\t\t0 - Planets\n\t\t\t\t1 - Collision. Defaults to 1"
-        "-b, --bench\t\tactivates benchmarking";
+        "-s, --sim_type\t\ttype of simulation to run:\n\t\t\t\t0 - Planets\n\t\t\t\t1 - Collision. Defaults to 1\n"
+        "-b, --bench\t\tactivates benchmarking\n"
+        "-S, --sigma\t\tinput sigma for Lennard-Jones potential\n"
+        "-E, --epsilon\t\tinput epsilon for Lennard-Jones potential";
 
     // setup option parsing
     int c;
     int simTypeNum;
-    const char* const shortOpts = "d:e:l:s:hb";
+    const char* const shortOpts = "d:e:l:s:h:b:E:S:";
     const option longOpts[] = {
         {"delta_t", required_argument, nullptr, 'd'},
         {"t_end", required_argument, nullptr, 'e'},
@@ -36,6 +40,8 @@ int SimulationData::parseOptions(int argc, char* argsv[]) {
         {"sim_type", required_argument, nullptr, 's'},
         {"bench", no_argument, nullptr, 'b'},
         {"help", no_argument, nullptr, 'h'},
+        {"epsilon", required_argument, nullptr, 'E'},
+        {"sigma", required_argument, nullptr, 'S'},
         {nullptr, no_argument, nullptr, 0}
     };
 
@@ -83,6 +89,22 @@ int SimulationData::parseOptions(int argc, char* argsv[]) {
             case 'b':
                 bench = true;
                 break;
+            case 'S':
+
+                sigma = std::stod(optarg);
+                if (sigma <= 0) {
+                    SPDLOG_LOGGER_ERROR(logger, "sigma must be positive!");
+                    exit(EXIT_FAILURE);
+                }
+                break;
+            case 'E':
+                epsilon = std::stod(optarg);
+                if (epsilon <= 0) {
+                    SPDLOG_LOGGER_ERROR(logger, "epsilon must be positive!");
+                    exit(EXIT_FAILURE);
+                }
+                break;
+
             case '?':
                 SPDLOG_LOGGER_INFO(logger, usageText);
                 exit(EXIT_FAILURE);
@@ -119,6 +141,14 @@ double SimulationData::getDeltaT() {
     return deltaT;
 }
 
+double SimulationData::getSigma() {
+    return sigma;
+}
+
+double SimulationData::getEpsilon() {
+    return epsilon;
+}
+
 bool SimulationData::getBench() {
     return bench;
 }
@@ -134,3 +164,5 @@ void SimulationData::setSimType(simulationType s) {
 void SimulationData::setParticlesCopy(ParticleContainer particlesArg) {
     particles = particlesArg;
 }
+
+

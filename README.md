@@ -41,6 +41,8 @@ The executable offers the following options:
   - 0 - Planet Simulation
   - 1 - Collision of Cuboids
 - `-b, --bench`: Activate benchmarking
+- `-E, --epsilon`: Epsilon parameter for Lennard-Jones potential
+- `-S, --sigma`: Sigma parameter for Lennard-Jones potential
 
 
 ### Unit Tests

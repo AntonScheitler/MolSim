@@ -50,6 +50,14 @@ class SimulationData {
          */
         double getDeltaT();
         /**
+         * @brief returns the time step size of the simulation
+         */
+        double getEpsilon();
+        /**
+         * @brief returns the time step size of the simulation
+         */
+        double getSigma();
+        /**
          * @brief returns the particles to be simulated
          */
         ParticleContainer& getParticles();
@@ -69,6 +77,8 @@ class SimulationData {
         double startTime;
         double endTime;
         double deltaT;
+        double sigma;
+        double epsilon;
         bool bench;
         spdlog::level::level_enum level;
         ParticleContainer particles;

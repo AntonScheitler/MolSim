@@ -39,7 +39,7 @@ Simulator::Simulator(SimulationData& simDataArg) {
             step = [this]() {
                 ForceComputations::resetForces(simData.getParticles());
                 PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
-                ForceComputations::computeLennardJonesPotential(simData.getParticles());
+                ForceComputations::computeLennardJonesPotential(simData.getParticles(), simData.getEpsilon(), simData.getSigma());
                 VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
             };
             after = [this]() {};

@@ -35,7 +35,7 @@ protected:
  * (modulo rounding/discretization errors)
  */
 TEST_F(ForceComputationsTest, LennardJonesForceCalcTest) {
-    ForceComputations::computeLennardJonesPotential(particles);
+    ForceComputations::computeLennardJonesPotential(particles, 5, 1);
 
     // the analytical solution F_ij calculates the force for j (for i is inverted)
     // particle a
