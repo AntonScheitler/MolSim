@@ -11,7 +11,7 @@
 #include <string>
 
 /**
- * Class for modeling particles, where each Particle has three-dimensional position, velocity and force that is
+ * @brief Class for modeling particles, where each Particle has three-dimensional position, velocity and force that is
  * effective on it. Mass of a Particle can also be specified. Use the class ParticleContainer for storing multiple
  * particles and iterating over them.
  */

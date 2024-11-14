@@ -27,7 +27,7 @@ The doxygen documentation will be generated in the directory `doxys_documentatio
 
 To run the program, execute the following command
 ```
-./src/molSim <input_file> [OPTIONS]
+./src/molsim <input_file> [OPTIONS]
 ```
 For the input file use for example `../input/eingabe-sonne.txt`.
 
@@ -47,7 +47,7 @@ The executable offers the following options:
 
 ### Unit Tests
 
-To run the unit test, execute the following commands (assuming current directory is build/):
+To run the unit test, execute the following commands (assuming current directory is `build/`):
 
 ```
 cd test/ && ctest
