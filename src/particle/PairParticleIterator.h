@@ -47,15 +47,15 @@ public:
 
 private:
     /**
-     * an iterator marking the first particle of a pair
+     * @brief an iterator marking the first particle of a pair
      */
     std::vector<Particle>::iterator first;
     /**
-     * an iterator marking the second particle of a pair
+     * @brief an iterator marking the second particle of a pair
      */
     std::vector<Particle>::iterator second;
     /**
-     * an iterator marking the end of the particle vector
+     * @brief an iterator marking the end of the particle vector
      */
     std::vector<Particle>::iterator end;
 };

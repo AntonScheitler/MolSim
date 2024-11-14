@@ -42,7 +42,7 @@ public:
 
 private:
     /**
-     * an iterator pointing to the current particle
+     * @brief an iterator pointing to the current particle
      */
     std::vector<Particle>::iterator current;
 };

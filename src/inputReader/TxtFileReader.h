@@ -30,7 +30,7 @@ namespace inputReader {
         private:
 
             /**
-             * a specific logger for the TxtFileReader
+             * @brief a specific logger for the TxtFileReader
              */
             std::shared_ptr<spdlog::logger> logger;
     };

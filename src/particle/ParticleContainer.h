@@ -73,11 +73,11 @@ public:
 
 protected:
     /**
-     * the particles wrapped by this container
+     * @brief the particles wrapped by this container
      */
     std::vector<Particle> particles;
     /**
-     * the average brownian velocity of the particles
+     * @brief the average brownian velocity of the particles
      */
     double averageVelocity;
 };

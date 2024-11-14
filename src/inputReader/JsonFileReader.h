@@ -32,7 +32,7 @@ namespace inputReader {
     private:
 
         /**
-         * a specific logger for the JsonFileReader
+         * @brief a specific logger for the JsonFileReader
          */
         std::shared_ptr<spdlog::logger> logger;
     };

@@ -27,19 +27,19 @@ namespace outputWriter {
         private:
             std::shared_ptr<spdlog::logger> logger;
             /**
-             * set up internal data structures and prepare to plot a particle.
+             * @brief set up internal data structures and prepare to plot a particle.
              */
             void initializeOutput(int numParticles);
 
             /**
-             * plot type, mass, position, velocity and force of a particle.
+             * @brief plot type, mass, position, velocity and force of a particle.
              *
              * @note: initializeOutput() must have been called before.
              */
             void plotParticle(Particle &p);
 
             /**
-             * writes the final output file.
+             * @brief writes the final output file.
              *
              * @param filename the base name of the file to be written.
              * @param iteration the number of the current iteration,
