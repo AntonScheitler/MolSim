@@ -8,11 +8,6 @@
 #include <chrono>
 #include <ctime>
 
-void tmp () {
-    int x = 5;
-    int y = x - 2;
-}
-
 Simulator::Simulator(SimulationData& simDataArg) {
     simData = simDataArg;
 
@@ -102,7 +97,7 @@ void Simulator::simulateBench() {
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
         // turn logging back on
         spdlog::set_level(spdlog::level::info);
-        SPDLOG_LOGGER_INFO(logger, "Simulation no. {0} took {1} ms", i, duration.count());
+        SPDLOG_LOGGER_INFO(logger, "Simulation no. {0} took {1} ms", i + 1, duration.count());
         totalDuration += duration.count();
     }
 

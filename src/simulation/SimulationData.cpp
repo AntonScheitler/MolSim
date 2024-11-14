@@ -21,25 +21,25 @@ SimulationData::SimulationData() {
 int SimulationData::parseOptions(int argc, char* argsv[]) {
     // define usage text
     std::string usageText = "Usage: ./MolSim [OPTIONS] INPUT_FILE\n"
-        "-d, --delta_t\t\tsize of each timestep. defaults to 0.014\n"
-        "-e, --t_end\t\ttime at which to stop the simulation. defaults to 1000\n"
+        "-d, --delta_t\t\tsize of each timestep. Defaults to 0.014\n"
+        "-e, --t_end\t\ttime at which to stop the simulation. Defaults to 1000\n"
         "-l, --log\t\tlog level, default value: 'info'. valid values (high to low):\n\t\t\t\t'trace', 'debug', 'info', 'warn', 'err', 'critical', 'off'\n\t\t\t\t (using any other string will result in logging turned 'off')\n"
         "-s, --sim_type\t\ttype of simulation to run:\n\t\t\t\t0 - Planets\n\t\t\t\t1 - Collision. Defaults to 1\n"
         "-b, --bench\t\tactivates benchmarking\n"
-        "-S, --sigma\t\tinput sigma for Lennard-Jones potential\n"
-        "-E, --epsilon\t\tinput epsilon for Lennard-Jones potential";
+        "-S, --sigma\t\tinput sigma for Lennard-Jones potential. Defaults to 1\n"
+        "-E, --epsilon\t\tinput epsilon for Lennard-Jones potential. Defaults to 5";
 
     // setup option parsing
     int c;
     int simTypeNum;
-    const char* const shortOpts = "d:e:l:s:h:b:E:S:";
+    const char* const shortOpts = "d:e:l:s:hbE:S:";
     const option longOpts[] = {
         {"delta_t", required_argument, nullptr, 'd'},
         {"t_end", required_argument, nullptr, 'e'},
         {"log", required_argument, nullptr, 'l'},
         {"sim_type", required_argument, nullptr, 's'},
-        {"bench", no_argument, nullptr, 'b'},
         {"help", no_argument, nullptr, 'h'},
+        {"bench", no_argument, nullptr, 'b'},
         {"epsilon", required_argument, nullptr, 'E'},
         {"sigma", required_argument, nullptr, 'S'},
         {nullptr, no_argument, nullptr, 0}
@@ -90,7 +90,6 @@ int SimulationData::parseOptions(int argc, char* argsv[]) {
                 bench = true;
                 break;
             case 'S':
-
                 sigma = std::stod(optarg);
                 if (sigma <= 0) {
                     SPDLOG_LOGGER_ERROR(logger, "sigma must be positive!");

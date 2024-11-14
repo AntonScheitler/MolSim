@@ -28,11 +28,7 @@ void ForceComputations::computeGravity(ParticleContainer &particles) {
     }
 }
 
-void ForceComputations::computeLennardJonesPotential(ParticleContainer &particles, double epsilonArg, double sigmaArg) {
-    // hardcoded for now (later dynamic)
-    double epsilon = epsilonArg;
-    double sigma = sigmaArg;
-
+void ForceComputations::computeLennardJonesPotential(ParticleContainer &particles, double epsilon, double sigma) {
     // iterate through all pairs of particles and calculate lennard-jones potential
     for (auto it = particles.beginPairParticle(); it != particles.endPairParticle(); ++it) {
         std::pair<Particle &, Particle &> pair = *it;
