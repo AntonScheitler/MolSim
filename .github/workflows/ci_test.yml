@@ -1,0 +1,46 @@
+name: Makefile CI
+
+on:
+  push:
+    branches:
+      - master
+      - "*/submission"
+  pull_request:
+    branches:
+      - master
+      - '*/submission'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: install dependencies
+        run:
+          sudo apt-get update && sudo apt-get install -y
+          build-essential
+          cmake
+          gcc
+          g++
+          gdb
+          clang
+          libxerces-c-dev
+          && sudo apt-get clean
+
+      - name: build the project with fsanitize=address
+        run:
+          mkdir build
+          && cd build
+          && cmake -E env CXXFLAGS="-fsanitize=address" cmake ..
+          && make
+
+      - name: run unit tests
+        run:
+          cd build
+          && cd test
+          && ctest
+
+
