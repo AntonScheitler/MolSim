@@ -45,6 +45,7 @@ The executable offers the following options:
 - `-S, --sigma`: Sigma parameter for Lennard-Jones potential
 
 
+
 ### Unit Tests
 
 To run the unit test, execute the following commands (assuming current directory is `build/`):
