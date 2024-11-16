@@ -11,8 +11,8 @@ SimulationData::SimulationData() {
     // set default values
     simType = simulationType::collision;
     startTime = 0;
-    endTime = 1000;
-    deltaT = 0.014;
+    endTime = 5;
+    deltaT = 0.0002;
     epsilon = 5;
     sigma = 1;
     bench = false;

@@ -1,6 +1,7 @@
 #include "JsonFileReader.h"
 #include <fstream>
 #include "spdlogConfig.h"
+#include "ParticleGenerator.h"
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
@@ -70,18 +71,7 @@ namespace inputReader {
                 bm = cuboid["brownianMotion"].get<double>();
                 particles.setAverageVelocity(bm);
 
-                std::array<double, 3> tempx{};
-                for (int j = 0; j < d[0]; ++j) {
-                    tempx[0] = j * h + x[0];
-                    for (int k = 0; k < d[1]; ++k) {
-                        tempx[1] = k * h + x[1];
-                        for (int l = 0; l < d[2]; ++l) {
-                            tempx[2] = l * h + x[2];
-                            SPDLOG_LOGGER_DEBUG(logger, "adding particle at coords {0}, {1}, {2}", tempx[0], tempx[1], tempx[2]);
-                            particles.addParticle(Particle(tempx, v, m, type));
-                        }
-                    }
-                }
+                ParticleGenerator::generateParticles(particles, x, v, d, m, h, type);
 
                 type++;
 
