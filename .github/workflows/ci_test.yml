@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master
-      - "*/submission"
+      - '*/submission'
   pull_request:
     branches:
       - master
