@@ -23,7 +23,8 @@ void ParticleContainerLinkedCell::initMesh(std::array<double, 3> domainSize, dou
     for (int i = 0; i < cellDimsNumber[0]; i++) {
         for (int j = 0; j < cellDimsNumber[1]; j++) {
             for (int k = 0; k < cellDimsNumber[2]; k++) {
-                bool isBoundary = i == 0 || j == 0 || k == 0;
+                bool isBoundary = i == 0 || j == 0 || k == 0
+                        || i == cellDimsNumber[0] - 1 || j == cellDimsNumber[1] - 1 || k == cellDimsNumber[2] - 1;
                 Cell cell{std::array<double, 3>{i * cellSize[i], j * cellSize[j], k * cellSize[k]}, cellSize};
                 cell.setBoundary(isBoundary);
                 mesh.push_back(cell);

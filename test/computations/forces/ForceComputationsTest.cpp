@@ -1,4 +1,4 @@
-#include "../../../../src/particle/ParticleContainer.h"
+#include "../../../../src/particle/ParticleContainerDirectSum.h"
 #include "../../../../src/computations/forces/ForceComputations.h"
 #include <gtest/gtest.h>
 #include "spdlogConfig.h"

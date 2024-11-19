@@ -1,4 +1,4 @@
-#include "../../../../src/particle/ParticleContainer.h"
+#include "../../../../src/particle/ParticleContainerDirectSum.h"
 #include "../../../../src/computations/positions/PositionComputations.h"
 #include <gtest/gtest.h>
 
