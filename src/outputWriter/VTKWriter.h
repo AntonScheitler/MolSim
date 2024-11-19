@@ -9,7 +9,7 @@
 
 #include "outputWriter/XYZWriter.h"
 #include "outputWriter/vtk-unstructured.h"
-#include "particle/ParticleContainer.h"
+#include "particle/ParticleContainerDirectSum.h"
 
 namespace outputWriter {
     /**

@@ -1,5 +1,5 @@
 #include "../../utils/ArrayUtils.h"
-#include "particle/ParticleContainer.h"
+#include "particle/ParticleContainerDirectSum.h"
 #include "VelocityComputations.h"
 #include "utils/MaxwellBoltzmannDistribution.h"
 #include <array>

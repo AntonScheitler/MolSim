@@ -1,4 +1,4 @@
-#include "particle/ParticleContainer.h"
+#include "particle/ParticleContainerDirectSum.h"
 #include "spdlog/spdlog.h"
 #include <iostream>
 #include <simulation/SimulationData.h>

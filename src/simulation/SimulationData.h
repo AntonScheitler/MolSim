@@ -2,7 +2,7 @@
 
 #include <spdlog/common.h>
 #include <spdlog/spdlog.h>
-#include <particle/ParticleContainer.h>
+#include <particle/ParticleContainerDirectSum.h>
 
 /**
  * @brief an enum which describes the type of simulation to run

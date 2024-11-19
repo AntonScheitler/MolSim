@@ -2,7 +2,7 @@
 #include <cmath>
 
 #include "../../utils/ArrayUtils.h"
-#include "particle/ParticleContainer.h"
+#include "particle/ParticleContainerDirectSum.h"
 #include "ForceComputations.h"
 #include "spdlogConfig.h"
 

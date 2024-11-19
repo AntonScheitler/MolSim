@@ -1,55 +1,55 @@
-#include "particle/ParticleContainer.h"
+#include "particle/ParticleContainerDirectSum.h"
 #include <vector>
 
-ParticleContainer::ParticleContainer() {
+ParticleContainerDirectSum::ParticleContainerDirectSum() {
     particles = std::vector<Particle>{};
     averageVelocity = 0.1;
 }
 
-ParticleContainer::ParticleContainer(const std::vector<Particle> &particlesArg, double averageVelocityArg=0.1) {
+ParticleContainerDirectSum::ParticleContainerDirectSum(const std::vector<Particle> &particlesArg, double averageVelocityArg=0.1) {
     particles = particlesArg;
     averageVelocity = averageVelocityArg;
 }
 
-void ParticleContainer::addParticle(const Particle &particle) {
+void ParticleContainerDirectSum::addParticle(const Particle &particle) {
     particles.push_back(particle);
     averageVelocity = 0.1;
 }
 
-int ParticleContainer::size() {
+int ParticleContainerDirectSum::size() {
     return particles.size();
 }
 
-Particle& ParticleContainer::getParticle(int index) {
+Particle& ParticleContainerDirectSum::getParticle(int index) {
     return particles.at(index);
 }
 
-double ParticleContainer::getAverageVelocity() {
+double ParticleContainerDirectSum::getAverageVelocity() {
     return averageVelocity;
 }
 
-void ParticleContainer::setAverageVelocity(double averageVelocityArg) {
+void ParticleContainerDirectSum::setAverageVelocity(double averageVelocityArg) {
     averageVelocity = averageVelocityArg;
 }
 
 // single particle iterator
-ParticleIterator ParticleContainer::begin() {
+ParticleIterator ParticleContainerDirectSum::begin() {
     return particles.begin();
 }
 
-ParticleIterator ParticleContainer::end() {
+ParticleIterator ParticleContainerDirectSum::end() {
     return particles.end();
 }
 
 // pair particle iterator
-PairParticleIterator ParticleContainer::beginPairParticle() {
+PairParticleIterator ParticleContainerDirectSum::beginPairParticle() {
     if (particles.empty()) {
         return {particles.begin(), particles.begin(), particles.end()};
     }
     return {particles.begin(), ++(particles.begin()), particles.end()};
 }
 
-PairParticleIterator ParticleContainer::endPairParticle() {
+PairParticleIterator ParticleContainerDirectSum::endPairParticle() {
     if (particles.empty()) {
         return {particles.end(), particles.end(), particles.end()};
     }
