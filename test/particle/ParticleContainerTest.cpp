@@ -21,16 +21,16 @@ class ParticleContainerTest : public testing::Test {
  */
 TEST_F(ParticleContainerTest, EmptyParticleContainerIteratorTest) {
     for (Particle &_ : empty) {
-        ASSERT_TRUE(false);
+        EXPECT_TRUE(false);
     }
 }
 
 /**
- * @brief checks if the Particles are returned by the Iterator in the correct
+ * @brief checks if the Particles returned by the Iterator are in the correct
  * order
  */
 TEST_F(ParticleContainerTest, ParticleContainerIteratorTest) {
-    double d = 0;
+    double d = 0; // dummy value for x, v and m
     for (Particle particle : container) {
         Particle otherParticle = Particle({d, d, d}, {d, d, d}, d);
         EXPECT_TRUE(particle == otherParticle);
@@ -45,16 +45,15 @@ TEST_F(ParticleContainerTest, ParticleContainerIteratorTest) {
 TEST_F(ParticleContainerTest, EmptyParticleContainerPairIteratorTest) {
     for (auto pair = empty.beginPairParticle(); pair != empty.endPairParticle();
             ++pair) {
-        ASSERT_TRUE(false);
+        EXPECT_TRUE(false);
     }
 }
 
 /**
- * @brief checks if the Particles are returned by the Iterator in the correct
- * order
+ * @brief checks if the Particle pairs returned by the PairParticleIterator are correct and the number of pairs
+ * is correct
  */
 TEST_F(ParticleContainerTest, ParticleContainerPairIteratorTest) {
-    double d = 0;
     std::vector<std::pair<Particle, Particle>> otherPairs = {};
     for (double i = 0; i < 3; i++) {
         for (double j = i + 1; j < 4; j++) {
@@ -62,11 +61,12 @@ TEST_F(ParticleContainerTest, ParticleContainerPairIteratorTest) {
                         Particle({j, j, j}, {j, j, j}, j)));
         }
     }
+    size_t pairIndex = 0;
     for (auto it = container.beginPairParticle();
-            it != container.endPairParticle(); ++it) {
+            it != container.endPairParticle(); ++it, pairIndex++) {
         std::pair<Particle, Particle> pair = *it;
-        EXPECT_TRUE(pair.first == otherPairs[d].first && pair.second == otherPairs[d].second);
-        d++;
+        EXPECT_TRUE(pair.first == otherPairs[pairIndex].first && pair.second == otherPairs[pairIndex].second);
     }
-    EXPECT_TRUE(d == 6);
+    // check that the number of pairs is correct
+    EXPECT_TRUE(pairIndex == 6);
 }

@@ -1,6 +1,7 @@
 #include "../../../../src/particle/ParticleContainer.h"
 #include "../../../../src/computations/forces/ForceComputations.h"
 #include <gtest/gtest.h>
+#include "spdlogConfig.h"
 
 /**
  * @brief Tests the force computations (src/computations/forces) via analytically calculated examples
@@ -25,7 +26,7 @@ protected:
         b.setM(1);
 
         particles = ParticleContainer({{a,b}}, 0.1);
-        std::cout << "inited tests" << std::endl;
+        SPDLOG_INFO("ForceComputationsTest setUp done");
     }
 };
 
