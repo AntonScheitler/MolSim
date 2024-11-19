@@ -165,3 +165,22 @@ void SimulationData::setParticlesCopy(ParticleContainer particlesArg) {
 }
 
 
+void SimulationData::setEndTime(double endTime) {
+    SimulationData::endTime = endTime;
+}
+
+void SimulationData::setStartTime(double startTime) {
+    SimulationData::startTime = startTime;
+}
+
+void SimulationData::setDeltaT(double deltaT) {
+    SimulationData::deltaT = deltaT;
+}
+
+void SimulationData::setEpsilon(double epsilon) {
+    SimulationData::epsilon = epsilon;
+}
+
+void SimulationData::setSigma(double sigma) {
+    SimulationData::sigma = sigma;
+}

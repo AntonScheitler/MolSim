@@ -115,7 +115,7 @@ namespace inputReader {
                 datastream >> bm;
                 particles.setAverageVelocity(bm);
 
-                ParticleGenerator::generateParticles(particles, x, v, d, m, h, type);
+                ParticleGenerator::generateCuboid(particles, x, v, d, m, h, type);
 
 
                 getline(inputFile, tmpString);

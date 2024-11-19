@@ -1,11 +1,12 @@
 #include "FileReader.h"
 #include "JsonFileReader.h"
 #include "TxtFileReader.h"
+#include "XMLFileReader.h"
 #include "spdlogConfig.h"
 
 namespace inputReader {
-        FileReader::FileReader(SimulationData& simDataArg) {
-            simData = simDataArg;
+        FileReader::FileReader(SimulationData& simDataArg) : simData(simDataArg){
+
             this->logger = spdlog::stdout_color_st("FileReader");
             SPDLOG_LOGGER_DEBUG(logger, "Initialized FileReader");
 
@@ -25,6 +26,8 @@ namespace inputReader {
                 readJson(particles, filename);
             } else if (fileFormat == "txt") {
                 readTxt(particles, filename);
+            } else if(fileFormat == "xml"){
+                readXML(particles, filename);
             } else {
                 SPDLOG_LOGGER_ERROR(logger, "Error: unsupported file format", filename);
                 exit(-1);
@@ -47,6 +50,12 @@ namespace inputReader {
             } else {
                 txtReader.readCollisionFile(particles, filename);
             }
+        }
+
+        void FileReader::readXML(ParticleContainer &particles, char *filename) {
+            XMLFileReader xmlFileReader(simData);
+
+            xmlFileReader.readCometFile(particles, filename);
         }
 
 
