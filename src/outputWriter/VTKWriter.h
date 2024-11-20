@@ -25,7 +25,6 @@ namespace outputWriter {
             void plotParticles(ParticleContainer &particles, int iteration);
 
         private:
-            std::shared_ptr<spdlog::logger> logger;
             /**
              * @brief set up internal data structures and prepare to plot a particle.
              */

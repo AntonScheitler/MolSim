@@ -29,8 +29,8 @@ protected:
         b.setV({{5, 10, 5}});
 
         // init old force for position calc
-        a.setOldF({{9, 0, 7}});
-        b.setOldF({{2, 10, 6}});
+        a.setF({{9, 0, 7}});
+        b.setF({{2, 10, 6}});
 
         particles = ParticleContainer({{a,b}}, 0.1);
     }
