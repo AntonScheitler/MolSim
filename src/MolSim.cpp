@@ -1,12 +1,12 @@
-#include "spdlogConfig.h"
 #include "computations/forces/ForceComputations.h"
 #include "computations/positions/PositionComputations.h"
 #include "computations/velocities/VelocityComputations.h"
 #include "inputReader/TxtFileReader.h"
-#include <cstdlib>
-#include <unistd.h>
-#include <getopt.h>
 #include "simulation/Simulator.h"
+#include "spdlogConfig.h"
+#include <cstdlib>
+#include <getopt.h>
+#include <unistd.h>
 
 int main(int argc, char *argsv[]) {
     // default logging level

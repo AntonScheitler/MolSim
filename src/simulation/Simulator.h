@@ -37,4 +37,10 @@ class Simulator {
          * @brief pointer to a function to run after a simulation
          */
         std::function<void(void)> after;
+
+        /**
+         * @brief runs the core simulation loop. This function gets called a number of times when benchmarking and just
+         * once if benchmarking is disabled
+         */
+        void runSimulationLoop();
 };
