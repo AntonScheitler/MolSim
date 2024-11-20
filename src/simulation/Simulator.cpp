@@ -17,8 +17,8 @@ Simulator::Simulator(SimulationData& simDataArg) {
         case comet: 
             before = [this]() {};
             step = [this]() {
-                ForceComputations::resetForces(simData.getParticles());
                 PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
+                ForceComputations::resetForces(simData.getParticles());
                 ForceComputations::computeGravity(simData.getParticles());
                 VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
             };
@@ -32,8 +32,8 @@ Simulator::Simulator(SimulationData& simDataArg) {
                 VelocityComputations::applyBrownianMotion(simData.getParticles(), simData.getParticles().getAverageVelocity());
             };
             step = [this]() {
-                ForceComputations::resetForces(simData.getParticles());
                 PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
+                ForceComputations::resetForces(simData.getParticles());
                 ForceComputations::computeLennardJonesPotential(simData.getParticles(), simData.getEpsilon(), simData.getSigma());
                 VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
             };
@@ -68,8 +68,8 @@ void Simulator::simulate() {
 
     if (simData.getBench()) {
         for (int i = 0; i < numIterations; i++) {
-            // turn off logging when benchmarking
-            spdlog::set_level(spdlog::level::off);
+            // turn off logging when benchmarking except for errors
+            spdlog::set_level(spdlog::level::err);
             simData.setParticlesCopy(particlesBefore);
             auto start = std::chrono::high_resolution_clock::now();
 
