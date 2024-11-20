@@ -46,9 +46,16 @@ public:
     bool operator!=(const PairParticleIterator &other);
 
 private:
+    /**
+     * @brief an iterator marking the first particle of a pair
+     */
     std::vector<Particle>::iterator first;
+    /**
+     * @brief an iterator marking the second particle of a pair
+     */
     std::vector<Particle>::iterator second;
+    /**
+     * @brief an iterator marking the end of the particle vector
+     */
     std::vector<Particle>::iterator end;
 };
-
-

@@ -7,6 +7,7 @@
 
 #include "VTKWriter.h"
 #include "particle/ParticleContainer.h"
+#include "spdlogConfig.h"
 
 #include <fstream>
 #include <iomanip>
@@ -14,6 +15,11 @@
 #include <string>
 
 namespace outputWriter {
+
+    VTKWriter::VTKWriter() {
+        this->logger = spdlog::stdout_color_st("VTKWriter");
+        SPDLOG_LOGGER_DEBUG(logger, "Initialized VTKWriter");
+    }
 
     void VTKWriter::plotParticles(ParticleContainer &particles, int iteration) {
         std::string outName("MD_vtk");
@@ -48,8 +54,8 @@ namespace outputWriter {
 
         Cells cells; // we don't have cells, => leave it empty
                      // for some reasons, we have to add a dummy entry for paraview
-        DataArray_t cells_data(type::Float32, "types", 0);
-        cells.DataArray().push_back(cells_data);
+        DataArray_t cellsData(type::Float32, "types", 0);
+        cells.DataArray().push_back(cellsData);
 
         PieceUnstructuredGrid_t piece(pointData, cellData, points, cells,
                 numParticles, 0);
@@ -69,9 +75,9 @@ namespace outputWriter {
 
     void VTKWriter::plotParticle(Particle &p) {
         if (vtkFile->UnstructuredGrid().present()) {
-            std::cout << "UnstructuredGrid is present" << std::endl;
+            SPDLOG_LOGGER_TRACE(logger, "UnstructuredGrid is present");
         } else {
-            std::cout << "ERROR: No UnstructuredGrid present" << std::endl;
+            SPDLOG_LOGGER_ERROR(logger, "No UnstructuredGrid present");
         }
 
         PointData::DataArray_sequence &pointDataSequence =
@@ -79,19 +85,16 @@ namespace outputWriter {
         PointData::DataArray_iterator dataIterator = pointDataSequence.begin();
 
         dataIterator->push_back(p.getM());
-        // cout << "Appended mass data in: " << dataIterator->Name();
 
         dataIterator++;
         dataIterator->push_back(p.getV()[0]);
         dataIterator->push_back(p.getV()[1]);
         dataIterator->push_back(p.getV()[2]);
-        // cout << "Appended velocity data in: " << dataIterator->Name();
 
         dataIterator++;
         dataIterator->push_back(p.getOldF()[0]);
         dataIterator->push_back(p.getOldF()[1]);
         dataIterator->push_back(p.getOldF()[2]);
-        // cout << "Appended force data in: " << dataIterator->Name();
 
         dataIterator++;
         dataIterator->push_back(p.getType());

@@ -41,3 +41,9 @@
 
 .cache
 doxys_documentation
+# dont include dirs generated for testing
+test/Testing
+Testing
+.cmake
+CMakeFiles
+.DS_Store

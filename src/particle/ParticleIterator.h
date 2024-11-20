@@ -41,7 +41,8 @@ public:
     bool operator!=(const ParticleIterator &other);
 
 private:
+    /**
+     * @brief an iterator pointing to the current particle
+     */
     std::vector<Particle>::iterator current;
 };
-
-

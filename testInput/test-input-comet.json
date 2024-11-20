@@ -1,0 +1,24 @@
+{
+  "planets": [
+    {
+      "coordinates": [0.0, 0.0, 0.0],
+      "mass": 1.0,
+      "velocity": [0.0, 0.0, 0.0]
+    },
+    {
+      "coordinates": [0.0, 1.0, 0.0],
+      "mass": 3.0e-6,
+      "velocity": [-1.0, 0.0, 0.0]
+    },
+    {
+      "coordinates": [0.0, 5.36, 0.0],
+      "mass": 9.55e-4,
+      "velocity": [-0.425, 0.0, 0.0]
+    },
+    {
+      "coordinates": [34.75, 0.0, 0.0],
+      "mass": 1.0e-14,
+      "velocity": [0.0, 0.0296, 0.0]
+    }
+  ]
+}

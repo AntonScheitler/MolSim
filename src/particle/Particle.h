@@ -11,7 +11,7 @@
 #include <string>
 
 /**
- * Class for modeling particles, where each Particle has three-dimensional position, velocity and force that is
+ * @brief Class for modeling particles, where each Particle has three-dimensional position, velocity and force that is
  * effective on it. Mass of a Particle can also be specified. Use the class ParticleContainer for storing multiple
  * particles and iterating over them.
  */
@@ -19,32 +19,32 @@ class Particle {
 
     private:
         /**
-         * Position of the particle
+         * @brief Position of the particle
          */
         std::array<double, 3> x;
 
         /**
-         * Velocity of the particle
+         * @brief Velocity of the particle
          */
         std::array<double, 3> v;
 
         /**
-         * Force effective on this particle
+         * @brief Force effective on this particle
          */
         std::array<double, 3> f;
 
         /**
-         * Force which was effective on this particle
+         * @brief Force which was effective on this particle
          */
         std::array<double, 3> oldF;
 
         /**
-         * Mass of this particle
+         * @brief Mass of this particle
          */
         double m;
 
         /**
-         * Type of the particle. Use it for whatever you want (e.g. to separate
+         * @brief Type of the particle. Use it for whatever you want (e.g. to separate
          * molecules belonging to different bodies, matters, and so on)
          */
         int type;
@@ -111,6 +111,11 @@ class Particle {
         void setOldF(std::array<double, 3> newF);
 
         /**
+         * @brief Set the new mass of this particle
+         * @param newM new mass
+         */
+        void setM(double newM);
+        /**
          * @brief Get the mass of this particle
          * @return mass of this particle
          */
@@ -122,8 +127,15 @@ class Particle {
          */
         int getType() const;
 
+        /**
+         * @brief checks if two particles are equal
+         * @param other the particle to compare with
+         */
         bool operator==(Particle &other);
 
+        /**
+         * @brief converts information about this particle into a string
+         */
         std::string toString() const;
 };
 
