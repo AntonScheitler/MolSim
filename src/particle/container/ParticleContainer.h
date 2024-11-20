@@ -1,3 +1,7 @@
+#include <particle/Particle.h>
+#include <particle/iterator/particleIterator/ParticleIterator.h>
+#include <particle/iterator/pairParticleIterator/PairParticleIterator.h>
+
 class ParticleContainer {
 private:
 
