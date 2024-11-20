@@ -1,4 +1,5 @@
 #include "../../../../src/particle/ParticleContainer.h"
+#include "spdlog/spdlog.h"
 #include "../../../../src/computations/forces/ForceComputations.h"
 #include <gtest/gtest.h>
 
@@ -25,7 +26,7 @@ protected:
         b.setM(1);
 
         particles = ParticleContainer({{a,b}}, 0.1);
-        std::cout << "inited tests" << std::endl;
+        SPDLOG_DEBUG("inited tests");
     }
 };
 

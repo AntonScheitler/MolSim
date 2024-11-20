@@ -21,7 +21,7 @@ class ParticleContainerTest : public testing::Test {
  */
 TEST_F(ParticleContainerTest, EmptyParticleContainerIteratorTest) {
     for (Particle &_ : empty) {
-        ASSERT_TRUE(false);
+        EXPECT_TRUE(false);
     }
 }
 
@@ -45,7 +45,7 @@ TEST_F(ParticleContainerTest, ParticleContainerIteratorTest) {
 TEST_F(ParticleContainerTest, EmptyParticleContainerPairIteratorTest) {
     for (auto pair = empty.beginPairParticle(); pair != empty.endPairParticle();
             ++pair) {
-        ASSERT_TRUE(false);
+        EXPECT_TRUE(false);
     }
 }
 
@@ -54,7 +54,7 @@ TEST_F(ParticleContainerTest, EmptyParticleContainerPairIteratorTest) {
  * order
  */
 TEST_F(ParticleContainerTest, ParticleContainerPairIteratorTest) {
-    double d = 0;
+    size_t pairIdx = 0;
     std::vector<std::pair<Particle, Particle>> otherPairs = {};
     for (double i = 0; i < 3; i++) {
         for (double j = i + 1; j < 4; j++) {
@@ -65,8 +65,8 @@ TEST_F(ParticleContainerTest, ParticleContainerPairIteratorTest) {
     for (auto it = container.beginPairParticle();
             it != container.endPairParticle(); ++it) {
         std::pair<Particle, Particle> pair = *it;
-        EXPECT_TRUE(pair.first == otherPairs[d].first && pair.second == otherPairs[d].second);
-        d++;
+        EXPECT_TRUE(pair.first == otherPairs[pairIdx].first && pair.second == otherPairs[pairIdx].second);
+        pairIdx++;
     }
-    EXPECT_TRUE(d == 6);
+    EXPECT_TRUE(pairIdx == 6);
 }
