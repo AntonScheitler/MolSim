@@ -17,10 +17,6 @@ class Simulator {
          * @brief runs the simulation
          */
         void simulate();
-        /**
-         * @brief runs the simulation in benchmark mode. This means that no outputs are produced 
-         */
-        void simulateBench();
     private:
         SimulationData simData;
         std::shared_ptr<spdlog::logger> logger;

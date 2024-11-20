@@ -20,10 +20,6 @@ int main(int argc, char *argsv[]) {
 
     // perform the simulation/benchmark it
     Simulator simulator{simData};
-    if (simData.getBench()) {
-        simulator.simulateBench();
-    } else {
-        simulator.simulate();
-    }
+    simulator.simulate();
     return 0;
 }

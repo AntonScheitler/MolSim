@@ -17,8 +17,7 @@
 namespace outputWriter {
 
     VTKWriter::VTKWriter() {
-        this->logger = spdlog::stdout_color_st("VTKWriter");
-        SPDLOG_LOGGER_DEBUG(logger, "Initialized VTKWriter");
+        SPDLOG_DEBUG("Initialized VTKWriter");
     }
 
     void VTKWriter::plotParticles(ParticleContainer &particles, int iteration) {
@@ -75,9 +74,9 @@ namespace outputWriter {
 
     void VTKWriter::plotParticle(Particle &p) {
         if (vtkFile->UnstructuredGrid().present()) {
-            SPDLOG_LOGGER_TRACE(logger, "UnstructuredGrid is present");
+            SPDLOG_TRACE("UnstructuredGrid is present");
         } else {
-            SPDLOG_LOGGER_ERROR(logger, "No UnstructuredGrid present");
+            SPDLOG_ERROR("No UnstructuredGrid present");
         }
 
         PointData::DataArray_sequence &pointDataSequence =

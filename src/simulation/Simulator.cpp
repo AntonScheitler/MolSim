@@ -29,7 +29,7 @@ Simulator::Simulator(SimulationData& simDataArg) {
             // use lennard-jones for the molecule collision
         case collision: 
             before = [this]() {
-                VelocityComputations::applyBrownianMotion(simData.getParticles(), simData.getParticles().getAverageVelocity());
+                VelocityComputations::applyBrownianMotion2D(simData.getParticles(), simData.getParticles().getAverageVelocity());
             };
             step = [this]() {
                 PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
@@ -55,9 +55,9 @@ void Simulator::simulate() {
         // no macro logging statements, they are turned off while compiling when setting SPDLOG_ACTIVE_LEVEL to
         // SPDLOG_LEVEL_OFF in spdlogConfig.h => more performance for benchmark
         logger = spdlog::stdout_color_mt("Benchmarking");
-        logger->info("=========================BENCH=========================");
-        logger->info("Benchmarking with delta_t={0}, t_end={1}, sim_type={2}", simData.getDeltaT(), simData.getEndTime(), (int) simData.getSimType());
-        logger->info("Commencing Simulation...");
+        SPDLOG_LOGGER_INFO(logger, "=========================BENCH=========================");
+        SPDLOG_LOGGER_INFO(logger, "Benchmarking with delta_t={0}, t_end={1}, sim_type={2}", simData.getDeltaT(), simData.getEndTime(), (int) simData.getSimType());
+        SPDLOG_LOGGER_INFO(logger, "Commencing Simulation...");
 
         totalDuration = 0;
         numIterations = 10;
@@ -78,11 +78,11 @@ void Simulator::simulate() {
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
             // turn logging back on to communicate results
             spdlog::set_level(spdlog::level::info);
-            logger->info("Simulation no. {0} took {1} ms", i + 1, duration.count());
+            SPDLOG_LOGGER_INFO(logger, "Simulation no. {0} took {1} ms", i + 1, duration.count());
             totalDuration += duration.count();
         }
-        logger->info("Simulation took {0} ms on average", (totalDuration / numIterations));
-        logger->info("=========================BENCH=========================");
+        SPDLOG_LOGGER_INFO(logger, "Simulation took {0} ms on average", (totalDuration / numIterations));
+        SPDLOG_LOGGER_INFO(logger, "=========================BENCH=========================");
     } else {
         runSimulationLoop();
     }
