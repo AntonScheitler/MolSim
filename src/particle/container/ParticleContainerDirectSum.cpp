@@ -1,5 +1,5 @@
-#include "../container/ParticleContainerDirectSum.h"
 #include <vector>
+#include <particle/container/ParticleContainerDirectSum.h>
 
 ParticleContainerDirectSum::ParticleContainerDirectSum() {
     particles = std::vector<Particle>{};

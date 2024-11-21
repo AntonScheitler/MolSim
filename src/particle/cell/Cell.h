@@ -4,7 +4,6 @@
 class Cell {
 
 public:
-
     Cell();
     Cell(bool isBoundary, bool isHalo);
     void addParticle(const Particle& particle);
