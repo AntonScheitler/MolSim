@@ -9,18 +9,13 @@
 class ParticleContainerLinkedCell : ParticleContainer {
 
     public:
-        /**
-         * @brief creates an empty ParticleContainer
-         * @return the object of an empty ParticleContainer
-         */
-        ParticleContainerLinkedCell();
 
         /**
          * @brief wraps a vector in a ParticleContainer
          * @param particlesArg the particle vector to be wrapped
          * @return the object of the ParticleContainer
          */
-        explicit ParticleContainerLinkedCell(const std::vector<Particle> &particlesArg, std::vector<double> domainSize, double cutoffRadius);
+        explicit ParticleContainerLinkedCell(std::array<double, 3> domainSize, double cutoffRadius);
 
         void addParticle(const Particle &particle) override;
         int size() override;
@@ -31,6 +26,7 @@ class ParticleContainerLinkedCell : ParticleContainer {
         ParticleIterator end() override;
         PairParticleIterator beginPairParticle() override;
         PairParticleIterator endPairParticle() override;
+        Cell& getCell(int index);
         /**
          * @brief initializes the mesh which is a grid of cells
          * @param domainSize the 3d size of the domain
@@ -53,17 +49,17 @@ class ParticleContainerLinkedCell : ParticleContainer {
         int continuousCoordsToIndex(std::array<double, 3> coord);
 
     protected:
-        /**
-         * @brief mesh contains all grid cells
-         */
+    /**
+     * @brief mesh contains all grid cells
+     */
         std::vector<Cell> mesh;
-        /**
-         * @brief the average brownian velocity of the particles
-         */
+    /**
+     * @brief the average brownian velocity of the particles
+     */
         double averageVelocity;
         std::vector<double> domainDims; // size of the domain of this particleContainer
         double cutoffRadius; // = cutoffRadius
         std::array<double, 3> cellSize; // dimensions of one cell
-        std::array<size_t, 3> numCells; // number of cells per dimensions
+        std::array<int, 3> numCells; // number of cells per dimensions
 
 };

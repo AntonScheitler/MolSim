@@ -6,19 +6,17 @@ class Cell {
 public:
 
     Cell();
-    //Cell(std::array<double, 3> posBottomLeft, std::array<double, 3> cellDims);
+    Cell(bool isBoundary, bool isHalo);
     void addParticle(const Particle& particle);
     bool isBoundary();
     bool isHalo();
     void setBoundary(bool boundary);
-    // TODO maybe better to have a separate Halo cell class?
     void setHalo(bool halo);
+    int size();
 
 private:
     std::vector<Particle> particles;
-    // TODO does this need to exist?
-    //std::array<double, 3> posBottomLeft;
-    //std::array<double, 3> cellDims;
+
     bool boundaryCell;
     bool haloCell;
 };
