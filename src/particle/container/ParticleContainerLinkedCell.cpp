@@ -5,7 +5,6 @@ ParticleContainerLinkedCell::ParticleContainerLinkedCell(std::array<double, 3> d
     initMesh(domainSize, cutoffRadius);
 }
 
-
 void ParticleContainerLinkedCell::initMesh(std::array<double, 3> domainSize, double cutoffRadius) {
     // initialize size for cells
     cellSize = {cutoffRadius, cutoffRadius, 1};
@@ -13,7 +12,7 @@ void ParticleContainerLinkedCell::initMesh(std::array<double, 3> domainSize, dou
     // adjust cell size depending on the domain size
     for (int i = 0; i < 3; i++) {
         numCells[i] = ceil(domainSize[i] / cellSize[i]);
-        cellSize[i] = domainSize[i] / (numCells[i]);
+        cellSize[i] = domainSize[i] / numCells[i];
         // add halo cells
         numCells[i] += 2;
     }
@@ -58,8 +57,43 @@ int ParticleContainerLinkedCell::size() {
     return size;
 }
 
-Cell& ParticleContainerLinkedCell::getCell(int index) {
+void ParticleContainerLinkedCell::checkParticlePositions() {
+
+    // TODO: ghost particle interaction when boundaryCondition is reflecting
+    // checks all particles in all cells if they should be removed because they are outflowing the grid
+    for (int i = 0; i < mesh.size(); i++) {
+        Cell c = mesh[i];
+        std::vector<Particle> particlesToRemove{};
+        for (const Particle &p: c.getParticles()) {
+            int newCellIndex = continuousCoordsToIndex(p.getX());
+            if (newCellIndex != i) {
+                // particle is not in its original cell anymore
+                if (c.isBoundary() && mesh[newCellIndex].isHalo() && boundaryCondition == outflowing) {
+                    // remove particle completely because it is outflowing
+                    particlesToRemove.push_back(p);
+                } else if (!c.isHalo() && !mesh[newCellIndex].isHalo()) {
+                    // move particle to other (non-halo) cell
+                    particlesToRemove.push_back(p);
+                    mesh[newCellIndex].addParticle(p);
+                }
+            }
+        }
+        // remove particles from current cell that are outflowing or moving into other cell
+        for (const Particle &p: particlesToRemove) {
+            c.removeParticle(p);
+        }
+    }
+
+}
+
+Cell &ParticleContainerLinkedCell::getCell(int index) {
     return mesh[index];
 }
 
+double ParticleContainerLinkedCell::getAverageVelocity() {
+    return averageVelocity;
+}
 
+void ParticleContainerLinkedCell::setAverageVelocity(double averageVelocityArg) {
+    this->averageVelocity = averageVelocityArg;
+}
