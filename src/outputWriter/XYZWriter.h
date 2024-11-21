@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "particle/ParticleContainerDirectSum.h"
+#include "particle/container/ParticleContainer.h"
 #include "./FileWriter.h"
 
 namespace outputWriter {

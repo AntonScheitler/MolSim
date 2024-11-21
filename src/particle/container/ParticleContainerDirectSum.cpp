@@ -1,4 +1,4 @@
-#include "particle/ParticleContainerDirectSum.h"
+#include "../container/ParticleContainerDirectSum.h"
 #include <vector>
 
 ParticleContainerDirectSum::ParticleContainerDirectSum() {

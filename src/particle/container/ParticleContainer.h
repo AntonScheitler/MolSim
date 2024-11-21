@@ -1,6 +1,6 @@
-#include <particle/Particle.h>
-#include <particle/iterator/particleIterator/ParticleIterator.h>
-#include <particle/iterator/pairParticleIterator/PairParticleIterator.h>
+#include "../Particle.h"
+#include "../iterator/particleIterator/ParticleIterator.h"
+#include "../iterator/pairParticleIterator/PairParticleIterator.h"
 
 class ParticleContainer {
 private:

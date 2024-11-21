@@ -1,9 +1,8 @@
 #include "../../utils/ArrayUtils.h"
-#include "particle/ParticleContainerDirectSum.h"
+#include "particle/container/ParticleContainer.h"
 #include "VelocityComputations.h"
 #include "utils/MaxwellBoltzmannDistribution.h"
 #include <array>
-#include <functional>
 #include "spdlogConfig.h"
 
 void VelocityComputations::stoermerVerlet(ParticleContainer &particles, double deltaT) {

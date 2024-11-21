@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "particle/ParticleContainerDirectSum.h"
+#include "particle/container/ParticleContainer.h"
 #include "spdlogConfig.h"
 #include "simulation/SimulationData.h"
 #include <memory>

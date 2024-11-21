@@ -1,7 +1,7 @@
 #include <vector>
-#include "Particle.h"
-#include "ParticleIterator.h"
-#include "PairParticleIterator.h"
+#include "../Particle.h"
+#include "../iterator/particleIterator/ParticleIterator.h"
+#include "../iterator/pairParticleIterator/PairParticleIterator.h"
 #include "ParticleContainer.h"
 
 #pragma once

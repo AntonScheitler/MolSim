@@ -6,7 +6,7 @@
  */
 
 #include "VTKWriter.h"
-#include "particle/ParticleContainerDirectSum.h"
+#include "particle/container/ParticleContainer.h"
 #include "spdlogConfig.h"
 
 #include <fstream>

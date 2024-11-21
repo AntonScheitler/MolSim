@@ -1,4 +1,4 @@
-#include "particle/ParticleContainerDirectSum.h"
+#include "particle/container/ParticleContainer.h"
 
 /**
  * @brief a class wrapping position-computing functions and their utility functions
