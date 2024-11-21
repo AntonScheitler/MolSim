@@ -6,7 +6,6 @@ class ParticleContainer {
 private:
 
 public:
-
     ParticleContainer() = default;
     virtual ~ParticleContainer() = default;
 
