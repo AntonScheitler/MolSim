@@ -1,8 +1,7 @@
 #include <vector>
 #include "../Particle.h"
-#include "../iterator/particleIterator/ParticleIterator.h"
-#include "../iterator/pairParticleIterator/PairParticleIterator.h"
-#include "ParticleContainer.h"
+#include "particle/iterator/particleIterator/ParticleIteratorDirectSum.h"
+#include <particle/container/ParticleContainer.h>
 
 #pragma once
 
@@ -11,38 +10,38 @@
  */
 class ParticleContainerDirectSum : public ParticleContainer {
 
-public:
-    /**
-     * @brief creates an empty ParticleContainer
-     * @return the object of an empty ParticleContainer
-     */
-    ParticleContainerDirectSum();
+    public:
+        /**
+         * @brief creates an empty ParticleContainer
+         * @return the object of an empty ParticleContainer
+         */
+        ParticleContainerDirectSum();
 
-    /**
-     * @brief wraps a vector in a ParticleContainer
-     * @param particlesArg the particle vector to be wrapped
-     * @return the object of the ParticleContainer
-     */
-    explicit ParticleContainerDirectSum(const std::vector<Particle> &particlesArg, double averageVelocityArg);
+        /**
+         * @brief wraps a vector in a ParticleContainer
+         * @param particlesArg the particle vector to be wrapped
+         * @return the object of the ParticleContainer
+         */
+        explicit ParticleContainerDirectSum(const std::vector<Particle> &particlesArg, double averageVelocityArg);
 
-    void addParticle(const Particle &particle) override;
-    int size() override;
-    double getAverageVelocity() override;
-    void setAverageVelocity(double averageVelocityArg) override;
-    Particle& getParticle(int index) override;
-    ParticleIterator begin() override;
-    ParticleIterator end() override;
-    PairParticleIterator beginPairParticle() override;
-    PairParticleIterator endPairParticle() override;
+        void addParticle(const Particle &particle) override;
+        int size() override;
+        double getAverageVelocity() override;
+        void setAverageVelocity(double averageVelocityArg) override;
+        Particle& getParticle(int index) override;
+        ParticleIteratorDirectSum begin();
+        ParticleIteratorDirectSum end();
+        PairParticleIterator beginPairParticle();
+        PairParticleIterator endPairParticle();
 
 
-protected:
-    /**
-     * @brief the particles wrapped by this container
-     */
-    std::vector<Particle> particles;
-    /**
-     * @brief the average brownian velocity of the particles
-     */
-    double averageVelocity;
+    protected:
+        /**
+         * @brief the particles wrapped by this container
+         */
+        std::vector<Particle> particles;
+        /**
+         * @brief the average brownian velocity of the particles
+         */
+        double averageVelocity;
 };
