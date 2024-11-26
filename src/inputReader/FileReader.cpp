@@ -4,11 +4,9 @@
 #include "spdlogConfig.h"
 
 namespace inputReader {
-        FileReader::FileReader(SimulationData& simDataArg) {
-            simData = simDataArg;
+        FileReader::FileReader(SimulationData& simDataArg) : simData(simDataArg) {
             this->logger = spdlog::stdout_color_st("FileReader");
             SPDLOG_LOGGER_DEBUG(logger, "Initialized FileReader");
-
         }
 
         FileReader::~FileReader() {

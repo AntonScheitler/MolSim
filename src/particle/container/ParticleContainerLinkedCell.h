@@ -2,6 +2,7 @@
 #include <particle/Particle.h>
 #include <particle/cell/Cell.h>
 #include "ParticleContainer.h"
+#include "spdlogConfig.h"
 
 enum BoundaryCondition {
     outflowing,
@@ -20,7 +21,7 @@ public:
      * @param particlesArg the particle vector to be wrapped
      * @return the object of the ParticleContainer
      */
-    explicit ParticleContainerLinkedCell(std::array<double, 3> domainSize, double cutoffRadius);
+    explicit ParticleContainerLinkedCell(std::array<double, 3> domainDimsArg, double cutoffRadiusArg);
 
     void addParticle(const Particle &particle) override;
 
@@ -30,7 +31,7 @@ public:
 
     void setAverageVelocity(double averageVelocityArg) override;
 
-    Particle &getParticle(int index) override;
+    Particle &getParticle(int x) override;
 
     ParticleIterator begin() override;
 
@@ -47,7 +48,7 @@ public:
      * @param domainSize the 3d size of the domain
      * @param cutoffRadius the cutoffRadius (used for determining for cell size)
      */
-    void initMesh(std::array<double, 3> domainSize, double cutoffRadius);
+    void initMesh();
 
     /**
      * @brief converts the discrete (index) coordinates of a cell in the mesh to the index at which the cell is in the mesh
@@ -66,10 +67,14 @@ public:
     int continuousCoordsToIndex(std::array<double, 3> coord);
 
     /**
-     *  @brief checks the positions of all particles in all cells and moves them to other cells if needed or
-     *  removed them completely from the mesh
+     *  @brief checks the position of one particle and moves it to other cells if needed or
+     *  removes it completely from the mesh
      */
-    void checkParticlePositions();
+    void correctParticleCell(Particle& p);
+    /**
+     * @brief checks the positions of all particles in the mesh and corrects them
+     */
+    void correctAllParticlesCell();
 
 protected:
     /**
@@ -80,7 +85,7 @@ protected:
      * @brief the average brownian velocity of the particles
      */
     double averageVelocity;
-    std::vector<double> domainDims; // size of the domain of this particleContainer
+    std::array<double, 3> domainDims; // size of the domain of this particleContainer
     double cutoffRadius; // = cutoffRadius
     std::array<double, 3> cellSize; // dimensions of one cell
     std::array<int, 3> numCells; // number of cells per dimensions

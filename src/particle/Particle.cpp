@@ -78,6 +78,14 @@ void Particle::setM(double newM) {
     this->m = newM;
 }
 
+const std::array<double, 3> &Particle::getOldX() const {
+    return this->oldX;
+}
+
+void Particle::setOldX(std::array<double, 3> oldXArg) {
+    this->oldX = oldXArg;
+}
+
 std::ostream &operator<<(std::ostream &stream, Particle &p) {
     stream << p.toString();
     return stream;

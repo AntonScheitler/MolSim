@@ -6,11 +6,11 @@
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/spdlog.h"
 #include "particle/container/ParticleContainer.h"
+#include "particle/container/ParticleContainerLinkedCell.h"
 #include <chrono>
 #include <ctime>
 
-Simulator::Simulator(SimulationData &simDataArg) {
-    simData = simDataArg;
+Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
 
     // choose computation functions based on the type
     switch (simData.getSimType()) {
@@ -35,20 +35,45 @@ Simulator::Simulator(SimulationData &simDataArg) {
             };
             step = [this]() {
                 PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
+
                 ForceComputations::resetForces(simData.getParticles());
                 ForceComputations::computeLennardJonesPotential(simData.getParticles(), simData.getEpsilon(),
                                                                 simData.getSigma());
                 VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
+
             };
             after = [this]() {};
             logger = spdlog::stdout_color_mt("CollisionSimulation");
             SPDLOG_LOGGER_INFO(logger, "Simulating body collision");
             break;
+        case collisionLinkedCell:
+            before = [this]() {
+                VelocityComputations::applyBrownianMotion2D(simData.getParticles(),
+                                                            simData.getParticles().getAverageVelocity());
+            };
+            step = [this]() {
+                PositionComputations::resetPositions(simData.getParticles());
+                PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
+
+                ParticleContainerLinkedCell* container = dynamic_cast<ParticleContainerLinkedCell*>(&simData.getParticles());
+                if(container) {
+                    container->correctAllParticlesCell();
+                }
+
+                ForceComputations::resetForces(simData.getParticles());
+                ForceComputations::computeLennardJonesPotential(simData.getParticles(), simData.getEpsilon(),
+                                                                simData.getSigma());
+                VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
+
+            };
+            after = [this]() {};
+            logger = spdlog::stdout_color_mt("CollisionSimulationLinkedCell");
+            SPDLOG_LOGGER_INFO(logger, "Simulating body collision with linked cell algorithm");
+            break;
     }
 }
 
 void Simulator::simulate() {
-    ParticleContainer particlesBefore;
     std::chrono::high_resolution_clock::rep totalDuration;
     int numIterations;
 
@@ -65,13 +90,13 @@ void Simulator::simulate() {
 
         totalDuration = 0;
         numIterations = 10;
-        particlesBefore = simData.getParticles();
     } else {
         SPDLOG_LOGGER_INFO(logger, "Starting Simulation with delta_t={0} and end_time={1}", simData.getDeltaT(),
                            simData.getEndTime());
     }
 
     if (simData.getBench()) {
+        ParticleContainer& particlesBefore = simData.getParticles();
         for (int i = 0; i < numIterations; i++) {
             // turn off logging when benchmarking except for errors
             spdlog::set_level(spdlog::level::err);

@@ -2,14 +2,15 @@
 
 #include <spdlog/common.h>
 #include <spdlog/spdlog.h>
-#include <particle/ParticleContainerDirectSum.h>
+#include <particle/container/ParticleContainer.h>
 
 /**
  * @brief an enum which describes the type of simulation to run
  */
-enum simulationType: int {
+enum SimulationType: int {
     comet = 0,
-    collision = 1
+    collision = 1,
+    collisionLinkedCell = 2
 };
 
 /**
@@ -20,7 +21,7 @@ class SimulationData {
         /**
          * @brief creates an instance of the SimulationData class
          */
-        SimulationData();
+        SimulationData(ParticleContainer& particlesArg);
         /**
          * @brief parses command line options and sets class attributes accordingly 
          * @param argc the number of arguments passed to the program
@@ -32,17 +33,17 @@ class SimulationData {
          * @brief reads a file and adds particles to the SimulationData Object based on it's content
          * @param fileName the name of the file to read the particle information from
          */
-        void readParticles(simulationType, char* fileName);
+        void readParticles(SimulationType, char* fileName);
 
         /**
          * @brief set simulation type
          * @param s new sim type
          */
-        void setSimType(simulationType s);
+        void setSimType(SimulationType s);
         /**
          * @brief returns the type of the simulation
          */
-        simulationType getSimType();
+        SimulationType getSimType();
         /**
          * @brief returns the start time of the simulation
          */
@@ -72,14 +73,17 @@ class SimulationData {
          * @brief sets particles to a copy of particlesArg
          * @param particlesArg the particles to copy
          */
-        void setParticlesCopy(ParticleContainer particlesArg);
+        template <typename T>
+        typename std::enable_if<std::is_base_of<ParticleContainer, T>::value, void>::type
+
+         setParticlesCopy(const T& particlesArg);
 
         /**
          * @brief returns whether or not benchmarking is switched on
          */
         bool getBench();
     private:
-        simulationType simType;
+        SimulationType simType;
         double startTime;
         double endTime;
         double deltaT;
@@ -87,5 +91,5 @@ class SimulationData {
         double epsilon;
         bool bench;
         spdlog::level::level_enum level;
-        ParticleContainer particles;
+        ParticleContainer& particles;
 };

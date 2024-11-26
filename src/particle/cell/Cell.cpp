@@ -11,8 +11,17 @@ Cell::Cell(bool isBoundary, bool isHalo) {
     this->haloCell = isHalo;
 }
 
+bool Cell::isHalo() {
+    return haloCell;
+}
 void Cell::setHalo(bool halo) {
     this->haloCell = halo;
+}
+bool Cell::isBoundary() {
+    return boundaryCell;
+}
+void Cell::setBoundary(bool boundary) {
+    this->boundaryCell = boundary;
 }
 
 void Cell::addParticle(const Particle &particle) {
@@ -27,8 +36,7 @@ std::vector<Particle> Cell::getParticles() {
     return particles;
 }
 
-void Cell::removeParticle(const Particle &particle) {
+void Cell::removeParticle(Particle &particle) {
     // TODO: fix
-    particles.erase(std::find(particles.begin(), particles.end(), particle));
+//    particles.erase(std::find(particles.begin(), particles.end(), particle));
 }
-

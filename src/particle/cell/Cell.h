@@ -13,7 +13,7 @@ public:
     void setHalo(bool halo);
     int size();
     std::vector<Particle> getParticles();
-    void removeParticle(const Particle& particle);
+    void removeParticle(Particle& particle);
 
 private:
     std::vector<Particle> particles;

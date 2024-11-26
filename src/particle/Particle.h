@@ -18,6 +18,7 @@
 class Particle {
 
     private:
+        std::array<double, 3> oldX;
         /**
          * @brief Position of the particle
          */
@@ -62,6 +63,8 @@ class Particle {
 
         virtual ~Particle();
 
+        const std::array<double, 3> &getOldX() const;
+        void setOldX(std::array<double, 3> oldXArg);
         /**
         * @brief Returns the position of the particle
         * @return position of the particle

@@ -37,7 +37,7 @@ namespace inputReader {
                 v = planet["velocity"].get<std::array<double, 3>>();
                 m = planet["mass"].get<double>();
 
-                particles.addParticle(Particle(x, v, m));
+                particles.addParticle(Particle{x, v, m});
                 SPDLOG_LOGGER_DEBUG(logger, "adding particle at coords {0}, {1}, {2}", x[0], x[1], x[2]);
             }
             SPDLOG_LOGGER_DEBUG(logger, "Successfully read {0} particles", particles.size());

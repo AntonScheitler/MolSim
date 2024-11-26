@@ -2,9 +2,9 @@
 #include "../iterator/particleIterator/ParticleIterator.h"
 #include "../iterator/pairParticleIterator/PairParticleIterator.h"
 
-class ParticleContainer {
-private:
+#pragma once
 
+class ParticleContainer {
 public:
     ParticleContainer() = default;
     virtual ~ParticleContainer() = default;

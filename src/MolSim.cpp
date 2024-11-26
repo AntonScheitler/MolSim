@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <getopt.h>
 #include <unistd.h>
+#include <particle/container/ParticleContainerDirectSum.h>
 
 int main(int argc, char *argsv[]) {
     // default logging level
@@ -14,7 +15,8 @@ int main(int argc, char *argsv[]) {
     spdlog::set_level(spdlog::level::info);
 
     // setup data for the simulation
-    SimulationData simData = SimulationData();
+    ParticleContainerDirectSum dummy{};
+    SimulationData simData = SimulationData(dummy); // TODO change this later
     int fileIdx = simData.parseOptions(argc, argsv);
     simData.readParticles(simData.getSimType(), argsv[fileIdx]);
 

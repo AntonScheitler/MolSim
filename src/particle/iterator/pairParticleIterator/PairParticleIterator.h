@@ -2,6 +2,7 @@
 #include <iterator>
 #include <vector>
 
+#pragma once
 
 /**
  * @brief an iterator which enables iteration over pairs of particles. The elements of those pairs are always

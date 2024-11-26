@@ -1,15 +1,16 @@
-#include "particle/ParticleContainerDirectSum.h"
 #include "spdlog/spdlog.h"
 #include <iostream>
 #include <simulation/SimulationData.h>
 #include <getopt.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <inputReader/FileReader.h>
+#include <particle/container/ParticleContainerDirectSum.h>
+#include <particle/container/ParticleContainer.h>
+#include <type_traits>
 
-
-SimulationData::SimulationData() {
+SimulationData::SimulationData(ParticleContainer& particlesArg) : particles(particlesArg) {
     // set default values
-    simType = simulationType::collision;
+    simType = SimulationType::collision;
     startTime = 0;
     endTime = 5;
     deltaT = 0.0002;
@@ -69,7 +70,7 @@ int SimulationData::parseOptions(int argc, char* argsv[]) {
                     SPDLOG_LOGGER_ERROR(logger, "simulation type must be between 0-1!");
                     exit(EXIT_FAILURE);
                 }
-                simType = simulationType(simTypeNum);
+                simType = SimulationType(simTypeNum);
                 break;
             case 'h':
                 SPDLOG_LOGGER_INFO(logger, usageText);
@@ -119,12 +120,12 @@ int SimulationData::parseOptions(int argc, char* argsv[]) {
     return optind;
 }
 
-void SimulationData::readParticles(simulationType, char* fileName) {
+void SimulationData::readParticles(SimulationType, char* fileName) {
     inputReader::FileReader fileReader(*this);
     fileReader.readFile(particles, fileName);
 }
 
-simulationType SimulationData::getSimType() {
+SimulationType SimulationData::getSimType() {
     return simType;
 }
 
@@ -156,11 +157,13 @@ ParticleContainer& SimulationData::getParticles() {
     return particles;
 }
 
-void SimulationData::setSimType(simulationType s) {
+void SimulationData::setSimType(SimulationType s) {
     this->simType = s;
 }
 
-void SimulationData::setParticlesCopy(ParticleContainer particlesArg) {
+template <typename T>
+typename std::enable_if<std::is_base_of<ParticleContainer, T>::value, void>::type
+SimulationData::setParticlesCopy(const T& particlesArg) {
     particles = particlesArg;
 }
 

@@ -1,11 +1,13 @@
 #include "ParticleContainerLinkedCell.h"
 #include <utils/ArrayUtils.h>
 
-ParticleContainerLinkedCell::ParticleContainerLinkedCell(std::array<double, 3> domainSize, double cutoffRadius) {
-    initMesh(domainSize, cutoffRadius);
+ParticleContainerLinkedCell::ParticleContainerLinkedCell(std::array<double, 3> domainDimsArg, double cutoffRadiusArg) {
+    this->cutoffRadius = cutoffRadiusArg;
+    this->domainDims = domainDimsArg;
+    initMesh();
 }
 
-void ParticleContainerLinkedCell::initMesh(std::array<double, 3> domainSize, double cutoffRadius) {
+void ParticleContainerLinkedCell::initMesh() {
 
     // initialize size for cells
     cellSize = {cutoffRadius, cutoffRadius, 1};
@@ -15,8 +17,8 @@ void ParticleContainerLinkedCell::initMesh(std::array<double, 3> domainSize, dou
         // the number of cells per dimension is rounded down
         // this means, the cutoffRadius will always fit in a cell, if it's center is
         // at the center of the cell
-        numCells[i] = floor(domainSize[i] / cellSize[i]);
-        cellSize[i] = domainSize[i] / numCells[i];
+        numCells[i] = floor(domainDims[i] / cellSize[i]);
+        cellSize[i] = domainDims[i] / numCells[i];
         // add halo cells
         numCells[i] += 2;
     }
@@ -61,33 +63,38 @@ int ParticleContainerLinkedCell::size() {
     return size;
 }
 
-void ParticleContainerLinkedCell::checkParticlePositions() {
+void ParticleContainerLinkedCell::correctParticleCell(Particle& p) {
 
     // TODO: ghost particle interaction when boundaryCondition is reflecting
-    // checks all particles in all cells if they should be removed because they are outflowing the grid
-    for (int i = 0; i < mesh.size(); i++) {
-        Cell c = mesh[i];
-        std::vector<Particle> particlesToRemove{};
-        for (const Particle &p: c.getParticles()) {
-            int newCellIndex = continuousCoordsToIndex(p.getX());
-            if (newCellIndex != i) {
-                // particle is not in its original cell anymore
-                if (c.isBoundary() && mesh[newCellIndex].isHalo() && boundaryCondition == outflowing) {
-                    // remove particle completely because it is outflowing
-                    particlesToRemove.push_back(p);
-                } else if (!c.isHalo() && !mesh[newCellIndex].isHalo()) {
-                    // move particle to other (non-halo) cell
-                    particlesToRemove.push_back(p);
-                    mesh[newCellIndex].addParticle(p);
-                }
-            }
-        }
-        // remove particles from current cell that are outflowing or moving into other cell
-        for (const Particle &p: particlesToRemove) {
-            c.removeParticle(p);
+    // checks particle if it should be removed because it is outflowing the grid
+
+    int oldCellIndex = continuousCoordsToIndex(p.getOldX());
+    int newCellIndex = continuousCoordsToIndex(p.getX());
+    if(newCellIndex < 0 || newCellIndex >= mesh.size()) {
+        SPDLOG_WARN("particle new cell index is out of bounds, index: {0}", newCellIndex);
+        return;
+    }
+    if (oldCellIndex != newCellIndex) {
+        Cell oldCell = mesh[oldCellIndex];
+        Cell newCell = mesh[newCellIndex];
+        // particle is not in its original cell anymore
+        if (oldCell.isBoundary() && newCell.isHalo() && boundaryCondition == outflowing) {
+            // remove particle completely because it is outflowing
+            oldCell.removeParticle(p);
+        } else if (!oldCell.isHalo() && !newCell.isHalo()) {
+            // move particle to other (non-halo) cell
+            oldCell.removeParticle(p);
+            newCell.addParticle(p);
         }
     }
+}
 
+void ParticleContainerLinkedCell::correctAllParticlesCell() {
+    for(auto c : mesh) {
+        for(auto p : c.getParticles()) {
+            correctParticleCell(p);
+        }
+    }
 }
 
 Cell &ParticleContainerLinkedCell::getCell(int index) {
@@ -100,5 +107,27 @@ double ParticleContainerLinkedCell::getAverageVelocity() {
 
 void ParticleContainerLinkedCell::setAverageVelocity(double averageVelocityArg) {
     this->averageVelocity = averageVelocityArg;
+}
+
+Particle &ParticleContainerLinkedCell::getParticle(int index) {
+    // TODO
+}
+
+ParticleIterator ParticleContainerLinkedCell::begin() {
+//    return ParticleIterator();
+    // TODO
+}
+
+ParticleIterator ParticleContainerLinkedCell::end() {
+//    return ParticleIterator(__gnu_cxx::__normal_iterator());
+    // TODO
+}
+
+PairParticleIterator ParticleContainerLinkedCell::beginPairParticle() {
+    // TODO
+}
+
+PairParticleIterator ParticleContainerLinkedCell::endPairParticle() {
+    // TODO
 }
 

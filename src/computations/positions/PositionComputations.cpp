@@ -12,3 +12,10 @@ void PositionComputations::stoermerVerlet(ParticleContainer& particles, double d
         particle.setX( ArrayUtils::elementWisePairOp(particle.getX(), deltaX, std::plus<>()));
     }
 }
+
+void PositionComputations::resetPositions(ParticleContainer &particles) {
+    for (Particle &particle: particles) {
+        particle.setOldX(particle.getX());
+        particle.setX({0, 0, 0});
+    }
+}
