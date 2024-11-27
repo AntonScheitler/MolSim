@@ -1,5 +1,4 @@
 #include "../Particle.h"
-#include "../iterator/pairParticleIterator/PairParticleIterator.h"
 
 class ParticleContainer {
 private:

@@ -30,8 +30,6 @@ class ParticleContainerLinkedCell : ParticleContainer {
         Particle &getParticle(int index) override;
         ParticleIteratorLinkedCell begin();
         ParticleIteratorLinkedCell end();
-        PairParticleIterator beginPairParticle();
-        PairParticleIterator endPairParticle();
         /**
          * @brief initializes the mesh which is a grid of cells
          * @param domainSize the 3d size of the domain
@@ -54,6 +52,10 @@ class ParticleContainerLinkedCell : ParticleContainer {
          */
         int continuousCoordsToIndex(std::array<double, 3> coord);
 
+        std::vector<Cell>& getMesh();
+        Cell& getCell(int idx);
+        std::array<size_t, 3> getNumCells();
+
     protected:
         /**
          * @brief mesh contains all grid cells
@@ -63,8 +65,7 @@ class ParticleContainerLinkedCell : ParticleContainer {
          * @brief the average brownian velocity of the particles
          */
         double averageVelocity;
-        std::vector<double>
-            domainDims;      // size of the domain of this particleContainer
+        std::vector<double> domainDims;      // size of the domain of this particleContainer
         double cutoffRadius; // = cutoffRadius
         std::array<double, 3> cellSize; // dimensions of one cell
         std::array<size_t, 3> numCells; // number of cells per dimensions

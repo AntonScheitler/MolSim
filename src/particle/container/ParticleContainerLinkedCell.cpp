@@ -1,4 +1,4 @@
-#include "ParticleContainerLinkedCell.h"
+#include <particle/container/ParticleContainerLinkedCell.h>
 #include "particle/iterator/particleIterator/ParticleIteratorLinkedCell.h"
 #include <utils/ArrayUtils.h>
 
@@ -23,9 +23,9 @@ void ParticleContainerLinkedCell::initMesh(std::array<double, 3> domainSize,
     }
 
     // add all cells to the mesh
-    for (int x = 0; x < numCells[0]; x++) {
+    for (int z = 0; z < numCells[0]; z++) {
         for (int y = 0; y < numCells[1]; y++) {
-            for (int z = 0; z < numCells[2]; z++) {
+            for (int x = 0; x < numCells[2]; x++) {
                 bool isBoundary = x == 0 || y == 0 || z == 0 || x == numCells[0] - 1 ||
                     y == numCells[1] - 1 || z == numCells[2] - 1;
                 Cell cell = Cell(isBoundary);
@@ -40,7 +40,11 @@ void ParticleContainerLinkedCell::addParticle(const Particle &particle) {
 }
 
 int ParticleContainerLinkedCell::discreteCoordsToIndex( std::array<int, 3> coord) {
-    return (coord[0] * numCells[1] * numCells[2]) + (coord[1] * numCells[2]) + coord[2];
+    // check if coord is out of bounds and return -1 if it is
+    if (coord[0] < 0 || coord[1] < 0 || coord[2] < 2) return -1;
+    if (coord[0] >= numCells[0] || coord[1] >= numCells[1] || coord[2] >= numCells[2]) return -1;
+
+    return coord[0]  + (coord[1] * numCells[0]) + (coord[2] * numCells[0] * numCells[1]);
 }
 
 int ParticleContainerLinkedCell::continuousCoordsToIndex( std::array<double, 3> coord) {
@@ -56,4 +60,13 @@ ParticleIteratorLinkedCell ParticleContainerLinkedCell::begin() {
 
 ParticleIteratorLinkedCell ParticleContainerLinkedCell::end() {
     return ParticleIteratorLinkedCell(mesh.end());
+}
+
+std::vector<Cell>& ParticleContainerLinkedCell::getMesh() {
+    return mesh;
+}
+
+
+Cell& ParticleContainerLinkedCell::getCell(int idx) {
+    return mesh[idx];
 }

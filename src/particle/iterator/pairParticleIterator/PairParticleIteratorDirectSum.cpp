@@ -1,7 +1,7 @@
-#include "PairParticleIterator.h"
+#include "PairParticleIteratorDirectSum.h"
 
 
-PairParticleIterator::PairParticleIterator(std::vector<Particle>::iterator firstArg,
+PairParticleIteratorDirectSum::PairParticleIteratorDirectSum(std::vector<Particle>::iterator firstArg,
                                            std::vector<Particle>::iterator secondArg,
                                            std::vector<Particle>::iterator endArg) {
     first = firstArg;
@@ -9,11 +9,11 @@ PairParticleIterator::PairParticleIterator(std::vector<Particle>::iterator first
     end = endArg;
 }
 
-PairParticleIterator::reference PairParticleIterator::operator*() {
+PairParticleIteratorDirectSum::reference PairParticleIteratorDirectSum::operator*() {
     return {*first, *second};
 }
 
-PairParticleIterator &PairParticleIterator::operator++() {
+PairParticleIteratorDirectSum &PairParticleIteratorDirectSum::operator++() {
     if (second == (end - 1)) {
         first++;
         second = first;
@@ -22,6 +22,6 @@ PairParticleIterator &PairParticleIterator::operator++() {
     return *this;
 }
 
-bool PairParticleIterator::operator!=(const PairParticleIterator &other) {
+bool PairParticleIteratorDirectSum::operator!=(const PairParticleIteratorDirectSum &other) {
     return first != other.first || second != other.second || end != other.end;
 }

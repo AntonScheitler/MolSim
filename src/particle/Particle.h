@@ -49,6 +49,12 @@ class Particle {
          */
         int type;
 
+        /**
+         * @brief indicates if all pairs this particle is a part of have been iterated through
+         * this is needed for the PairParticleIterator in the linked cell algorithm
+         */
+        bool pairsFlag;
+
     public:
         explicit Particle(int typeArg = 0);
 
@@ -120,6 +126,17 @@ class Particle {
          * @return mass of this particle
          */
         double getM() const;
+
+        /**
+         * @brief Set the pairs flag of this particle
+         * @param pairsFlagArg the value to set the flag to
+         */
+        void setPairsFlag(bool pairsFlagArg);
+        /**
+         * @brief Get the pairs flag of this particle
+         * @return pairs flag of this particle
+         */
+        bool getPairsFlag() const;
 
         /**
          * @brief Get the type of this particle
