@@ -1,6 +1,8 @@
+#pragma once
 #include <particle/Particle.h>
 #include <particle/container/ParticleContainer.h>
 #include <particle/iterator/particleIterator/ParticleIteratorLinkedCell.h>
+#include <particle/iterator/pairParticleIterator/PairParticleIteratorLinkedCell.h>
 #include <vector>
 
 /**
@@ -30,6 +32,9 @@ class ParticleContainerLinkedCell : ParticleContainer {
         Particle &getParticle(int index) override;
         ParticleIteratorLinkedCell begin();
         ParticleIteratorLinkedCell end();
+
+        PairParticleIteratorLinkedCell beginPairs();
+        PairParticleIteratorLinkedCell endPairs();
         /**
          * @brief initializes the mesh which is a grid of cells
          * @param domainSize the 3d size of the domain

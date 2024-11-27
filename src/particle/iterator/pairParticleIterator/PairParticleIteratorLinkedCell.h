@@ -1,8 +1,9 @@
+#pragma once
 #include <cstddef>
 #include <particle/Particle.h>
 #include <iterator>
 #include <vector>
-#include <particle/container/ParticleContainerLinkedCell.h>
+#include <particle/cell/Cell.h>
 
 
 /**
@@ -21,7 +22,7 @@ class PairParticleIteratorLinkedCell {
          * @param particleContainer the particleContainer to form the pairs for
          * @return an instance of the Linked Cell PairParticleIterator
          */
-        PairParticleIteratorLinkedCell(std::vector<Cell>::iterator it, std::vector<Cell>::iterator end, ParticleContainerLinkedCell& particleContainerArg);
+        PairParticleIteratorLinkedCell(std::vector<Cell>::iterator it, std::vector<Cell>::iterator end, std::vector<Cell>& meshArg, std::array<size_t, 3> numCellsArg);
 
         /**
          * @brief Dereference this PairParticleIterator, i.e. get the current pair of Particles
@@ -48,20 +49,15 @@ class PairParticleIteratorLinkedCell {
          */
         std::vector<Cell> getNeighborCells();
 
-        /**
-         * @brief increments the currentCellIdx
-         */
-        void incrementCurrIdx();
-
     private:
         /**
-         * @brief the particle container to iterate through 
+         * @brief the mesh to iterate through 
          */
-        ParticleContainerLinkedCell particleContainer;
+        std::vector<Cell> mesh;
         /**
          * @brief the mesh index of the current cell
          */
-        std::array<int, 3> currentCellIdx;
+        int currentCellIdx;
         /**
         * @brief an iterator pointing to the current cell
          */

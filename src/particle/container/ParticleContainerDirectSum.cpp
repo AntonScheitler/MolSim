@@ -44,14 +44,14 @@ ParticleIteratorDirectSum ParticleContainerDirectSum::end() {
 }
 
 // pair particle iterator
-PairParticleIterator ParticleContainerDirectSum::beginPairParticle() {
+PairParticleIteratorDirectSum ParticleContainerDirectSum::beginPairParticle() {
     if (particles.empty()) {
         return {particles.begin(), particles.begin(), particles.end()};
     }
     return {particles.begin(), ++(particles.begin()), particles.end()};
 }
 
-PairParticleIterator ParticleContainerDirectSum::endPairParticle() {
+PairParticleIteratorDirectSum ParticleContainerDirectSum::endPairParticle() {
     if (particles.empty()) {
         return {particles.end(), particles.end(), particles.end()};
     }

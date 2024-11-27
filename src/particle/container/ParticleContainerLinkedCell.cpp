@@ -55,11 +55,11 @@ int ParticleContainerLinkedCell::continuousCoordsToIndex( std::array<double, 3> 
 }
 
 ParticleIteratorLinkedCell ParticleContainerLinkedCell::begin() {
-    return ParticleIteratorLinkedCell(mesh.begin());
+    return ParticleIteratorLinkedCell(mesh.begin(), mesh.end());
 }
 
 ParticleIteratorLinkedCell ParticleContainerLinkedCell::end() {
-    return ParticleIteratorLinkedCell(mesh.end());
+    return ParticleIteratorLinkedCell(mesh.end(), mesh.end());
 }
 
 std::vector<Cell>& ParticleContainerLinkedCell::getMesh() {
@@ -69,4 +69,12 @@ std::vector<Cell>& ParticleContainerLinkedCell::getMesh() {
 
 Cell& ParticleContainerLinkedCell::getCell(int idx) {
     return mesh[idx];
+}
+
+PairParticleIteratorLinkedCell ParticleContainerLinkedCell::beginPairs() {
+    return {mesh.begin(), mesh.end(), mesh, numCells};
+}
+
+PairParticleIteratorLinkedCell ParticleContainerLinkedCell::endPairs() {
+    return {mesh.end(), mesh.end(), mesh, numCells};
 }

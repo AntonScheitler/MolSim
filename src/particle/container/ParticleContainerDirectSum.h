@@ -1,6 +1,7 @@
 #include <vector>
 #include "../Particle.h"
 #include "particle/iterator/particleIterator/ParticleIteratorDirectSum.h"
+#include <particle/iterator/pairParticleIterator/PairParticleIteratorDirectSum.h>
 #include <particle/container/ParticleContainer.h>
 
 #pragma once
@@ -31,8 +32,8 @@ class ParticleContainerDirectSum : public ParticleContainer {
         Particle& getParticle(int index) override;
         ParticleIteratorDirectSum begin();
         ParticleIteratorDirectSum end();
-        PairParticleIterator beginPairParticle();
-        PairParticleIterator endPairParticle();
+        PairParticleIteratorDirectSum beginPairParticle();
+        PairParticleIteratorDirectSum endPairParticle();
 
 
     protected:
