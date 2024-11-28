@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <particle/container/ParticleContainerLinkedCell.h>
 #include "particle/iterator/particleIterator/ParticleIteratorLinkedCell.h"
 #include <utils/ArrayUtils.h>
@@ -17,7 +18,8 @@ void ParticleContainerLinkedCell::initMesh(std::array<double, 3> domainSize,
         // the number of cells per dimension is rounded down
         // this means, the cutoffRadius will always fit in a cell, if it'c center is
         // at the center of the cell
-        numCells[i] = floor(domainSize[i] / cellSize[i]);
+        // there should be at least once cell per dimension
+        numCells[i] = std::max((int) floor(domainSize[i] / cellSize[i]), 1);
         cellSize[i] = domainSize[i] / (1.0 * numCells[i]);
     }
 

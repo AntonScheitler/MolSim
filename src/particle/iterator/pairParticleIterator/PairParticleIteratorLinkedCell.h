@@ -44,8 +44,8 @@ class PairParticleIteratorLinkedCell {
         bool operator!=(const PairParticleIteratorLinkedCell &other);
 
         /**
-         * @brief determines the iterator for the neighbors of the current cell
-         * @return the iterator for the neighbors of the current cell
+         * @brief determines the vector of neighbors for the current cell
+         * @return the vector of neighbors for the current cell
          */
         std::vector<Cell> getNeighborCells();
 

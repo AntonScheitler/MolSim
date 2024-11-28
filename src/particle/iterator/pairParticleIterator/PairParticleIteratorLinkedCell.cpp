@@ -2,7 +2,6 @@
 #include <cstddef>
 #include <particle/iterator/pairParticleIterator/PairParticleIteratorLinkedCell.h>
 
-
 PairParticleIteratorLinkedCell::PairParticleIteratorLinkedCell(std::vector<Cell>::iterator it, std::vector<Cell>::iterator end, std::vector<Cell>& meshArg, std::array<size_t, 3> numCellsArg) {
     currentCellIdx = 0;
     mesh = meshArg;
