@@ -1,3 +1,6 @@
+#include "particle/Particle.h"
+#include "particle/iterator/particleIterator/ParticleIteratorDirectSum.h"
+#include <particle/container/ParticleContainerDirectSum.h>
 #include <vector>
 #include <particle/container/ParticleContainerDirectSum.h>
 
@@ -33,23 +36,23 @@ void ParticleContainerDirectSum::setAverageVelocity(double averageVelocityArg) {
 }
 
 // single particle iterator
-ParticleIterator ParticleContainerDirectSum::begin() {
+ParticleIteratorDirectSum ParticleContainerDirectSum::begin() {
     return particles.begin();
 }
 
-ParticleIterator ParticleContainerDirectSum::end() {
+ParticleIteratorDirectSum ParticleContainerDirectSum::end() {
     return particles.end();
 }
 
 // pair particle iterator
-PairParticleIterator ParticleContainerDirectSum::beginPairParticle() {
+PairParticleIteratorDirectSum ParticleContainerDirectSum::beginPairParticle() {
     if (particles.empty()) {
         return {particles.begin(), particles.begin(), particles.end()};
     }
     return {particles.begin(), ++(particles.begin()), particles.end()};
 }
 
-PairParticleIterator ParticleContainerDirectSum::endPairParticle() {
+PairParticleIteratorDirectSum ParticleContainerDirectSum::endPairParticle() {
     if (particles.empty()) {
         return {particles.end(), particles.end(), particles.end()};
     }

@@ -1,40 +1,34 @@
-#include "ParticleContainerLinkedCell.h"
+#include <particle/container/ParticleContainerLinkedCell.h>
+#include "particle/iterator/particleIterator/ParticleIteratorLinkedCell.h"
 #include <utils/ArrayUtils.h>
+#include "spdlogConfig.h"
 
 ParticleContainerLinkedCell::ParticleContainerLinkedCell(std::array<double, 3> domainDimsArg, double cutoffRadiusArg) {
-    this->cutoffRadius = cutoffRadiusArg;
-    this->domainDims = domainDimsArg;
-    initMesh();
 }
 
-void ParticleContainerLinkedCell::initMesh() {
-
+// TODO move to constructor?
+void ParticleContainerLinkedCell::initMesh(std::array<double, 3> domainSize,
+        double cutoffRadius) {
     // initialize size for cells
     cellSize = {cutoffRadius, cutoffRadius, 1};
 
     // adjust cell size depending on the domain size
     for (int i = 0; i < 3; i++) {
         // the number of cells per dimension is rounded down
-        // this means, the cutoffRadius will always fit in a cell, if it's center is
+        // this means, the cutoffRadius will always fit in a cell, if it'c center is
         // at the center of the cell
-        numCells[i] = floor(domainDims[i] / cellSize[i]);
-        cellSize[i] = domainDims[i] / numCells[i];
-        // add halo cells
-        numCells[i] += 2;
+        numCells[i] = floor(domainSize[i] / cellSize[i]);
+        cellSize[i] = domainSize[i] / (1.0 * numCells[i]);
     }
 
-    // create cells (inner, boundary, halo)
-    for (int x = 0; x < numCells[0]; x++) {
+    // add all cells to the mesh
+    for (int z = 0; z < numCells[0]; z++) {
         for (int y = 0; y < numCells[1]; y++) {
-            for (int z = 0; z < numCells[2]; z++) {
-
-                bool isBoundary = x == 1 || y == 1 || z == 1
-                                  || x == numCells[0] - 2 || y == numCells[1] - 2 || z == numCells[2] - 2;
-
-                bool isHalo = x == 0 || y == 0 || z == 0 || x == numCells[0] - 1 || y == numCells[1] - 1 ||
-                              z == numCells[2] - 1;
-
-                mesh.emplace_back(isBoundary, isHalo);
+            for (int x = 0; x < numCells[2]; x++) {
+                bool isBoundary = x == 0 || y == 0 || z == 0 || x == numCells[0] - 1 ||
+                    y == numCells[1] - 1 || z == numCells[2] - 1;
+                Cell cell = Cell(isBoundary);
+                mesh.push_back(cell);
             }
         }
     }
@@ -44,8 +38,12 @@ void ParticleContainerLinkedCell::addParticle(const Particle &particle) {
     mesh[continuousCoordsToIndex(particle.getX())].addParticle(particle);
 }
 
-int ParticleContainerLinkedCell::discreteCoordsToIndex( std::array<int, 3> coord) {
-    return (coord[0] * numCells[1] * numCells[2]) + (coord[1] * numCells[2]) + coord[2];
+int ParticleContainerLinkedCell::discreteCoordsToIndex(std::array<int, 3> coord) {
+    // check if coord is out of bounds and return -1 if it is
+    if (coord[0] < 0 || coord[1] < 0 || coord[2] < 2) return -1;
+    if (coord[0] >= numCells[0] || coord[1] >= numCells[1] || coord[2] >= numCells[2]) return -1;
+
+    return coord[0]  + (coord[1] * numCells[0]) + (coord[2] * numCells[0] * numCells[1]);
 }
 
 int ParticleContainerLinkedCell::continuousCoordsToIndex( std::array<double, 3> coord) {
@@ -55,15 +53,40 @@ int ParticleContainerLinkedCell::continuousCoordsToIndex( std::array<double, 3> 
     return discreteCoordsToIndex(std::array<int, 3>{(int)floor(approxDiscreteCoords[0]), (int)floor(approxDiscreteCoords[1]), (int)floor(approxDiscreteCoords[2])});
 }
 
+ParticleIteratorLinkedCell ParticleContainerLinkedCell::begin() {
+    return ParticleIteratorLinkedCell(mesh.begin(), mesh.end());
+}
+
+ParticleIteratorLinkedCell ParticleContainerLinkedCell::end() {
+    return ParticleIteratorLinkedCell(mesh.end(), mesh.end());
+}
+
+std::vector<Cell>& ParticleContainerLinkedCell::getMesh() {
+    return mesh;
+}
+
+
+Cell& ParticleContainerLinkedCell::getCell(int idx) {
+    return mesh[idx];
+}
+
+PairParticleIteratorLinkedCell ParticleContainerLinkedCell::beginPairs() {
+    return {mesh.begin(), mesh.end(), mesh, numCells};
+}
+
+PairParticleIteratorLinkedCell ParticleContainerLinkedCell::endPairs() {
+    return {mesh.end(), mesh.end(), mesh, numCells};
+}
+
 int ParticleContainerLinkedCell::size() {
     int size = 0;
-    for (auto &i: mesh) {
-        size += i.size();
+    for (auto& i: mesh) {
+        size += i.getParticles().size();
     }
     return size;
 }
 
-void ParticleContainerLinkedCell::correctParticleCell(Particle& p) {
+void ParticleContainerLinkedCell::correctParticleIndex(Particle& p) {
 
     // TODO: ghost particle interaction when boundaryCondition is reflecting
     // checks particle if it should be removed because it is outflowing the grid
@@ -74,31 +97,24 @@ void ParticleContainerLinkedCell::correctParticleCell(Particle& p) {
         SPDLOG_WARN("particle new cell index is out of bounds, index: {0}", newCellIndex);
         return;
     }
+    // particle is not in its original cell anymore
     if (oldCellIndex != newCellIndex) {
-        Cell oldCell = mesh[oldCellIndex];
-        Cell newCell = mesh[newCellIndex];
-        // particle is not in its original cell anymore
-        if (oldCell.isBoundary() && newCell.isHalo() && boundaryCondition == outflowing) {
-            // remove particle completely because it is outflowing
-            oldCell.removeParticle(p);
-        } else if (!oldCell.isHalo() && !newCell.isHalo()) {
-            // move particle to other (non-halo) cell
-            oldCell.removeParticle(p);
+        Cell oldCell = getCell(oldCellIndex);
+        oldCell.removeParticle(p);
+        // check if the cell is still within bounds
+        if (newCellIndex != -1) {
+            Cell newCell = getCell(newCellIndex);
             newCell.addParticle(p);
         }
     }
 }
 
-void ParticleContainerLinkedCell::correctAllParticlesCell() {
-    for(auto c : mesh) {
-        for(auto p : c.getParticles()) {
-            correctParticleCell(p);
+void ParticleContainerLinkedCell::correctAllParticleIndecies() {
+    for(auto& c : mesh) {
+        for(auto& p : c.getParticles()) {
+            correctParticleIndex(p);
         }
     }
-}
-
-Cell &ParticleContainerLinkedCell::getCell(int index) {
-    return mesh[index];
 }
 
 double ParticleContainerLinkedCell::getAverageVelocity() {
@@ -112,22 +128,3 @@ void ParticleContainerLinkedCell::setAverageVelocity(double averageVelocityArg) 
 Particle &ParticleContainerLinkedCell::getParticle(int index) {
     // TODO
 }
-
-ParticleIterator ParticleContainerLinkedCell::begin() {
-//    return ParticleIterator();
-    // TODO
-}
-
-ParticleIterator ParticleContainerLinkedCell::end() {
-//    return ParticleIterator(__gnu_cxx::__normal_iterator());
-    // TODO
-}
-
-PairParticleIterator ParticleContainerLinkedCell::beginPairParticle() {
-    // TODO
-}
-
-PairParticleIterator ParticleContainerLinkedCell::endPairParticle() {
-    // TODO
-}
-

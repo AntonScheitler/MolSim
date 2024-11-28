@@ -1,38 +1,14 @@
 #include "Cell.h"
-#include <bits/stdc++.h>
 
-Cell::Cell() {
-    this->boundaryCell = false;
-    this->haloCell = false;
-}
-
-Cell::Cell(bool isBoundary, bool isHalo) {
-    this->boundaryCell = isBoundary;
-    this->haloCell = isHalo;
-}
-
-bool Cell::isHalo() {
-    return haloCell;
-}
-void Cell::setHalo(bool halo) {
-    this->haloCell = halo;
-}
-bool Cell::isBoundary() {
-    return boundaryCell;
-}
-void Cell::setBoundary(bool boundary) {
-    this->boundaryCell = boundary;
+Cell::Cell(bool isBoundaryArg) {
+    isBoundary = isBoundaryArg;
 }
 
 void Cell::addParticle(const Particle &particle) {
     particles.push_back(particle);
 }
 
-int Cell::size() {
-    return particles.size();
-}
-
-std::vector<Particle> Cell::getParticles() {
+std::vector<Particle>& Cell::getParticles() {
     return particles;
 }
 

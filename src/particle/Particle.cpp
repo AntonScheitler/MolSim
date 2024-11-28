@@ -63,6 +63,10 @@ double Particle::getM() const { return m; }
 
 int Particle::getType() const { return type; }
 
+void Particle::setPairsFlag(bool pairsFlagArg) { pairsFlag = pairsFlagArg; }
+
+bool Particle::getPairsFlag() const { return pairsFlag; }
+
 std::string Particle::toString() const {
     std::stringstream stream;
     stream << "Particle: X:" << x << " v: " << v << " f: " << f << " oldF: " << oldF << " type: " << type;

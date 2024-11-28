@@ -9,7 +9,7 @@
  * distinct ordering is not considered. This means, that a specific pair <a, b> will only appear once when
  * iterating. <b, a> will never show itself in an iteration
  */
-class PairParticleIterator {
+class PairParticleIteratorDirectSum {
 
 public:
     using iterator_category = std::forward_iterator_tag;
@@ -23,7 +23,7 @@ public:
      * final pair has been reached
      * @return an instance of a PairParticleIterator
      */
-    PairParticleIterator(std::vector<Particle>::iterator firstArg,
+    PairParticleIteratorDirectSum(std::vector<Particle>::iterator firstArg,
                          std::vector<Particle>::iterator secondArg,
                          std::vector<Particle>::iterator endArg);
 
@@ -37,14 +37,14 @@ public:
      * @brief Increment this iterator, i.e. get the next distinct pair of particles
      * @return this PairParticleIterator updated
      */
-    PairParticleIterator &operator++();
+    PairParticleIteratorDirectSum &operator++();
 
     /**
      * @brief check whether this PairParticleIterator is not equal to another PairParticleIterator
      * @param other other PairParticleIterator
      * @return True if iterators not equal
      */
-    bool operator!=(const PairParticleIterator &other);
+    bool operator!=(const PairParticleIteratorDirectSum &other);
 
 private:
     /**

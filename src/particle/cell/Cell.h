@@ -1,23 +1,15 @@
+#pragma once
 #include "vector"
 #include <particle/Particle.h>
 
 class Cell {
 
 public:
-    Cell();
-    Cell(bool isBoundary, bool isHalo);
+    Cell(bool isBoundaryCell);
     void addParticle(const Particle& particle);
-    bool isBoundary();
-    bool isHalo();
-    void setBoundary(bool boundary);
-    void setHalo(bool halo);
-    int size();
-    std::vector<Particle> getParticles();
-    void removeParticle(Particle& particle);
-
+    void removeParticle(Particle &particle);
+    std::vector<Particle>& getParticles();
+    bool isBoundary;
 private:
     std::vector<Particle> particles;
-
-    bool boundaryCell;
-    bool haloCell;
 };
