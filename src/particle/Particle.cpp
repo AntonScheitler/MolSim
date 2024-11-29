@@ -13,7 +13,6 @@
 #include <iostream>
 
 Particle::Particle(int typeArg) {
-    pairsFlag = false;
     type = typeArg;
     f = {0., 0., 0.};
     oldF = {0., 0., 0.};
@@ -21,7 +20,6 @@ Particle::Particle(int typeArg) {
 }
 
 Particle::Particle(const Particle &other) {
-    pairsFlag = false;
     oldX = other.oldX;
     x = other.x;
     v = other.v;
@@ -35,7 +33,6 @@ Particle::Particle(const Particle &other) {
 // Todo: maybe use initializer list instead of copy?
 Particle::Particle(std::array<double, 3> xArg, std::array<double, 3> vArg,
                    double mArg, int typeArg) {
-    pairsFlag = false;
     oldX = {0., 0., 0.};
     x = xArg;
     v = vArg;
@@ -68,17 +65,13 @@ double Particle::getM() const { return m; }
 
 int Particle::getType() const { return type; }
 
-void Particle::setPairsFlag(bool pairsFlagArg) { pairsFlag = pairsFlagArg; }
-
-bool Particle::getPairsFlag() const { return pairsFlag; }
-
 std::string Particle::toString() const {
     std::stringstream stream;
     stream << "Particle: X:" << x << " v: " << v << " f: " << f << " oldF: " << oldF << " type: " << type;
     return stream.str();
 }
 
-bool Particle::operator==(Particle &other) {
+bool Particle::operator==(const Particle &other) const {
     return (x == other.x) and (v == other.v) and (f == other.f) and
         (type == other.type) and (m == other.m) and (oldF == other.oldF);
 }

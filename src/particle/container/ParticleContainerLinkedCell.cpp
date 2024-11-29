@@ -4,12 +4,9 @@
 #include <utils/ArrayUtils.h>
 #include "spdlogConfig.h"
 
-ParticleContainerLinkedCell::ParticleContainerLinkedCell(std::array<double, 3> domainDimsArg, double cutoffRadiusArg) {
-}
-
-// TODO move to constructor?
-void ParticleContainerLinkedCell::initMesh(std::array<double, 3> domainSize,
-        double cutoffRadius) {
+ParticleContainerLinkedCell::ParticleContainerLinkedCell(std::array<double, 3> domainSizeArg, double cutoffRadiusArg) {
+    domainSize = domainSizeArg;
+    cutoffRadius = cutoffRadiusArg;
     // initialize size for cells
     cellSize = {cutoffRadius, cutoffRadius, 1};
 
@@ -72,19 +69,19 @@ Cell& ParticleContainerLinkedCell::getCell(int idx) {
     return mesh[idx];
 }
 
-PairParticleIteratorLinkedCell ParticleContainerLinkedCell::beginPairs() {
+PairParticleIteratorLinkedCell ParticleContainerLinkedCell::beginPairParticle() {
     return {mesh.begin(), mesh.end(), mesh, numCells};
 }
 
-PairParticleIteratorLinkedCell ParticleContainerLinkedCell::endPairs() {
+PairParticleIteratorLinkedCell ParticleContainerLinkedCell::endPairParticle() {
     return {mesh.end(), mesh.end(), mesh, numCells};
 }
 
-PairParticleIteratorBoundaryNHalo ParticleContainerLinkedCell::beginGhosts() {
+PairParticleIteratorBoundaryNHalo ParticleContainerLinkedCell::beginPairGhost() {
     return {mesh.begin(), mesh, numCells, cellSize};
 }
 
-PairParticleIteratorBoundaryNHalo ParticleContainerLinkedCell::endGhosts() {
+PairParticleIteratorBoundaryNHalo ParticleContainerLinkedCell::endPairGhost() {
     return {mesh.end(), mesh, numCells, cellSize};
 }
 

@@ -1,8 +1,24 @@
 #include <array>
 #include <cstddef>
+#include <functional>
 #include <particle/iterator/pairParticleIterator/PairParticleIteratorLinkedCell.h>
 
+struct ParticleHash {
+    size_t operator()(const Particle& p) const {
+        return (std::hash<double>()(p.getX()[0]) << 6) ^
+            (std::hash<double>()(p.getX()[1]) << 4) ^
+            (std::hash<double>()(p.getX()[2]) << 2);
+    }
+};
+
+struct ParticleEqual {
+    bool operator()(const Particle& p1, const Particle& p2) const {
+        return p1 == p2;
+    }
+};
+
 PairParticleIteratorLinkedCell::PairParticleIteratorLinkedCell(std::vector<Cell>::iterator it, std::vector<Cell>::iterator end, std::vector<Cell>& meshArg, std::array<size_t, 3> numCellsArg) {
+    completedPairs.clear();
     currentCellIdx = 0;
     mesh = meshArg;
     numCells = numCellsArg;
@@ -22,7 +38,7 @@ PairParticleIteratorLinkedCell::PairParticleIteratorLinkedCell(std::vector<Cell>
     neighborParticle = (*neighborCell).getParticles().begin();
 
     // move to the first valid pair
-    while ((*currentParticle) == (*neighborParticle) || (neighborParticle->getPairsFlag())) {
+    while ((*currentParticle) == (*neighborParticle) || (completedPairs.count(*neighborParticle) > 0)) {
         ++(*this);
     }
 }
@@ -52,7 +68,7 @@ PairParticleIteratorLinkedCell& PairParticleIteratorLinkedCell::operator++() {
     if (neighborParticle == (*neighborCell).getParticles().end()) {
         neighborCell++;
         if (neighborCell == neighborCellsVector.end()) {
-            (*currentParticle).setPairsFlag(true);
+            completedPairs.insert(*currentParticle);
             currentParticle++;
             if (currentParticle == (*currentCell).getParticles().end()) {
                 currentCell++;
@@ -67,7 +83,8 @@ PairParticleIteratorLinkedCell& PairParticleIteratorLinkedCell::operator++() {
         }
         neighborParticle = (*neighborCell).getParticles().begin();
     }
-    if ((*currentParticle) == (*neighborParticle) || (neighborParticle->getPairsFlag())) {
+    // todo do-while instead?
+    if ((*currentParticle) == (*neighborParticle) || (completedPairs.count(*neighborParticle) > 0)) {
         return ++(*this);
     }
     return *this;
@@ -76,3 +93,4 @@ PairParticleIteratorLinkedCell& PairParticleIteratorLinkedCell::operator++() {
 bool PairParticleIteratorLinkedCell::operator!=(const PairParticleIteratorLinkedCell &other) {
     return currentCell != other.currentCell;
 }
+

@@ -7,19 +7,19 @@
 #include <vector>
 
 /**
- * @brief wrapper for a vector of particles, enabling iteration over separate
- * particles or particle pairs
+ * @brief manages a set of particles using the linked cell algorithm
  */
 class ParticleContainerLinkedCell : ParticleContainer {
 
 public:
 
         /**
-         * @brief wraps a vector in a ParticleContainer
-         * @param particlesArg the particle vector to be wrapped
-         * @return the object of the ParticleContainer
+         * @brief creates an instance of a particle container for the linked cell algorithm 
+         * @param domainSizeArg the size of the domain
+         * @param cutoffRadiusArg radius past which forces between particles don't need to be computed
+         * @return an instance of the particle container for the linked cell algorithm
          */
-        ParticleContainerLinkedCell(std::array<double, 3> domainDimsArg, double cutoffRadiusArg);
+        ParticleContainerLinkedCell(std::array<double, 3> domainSizeArg, double cutoffRadiusArg);
 
         void addParticle(const Particle &particle) override;
         int size() override;
@@ -40,30 +40,24 @@ public:
          * @brief provides an iterator for iterating through pairs of particles when using the linked cell algorithm
          * @return the pair particle iterator
          */
-        PairParticleIteratorLinkedCell beginPairs();
+        PairParticleIteratorLinkedCell beginPairParticle();
         /**
          * @brief provides an iterator pointing to the end of the pairs when using the linked cell algorithm
          * @return the end of the pair particle iterator
          */
-        PairParticleIteratorLinkedCell endPairs();
+        PairParticleIteratorLinkedCell endPairParticle();
 
         /**
          * @brief provides an iterator for iterating through pairs of boundary particles and their ghosts. The first
          * element in a pair is the actual particle whereas the second element is the ghost
          * @return the boundary particle and ghost pair iterator
          */
-        PairParticleIteratorBoundaryNHalo beginGhosts();
+        PairParticleIteratorBoundaryNHalo beginPairGhost();
         /**
          * @brief provides an iterator pointing to the end of the boundary and ghost pairs
          * @return the end of the boundary and ghost pair iterator
          */
-        PairParticleIteratorBoundaryNHalo endGhosts();
-        /**
-         * @brief initializes the mesh which is a grid of cells
-         * @param domainSize the 3d size of the domain
-         * @param cutoffRadius the cutoffRadius (used for determining for cell size)
-         */
-        void initMesh(std::array<double, 3> domainSize, double cutoffRadius);
+        PairParticleIteratorBoundaryNHalo endPairGhost();
         /**
          * @brief converts the discrete (index) coordinates of a cell in the mesh to
          * the index at which the cell is in the mesh vector
@@ -95,7 +89,7 @@ public:
          * @brief the average brownian velocity of the particles
          */
         double averageVelocity;
-        std::vector<double> domainDims;      // size of the domain of this particleContainer
+        std::array<double, 3> domainSize;      // size of the domain of this particleContainer
         double cutoffRadius; // = cutoffRadius
         std::array<double, 3> cellSize; // dimensions of one cell
         std::array<size_t, 3> numCells; // number of cells per dimensions

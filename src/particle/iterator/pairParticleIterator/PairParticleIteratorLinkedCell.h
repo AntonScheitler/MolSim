@@ -2,6 +2,7 @@
 #include <cstddef>
 #include <particle/Particle.h>
 #include <iterator>
+#include <unordered_set>
 #include <vector>
 #include <particle/cell/Cell.h>
 
@@ -86,4 +87,22 @@ class PairParticleIteratorLinkedCell {
          * @brief the number cells per dimension
          */
         std::array<size_t, 3> numCells;
+        /**
+         * @brief struct for hashing particles. this is necessary because particles that have been iterated through are
+         * stored in a hashset
+         */
+        struct ParticleHash {
+            size_t operator()(const Particle& p) const;
+        };
+        /**
+         * @brief struct for comparing particles. this is necessary because particles that have been iterated through are
+         * stored in a hashset
+         */
+        struct ParticleEqual {
+            bool operator()(const Particle& p1, const Particle& p2) const;
+        };
+        /**
+         * @brief a set containing all particles for which all paris have been iterated through
+         */
+        std::unordered_set<Particle, ParticleHash, ParticleEqual> completedPairs;
 };
