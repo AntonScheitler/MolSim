@@ -18,7 +18,7 @@ namespace inputReader {
         spdlog::drop("JsonFileReader");
     }
 
-    void JsonFileReader::readFile(ParticleContainer &particles, char *filename) {
+    void JsonFileReader::readFile(SimulationData &simData, char *filename) {
         simData.setAverageVelocity(0);
         std::array<double, 3> x{};
         std::array<double, 3> v{};
@@ -40,7 +40,7 @@ namespace inputReader {
                 v = planet["velocity"].get<std::array<double, 3>>();
                 m = planet["mass"].get<double>();
 
-                particles.addParticle(Particle{x, v, m});
+                simData.getParticles().addParticle(Particle{x, v, m});
                 SPDLOG_LOGGER_DEBUG(logger, "adding particle at coords {0}, {1}, {2}", x[0], x[1], x[2]);
             }
 
@@ -53,7 +53,7 @@ namespace inputReader {
                 bm = cuboid["brownianMotion"].get<double>();
                 simData.setAverageVelocity(bm);
 
-                ParticleGenerator::generateCuboid(particles, x, v, d, m, h, type);
+                ParticleGenerator::generateCuboid(simData.getParticles(), x, v, d, m, h, type);
 
                 type++;
 

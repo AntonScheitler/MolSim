@@ -157,6 +157,10 @@ ParticleContainer& SimulationData::getParticles() {
     return particles;
 }
 
+void SimulationData::setParticles(ParticleContainer& particlesArg) {
+    this->particles = particlesArg;
+}
+
 void SimulationData::setSimType(SimulationType s) {
     this->simType = s;
 }

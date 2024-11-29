@@ -7,6 +7,7 @@
 #include <array>
 #include "io/inputReader/ParticleGenerator.h"
 #include "ParameterParser.h"
+#include <particle/container/ParticleContainerLinkedCell.h>
 
 
 namespace inputReader {
@@ -21,7 +22,7 @@ namespace inputReader {
     }
 
 
-    void XMLFileReader::readCometFile(ParticleContainer &particles, char *filename) {
+    void XMLFileReader::readCometFile(SimulationData &simData, char *filename) {
         simData.setAverageVelocity(0);
         std::array<double, 3> x{};
         std::array<double, 3> v{};
@@ -30,6 +31,10 @@ namespace inputReader {
         double h;
         double r;
         int type = 0;
+
+        // TODO create ParticleContainer based on info in xml (directSum or linkedCell)
+        ParticleContainer *particles = ParticleContainerLinkedCell(std::array<double, 3>(0, 0, 0), 0);
+        simData.setParticles(particles);
 
         std::cout << "entering XML parsing with filename" << filename << std::endl;
 
@@ -57,7 +62,7 @@ namespace inputReader {
                 v[2] = planet.velocity().z();
                 m = planet.mass();
 
-                particles.addParticle(Particle(x, v, m));
+                particles->addParticle(Particle(x, v, m));
                 SPDLOG_LOGGER_DEBUG(logger, "adding particle at coords {0}, {1}, {2}", x[0], x[1], x[2]);
             }
 
@@ -102,7 +107,7 @@ namespace inputReader {
                 r = disc.radius();
 
                 //Todo implement generateDisc
-                ParticleGenerator::generateDisc(particles, x, v, r, m, h, type);
+                ParticleGenerator::generateDisc(*particles, x, v, r, m, h, type);
 
                 type++;
             }

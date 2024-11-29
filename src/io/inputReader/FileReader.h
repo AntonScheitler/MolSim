@@ -39,7 +39,7 @@ namespace inputReader {
          * @param particles the particles to be filled up
          * @param filename the file to read the particle information from
          */
-        void readFile(ParticleContainer &particles, char *filename);
+        void readFile(SimulationData simData, char *filename);
 
 
     private:
@@ -57,15 +57,15 @@ namespace inputReader {
          * @param particles the particleContainer to write into
          * @param filename the file to read from
          */
-        void readJson(ParticleContainer &particles, char *filename);
+        void readJson(SimulationData& simData, char *filename);
 
         /**
          * @brief reads a txt file and writes the particle information into the particleContainer
          * @param particles the particleContainer to write into
          * @param filename the file to read from
          */
-        void readTxt(ParticleContainer &particles, char *filename);
+        void readTxt(SimulationData& simData, char *filename);
 
-        void readXML(ParticleContainer &particles, char *filename);
+        void readXML(SimulationData& simData, char *filename);
     };
 } // namespace inputReader

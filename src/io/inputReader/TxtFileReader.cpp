@@ -16,7 +16,7 @@ namespace inputReader {
     }
 
 
-    void TxtFileReader::readCometFile(ParticleContainer &particles, char *filename) {
+    void TxtFileReader::readCometFile(SimulationData& simData, char *filename) {
         simData.setAverageVelocity(0);
         std::array<double, 3> x{};
         std::array<double, 3> v{};
@@ -25,6 +25,9 @@ namespace inputReader {
 
         std::ifstream inputFile(filename);
         std::string tmpString;
+
+        // TODO create correct ParticleContainer
+//        simData.setParticles
 
         if (inputFile.is_open()) {
 
@@ -55,18 +58,18 @@ namespace inputReader {
                     exit(-1);
                 }
                 datastream >> m;
-                particles.addParticle(Particle(x, v, m));
+                simData.getParticles().addParticle(Particle(x, v, m));
                 getline(inputFile, tmpString);
                 SPDLOG_LOGGER_DEBUG(logger, "Read line: {0}", tmpString);
             }
-            SPDLOG_LOGGER_DEBUG(logger, "Successfully read {0} particles", particles.size());
+            SPDLOG_LOGGER_DEBUG(logger, "Successfully read {0} particles", simData.getParticles().size());
         } else {
             SPDLOG_LOGGER_ERROR(logger, "Error: could not open file {0}", filename);
             exit(-1);
         }
     }
 
-    void TxtFileReader::readCollisionFile(ParticleContainer &particles, char *filename) {
+    void TxtFileReader::readCollisionFile(SimulationData& simData, char *filename) {
         std::array<double, 3> x{};
         std::array<double, 3> v{};
         std::array<int, 3> d{};
@@ -115,14 +118,14 @@ namespace inputReader {
                 datastream >> bm;
                 simData.setAverageVelocity(bm);
 
-                ParticleGenerator::generateCuboid(particles, x, v, d, m, h, type);
+                ParticleGenerator::generateCuboid(simData.getParticles(), x, v, d, m, h, type);
 
 
                 getline(inputFile, tmpString);
                 SPDLOG_LOGGER_DEBUG(logger, "Read line: {0}", tmpString);
                 type++;
             }
-            SPDLOG_LOGGER_DEBUG(logger, "Successfully read {0} particles", particles.size());
+            SPDLOG_LOGGER_DEBUG(logger, "Successfully read {0} particles", simData.getParticles().size());
         } else {
             SPDLOG_LOGGER_ERROR(logger, "Error: could not open file {0}", filename);
             exit(-1);

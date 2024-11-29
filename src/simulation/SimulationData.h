@@ -115,6 +115,7 @@ class SimulationData {
 
         void setParticlesCopy(const ParticleContainer& particlesArg);
 
+        void setParticles(ParticleContainer& particles);
 
         std::string getBaseName();
 
