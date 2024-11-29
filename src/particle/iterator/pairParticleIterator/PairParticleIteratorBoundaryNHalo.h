@@ -25,7 +25,7 @@ class PairParticleIteratorBoundaryNHalo {
          * @param cellSizeArg the size of a cell
          * @return an instance of a PairParticleIterator for boundary and halo cells 
          */
-        PairParticleIteratorBoundaryNHalo(std::vector<Cell> meshArg, std::array<size_t, 3> numCellsArg, std::array<double, 3> cellSizeArg);
+        PairParticleIteratorBoundaryNHalo(std::vector<Cell>::iterator currentCellArg, std::vector<Cell> meshArg, std::array<size_t, 3> numCellsArg, std::array<double, 3> cellSizeArg);
 
         /**
          * @brief dereferences this PairParticleIterator and gets the current particle/ghost pair. The second particle in any

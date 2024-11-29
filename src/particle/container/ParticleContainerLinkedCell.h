@@ -3,6 +3,7 @@
 #include <particle/container/ParticleContainer.h>
 #include <particle/iterator/particleIterator/ParticleIteratorLinkedCell.h>
 #include <particle/iterator/pairParticleIterator/PairParticleIteratorLinkedCell.h>
+#include <particle/iterator/pairParticleIterator/PairParticleIteratorBoundaryNHalo.h>
 #include <vector>
 
 /**
@@ -25,11 +26,38 @@ public:
         double getAverageVelocity() override;
         void setAverageVelocity(double averageVelocityArg) override;
         Particle &getParticle(int index) override;
+        /**
+         * @brief provides an iterator for iterating through all particles when using the linked cell algorithm
+         * @return the particle iterator
+         */
         ParticleIteratorLinkedCell begin();
+        /**
+         * @brief provides an iterator pointing to the end of the particles when using the linked cell algorithm
+         * @return the end of the particle iterator
+         */
         ParticleIteratorLinkedCell end();
-
+        /**
+         * @brief provides an iterator for iterating through pairs of particles when using the linked cell algorithm
+         * @return the pair particle iterator
+         */
         PairParticleIteratorLinkedCell beginPairs();
+        /**
+         * @brief provides an iterator pointing to the end of the pairs when using the linked cell algorithm
+         * @return the end of the pair particle iterator
+         */
         PairParticleIteratorLinkedCell endPairs();
+
+        /**
+         * @brief provides an iterator for iterating through pairs of boundary particles and their ghosts. The first
+         * element in a pair is the actual particle whereas the second element is the ghost
+         * @return the boundary particle and ghost pair iterator
+         */
+        PairParticleIteratorBoundaryNHalo beginGhosts();
+        /**
+         * @brief provides an iterator pointing to the end of the boundary and ghost pairs
+         * @return the end of the boundary and ghost pair iterator
+         */
+        PairParticleIteratorBoundaryNHalo endGhosts();
         /**
          * @brief initializes the mesh which is a grid of cells
          * @param domainSize the 3d size of the domain

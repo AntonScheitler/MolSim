@@ -80,6 +80,14 @@ PairParticleIteratorLinkedCell ParticleContainerLinkedCell::endPairs() {
     return {mesh.end(), mesh.end(), mesh, numCells};
 }
 
+PairParticleIteratorBoundaryNHalo ParticleContainerLinkedCell::beginGhosts() {
+    return {mesh.begin(), mesh, numCells, cellSize};
+}
+
+PairParticleIteratorBoundaryNHalo ParticleContainerLinkedCell::endGhosts() {
+    return {mesh.end(), mesh, numCells, cellSize};
+}
+
 int ParticleContainerLinkedCell::size() {
     int size = 0;
     for (auto& i: mesh) {

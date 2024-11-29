@@ -30,11 +30,26 @@ class ParticleContainerDirectSum : public ParticleContainer {
         double getAverageVelocity() override;
         void setAverageVelocity(double averageVelocityArg) override;
         Particle& getParticle(int index) override;
+        /**
+         * @brief provides an iterator for iterating through all particles
+         * @return the particle iterator
+         */
         ParticleIteratorDirectSum begin();
+        /**
+         * @brief provides an iterator pointing to the end of the particles
+         * @return the end of the particle iterator
+         */
         ParticleIteratorDirectSum end();
+        /**
+         * @brief provides an iterator for iterating through pairs of particles
+         * @return the pair particle iterator
+         */
         PairParticleIteratorDirectSum beginPairParticle();
+        /**
+         * @brief provides an iterator pointing to the end of the pairs
+         * @return the end of the pair particle iterator
+         */
         PairParticleIteratorDirectSum endPairParticle();
-
 
     protected:
         /**

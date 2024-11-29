@@ -3,13 +3,13 @@
 #include <functional>
 #include <particle/iterator/pairParticleIterator/PairParticleIteratorBoundaryNHalo.h>
 
-PairParticleIteratorBoundaryNHalo::PairParticleIteratorBoundaryNHalo( std::vector<Cell> meshArg, std::array<size_t, 3> numCellsArg, std::array<double, 3> cellSizeArg) {
+PairParticleIteratorBoundaryNHalo::PairParticleIteratorBoundaryNHalo(std::vector<Cell>::iterator it, std::vector<Cell> meshArg, std::array<size_t, 3> numCellsArg, std::array<double, 3> cellSizeArg) {
     mesh = meshArg;
     currentCellIdx = {0, 0, 0};
     numCells = numCellsArg;
     cellSize = cellSizeArg;
 
-    currentCell = mesh.begin();
+    currentCell = it;
     if (currentCell == mesh.end()) {
         return;
     }

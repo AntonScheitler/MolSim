@@ -6,7 +6,7 @@ PairParticleIteratorLinkedCell::PairParticleIteratorLinkedCell(std::vector<Cell>
     currentCellIdx = 0;
     mesh = meshArg;
     numCells = numCellsArg;
-    currentCell = currentCell = it;
+    currentCell = it;
 
     // dont initialize the other variables if it already points to the end
     if (it == end){
