@@ -40,7 +40,7 @@ void ParticleContainerLinkedCell::addParticle(const Particle &particle) {
 
 int ParticleContainerLinkedCell::discreteCoordsToIndex(std::array<int, 3> coord) {
     // check if coord is out of bounds and return -1 if it is
-    if (coord[0] < 0 || coord[1] < 0 || coord[2] < 2) return -1;
+    if (coord[0] < 0 || coord[1] < 0 || coord[2] < 0) return -1;
     if (coord[0] >= numCells[0] || coord[1] >= numCells[1] || coord[2] >= numCells[2]) return -1;
 
     return coord[0]  + (coord[1] * numCells[0]) + (coord[2] * numCells[0] * numCells[1]);
@@ -101,10 +101,6 @@ void ParticleContainerLinkedCell::correctParticleIndex(Particle& p) {
 
     int oldCellIndex = continuousCoordsToIndex(p.getOldX());
     int newCellIndex = continuousCoordsToIndex(p.getX());
-    if(newCellIndex < 0 || newCellIndex >= mesh.size()) {
-        SPDLOG_WARN("particle new cell index is out of bounds, index: {0}", newCellIndex);
-        return;
-    }
     // particle is not in its original cell anymore
     if (oldCellIndex != newCellIndex) {
         Cell oldCell = getCell(oldCellIndex);

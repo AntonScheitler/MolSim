@@ -1,12 +1,10 @@
+#include <particle/container/ParticleContainerDirectSum.h>
+#include <memory>
+#include <vector>
 #include "particle/Particle.h"
 #include "particle/iterator/pairParticleIterator/PairParticleIterator.h"
 #include "particle/iterator/particleIterator/ParticleIterator.h"
 #include "particle/iterator/particleIterator/ParticleIteratorDirectSum.h"
-#include <algorithm>
-#include <memory>
-#include <particle/container/ParticleContainerDirectSum.h>
-#include <vector>
-#include <particle/container/ParticleContainerDirectSum.h>
 
 ParticleContainerDirectSum::ParticleContainerDirectSum() {
     particles = std::vector<Particle>{};
