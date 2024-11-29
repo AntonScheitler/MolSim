@@ -25,7 +25,6 @@ public:
         int size() override;
         double getAverageVelocity() override;
         void setAverageVelocity(double averageVelocityArg) override;
-        Particle &getParticle(int index) override;
         std::unique_ptr<ParticleIterator> begin() override;
         std::unique_ptr<ParticleIterator> end() override;
         std::unique_ptr<PairParticleIterator> beginPairParticle() override;

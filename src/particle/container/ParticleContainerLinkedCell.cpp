@@ -133,6 +133,3 @@ void ParticleContainerLinkedCell::setAverageVelocity(double averageVelocityArg) 
     this->averageVelocity = averageVelocityArg;
 }
 
-Particle& ParticleContainerLinkedCell::getParticle(int index) {
-    return mesh[0].getParticles()[0];
-}

@@ -1,4 +1,4 @@
-#include "../../../../src/particle/ParticleContainerDirectSum.h"
+#include "../../../../src/particle/container/ParticleContainerDirectSum.h"
 #include "../../../../src/computations/velocities/VelocityComputations.h"
 #include <gtest/gtest.h>
 
@@ -8,7 +8,7 @@
 class VelocityComputationsTest : public testing::Test {
 protected:
 
-    ParticleContainer particles;
+    ParticleContainerDirectSum particles;
 
     // executed before each test
     void SetUp() override {
@@ -36,7 +36,7 @@ protected:
         a.setF({{1, 6, 9}});
         b.setF({{4, 7, 5}});
 
-        particles = ParticleContainer({{a,b}}, 0.1);
+        particles = ParticleContainerDirectSum({{a,b}}, 0.1);
     }
 };
 

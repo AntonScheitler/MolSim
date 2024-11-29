@@ -4,7 +4,7 @@
 class FileReaderTest : public testing::Test {
 
 protected:
-    SimulationData simulationData{};
+    SimulationData simulationData{<#initializer#>};
 
     void testCometSim(char *inputFile);
     void testCollisionSim(char *inputFile);
@@ -84,7 +84,7 @@ void expectParticlesCollisionSimCorrect(ParticleContainer &p) {
  * @param inputFile path of the input file
  */
 void FileReaderTest::testCometSim(char *inputFile) {
-    simulationData.setSimType(simulationType::comet);
+    simulationData.setSimType(SimulationType::comet);
     inputReader::FileReader fileReader = inputReader::FileReader(simulationData);
     ParticleContainer p{};
     fileReader.readFile(p, inputFile);
@@ -97,7 +97,7 @@ void FileReaderTest::testCometSim(char *inputFile) {
  * @param inputFile path of the input file
  */
 void FileReaderTest::testCollisionSim(char *inputFile) {
-    simulationData.setSimType(simulationType::collision);
+    simulationData.setSimType(SimulationType::collision);
     inputReader::FileReader fileReader = inputReader::FileReader(simulationData);
     ParticleContainer p{};
     fileReader.readFile(p, inputFile);

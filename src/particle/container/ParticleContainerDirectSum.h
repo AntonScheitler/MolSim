@@ -31,7 +31,7 @@ class ParticleContainerDirectSum : public ParticleContainer {
         int size() override;
         double getAverageVelocity() override;
         void setAverageVelocity(double averageVelocityArg) override;
-        Particle& getParticle(int index) override;
+        Particle& getParticle(int index);
         std::unique_ptr<ParticleIterator> begin() override;
         std::unique_ptr<ParticleIterator> end() override;
         /**

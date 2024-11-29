@@ -1,14 +1,14 @@
-#include "../../src/particle/ParticleContainerDirectSum.h"
+#include "../../src/particle/container/ParticleContainerDirectSum.h"
 #include <gtest/gtest.h>
 
 class ParticleContainerTest : public testing::Test {
     protected:
-        ParticleContainer empty;
-        ParticleContainer container;
+        ParticleContainerDirectSum empty;
+        ParticleContainerDirectSum container;
 
         void SetUp() override {
-            empty = ParticleContainer();
-            container = ParticleContainer();
+            empty = ParticleContainerDirectSum();
+            container = ParticleContainerDirectSum();
             for (double d = 0; d < 4; d++) {
                 container.addParticle(Particle({d, d, d}, {d, d, d}, d));
             }

@@ -31,7 +31,6 @@ public:
      * @param averageVelocityArg the velocity to set the average velocity to
      */
     virtual void setAverageVelocity(double averageVelocityArg) = 0;
-    virtual Particle& getParticle(int index) = 0;
 
     virtual std::unique_ptr<ParticleIterator> begin() = 0;
     virtual std::unique_ptr<ParticleIterator> end() = 0;
