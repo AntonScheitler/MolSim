@@ -44,7 +44,7 @@ namespace inputReader {
             /**
              * the simulation data to write into
              */
-            SimulationData simData;
+            SimulationData& simData;
             /**
              * a fileReader-specific logger
              */
@@ -62,5 +62,7 @@ namespace inputReader {
              * @param filename the file to read from
              */
             void readTxt(ParticleContainer &particles, char *filename);
+
+            void readXML(ParticleContainer &particles, char *filename);
     };
 } // namespace inputReader

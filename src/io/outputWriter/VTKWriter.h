@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "outputWriter/XYZWriter.h"
-#include "outputWriter/vtk-unstructured.h"
+#include "XYZWriter.h"
+#include "vtk-unstructured.h"
 #include "particle/ParticleContainer.h"
 
 namespace outputWriter {
@@ -18,13 +18,18 @@ namespace outputWriter {
      */
     class VTKWriter : public FileWriter {
         public:
-            VTKWriter();
+
+            VTKWriter(std::string baseName);
             /**
              * @brief plots particles and writes them to a vtk file 
              */
             void plotParticles(ParticleContainer &particles, int iteration);
 
         private:
+
+            std::string baseName = "MD_vtk";
+            std::shared_ptr<spdlog::logger> logger;
+
             /**
              * @brief set up internal data structures and prepare to plot a particle.
              */
