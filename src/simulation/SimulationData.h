@@ -111,17 +111,17 @@ class SimulationData {
         void setParticlesCopy(ParticleContainer particlesArg);
 
 
-        const std::string &getBaseName() const;
+        std::string getBaseName();
 
         void setBaseName(const std::string &baseName);
 
-    int getWriteFrequency() const;
+        int getWriteFrequency() const;
 
-    void setWriteFrequency(int writeFrequency);
+        void setWriteFrequency(int writeFrequency);
 
-    /**
-     * @brief returns whether or not benchmarking is switched on
-     */
+        /**
+         * @brief returns whether or not benchmarking is switched on
+         */
         bool getBench();
 
 

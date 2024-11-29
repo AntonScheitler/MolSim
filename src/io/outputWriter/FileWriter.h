@@ -11,6 +11,8 @@ namespace outputWriter {
     class FileWriter {
         public:
             FileWriter() = default;
+
+            FileWriter(std::string baseName): baseName(baseName){}
             virtual ~FileWriter() = default;
             /**
              * @brief plot particles and write them to a file 
@@ -20,5 +22,6 @@ namespace outputWriter {
             virtual void plotParticles(ParticleContainer &particles, int iteration) = 0;
         private:
             std::shared_ptr<spdlog::logger> logger;
+            std::string baseName = "MD_vtk";
     };
 } // namespace outputWriter

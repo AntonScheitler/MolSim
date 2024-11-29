@@ -49,7 +49,9 @@ void Simulator::simulate() {
     // prepare for iteration
     double currentTime = simData.getStartTime();
     int iteration = 0;
-    outputWriter::VTKWriter writer;
+    outputWriter::VTKWriter writer(simData.getBaseName());
+    SPDLOG_LOGGER_INFO(logger, "Basenaem: {0}.", simData.getBaseName());
+
 
     before();
     // compute position, force and velocity for all particles each iteration
@@ -57,7 +59,7 @@ void Simulator::simulate() {
         step();
 
         iteration++;
-        if (iteration % 10 == 0 && !simData.getBench()) {
+        if (iteration % simData.getWriteFrequency() == 0 && !simData.getBench()) {
             // write output on every 10th iteration
             writer.plotParticles(simData.getParticles(), iteration);
         }

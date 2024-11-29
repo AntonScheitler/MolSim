@@ -187,7 +187,7 @@ void SimulationData::setSigma(double sigma) {
     SimulationData::sigma = sigma;
 }
 
-const std::string &SimulationData::getBaseName() const {
+std::string SimulationData::getBaseName() {
     return baseName;
 }
 

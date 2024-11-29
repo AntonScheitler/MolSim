@@ -36,11 +36,9 @@ namespace inputReader {
 
         void FileReader::readJson(ParticleContainer &particles, char *filename) {
             JsonFileReader jsonReader;
-            if (simData.getSimType() == comet) {
-                jsonReader.readCometFile(particles, filename);
-            } else {
-                jsonReader.readCollisionFile(particles, filename);
-            }
+
+            jsonReader.readFile(particles, filename);
+
         }
 
         void FileReader::readTxt(ParticleContainer &particles, char *filename) {
