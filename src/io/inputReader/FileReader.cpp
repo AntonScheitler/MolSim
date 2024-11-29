@@ -53,7 +53,7 @@ namespace inputReader {
         void FileReader::readXML(ParticleContainer &particles, char *filename) {
             XMLFileReader xmlFileReader(simData);
 
-            xmlFileReader.readCometFile(particles, filename);
+            xmlFileReader.readFile(particles, filename);
         }
 
 

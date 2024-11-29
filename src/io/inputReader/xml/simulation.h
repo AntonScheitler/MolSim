@@ -625,6 +625,87 @@ class parameters: public ::xml_schema::type
   void
   t_start (const t_start_optional& x);
 
+  // containerType
+  //
+  typedef ::xml_schema::string containerType_type;
+  typedef ::xsd::cxx::tree::optional< containerType_type > containerType_optional;
+  typedef ::xsd::cxx::tree::traits< containerType_type, char > containerType_traits;
+
+  const containerType_optional&
+  containerType () const;
+
+  containerType_optional&
+  containerType ();
+
+  void
+  containerType (const containerType_type& x);
+
+  void
+  containerType (const containerType_optional& x);
+
+  void
+  containerType (::std::unique_ptr< containerType_type > p);
+
+  // domainSize
+  //
+  typedef ::vectorType domainSize_type;
+  typedef ::xsd::cxx::tree::optional< domainSize_type > domainSize_optional;
+  typedef ::xsd::cxx::tree::traits< domainSize_type, char > domainSize_traits;
+
+  const domainSize_optional&
+  domainSize () const;
+
+  domainSize_optional&
+  domainSize ();
+
+  void
+  domainSize (const domainSize_type& x);
+
+  void
+  domainSize (const domainSize_optional& x);
+
+  void
+  domainSize (::std::unique_ptr< domainSize_type > p);
+
+  // cutoff
+  //
+  typedef ::xml_schema::double_ cutoff_type;
+  typedef ::xsd::cxx::tree::optional< cutoff_type > cutoff_optional;
+  typedef ::xsd::cxx::tree::traits< cutoff_type, char, ::xsd::cxx::tree::schema_type::double_ > cutoff_traits;
+
+  const cutoff_optional&
+  cutoff () const;
+
+  cutoff_optional&
+  cutoff ();
+
+  void
+  cutoff (const cutoff_type& x);
+
+  void
+  cutoff (const cutoff_optional& x);
+
+  // boundry
+  //
+  typedef ::xml_schema::string boundry_type;
+  typedef ::xsd::cxx::tree::optional< boundry_type > boundry_optional;
+  typedef ::xsd::cxx::tree::traits< boundry_type, char > boundry_traits;
+
+  const boundry_optional&
+  boundry () const;
+
+  boundry_optional&
+  boundry ();
+
+  void
+  boundry (const boundry_type& x);
+
+  void
+  boundry (const boundry_optional& x);
+
+  void
+  boundry (::std::unique_ptr< boundry_type > p);
+
   // Constructors.
   //
   parameters ();
@@ -660,6 +741,10 @@ class parameters: public ::xml_schema::type
   epsilon_optional epsilon_;
   sigma_optional sigma_;
   t_start_optional t_start_;
+  containerType_optional containerType_;
+  domainSize_optional domainSize_;
+  cutoff_optional cutoff_;
+  boundry_optional boundry_;
 };
 
 class clusters: public ::xml_schema::type

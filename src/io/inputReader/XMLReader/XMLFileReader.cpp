@@ -23,8 +23,7 @@ namespace inputReader {
     }
 
 
-
-    void XMLFileReader::readCometFile(ParticleContainer &particles, char *filename) {
+    void XMLFileReader::readFile(ParticleContainer &particles, char *filename) {
         particles.setAverageVelocity(0);
         std::array<double, 3> x{};
         std::array<double, 3> v{};
@@ -42,8 +41,14 @@ namespace inputReader {
         }
         try {
 
-        std::unique_ptr<simulation> simParser = simulation_(inputFile, xml_schema::flags::dont_validate);
+        std::unique_ptr<simulation> simParser = simulation_(inputFile);
 
+
+
+        //@Fabian, hier sollte der container Type sein. Die values sollten sum oder linked sein.
+        if(simParser->parameters().present() && simParser->parameters()->containerType().present()) {
+            std::string particleContainertype = simParser->parameters()->containerType().get();
+        }
 
 
         ParameterParser::readParams(simData, simParser);
@@ -120,4 +125,3 @@ namespace inputReader {
         }
     }
 }
-

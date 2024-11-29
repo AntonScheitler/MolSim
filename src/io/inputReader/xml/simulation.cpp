@@ -367,6 +367,120 @@ t_start (const t_start_optional& x)
   this->t_start_ = x;
 }
 
+const parameters::containerType_optional& parameters::
+containerType () const
+{
+  return this->containerType_;
+}
+
+parameters::containerType_optional& parameters::
+containerType ()
+{
+  return this->containerType_;
+}
+
+void parameters::
+containerType (const containerType_type& x)
+{
+  this->containerType_.set (x);
+}
+
+void parameters::
+containerType (const containerType_optional& x)
+{
+  this->containerType_ = x;
+}
+
+void parameters::
+containerType (::std::unique_ptr< containerType_type > x)
+{
+  this->containerType_.set (std::move (x));
+}
+
+const parameters::domainSize_optional& parameters::
+domainSize () const
+{
+  return this->domainSize_;
+}
+
+parameters::domainSize_optional& parameters::
+domainSize ()
+{
+  return this->domainSize_;
+}
+
+void parameters::
+domainSize (const domainSize_type& x)
+{
+  this->domainSize_.set (x);
+}
+
+void parameters::
+domainSize (const domainSize_optional& x)
+{
+  this->domainSize_ = x;
+}
+
+void parameters::
+domainSize (::std::unique_ptr< domainSize_type > x)
+{
+  this->domainSize_.set (std::move (x));
+}
+
+const parameters::cutoff_optional& parameters::
+cutoff () const
+{
+  return this->cutoff_;
+}
+
+parameters::cutoff_optional& parameters::
+cutoff ()
+{
+  return this->cutoff_;
+}
+
+void parameters::
+cutoff (const cutoff_type& x)
+{
+  this->cutoff_.set (x);
+}
+
+void parameters::
+cutoff (const cutoff_optional& x)
+{
+  this->cutoff_ = x;
+}
+
+const parameters::boundry_optional& parameters::
+boundry () const
+{
+  return this->boundry_;
+}
+
+parameters::boundry_optional& parameters::
+boundry ()
+{
+  return this->boundry_;
+}
+
+void parameters::
+boundry (const boundry_type& x)
+{
+  this->boundry_.set (x);
+}
+
+void parameters::
+boundry (const boundry_optional& x)
+{
+  this->boundry_ = x;
+}
+
+void parameters::
+boundry (::std::unique_ptr< boundry_type > x)
+{
+  this->boundry_.set (std::move (x));
+}
+
 
 // clusters
 // 
@@ -1116,7 +1230,11 @@ parameters ()
   t_end_ (this),
   epsilon_ (this),
   sigma_ (this),
-  t_start_ (this)
+  t_start_ (this),
+  containerType_ (this),
+  domainSize_ (this),
+  cutoff_ (this),
+  boundry_ (this)
 {
 }
 
@@ -1129,7 +1247,11 @@ parameters (const parameters& x,
   t_end_ (x.t_end_, f, this),
   epsilon_ (x.epsilon_, f, this),
   sigma_ (x.sigma_, f, this),
-  t_start_ (x.t_start_, f, this)
+  t_start_ (x.t_start_, f, this),
+  containerType_ (x.containerType_, f, this),
+  domainSize_ (x.domainSize_, f, this),
+  cutoff_ (x.cutoff_, f, this),
+  boundry_ (x.boundry_, f, this)
 {
 }
 
@@ -1142,7 +1264,11 @@ parameters (const ::xercesc::DOMElement& e,
   t_end_ (this),
   epsilon_ (this),
   sigma_ (this),
-  t_start_ (this)
+  t_start_ (this),
+  containerType_ (this),
+  domainSize_ (this),
+  cutoff_ (this),
+  boundry_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -1216,6 +1342,59 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // containerType
+    //
+    if (n.name () == "containerType" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< containerType_type > r (
+        containerType_traits::create (i, f, this));
+
+      if (!this->containerType_)
+      {
+        this->containerType_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // domainSize
+    //
+    if (n.name () == "domainSize" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< domainSize_type > r (
+        domainSize_traits::create (i, f, this));
+
+      if (!this->domainSize_)
+      {
+        this->domainSize_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // cutoff
+    //
+    if (n.name () == "cutoff" && n.namespace_ ().empty ())
+    {
+      if (!this->cutoff_)
+      {
+        this->cutoff_.set (cutoff_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // boundry
+    //
+    if (n.name () == "boundry" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< boundry_type > r (
+        boundry_traits::create (i, f, this));
+
+      if (!this->boundry_)
+      {
+        this->boundry_.set (::std::move (r));
+        continue;
+      }
+    }
+
     break;
   }
 }
@@ -1238,6 +1417,10 @@ operator= (const parameters& x)
     this->epsilon_ = x.epsilon_;
     this->sigma_ = x.sigma_;
     this->t_start_ = x.t_start_;
+    this->containerType_ = x.containerType_;
+    this->domainSize_ = x.domainSize_;
+    this->cutoff_ = x.cutoff_;
+    this->boundry_ = x.boundry_;
   }
 
   return *this;
@@ -2539,6 +2722,54 @@ operator<< (::xercesc::DOMElement& e, const parameters& i)
         e));
 
     s << ::xml_schema::as_double(*i.t_start ());
+  }
+
+  // containerType
+  //
+  if (i.containerType ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "containerType",
+        e));
+
+    s << *i.containerType ();
+  }
+
+  // domainSize
+  //
+  if (i.domainSize ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "domainSize",
+        e));
+
+    s << *i.domainSize ();
+  }
+
+  // cutoff
+  //
+  if (i.cutoff ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "cutoff",
+        e));
+
+    s << ::xml_schema::as_double(*i.cutoff ());
+  }
+
+  // boundry
+  //
+  if (i.boundry ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "boundry",
+        e));
+
+    s << *i.boundry ();
   }
 }
 
