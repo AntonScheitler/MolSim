@@ -2,7 +2,7 @@
 #include "computations/forces/ForceComputations.h"
 #include "computations/positions/PositionComputations.h"
 #include "computations/velocities/VelocityComputations.h"
-#include "outputWriter/VTKWriter.h"
+#include "io/outputWriter/VTKWriter.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/spdlog.h"
 #include "particle/container/ParticleContainer.h"
@@ -124,14 +124,16 @@ void Simulator::runSimulationLoop() {
     // prepare for iteration
     double currentTime = simData.getStartTime();
     int iteration = 0;
-    outputWriter::VTKWriter writer;
+    outputWriter::VTKWriter writer(simData.getBaseName());
+    SPDLOG_LOGGER_INFO(logger, "Basenaem: {0}.", simData.getBaseName());
+
 
     before();
     // compute position, force and velocity for all particles each iteration
     while (currentTime < simData.getEndTime()) {
         step();
         iteration++;
-        if (!simData.getBench() && iteration % 10 == 0) {
+        if (iteration % simData.getWriteFrequency() == 0 && !simData.getBench()) {
             // write output on every 10th iteration
             writer.plotParticles(simData.getParticles(), iteration);
         }

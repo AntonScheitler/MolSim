@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+
+    <xsd:complexType name="vectorType">
+        <xsd:sequence>
+            <xsd:element name="x" type="xsd:double"/>
+            <xsd:element name="y" type="xsd:double"/>
+            <xsd:element name="z" type="xsd:double"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+
+
+    <xsd:element name="simulation">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="output" minOccurs="0">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="writeFrequency" type="xsd:int" minOccurs="0"/>
+                            <xsd:element name="baseName" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+                <xsd:element name="parameters" minOccurs="0">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="delta_t" type="xsd:double" minOccurs="0"/>
+                            <xsd:element name="t_end" type="xsd:double" minOccurs="0"/>
+                            <xsd:element name="epsilon" type="xsd:double" minOccurs="0"/>
+                            <xsd:element name="sigma" type="xsd:double" minOccurs="0"/>
+                            <xsd:element name="t_start" type="xsd:double" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+
+
+                <xsd:element name="clusters">
+                    <xsd:complexType>
+                        <xsd:sequence>
+
+                            <xsd:element name="particle" maxOccurs="unbounded" minOccurs="0">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="coordinate" type="vectorType"/>
+                                        <xsd:element name="velocity" type="vectorType"/>
+                                        <xsd:element name="mass" type="xsd:double"/>
+
+
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+
+
+                            <xsd:element name="disc" maxOccurs="unbounded" minOccurs="0">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="center" type="vectorType"/>
+
+                                        <xsd:element name="velocity" type="vectorType"/>
+
+                                        <xsd:element name="mass" type="xsd:double"/>
+                                        <xsd:element name="meshWidth" type="xsd:double"/>
+                                        <xsd:element name="radius" type="xsd:double"/>
+
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+
+
+                            <xsd:element name="cuboid" maxOccurs="unbounded" minOccurs="0">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="cornerCoordinates" type="vectorType"/>
+
+                                        <xsd:element name="dimensions" type="vectorType"/>
+
+                                        <xsd:element name="velocity" type="vectorType"/>
+
+                                        <xsd:element name="meshWidth" type="xsd:double"/>
+                                        <xsd:element name="mass" type="xsd:double"/>
+                                        <xsd:element name="brownianMotion" type="xsd:double"/>
+
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

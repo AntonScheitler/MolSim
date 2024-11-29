@@ -3,10 +3,8 @@
 #include <simulation/SimulationData.h>
 #include <getopt.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
-#include <inputReader/FileReader.h>
-#include <particle/container/ParticleContainerDirectSum.h>
 #include <particle/container/ParticleContainer.h>
-#include <type_traits>
+#include <io/inputReader/FileReader.h>
 
 SimulationData::SimulationData(ParticleContainer& particlesArg) : particles(particlesArg) {
     // set default values
@@ -17,6 +15,8 @@ SimulationData::SimulationData(ParticleContainer& particlesArg) : particles(part
     epsilon = 5;
     sigma = 1;
     bench = false;
+    baseName = "MD_vtk";
+    writeFrequency = 10;
 }
 
 int SimulationData::parseOptions(int argc, char* argsv[]) {
@@ -166,3 +166,38 @@ void SimulationData::setParticlesCopy(const ParticleContainer& particlesArg) {
 }
 
 
+void SimulationData::setEndTime(double endTime) {
+    SimulationData::endTime = endTime;
+}
+
+void SimulationData::setStartTime(double startTime) {
+    SimulationData::startTime = startTime;
+}
+
+void SimulationData::setDeltaT(double deltaT) {
+    SimulationData::deltaT = deltaT;
+}
+
+void SimulationData::setEpsilon(double epsilon) {
+    SimulationData::epsilon = epsilon;
+}
+
+void SimulationData::setSigma(double sigma) {
+    SimulationData::sigma = sigma;
+}
+
+std::string SimulationData::getBaseName() {
+    return baseName;
+}
+
+void SimulationData::setBaseName(const std::string &baseName) {
+    SimulationData::baseName = baseName;
+}
+
+int SimulationData::getWriteFrequency() const {
+    return writeFrequency;
+}
+
+void SimulationData::setWriteFrequency(int writeFrequency) {
+    SimulationData::writeFrequency = writeFrequency;
+}

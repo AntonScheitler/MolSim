@@ -43,23 +43,60 @@ class SimulationData {
         /**
          * @brief returns the type of the simulation
          */
+
         SimulationType getSimType();
+
+        /**
+         * @brief set simulation type
+         * @param startTime new start time
+         */
+        void setStartTime(double startTime);
+
         /**
          * @brief returns the start time of the simulation
          */
         double getStartTime();
+
+        /**
+         * @brief set simulation type
+         * @param endTime new end time
+         */
+        void setEndTime(double endTime);
+
         /**
          * @brief returns the end time of the simulation
          */
         double getEndTime();
+
+        /**
+         * @brief set simulation type
+         * @param deltaT new deltaT
+         */
+        void setDeltaT(double deltaT);
+
         /**
          * @brief returns the time step size of the simulation
          */
         double getDeltaT();
+
+
+        /**
+         * @brief set simulation type
+         * @param epsilon new epsilon
+         */
+        void setEpsilon(double epsilon);
+
         /**
          * @brief returns the time step size of the simulation
          */
         double getEpsilon();
+
+        /**
+         * @brief set simulation type
+         * @param sigma new sigma
+         */
+        void setSigma(double sigma);
+
         /**
          * @brief returns the time step size of the simulation
          */
@@ -78,10 +115,21 @@ class SimulationData {
 
         void setParticlesCopy(const ParticleContainer& particlesArg);
 
+
+        std::string getBaseName();
+
+        void setBaseName(const std::string &baseName);
+
+        int getWriteFrequency() const;
+
+        void setWriteFrequency(int writeFrequency);
+
         /**
          * @brief returns whether or not benchmarking is switched on
          */
         bool getBench();
+
+
     private:
         SimulationType simType;
         double startTime;
@@ -90,6 +138,8 @@ class SimulationData {
         double sigma;
         double epsilon;
         bool bench;
+        int writeFrequency;
+        std::string baseName;
         spdlog::level::level_enum level;
         ParticleContainer& particles;
 };
