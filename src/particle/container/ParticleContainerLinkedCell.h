@@ -26,26 +26,10 @@ public:
         double getAverageVelocity() override;
         void setAverageVelocity(double averageVelocityArg) override;
         Particle &getParticle(int index) override;
-        /**
-         * @brief provides an iterator for iterating through all particles when using the linked cell algorithm
-         * @return the particle iterator
-         */
-        ParticleIteratorLinkedCell begin();
-        /**
-         * @brief provides an iterator pointing to the end of the particles when using the linked cell algorithm
-         * @return the end of the particle iterator
-         */
-        ParticleIteratorLinkedCell end();
-        /**
-         * @brief provides an iterator for iterating through pairs of particles when using the linked cell algorithm
-         * @return the pair particle iterator
-         */
-        PairParticleIteratorLinkedCell beginPairParticle();
-        /**
-         * @brief provides an iterator pointing to the end of the pairs when using the linked cell algorithm
-         * @return the end of the pair particle iterator
-         */
-        PairParticleIteratorLinkedCell endPairParticle();
+        std::unique_ptr<ParticleIterator> begin() override;
+        std::unique_ptr<ParticleIterator> end() override;
+        std::unique_ptr<PairParticleIterator> beginPairParticle() override;
+        std::unique_ptr<PairParticleIterator> endPairParticle() override;
 
         /**
          * @brief provides an iterator for iterating through pairs of boundary particles and their ghosts. The first

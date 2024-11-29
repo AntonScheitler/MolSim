@@ -6,20 +6,22 @@
 #include "spdlogConfig.h"
 
 void VelocityComputations::stoermerVerlet(ParticleContainer &particles, double deltaT) {
-    for (Particle &planet: particles) {
+    for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
+        Particle particle = **it;
         // velocity calculation based on the Stoermer-Verlet formula
-        double coefficient = deltaT / (2 * planet.getM());
+        double coefficient = deltaT / (2 * particle.getM());
         std::array<double, 3> deltaV = ArrayUtils::elementWiseScalarOp(coefficient,
-                                                                       ArrayUtils::elementWisePairOp(planet.getF(),
-                                                                                                     planet.getOldF(),
+                                                                       ArrayUtils::elementWisePairOp(particle.getF(),
+                                                                                                     particle.getOldF(),
                                                                                                      std::plus<>()),
                                                                        std::multiplies<>());
-        planet.setV(ArrayUtils::elementWisePairOp(planet.getV(), deltaV, std::plus<>()));
+        particle.setV(ArrayUtils::elementWisePairOp(particle.getV(), deltaV, std::plus<>()));
     }
 }
 
 void VelocityComputations::applyBrownianMotion2D(ParticleContainer &particles, double averageVelocity) {
-    for (Particle &particle: particles) {
+    for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
+        Particle particle = **it;
         std::array<double, 3> maxBoltzVelocity = maxwellBoltzmannDistributedVelocity(averageVelocity, 3);
         maxBoltzVelocity[2] = 0;
         SPDLOG_DEBUG("maxBoltzVelocity: {0}, {1}, {2}", maxBoltzVelocity[0], maxBoltzVelocity[1], maxBoltzVelocity[2]);
@@ -29,7 +31,8 @@ void VelocityComputations::applyBrownianMotion2D(ParticleContainer &particles, d
 }
 
 void VelocityComputations::applyBrownianMotion3D(ParticleContainer &particles, double averageVelocity) {
-    for (Particle &particle: particles) {
+    for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
+        Particle particle = **it;
         std::array<double, 3> maxBoltzVelocity = maxwellBoltzmannDistributedVelocity(averageVelocity, 3);
         SPDLOG_DEBUG("maxBoltzVelocity: {0}, {1}, {2}", maxBoltzVelocity[0], maxBoltzVelocity[1], maxBoltzVelocity[2]);
         // add the velocity from the brownian motion to the initial velocity

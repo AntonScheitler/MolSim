@@ -1,5 +1,7 @@
+#include <memory>
 #include <vector>
 #include "../Particle.h"
+#include "particle/iterator/pairParticleIterator/PairParticleIterator.h"
 #include "particle/iterator/particleIterator/ParticleIteratorDirectSum.h"
 #include <particle/iterator/pairParticleIterator/PairParticleIteratorDirectSum.h>
 #include <particle/container/ParticleContainer.h>
@@ -30,26 +32,18 @@ class ParticleContainerDirectSum : public ParticleContainer {
         double getAverageVelocity() override;
         void setAverageVelocity(double averageVelocityArg) override;
         Particle& getParticle(int index) override;
-        /**
-         * @brief provides an iterator for iterating through all particles
-         * @return the particle iterator
-         */
-        ParticleIteratorDirectSum begin();
-        /**
-         * @brief provides an iterator pointing to the end of the particles
-         * @return the end of the particle iterator
-         */
-        ParticleIteratorDirectSum end();
+        std::unique_ptr<ParticleIterator> begin() override;
+        std::unique_ptr<ParticleIterator> end() override;
         /**
          * @brief provides an iterator for iterating through pairs of particles
          * @return the pair particle iterator
          */
-        PairParticleIteratorDirectSum beginPairParticle();
+        std::unique_ptr<PairParticleIterator> beginPairParticle() override;
         /**
          * @brief provides an iterator pointing to the end of the pairs
          * @return the end of the pair particle iterator
          */
-        PairParticleIteratorDirectSum endPairParticle();
+        std::unique_ptr<PairParticleIterator> endPairParticle() override;
 
     protected:
         /**

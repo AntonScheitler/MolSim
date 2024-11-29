@@ -7,8 +7,8 @@
 #include "spdlogConfig.h"
 
 void ForceComputations::computeGravity(ParticleContainer &particles) {
-    for (auto it = particles.beginPairParticle(); it != particles.endPairParticle(); ++it) {
-        std::pair<Particle &, Particle &> pair = *it;
+    for (auto it = particles.beginPairParticle(); *it != *(particles.endPairParticle()); it->operator++()) {
+        std::pair<Particle &, Particle &> pair = **it;
         std::array<double, 3> newForce = {0, 0, 0};
 
         // gravity computation according to the formula
@@ -30,8 +30,8 @@ void ForceComputations::computeGravity(ParticleContainer &particles) {
 
 void ForceComputations::computeLennardJonesPotential(ParticleContainer &particles, double epsilon, double sigma) {
     // iterate through all pairs of particles and calculate lennard-jones potential
-    for (auto it = particles.beginPairParticle(); it != particles.endPairParticle(); ++it) {
-        std::pair<Particle &, Particle &> pair = *it;
+    for (auto it = particles.beginPairParticle(); *it != *(particles.endPairParticle()); it->operator++()) {
+        std::pair<Particle &, Particle &> pair = **it;
 
         std::array<double, 3> distanceVector = ArrayUtils::elementWisePairOp(pair.first.getX(), pair.second.getX(), std::minus<>());
         double distance = ArrayUtils::L2Norm(distanceVector);
@@ -47,11 +47,9 @@ void ForceComputations::computeLennardJonesPotential(ParticleContainer &particle
 }
 
 void ForceComputations::resetForces(ParticleContainer &particles) {
-    for (Particle &particle: particles) {
+    for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
+        Particle particle = **it;
         particle.setOldF(particle.getF());
         particle.setF({0, 0, 0});
     }
 }
-
-
-

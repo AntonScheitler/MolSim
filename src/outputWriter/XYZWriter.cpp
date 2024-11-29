@@ -24,7 +24,8 @@ namespace outputWriter {
             "file format doku."
             << std::endl;
 
-        for (auto &p: particles) {
+        for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
+            Particle p = **it;
             std::array<double, 3> x = p.getX();
             file << "Ar ";
             file.setf(std::ios_base::showpoint);

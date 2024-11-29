@@ -1,22 +1,7 @@
 #include "particle/iterator/pairParticleIterator/PairParticleIterator.h"
 #include <array>
 #include <cstddef>
-#include <functional>
 #include <particle/iterator/pairParticleIterator/PairParticleIteratorLinkedCell.h>
-
-struct ParticleHash {
-    size_t operator()(const Particle& p) const {
-        return (std::hash<double>()(p.getX()[0]) << 6) ^
-            (std::hash<double>()(p.getX()[1]) << 4) ^
-            (std::hash<double>()(p.getX()[2]) << 2);
-    }
-};
-
-struct ParticleEqual {
-    bool operator()(const Particle& p1, const Particle& p2) const {
-        return p1 == p2;
-    }
-};
 
 PairParticleIteratorLinkedCell::PairParticleIteratorLinkedCell(std::vector<Cell>::iterator it, std::vector<Cell>::iterator end, std::vector<Cell>& meshArg, std::array<size_t, 3> numCellsArg) {
     completedPairs.clear();

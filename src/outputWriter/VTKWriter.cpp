@@ -23,7 +23,8 @@ namespace outputWriter {
     void VTKWriter::plotParticles(ParticleContainer &particles, int iteration) {
         std::string outName("MD_vtk");
         initializeOutput(particles.size());
-        for (Particle &particle: particles) {
+        for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
+            Particle particle = **it;
             plotParticle(particle);
         }
         writeFile(outName, iteration);

@@ -161,9 +161,7 @@ void SimulationData::setSimType(SimulationType s) {
     this->simType = s;
 }
 
-template <typename T>
-typename std::enable_if<std::is_base_of<ParticleContainer, T>::value, void>::type
-SimulationData::setParticlesCopy(const T& particlesArg) {
+void SimulationData::setParticlesCopy(const ParticleContainer& particlesArg) {
     particles = particlesArg;
 }
 

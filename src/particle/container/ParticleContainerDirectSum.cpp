@@ -1,5 +1,9 @@
 #include "particle/Particle.h"
+#include "particle/iterator/pairParticleIterator/PairParticleIterator.h"
+#include "particle/iterator/particleIterator/ParticleIterator.h"
 #include "particle/iterator/particleIterator/ParticleIteratorDirectSum.h"
+#include <algorithm>
+#include <memory>
 #include <particle/container/ParticleContainerDirectSum.h>
 #include <vector>
 #include <particle/container/ParticleContainerDirectSum.h>
@@ -36,25 +40,25 @@ void ParticleContainerDirectSum::setAverageVelocity(double averageVelocityArg) {
 }
 
 // single particle iterator
-ParticleIteratorDirectSum ParticleContainerDirectSum::begin() {
-    return particles.begin();
+std::unique_ptr<ParticleIterator> ParticleContainerDirectSum::begin() {
+    return std::unique_ptr<ParticleIterator>(new ParticleIteratorDirectSum(particles.begin()));
 }
 
-ParticleIteratorDirectSum ParticleContainerDirectSum::end() {
-    return particles.end();
+std::unique_ptr<ParticleIterator> ParticleContainerDirectSum::end() {
+    return std::unique_ptr<ParticleIterator>(new ParticleIteratorDirectSum(particles.end()));
 }
 
 // pair particle iterator
-PairParticleIteratorDirectSum ParticleContainerDirectSum::beginPairParticle() {
+std::unique_ptr<PairParticleIterator> ParticleContainerDirectSum::beginPairParticle() {
     if (particles.empty()) {
-        return {particles.begin(), particles.begin(), particles.end()};
+        return std::unique_ptr<PairParticleIterator>(new PairParticleIteratorDirectSum(particles.begin(), particles.begin(), particles.end()));
     }
-    return {particles.begin(), ++(particles.begin()), particles.end()};
+    return std::unique_ptr<PairParticleIterator>(new PairParticleIteratorDirectSum(particles.begin(), ++(particles.begin()), particles.end()));
 }
 
-PairParticleIteratorDirectSum ParticleContainerDirectSum::endPairParticle() {
+std::unique_ptr<PairParticleIterator> ParticleContainerDirectSum::endPairParticle() {
     if (particles.empty()) {
-        return {particles.end(), particles.end(), particles.end()};
+        return std::unique_ptr<PairParticleIterator>(new PairParticleIteratorDirectSum(particles.end(), particles.end(), particles.end()));
     }
-    return {--(particles.end()), particles.end(), particles.end()};
+    return std::unique_ptr<PairParticleIterator>(new PairParticleIteratorDirectSum(--(particles.end()), particles.end(), particles.end()));
 }

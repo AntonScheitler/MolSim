@@ -84,14 +84,20 @@ class PairParticleIteratorLinkedCell: public PairParticleIterator {
          * stored in a hashset
          */
         struct ParticleHash {
-            size_t operator()(const Particle& p) const;
+            size_t operator()(const Particle& p) const {
+                return (std::hash<double>()(p.getX()[0]) << 6) ^
+                    (std::hash<double>()(p.getX()[1]) << 4) ^
+                    (std::hash<double>()(p.getX()[2]) << 2);
+            }
         };
         /**
          * @brief struct for comparing particles. this is necessary because particles that have been iterated through are
          * stored in a hashset
          */
         struct ParticleEqual {
-            bool operator()(const Particle& p1, const Particle& p2) const;
+            bool operator()(const Particle& p1, const Particle& p2) const {
+                return p1 == p2;
+            }
         };
         /**
          * @brief a set containing all particles for which all paris have been iterated through

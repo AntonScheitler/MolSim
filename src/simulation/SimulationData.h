@@ -73,10 +73,10 @@ class SimulationData {
          * @brief sets particles to a copy of particlesArg
          * @param particlesArg the particles to copy
          */
-        template <typename T>
-        typename std::enable_if<std::is_base_of<ParticleContainer, T>::value, void>::type
+        //template <typename T>
+        //typename std::enable_if<std::is_base_of<ParticleContainer, T>::value, void>::type
 
-         setParticlesCopy(const T& particlesArg);
+        void setParticlesCopy(const ParticleContainer& particlesArg);
 
         /**
          * @brief returns whether or not benchmarking is switched on

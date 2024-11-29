@@ -1,4 +1,7 @@
 #include "../Particle.h"
+#include "particle/iterator/pairParticleIterator/PairParticleIterator.h"
+#include "particle/iterator/particleIterator/ParticleIterator.h"
+#include <memory>
 
 #pragma once
 
@@ -29,4 +32,10 @@ public:
      */
     virtual void setAverageVelocity(double averageVelocityArg) = 0;
     virtual Particle& getParticle(int index) = 0;
+
+    virtual std::unique_ptr<ParticleIterator> begin() = 0;
+    virtual std::unique_ptr<ParticleIterator> end() = 0;
+
+    virtual std::unique_ptr<PairParticleIterator> beginPairParticle() = 0;
+    virtual std::unique_ptr<PairParticleIterator> endPairParticle() = 0;
 };

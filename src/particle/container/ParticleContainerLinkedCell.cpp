@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <particle/container/ParticleContainerLinkedCell.h>
+#include "particle/iterator/pairParticleIterator/PairParticleIteratorLinkedCell.h"
 #include "particle/iterator/particleIterator/ParticleIteratorLinkedCell.h"
 #include <utils/ArrayUtils.h>
 #include "spdlogConfig.h"
@@ -52,14 +53,6 @@ int ParticleContainerLinkedCell::continuousCoordsToIndex( std::array<double, 3> 
     return discreteCoordsToIndex(std::array<int, 3>{(int)floor(approxDiscreteCoords[0]), (int)floor(approxDiscreteCoords[1]), (int)floor(approxDiscreteCoords[2])});
 }
 
-ParticleIteratorLinkedCell ParticleContainerLinkedCell::begin() {
-    return ParticleIteratorLinkedCell(mesh.begin(), mesh.end());
-}
-
-ParticleIteratorLinkedCell ParticleContainerLinkedCell::end() {
-    return ParticleIteratorLinkedCell(mesh.end(), mesh.end());
-}
-
 std::vector<Cell>& ParticleContainerLinkedCell::getMesh() {
     return mesh;
 }
@@ -69,12 +62,20 @@ Cell& ParticleContainerLinkedCell::getCell(int idx) {
     return mesh[idx];
 }
 
-PairParticleIteratorLinkedCell ParticleContainerLinkedCell::beginPairParticle() {
-    return {mesh.begin(), mesh.end(), mesh, numCells};
+std::unique_ptr<ParticleIterator> ParticleContainerLinkedCell::begin() {
+    return std::unique_ptr<ParticleIterator>(new ParticleIteratorLinkedCell(mesh.begin(), mesh.end()));
 }
 
-PairParticleIteratorLinkedCell ParticleContainerLinkedCell::endPairParticle() {
-    return {mesh.end(), mesh.end(), mesh, numCells};
+std::unique_ptr<ParticleIterator> ParticleContainerLinkedCell::end() {
+    return std::unique_ptr<ParticleIterator>(new ParticleIteratorLinkedCell(mesh.end(), mesh.end()));
+}
+
+std::unique_ptr<PairParticleIterator> ParticleContainerLinkedCell::beginPairParticle() {
+    return std::unique_ptr<PairParticleIterator>(new PairParticleIteratorLinkedCell(mesh.begin(), mesh.end(), mesh, numCells));
+}
+
+std::unique_ptr<PairParticleIterator> ParticleContainerLinkedCell::endPairParticle() {
+    return std::unique_ptr<PairParticleIterator>(new PairParticleIteratorLinkedCell(mesh.end(), mesh.end(), mesh, numCells));
 }
 
 PairParticleIteratorBoundaryNHalo ParticleContainerLinkedCell::beginPairGhost() {
@@ -132,6 +133,6 @@ void ParticleContainerLinkedCell::setAverageVelocity(double averageVelocityArg) 
     this->averageVelocity = averageVelocityArg;
 }
 
-Particle &ParticleContainerLinkedCell::getParticle(int index) {
-    // TODO
+Particle& ParticleContainerLinkedCell::getParticle(int index) {
+    return mesh[0].getParticles()[0];
 }

@@ -57,7 +57,7 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
 
                 ParticleContainerLinkedCell* container = dynamic_cast<ParticleContainerLinkedCell*>(&simData.getParticles());
                 if(container) {
-                    container->correctAllParticlesCell();
+                    container->correctAllParticleIndecies();
                 }
 
                 ForceComputations::resetForces(simData.getParticles());
