@@ -25,12 +25,10 @@ class ParticleContainerDirectSum : public ParticleContainer {
          * @param particlesArg the particle vector to be wrapped
          * @return the object of the ParticleContainer
          */
-        explicit ParticleContainerDirectSum(const std::vector<Particle> &particlesArg, double averageVelocityArg);
+        explicit ParticleContainerDirectSum(const std::vector<Particle> &particlesArg);
 
         void addParticle(const Particle &particle) override;
         int size() override;
-        double getAverageVelocity() override;
-        void setAverageVelocity(double averageVelocityArg) override;
         Particle& getParticle(int index);
         std::unique_ptr<ParticleIterator> begin() override;
         std::unique_ptr<ParticleIterator> end() override;
@@ -50,8 +48,8 @@ class ParticleContainerDirectSum : public ParticleContainer {
          * @brief the particles wrapped by this container
          */
         std::vector<Particle> particles;
-        /**
-         * @brief the average brownian velocity of the particles
-         */
-        double averageVelocity;
+//        /**
+//         * @brief the average brownian velocity of the particles
+//         */
+//        double averageVelocity;
 };

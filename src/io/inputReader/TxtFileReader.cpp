@@ -7,7 +7,7 @@
 
 namespace inputReader {
 
-    TxtFileReader::TxtFileReader() {
+    TxtFileReader::TxtFileReader(SimulationData& simulationDataArg) : simData(simulationDataArg) {
         this->logger = spdlog::stdout_color_st("TxtFileReader");
         SPDLOG_LOGGER_DEBUG(logger, "Initialized TxtFileReader");
     }
@@ -17,7 +17,7 @@ namespace inputReader {
 
 
     void TxtFileReader::readCometFile(ParticleContainer &particles, char *filename) {
-        particles.setAverageVelocity(0);
+        simData.setAverageVelocity(0);
         std::array<double, 3> x{};
         std::array<double, 3> v{};
         double m;
@@ -113,7 +113,7 @@ namespace inputReader {
                     datastream >> dj;
                 }
                 datastream >> bm;
-                particles.setAverageVelocity(bm);
+                simData.setAverageVelocity(bm);
 
                 ParticleGenerator::generateCuboid(particles, x, v, d, m, h, type);
 

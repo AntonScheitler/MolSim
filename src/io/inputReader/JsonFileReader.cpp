@@ -9,7 +9,7 @@ using json = nlohmann::json;
 
 namespace inputReader {
 
-    JsonFileReader::JsonFileReader() {
+    JsonFileReader::JsonFileReader(SimulationData &simDataArg) : simData(simDataArg) {
         this->logger = spdlog::stdout_color_st("JsonFileReader");
         SPDLOG_LOGGER_DEBUG(logger, "Initialized JsonFileReader");
     }
@@ -19,7 +19,7 @@ namespace inputReader {
     }
 
     void JsonFileReader::readFile(ParticleContainer &particles, char *filename) {
-        particles.setAverageVelocity(0);
+        simData.setAverageVelocity(0);
         std::array<double, 3> x{};
         std::array<double, 3> v{};
         std::array<int, 3> d{};
@@ -28,15 +28,13 @@ namespace inputReader {
         double bm;
         int type = 0;
 
-
-
         SPDLOG_LOGGER_DEBUG(logger, "Reading json file");
 
         std::ifstream inputFile(filename);
         json data = json::parse(inputFile);
 
         if (inputFile.is_open()) {
-            for (const auto& planet : data["planets"]) {
+            for (const auto &planet: data["planets"]) {
 
                 x = planet["coordinates"].get<std::array<double, 3>>();
                 v = planet["velocity"].get<std::array<double, 3>>();
@@ -46,14 +44,14 @@ namespace inputReader {
                 SPDLOG_LOGGER_DEBUG(logger, "adding particle at coords {0}, {1}, {2}", x[0], x[1], x[2]);
             }
 
-            for (const auto& cuboid : data["cuboids"]) {
+            for (const auto &cuboid: data["cuboids"]) {
                 x = cuboid["cornerCoordinates"].get<std::array<double, 3>>();
                 v = cuboid["velocity"].get<std::array<double, 3>>();
                 d = cuboid["dimensions"].get<std::array<int, 3>>();
                 m = cuboid["mass"].get<double>();
                 h = cuboid["meshWidth"].get<double>();
                 bm = cuboid["brownianMotion"].get<double>();
-                particles.setAverageVelocity(bm);
+                simData.setAverageVelocity(bm);
 
                 ParticleGenerator::generateCuboid(particles, x, v, d, m, h, type);
 
@@ -65,9 +63,6 @@ namespace inputReader {
             exit(-1);
         }
     }
-
-
-
 
 
 } // namespace inputReader

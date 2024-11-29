@@ -1,4 +1,3 @@
-
 #include "simulation/SimulationData.h"
 #include "io/inputReader/xml/simulation.h"
 

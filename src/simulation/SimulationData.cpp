@@ -201,3 +201,11 @@ int SimulationData::getWriteFrequency() const {
 void SimulationData::setWriteFrequency(int writeFrequency) {
     SimulationData::writeFrequency = writeFrequency;
 }
+
+void SimulationData::setAverageVelocity(double averageVelocityArg) {
+    this->averageVelocity = averageVelocityArg;
+}
+
+double SimulationData::getAverageVelocity() {
+    return averageVelocity;
+}

@@ -8,17 +8,14 @@
 
 ParticleContainerDirectSum::ParticleContainerDirectSum() {
     particles = std::vector<Particle>{};
-    averageVelocity = 0.1;
 }
 
-ParticleContainerDirectSum::ParticleContainerDirectSum(const std::vector<Particle> &particlesArg, double averageVelocityArg=0.1) {
+ParticleContainerDirectSum::ParticleContainerDirectSum(const std::vector<Particle> &particlesArg) {
     particles = particlesArg;
-    averageVelocity = averageVelocityArg;
 }
 
 void ParticleContainerDirectSum::addParticle(const Particle &particle) {
     particles.push_back(particle);
-    averageVelocity = 0.1;
 }
 
 int ParticleContainerDirectSum::size() {
@@ -27,14 +24,6 @@ int ParticleContainerDirectSum::size() {
 
 Particle& ParticleContainerDirectSum::getParticle(int index) {
     return particles.at(index);
-}
-
-double ParticleContainerDirectSum::getAverageVelocity() {
-    return averageVelocity;
-}
-
-void ParticleContainerDirectSum::setAverageVelocity(double averageVelocityArg) {
-    averageVelocity = averageVelocityArg;
 }
 
 // single particle iterator

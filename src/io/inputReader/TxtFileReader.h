@@ -1,5 +1,6 @@
 #include "particle/container/ParticleContainer.h"
 #include "spdlogConfig.h"
+#include "../../simulation/simulationData.h"
 
 namespace inputReader {
     /**
@@ -10,7 +11,7 @@ namespace inputReader {
             /**
              * @brief creates an instance of the TxtFileReader
              */
-            TxtFileReader();
+            TxtFileReader(SimulationData& simulationDataArg);
             /**
              * @brief destructs an instance of the TxtFileReader
              */
@@ -33,5 +34,6 @@ namespace inputReader {
              * @brief a specific logger for the TxtFileReader
              */
             std::shared_ptr<spdlog::logger> logger;
+            SimulationData simData;
     };
 } // namespace inputReader

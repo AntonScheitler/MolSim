@@ -1,15 +1,12 @@
-
-
 #include "ParameterParser.h"
 #include "io/inputReader/xml/simulation.h"
 #include "simulation/SimulationData.h"
 
 
-
 namespace ParameterParser {
 
     void readParams(SimulationData &simData, const std::unique_ptr<simulation> &xmlParser) {
-        if(xmlParser->parameters().present()) {
+        if (xmlParser->parameters().present()) {
             if (xmlParser->parameters()->delta_t().present()) {
                 simData.setDeltaT(xmlParser->parameters()->delta_t().get());
             }
@@ -33,5 +30,4 @@ namespace ParameterParser {
             }
         }
     }
-
 }

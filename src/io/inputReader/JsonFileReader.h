@@ -1,5 +1,6 @@
 #include "particle/container/ParticleContainer.h"
 #include "spdlogConfig.h"
+#include "../../simulation/simulationData.h"
 
 
 namespace inputReader {
@@ -11,7 +12,7 @@ namespace inputReader {
         /**
          * @brief creates an instance of the JsonFileReader
          */
-        JsonFileReader();
+        JsonFileReader(SimulationData& simDataArg);
         /**
          * @brief destructs an instance of the JsonFileReader
          */
@@ -35,5 +36,6 @@ namespace inputReader {
          * @brief a specific logger for the JsonFileReader
          */
         std::shared_ptr<spdlog::logger> logger;
+        SimulationData simData;
     };
 } // namespace inputReader

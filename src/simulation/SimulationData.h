@@ -129,6 +129,10 @@ class SimulationData {
          */
         bool getBench();
 
+        void setAverageVelocity(double averageVelocityArg);
+
+        double getAverageVelocity();
+
 
     private:
         SimulationType simType;
@@ -142,4 +146,5 @@ class SimulationData {
         std::string baseName;
         spdlog::level::level_enum level;
         ParticleContainer& particles;
+        double averageVelocity;
 };

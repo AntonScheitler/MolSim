@@ -31,7 +31,7 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
         case collision:
             before = [this]() {
                 VelocityComputations::applyBrownianMotion2D(simData.getParticles(),
-                                                            simData.getParticles().getAverageVelocity());
+                                                            simData.getAverageVelocity());
             };
             step = [this]() {
                 PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
@@ -49,7 +49,7 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
         case collisionLinkedCell:
             before = [this]() {
                 VelocityComputations::applyBrownianMotion2D(simData.getParticles(),
-                                                            simData.getParticles().getAverageVelocity());
+                                                            simData.getAverageVelocity());
             };
             step = [this]() {
                 PositionComputations::resetPositions(simData.getParticles());
@@ -125,7 +125,7 @@ void Simulator::runSimulationLoop() {
     double currentTime = simData.getStartTime();
     int iteration = 0;
     outputWriter::VTKWriter writer(simData.getBaseName());
-    SPDLOG_LOGGER_INFO(logger, "Basenaem: {0}.", simData.getBaseName());
+    SPDLOG_LOGGER_INFO(logger, "Basename: {0}.", simData.getBaseName());
 
 
     before();

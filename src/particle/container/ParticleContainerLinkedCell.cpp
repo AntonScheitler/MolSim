@@ -121,11 +121,4 @@ void ParticleContainerLinkedCell::correctAllParticleIndecies() {
     }
 }
 
-double ParticleContainerLinkedCell::getAverageVelocity() {
-    return averageVelocity;
-}
-
-void ParticleContainerLinkedCell::setAverageVelocity(double averageVelocityArg) {
-    this->averageVelocity = averageVelocityArg;
-}
 

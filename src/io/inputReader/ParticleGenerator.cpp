@@ -1,14 +1,12 @@
-
+#include "../../particle/container/ParticleContainer.h"
 #include "ParticleGenerator.h"
-
-
-
 
 namespace inputReader {
 
 
-     void ParticleGenerator::generateCuboid(ParticleContainer &particles, std::array<double, 3> x, std::array<double, 3> v,
-                                  std::array<int, 3> d, double m, double h, int type) {
+    void
+    ParticleGenerator::generateCuboid(ParticleContainer &particles, std::array<double, 3> x, std::array<double, 3> v,
+                                      std::array<int, 3> d, double m, double h, int type) {
         std::array<double, 3> tempx{};
         for (int j = 0; j < d[0]; ++j) {
             tempx[0] = j * h + x[0];
@@ -39,5 +37,5 @@ namespace inputReader {
         }
 
 
-     }
+    }
 }

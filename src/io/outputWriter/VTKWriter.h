@@ -9,7 +9,7 @@
 
 #include "XYZWriter.h"
 #include "vtk-unstructured.h"
-#include "particle/ParticleContainer.h"
+#include <particle/container/ParticleContainer.h>
 
 namespace outputWriter {
     /**
@@ -26,11 +26,9 @@ namespace outputWriter {
             void plotParticles(ParticleContainer &particles, int iteration);
 
         private:
-<<<<<<< HEAD:src/outputWriter/VTKWriter.h
-=======
+
             std::string baseName = "MD_vtk";
             std::shared_ptr<spdlog::logger> logger;
->>>>>>> assignment3/xml:src/io/outputWriter/VTKWriter.h
             /**
              * @brief set up internal data structures and prepare to plot a particle.
              */

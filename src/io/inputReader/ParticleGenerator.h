@@ -1,5 +1,3 @@
-#include "particle/ParticleContainer.h"
-
 #pragma once
 
 namespace inputReader {
