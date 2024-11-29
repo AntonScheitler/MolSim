@@ -52,7 +52,7 @@ class PairParticleIteratorBoundaryNHalo {
          * @param particle the particle to determine the ghosts for
          * @return the vector of ghosts
          */
-        std::vector<Particle>& createGhostParticles(Particle& particle);
+        std::vector<Particle> createGhostParticles(Particle& particle);
 
     private:
         /**

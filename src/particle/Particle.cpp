@@ -13,6 +13,7 @@
 #include <iostream>
 
 Particle::Particle(int typeArg) {
+    pairsFlag = false;
     type = typeArg;
     f = {0., 0., 0.};
     oldF = {0., 0., 0.};
@@ -20,6 +21,8 @@ Particle::Particle(int typeArg) {
 }
 
 Particle::Particle(const Particle &other) {
+    pairsFlag = false;
+    oldX = other.oldX;
     x = other.x;
     v = other.v;
     f = other.f;
@@ -32,6 +35,8 @@ Particle::Particle(const Particle &other) {
 // Todo: maybe use initializer list instead of copy?
 Particle::Particle(std::array<double, 3> xArg, std::array<double, 3> vArg,
                    double mArg, int typeArg) {
+    pairsFlag = false;
+    oldX = {0., 0., 0.};
     x = xArg;
     v = vArg;
     m = mArg;
