@@ -1,4 +1,5 @@
 #include "ParticleIteratorDirectSum.h"
+#include "particle/iterator/particleIterator/ParticleIterator.h"
 
 ParticleIteratorDirectSum::ParticleIteratorDirectSum(std::vector<Particle>::iterator it) {
     current = it;
@@ -13,6 +14,10 @@ ParticleIteratorDirectSum &ParticleIteratorDirectSum::operator++() {
     return *this;
 }
 
-bool ParticleIteratorDirectSum::operator!=(const ParticleIteratorDirectSum &other) {
-    return current != other.current;
+bool ParticleIteratorDirectSum::operator!=(const ParticleIterator &other) {
+    auto casted = dynamic_cast<const ParticleIteratorDirectSum*>(&other);
+    if (casted) {
+        return current != casted->current;
+    } 
+    return false;
 }

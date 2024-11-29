@@ -1,4 +1,5 @@
 #pragma once
+#include "particle/iterator/particleIterator/ParticleIterator.h"
 #include <particle/Particle.h>
 #include <particle/cell/Cell.h>
 #include <vector>
@@ -7,11 +8,9 @@
 /**
  * @brief an iterator which enables iteration over each particle separately
  */
-class ParticleIteratorLinkedCell {
+class ParticleIteratorLinkedCell : public ParticleIterator{
 
     public:
-        using iterator_category = std::forward_iterator_tag;
-        using reference = Particle &;
         /**
          * @brief create an instance of a ParticleIterator for the Linked Cell Particle Container
          * @param it the vector iterator to build the ParticleIterator upon
@@ -24,13 +23,13 @@ class ParticleIteratorLinkedCell {
          * @brief Dereference current Particle in this Linked Cell ParticleContainer
          * @return current Particle
          */
-        reference operator*();
+        reference operator*() override;
 
         /**
          * @brief Increment current Particle in this Linked Cell ParticleContainer
          * @return this ParticleContainer object
          */
-        ParticleIteratorLinkedCell &operator++();
+        ParticleIteratorLinkedCell &operator++() override;
 
         /**
          * @brief Check whether the current Particle of this ParticleContainer is not equal to the current
@@ -38,7 +37,7 @@ class ParticleIteratorLinkedCell {
          * @param other Other ParticleContainer
          * @return True if the current particles are not equal
          */
-        bool operator!=(const ParticleIteratorLinkedCell &other);
+        bool operator!=(const ParticleIterator& other) override;
 
     private:
         /**

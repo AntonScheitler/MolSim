@@ -1,4 +1,5 @@
 #include <particle/Particle.h>
+#include <particle/iterator/particleIterator/ParticleIterator.h>
 #include <vector>
 
 #pragma once
@@ -6,11 +7,9 @@
 /**
  * @brief an iterator which enables iteration over each particle separately
  */
-class ParticleIteratorDirectSum {
+class ParticleIteratorDirectSum : public ParticleIterator {
 
     public:
-        using iterator_category = std::forward_iterator_tag;
-        using reference = Particle &;
         /**
          * @brief create an instance of a ParticleIterator
          * @param it the vector iterator to build the ParticleIterator upon
@@ -22,13 +21,13 @@ class ParticleIteratorDirectSum {
          * @brief Dereference current Particle in this ParticleContainer
          * @return current Particle
          */
-        reference operator*();
+        reference operator*() override;
 
         /**
          * @brief Increment current Particle in this ParticleContainer
          * @return this ParticleContainer object
          */
-        ParticleIteratorDirectSum &operator++();
+        ParticleIteratorDirectSum &operator++() override;
 
         /**
          * @brief Check whether the current Particle of this ParticleContainer is not equal to the current
@@ -36,8 +35,7 @@ class ParticleIteratorDirectSum {
          * @param other Other ParticleContainer
          * @return True if the current particles are not equal
          */
-        bool operator!=(const ParticleIteratorDirectSum &other);
-
+        bool operator!=(const ParticleIterator& other) override;
     private:
         /**
          * @brief an iterator pointing to the current particle
