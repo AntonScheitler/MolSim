@@ -1,4 +1,5 @@
 #include "PairParticleIteratorDirectSum.h"
+#include "particle/iterator/pairParticleIterator/PairParticleIterator.h"
 
 
 PairParticleIteratorDirectSum::PairParticleIteratorDirectSum(std::vector<Particle>::iterator firstArg,
@@ -22,6 +23,10 @@ PairParticleIteratorDirectSum &PairParticleIteratorDirectSum::operator++() {
     return *this;
 }
 
-bool PairParticleIteratorDirectSum::operator!=(const PairParticleIteratorDirectSum &other) {
-    return first != other.first || second != other.second || end != other.end;
+bool PairParticleIteratorDirectSum::operator!=(const PairParticleIterator &other) {
+    auto casted = dynamic_cast<const PairParticleIteratorDirectSum*>(&other);
+    if (casted) {
+        return first != casted->first || second != casted->second || end != casted->end;
+    } 
+    return false;
 }

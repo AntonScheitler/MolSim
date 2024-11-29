@@ -1,3 +1,4 @@
+#include "particle/iterator/pairParticleIterator/PairParticleIterator.h"
 #include "utils/ArrayUtils.h"
 #include <cstdlib>
 #include <functional>
@@ -107,6 +108,10 @@ PairParticleIteratorBoundaryNHalo& PairParticleIteratorBoundaryNHalo::operator++
     return *this; 
 }
 
-bool PairParticleIteratorBoundaryNHalo::operator!=(const PairParticleIteratorBoundaryNHalo &other) {
-    return currentCell != other.currentCell;
+bool PairParticleIteratorBoundaryNHalo::operator!=(const PairParticleIterator &other) {
+    auto casted = dynamic_cast<const PairParticleIteratorBoundaryNHalo*>(&other);
+    if (casted) {
+        return currentCell != casted->currentCell;
+    } 
+    return false;
 }

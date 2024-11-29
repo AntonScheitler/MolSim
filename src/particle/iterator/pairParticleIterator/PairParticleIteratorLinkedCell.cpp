@@ -1,3 +1,4 @@
+#include "particle/iterator/pairParticleIterator/PairParticleIterator.h"
 #include <array>
 #include <cstddef>
 #include <functional>
@@ -90,7 +91,11 @@ PairParticleIteratorLinkedCell& PairParticleIteratorLinkedCell::operator++() {
     return *this;
 }
 
-bool PairParticleIteratorLinkedCell::operator!=(const PairParticleIteratorLinkedCell &other) {
-    return currentCell != other.currentCell;
+bool PairParticleIteratorLinkedCell::operator!=(const PairParticleIterator &other) {
+    auto casted = dynamic_cast<const PairParticleIteratorLinkedCell*>(&other);
+    if (casted) {
+        return currentCell != casted->currentCell;
+    } 
+    return false;
 }
 

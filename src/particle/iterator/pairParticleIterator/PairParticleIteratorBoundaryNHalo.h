@@ -1,7 +1,7 @@
 #pragma once
+#include "particle/iterator/pairParticleIterator/PairParticleIterator.h"
 #include <cstddef>
 #include <particle/Particle.h>
-#include <iterator>
 #include <vector>
 #include <particle/cell/Cell.h>
 
@@ -11,12 +11,8 @@
  * distinct ordering is not considered. This means, that a specific pair <a, b> will only appear once when
  * iterating. <b, a> will never show itself in an iteration
  */
-class PairParticleIteratorBoundaryNHalo {
-
+class PairParticleIteratorBoundaryNHalo: public PairParticleIterator {
     public:
-        using iterator_category = std::forward_iterator_tag;
-        using reference = std::pair<Particle &, Particle &>;
-
         /**
          * @brief create an instance of a PairParticleIterator for iterating through the boundary cells of the mesh and
          * return pairs of boundary cells and their ghost particles in the halo cells
@@ -26,34 +22,29 @@ class PairParticleIteratorBoundaryNHalo {
          * @return an instance of a PairParticleIterator for boundary and halo cells 
          */
         PairParticleIteratorBoundaryNHalo(std::vector<Cell>::iterator currentCellArg, std::vector<Cell> meshArg, std::array<size_t, 3> numCellsArg, std::array<double, 3> cellSizeArg);
-
         /**
          * @brief dereferences this PairParticleIterator and gets the current particle/ghost pair. The second particle in any
          * pair is a ghost particle. So in a pair <a, b>, a would be a real particle and b the ghost
          * @return a pair of real and ghost particles
          */
-        reference operator*();
-
+        reference operator*() override;
         /**
          * @brief Increment this iterator, i.e. get the next distinct pair of particles
          * @return this PairParticleIterator updated
          */
-        PairParticleIteratorBoundaryNHalo& operator++();
-
+        PairParticleIteratorBoundaryNHalo& operator++() override;
         /**
          * @brief check whether this PairParticleIterator is not equal to another PairParticleIterator
          * @param other other PairParticleIterator
          * @return True if iterators not equal
          */
-        bool operator!=(const PairParticleIteratorBoundaryNHalo &other);
-
+        bool operator!=(const PairParticleIterator &other) override;
         /**
          * @brief returns the ghost particles for the specified particle
          * @param particle the particle to determine the ghosts for
          * @return the vector of ghosts
          */
         std::vector<Particle> createGhostParticles(Particle& particle);
-
     private:
         /**
          * @brief the mesh to iterate through 

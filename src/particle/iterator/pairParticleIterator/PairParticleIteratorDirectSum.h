@@ -1,5 +1,5 @@
+#include "particle/iterator/pairParticleIterator/PairParticleIterator.h"
 #include <particle/Particle.h>
-#include <iterator>
 #include <vector>
 
 #pragma once
@@ -9,12 +9,9 @@
  * distinct ordering is not considered. This means, that a specific pair <a, b> will only appear once when
  * iterating. <b, a> will never show itself in an iteration
  */
-class PairParticleIteratorDirectSum {
+class PairParticleIteratorDirectSum: public PairParticleIterator {
 
 public:
-    using iterator_category = std::forward_iterator_tag;
-    using reference = std::pair<Particle &, Particle &>;
-
     /**
      * @brief create an instance of a PairParticleIterator
      * @param firstArg the vector iterator which will be used to generate the first element in the pair
@@ -26,26 +23,22 @@ public:
     PairParticleIteratorDirectSum(std::vector<Particle>::iterator firstArg,
                          std::vector<Particle>::iterator secondArg,
                          std::vector<Particle>::iterator endArg);
-
     /**
      * @brief Dereference this PairParticleIterator, i.e. get the current pair of Particles
      * @return std::pair of Particles
      */
-    reference operator*();
-
+    reference operator*() override;
     /**
      * @brief Increment this iterator, i.e. get the next distinct pair of particles
      * @return this PairParticleIterator updated
      */
-    PairParticleIteratorDirectSum &operator++();
-
+    PairParticleIteratorDirectSum &operator++() override;
     /**
      * @brief check whether this PairParticleIterator is not equal to another PairParticleIterator
      * @param other other PairParticleIterator
      * @return True if iterators not equal
      */
-    bool operator!=(const PairParticleIteratorDirectSum &other);
-
+    bool operator!=(const PairParticleIterator &other) override;
 private:
     /**
      * @brief an iterator marking the first particle of a pair
