@@ -1,4 +1,4 @@
-#include "../particle/ParticleContainer.h"
+#include "particle/ParticleContainer.h"
 
 #pragma once
 

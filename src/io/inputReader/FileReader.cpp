@@ -1,7 +1,7 @@
 #include "FileReader.h"
 #include "JsonFileReader.h"
 #include "TxtFileReader.h"
-#include "XMLFileReader.h"
+#include "io/inputReader/XMLReader/XMLFileReader.h"
 #include "spdlogConfig.h"
 
 namespace inputReader {

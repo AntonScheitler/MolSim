@@ -31,8 +31,8 @@
 // in the accompanying FLOSSE file.
 //
 
-#ifndef MOL_SIM_SRC_INPUT_READER_SIM_PARSER_SIMULATION_H
-#define MOL_SIM_SRC_INPUT_READER_SIM_PARSER_SIMULATION_H
+#ifndef MOL_SIM_SRC_IO_INPUT_READER_XML_SIMULATION_H
+#define MOL_SIM_SRC_IO_INPUT_READER_XML_SIMULATION_H
 
 #ifndef XSD_CXX11
 #define XSD_CXX11
@@ -254,6 +254,7 @@ namespace xml_schema
 //
 class vectorType;
 class simulation;
+class output;
 class parameters;
 class clusters;
 class particle;
@@ -359,6 +360,27 @@ class vectorType: public ::xml_schema::type
 class simulation: public ::xml_schema::type
 {
   public:
+  // output
+  //
+  typedef ::output output_type;
+  typedef ::xsd::cxx::tree::optional< output_type > output_optional;
+  typedef ::xsd::cxx::tree::traits< output_type, char > output_traits;
+
+  const output_optional&
+  output () const;
+
+  output_optional&
+  output ();
+
+  void
+  output (const output_type& x);
+
+  void
+  output (const output_optional& x);
+
+  void
+  output (::std::unique_ptr< output_type > p);
+
   // parameters
   //
   typedef ::parameters parameters_type;
@@ -429,8 +451,85 @@ class simulation: public ::xml_schema::type
          ::xml_schema::flags);
 
   protected:
+  output_optional output_;
   parameters_optional parameters_;
   ::xsd::cxx::tree::one< clusters_type > clusters_;
+};
+
+class output: public ::xml_schema::type
+{
+  public:
+  // writeFrequency
+  //
+  typedef ::xml_schema::int_ writeFrequency_type;
+  typedef ::xsd::cxx::tree::optional< writeFrequency_type > writeFrequency_optional;
+  typedef ::xsd::cxx::tree::traits< writeFrequency_type, char > writeFrequency_traits;
+
+  const writeFrequency_optional&
+  writeFrequency () const;
+
+  writeFrequency_optional&
+  writeFrequency ();
+
+  void
+  writeFrequency (const writeFrequency_type& x);
+
+  void
+  writeFrequency (const writeFrequency_optional& x);
+
+  // baseName
+  //
+  typedef ::xml_schema::string baseName_type;
+  typedef ::xsd::cxx::tree::optional< baseName_type > baseName_optional;
+  typedef ::xsd::cxx::tree::traits< baseName_type, char > baseName_traits;
+
+  const baseName_optional&
+  baseName () const;
+
+  baseName_optional&
+  baseName ();
+
+  void
+  baseName (const baseName_type& x);
+
+  void
+  baseName (const baseName_optional& x);
+
+  void
+  baseName (::std::unique_ptr< baseName_type > p);
+
+  // Constructors.
+  //
+  output ();
+
+  output (const ::xercesc::DOMElement& e,
+          ::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0);
+
+  output (const output& x,
+          ::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0);
+
+  virtual output*
+  _clone (::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0) const;
+
+  output&
+  operator= (const output& x);
+
+  virtual 
+  ~output ();
+
+  // Implementation.
+  //
+  protected:
+  void
+  parse (::xsd::cxx::xml::dom::parser< char >&,
+         ::xml_schema::flags);
+
+  protected:
+  writeFrequency_optional writeFrequency_;
+  baseName_optional baseName_;
 };
 
 class parameters: public ::xml_schema::type
@@ -1198,6 +1297,9 @@ void
 operator<< (::xercesc::DOMElement&, const simulation&);
 
 void
+operator<< (::xercesc::DOMElement&, const output&);
+
+void
 operator<< (::xercesc::DOMElement&, const parameters&);
 
 void
@@ -1219,4 +1321,4 @@ operator<< (::xercesc::DOMElement&, const cuboid&);
 //
 // End epilogue.
 
-#endif // MOL_SIM_SRC_INPUT_READER_SIM_PARSER_SIMULATION_H
+#endif // MOL_SIM_SRC_IO_INPUT_READER_XML_SIMULATION_H

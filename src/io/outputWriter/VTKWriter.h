@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "outputWriter/XYZWriter.h"
-#include "outputWriter/vtk-unstructured.h"
+#include "XYZWriter.h"
+#include "vtk-unstructured.h"
 #include "particle/ParticleContainer.h"
 
 namespace outputWriter {

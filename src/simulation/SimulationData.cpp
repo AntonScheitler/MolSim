@@ -4,7 +4,7 @@
 #include <simulation/SimulationData.h>
 #include <getopt.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
-#include <inputReader/FileReader.h>
+#include <io/inputReader/FileReader.h>
 
 
 SimulationData::SimulationData() {
@@ -16,6 +16,8 @@ SimulationData::SimulationData() {
     epsilon = 5;
     sigma = 1;
     bench = false;
+    baseName = "MD_vtk";
+    writeFrequency = 10;
 }
 
 int SimulationData::parseOptions(int argc, char* argsv[]) {
@@ -183,4 +185,20 @@ void SimulationData::setEpsilon(double epsilon) {
 
 void SimulationData::setSigma(double sigma) {
     SimulationData::sigma = sigma;
+}
+
+const std::string &SimulationData::getBaseName() const {
+    return baseName;
+}
+
+void SimulationData::setBaseName(const std::string &baseName) {
+    SimulationData::baseName = baseName;
+}
+
+int SimulationData::getWriteFrequency() const {
+    return writeFrequency;
+}
+
+void SimulationData::setWriteFrequency(int writeFrequency) {
+    SimulationData::writeFrequency = writeFrequency;
 }

@@ -2,9 +2,9 @@
 #include <iostream>
 #include <fstream>
 #include "spdlogConfig.h"
-#include "inputReader/simParser/simulation.h"
+#include "io/inputReader/xml/simulation.h"
 #include <array>
-#include "ParticleGenerator.h"
+#include "io/inputReader/ParticleGenerator.h"
 
 
 

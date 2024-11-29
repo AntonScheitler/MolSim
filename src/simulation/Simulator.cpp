@@ -2,7 +2,7 @@
 #include "computations/forces/ForceComputations.h"
 #include "computations/positions/PositionComputations.h"
 #include "computations/velocities/VelocityComputations.h"
-#include "outputWriter/VTKWriter.h"
+#include "io/outputWriter/VTKWriter.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/spdlog.h"
 #include <chrono>

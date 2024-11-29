@@ -3,9 +3,10 @@
 #include <iostream>
 #include <fstream>
 #include "spdlogConfig.h"
-#include "inputReader/simParser/simulation.h"
+#include "io/inputReader/xml/simulation.h"
 #include <array>
-#include "ParticleGenerator.h"
+#include "io/inputReader/ParticleGenerator.h"
+#include "ParameterParser.h"
 
 
 
@@ -21,10 +22,7 @@ namespace inputReader {
         spdlog::drop("XMLFileReader");
     }
 
-    void XMLFileReader::readParams() {
-        //Todo for refactoring
 
-    }
 
     void XMLFileReader::readCometFile(ParticleContainer &particles, char *filename) {
         particles.setAverageVelocity(0);
@@ -48,23 +46,8 @@ namespace inputReader {
 
 
 
-        if(simParser->parameters().present()) {
-            if (simParser->parameters()->delta_t().present()) {
-                simData.setDeltaT(simParser->parameters()->delta_t().get());
-            }
-            if (simParser->parameters()->t_end().present()) {
-                simData.setEndTime(simParser->parameters()->t_end().get());
-            }
-            if (simParser->parameters()->epsilon().present()) {
-                simData.setEpsilon(simParser->parameters()->epsilon().get());
-            }
-            if (simParser->parameters()->sigma().present()) {
-                simData.setSigma(simParser->parameters()->sigma().get());
-            }
-            if (simParser->parameters()->t_start().present()) {
-                simData.setStartTime(simParser->parameters()->t_start().get());
-            }
-        }
+        ParameterParser::readParams(simData, simParser);
+
         std::cout << "start parsing cuboids" << std::endl;
 
         for (const auto& planet : simParser->clusters().particle()) {

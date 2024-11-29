@@ -101,6 +101,36 @@ z (const z_type& x)
 // simulation
 // 
 
+const simulation::output_optional& simulation::
+output () const
+{
+  return this->output_;
+}
+
+simulation::output_optional& simulation::
+output ()
+{
+  return this->output_;
+}
+
+void simulation::
+output (const output_type& x)
+{
+  this->output_.set (x);
+}
+
+void simulation::
+output (const output_optional& x)
+{
+  this->output_ = x;
+}
+
+void simulation::
+output (::std::unique_ptr< output_type > x)
+{
+  this->output_.set (std::move (x));
+}
+
 const simulation::parameters_optional& simulation::
 parameters () const
 {
@@ -153,6 +183,64 @@ void simulation::
 clusters (::std::unique_ptr< clusters_type > x)
 {
   this->clusters_.set (std::move (x));
+}
+
+
+// output
+// 
+
+const output::writeFrequency_optional& output::
+writeFrequency () const
+{
+  return this->writeFrequency_;
+}
+
+output::writeFrequency_optional& output::
+writeFrequency ()
+{
+  return this->writeFrequency_;
+}
+
+void output::
+writeFrequency (const writeFrequency_type& x)
+{
+  this->writeFrequency_.set (x);
+}
+
+void output::
+writeFrequency (const writeFrequency_optional& x)
+{
+  this->writeFrequency_ = x;
+}
+
+const output::baseName_optional& output::
+baseName () const
+{
+  return this->baseName_;
+}
+
+output::baseName_optional& output::
+baseName ()
+{
+  return this->baseName_;
+}
+
+void output::
+baseName (const baseName_type& x)
+{
+  this->baseName_.set (x);
+}
+
+void output::
+baseName (const baseName_optional& x)
+{
+  this->baseName_ = x;
+}
+
+void output::
+baseName (::std::unique_ptr< baseName_type > x)
+{
+  this->baseName_.set (std::move (x));
 }
 
 
@@ -787,6 +875,7 @@ vectorType::
 simulation::
 simulation (const clusters_type& clusters)
 : ::xml_schema::type (),
+  output_ (this),
   parameters_ (this),
   clusters_ (clusters, this)
 {
@@ -795,6 +884,7 @@ simulation (const clusters_type& clusters)
 simulation::
 simulation (::std::unique_ptr< clusters_type > clusters)
 : ::xml_schema::type (),
+  output_ (this),
   parameters_ (this),
   clusters_ (std::move (clusters), this)
 {
@@ -805,6 +895,7 @@ simulation (const simulation& x,
             ::xml_schema::flags f,
             ::xml_schema::container* c)
 : ::xml_schema::type (x, f, c),
+  output_ (x.output_, f, this),
   parameters_ (x.parameters_, f, this),
   clusters_ (x.clusters_, f, this)
 {
@@ -815,6 +906,7 @@ simulation (const ::xercesc::DOMElement& e,
             ::xml_schema::flags f,
             ::xml_schema::container* c)
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  output_ (this),
   parameters_ (this),
   clusters_ (this)
 {
@@ -834,6 +926,20 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
     const ::xercesc::DOMElement& i (p.cur_element ());
     const ::xsd::cxx::xml::qualified_name< char > n (
       ::xsd::cxx::xml::dom::name< char > (i));
+
+    // output
+    //
+    if (n.name () == "output" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< output_type > r (
+        output_traits::create (i, f, this));
+
+      if (!this->output_)
+      {
+        this->output_.set (::std::move (r));
+        continue;
+      }
+    }
 
     // parameters
     //
@@ -887,6 +993,7 @@ operator= (const simulation& x)
   if (this != &x)
   {
     static_cast< ::xml_schema::type& > (*this) = x;
+    this->output_ = x.output_;
     this->parameters_ = x.parameters_;
     this->clusters_ = x.clusters_;
   }
@@ -896,6 +1003,106 @@ operator= (const simulation& x)
 
 simulation::
 ~simulation ()
+{
+}
+
+// output
+//
+
+output::
+output ()
+: ::xml_schema::type (),
+  writeFrequency_ (this),
+  baseName_ (this)
+{
+}
+
+output::
+output (const output& x,
+        ::xml_schema::flags f,
+        ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  writeFrequency_ (x.writeFrequency_, f, this),
+  baseName_ (x.baseName_, f, this)
+{
+}
+
+output::
+output (const ::xercesc::DOMElement& e,
+        ::xml_schema::flags f,
+        ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  writeFrequency_ (this),
+  baseName_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void output::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // writeFrequency
+    //
+    if (n.name () == "writeFrequency" && n.namespace_ ().empty ())
+    {
+      if (!this->writeFrequency_)
+      {
+        this->writeFrequency_.set (writeFrequency_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // baseName
+    //
+    if (n.name () == "baseName" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< baseName_type > r (
+        baseName_traits::create (i, f, this));
+
+      if (!this->baseName_)
+      {
+        this->baseName_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    break;
+  }
+}
+
+output* output::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class output (*this, f, c);
+}
+
+output& output::
+operator= (const output& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->writeFrequency_ = x.writeFrequency_;
+    this->baseName_ = x.baseName_;
+  }
+
+  return *this;
+}
+
+output::
+~output ()
 {
 }
 
@@ -2203,6 +2410,18 @@ operator<< (::xercesc::DOMElement& e, const simulation& i)
 {
   e << static_cast< const ::xml_schema::type& > (i);
 
+  // output
+  //
+  if (i.output ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "output",
+        e));
+
+    s << *i.output ();
+  }
+
   // parameters
   //
   if (i.parameters ())
@@ -2224,6 +2443,36 @@ operator<< (::xercesc::DOMElement& e, const simulation& i)
         e));
 
     s << i.clusters ();
+  }
+}
+
+void
+operator<< (::xercesc::DOMElement& e, const output& i)
+{
+  e << static_cast< const ::xml_schema::type& > (i);
+
+  // writeFrequency
+  //
+  if (i.writeFrequency ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "writeFrequency",
+        e));
+
+    s << *i.writeFrequency ();
+  }
+
+  // baseName
+  //
+  if (i.baseName ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "baseName",
+        e));
+
+    s << *i.baseName ();
   }
 }
 

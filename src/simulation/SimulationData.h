@@ -110,10 +110,21 @@ class SimulationData {
          */
         void setParticlesCopy(ParticleContainer particlesArg);
 
-        /**
-         * @brief returns whether or not benchmarking is switched on
-         */
+
+        const std::string &getBaseName() const;
+
+        void setBaseName(const std::string &baseName);
+
+    int getWriteFrequency() const;
+
+    void setWriteFrequency(int writeFrequency);
+
+    /**
+     * @brief returns whether or not benchmarking is switched on
+     */
         bool getBench();
+
+
     private:
         simulationType simType;
         double startTime;
@@ -122,6 +133,8 @@ class SimulationData {
         double sigma;
         double epsilon;
         bool bench;
+        int writeFrequency;
+        std::string baseName;
         spdlog::level::level_enum level;
         ParticleContainer particles;
 };
