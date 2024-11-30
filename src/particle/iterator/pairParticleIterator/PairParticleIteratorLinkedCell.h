@@ -42,6 +42,8 @@ class PairParticleIteratorLinkedCell: public PairParticleIterator {
          */
         std::vector<Cell> getNeighborCells();
 
+        void incrementCurrCellIdx();
+
     private:
         /**
          * @brief the mesh to iterate through 
@@ -50,7 +52,7 @@ class PairParticleIteratorLinkedCell: public PairParticleIterator {
         /**
          * @brief the mesh index of the current cell
          */
-        int currentCellIdx;
+        std::array<int, 3> currentCellIdx;
         /**
          * @brief an iterator pointing to the current cell
          */
@@ -114,7 +116,7 @@ class PairParticleIteratorLinkedCell: public PairParticleIterator {
         /**
          * @brief skips cells until currentCell reaches the next non-empty cell. If the currentCell is non-empty no step is executed
          */
-        void currentStepToViableCell();
+        void currentStepToViableCell(bool stepBefore);
 
         /**
          * @brief skips particles within currentCell until a particle is reached, with which pairs can be formed.
@@ -127,7 +129,7 @@ class PairParticleIteratorLinkedCell: public PairParticleIterator {
          * a pair. neigborParticle is then set to such a particle
          * If those conditions are already satisfied, no steps are executed
          */
-        void neighborStepToViableCell();
+        void neighborStepToViableCell(bool stepBefore);
 
         /**
          * @brief skips particles within neighborCell until a particle is reached, with which a pair can be formed.
