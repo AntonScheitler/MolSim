@@ -122,3 +122,10 @@ void ParticleContainerLinkedCell::correctAllParticleIndecies() {
 }
 
 
+std::array<size_t, 3> ParticleContainerLinkedCell::getNumCells() {
+    return numCells;
+}
+
+std::array<double, 3> ParticleContainerLinkedCell::getCellSize() {
+    return cellSize;
+}

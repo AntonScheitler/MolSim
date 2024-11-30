@@ -61,6 +61,7 @@ public:
         std::vector<Cell>& getMesh();
         Cell& getCell(int idx);
         std::array<size_t, 3> getNumCells();
+        std::array<double, 3> getCellSize();
     private:
         /**
          * @brief mesh contains all grid cells
