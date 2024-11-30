@@ -47,4 +47,4 @@ FetchContent_MakeAvailable(json)
 
 # add src and test as subdirectories
 add_subdirectory(src)
-#add_subdirectory(test)
+add_subdirectory(test)

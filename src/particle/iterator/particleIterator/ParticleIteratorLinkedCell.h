@@ -39,6 +39,12 @@ class ParticleIteratorLinkedCell : public ParticleIterator{
          */
         bool operator!=(const ParticleIterator& other) override;
 
+        /**
+         * @brief skips cells until it reaches the next non-empty one and sets currentCell to it. If the currentCell is
+         * non-empty no step is executed
+         */
+        void stepToNonEmptyCell();
+
     private:
         /**
          * @brief an iterator pointing to the current cell

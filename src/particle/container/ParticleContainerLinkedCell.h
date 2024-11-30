@@ -28,6 +28,11 @@ public:
         std::unique_ptr<PairParticleIterator> beginPairParticle() override;
         std::unique_ptr<PairParticleIterator> endPairParticle() override;
 
+        double getAverageVelocity() override;
+        void setAverageVelocity(double averageVelocityArg) override;
+        Particle& getParticle(int index) override;
+
+
         /**
          * @brief provides an iterator for iterating through pairs of boundary particles and their ghosts. The first
          * element in a pair is the actual particle whereas the second element is the ghost

@@ -19,5 +19,5 @@ bool ParticleIteratorDirectSum::operator!=(const ParticleIterator &other) {
     if (casted) {
         return current != casted->current;
     } 
-    return false;
+    return true;
 }

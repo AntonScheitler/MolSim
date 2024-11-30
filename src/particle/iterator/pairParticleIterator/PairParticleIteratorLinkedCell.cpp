@@ -81,6 +81,6 @@ bool PairParticleIteratorLinkedCell::operator!=(const PairParticleIterator &othe
     if (casted) {
         return currentCell != casted->currentCell;
     } 
-    return false;
+    return true;
 }
 

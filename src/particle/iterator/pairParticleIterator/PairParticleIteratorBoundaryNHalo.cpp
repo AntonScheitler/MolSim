@@ -113,5 +113,5 @@ bool PairParticleIteratorBoundaryNHalo::operator!=(const PairParticleIterator &o
     if (casted) {
         return currentCell != casted->currentCell;
     } 
-    return false;
+    return true;
 }

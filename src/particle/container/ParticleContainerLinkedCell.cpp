@@ -130,3 +130,14 @@ std::array<double, 3> ParticleContainerLinkedCell::getCellSize() {
     return cellSize;
 }
 
+double ParticleContainerLinkedCell::getAverageVelocity() {
+    return 0.0;
+}
+
+void ParticleContainerLinkedCell::setAverageVelocity(double in) {
+
+}
+
+Particle& ParticleContainerLinkedCell::getParticle(int index) {
+    return mesh[0].getParticles()[0];
+}
