@@ -23,9 +23,6 @@ public:
 
         void addParticle(const Particle &particle) override;
         int size() override;
-        double getAverageVelocity() override;
-        void setAverageVelocity(double averageVelocityArg) override;
-        Particle &getParticle(int index) override;
         std::unique_ptr<ParticleIterator> begin() override;
         std::unique_ptr<ParticleIterator> end() override;
         std::unique_ptr<PairParticleIterator> beginPairParticle() override;
@@ -64,15 +61,12 @@ public:
         std::vector<Cell>& getMesh();
         Cell& getCell(int idx);
         std::array<size_t, 3> getNumCells();
+        std::array<double, 3> getCellSize();
     private:
         /**
          * @brief mesh contains all grid cells
          */
-        std::vector<Cell> mesh;
-        /**
-         * @brief the average brownian velocity of the particles
-         */
-        double averageVelocity;
+        std::vector<Cell> mesh;;
         std::array<double, 3> domainSize;      // size of the domain of this particleContainer
         double cutoffRadius; // = cutoffRadius
         std::array<double, 3> cellSize; // dimensions of one cell
@@ -83,3 +77,4 @@ public:
          */
         void correctParticleIndex(Particle& p);
 };
+
