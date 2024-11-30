@@ -1,10 +1,8 @@
 #include "../src/particle/container/ParticleContainerLinkedCell.h"
-#include "spdlog/spdlog.h"
 #include <cstddef>
 #include <gtest/gtest.h>
 #include <unordered_set>
 #include <utility>
-#include "spdlogConfig.h"
 
 
 class ParticleContainerLinkedCellTest : public testing::Test {

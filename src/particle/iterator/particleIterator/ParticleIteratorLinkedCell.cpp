@@ -23,7 +23,6 @@ ParticleIteratorLinkedCell &ParticleIteratorLinkedCell::operator++() {
         if (currentCell == end) {
             return *this;
         }
-        currentParticle = currentCell->getParticles().begin();
     }
     return *this;
 }
@@ -35,8 +34,12 @@ bool ParticleIteratorLinkedCell::operator!=(const ParticleIterator &other) {
     } 
     return true;
 }
+
 void ParticleIteratorLinkedCell::stepToNonEmptyCell() {
     while (currentCell != end && currentCell->getParticles().size() == 0) {
         ++currentCell;
+    }
+    if (currentCell != end) {
+        currentParticle = currentCell->getParticles().begin();
     }
 }

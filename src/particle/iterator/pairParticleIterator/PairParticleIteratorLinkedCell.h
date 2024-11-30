@@ -56,6 +56,10 @@ class PairParticleIteratorLinkedCell: public PairParticleIterator {
          */
         std::vector<Cell>::iterator currentCell;
         /**
+         * @brief an iterator pointing to the end of the cells
+         */
+        std::vector<Cell>::iterator end;
+        /**
          * @brief an iterator pointing to the current particle within the current cell
          */
         std::vector<Particle>::iterator currentParticle;
@@ -64,13 +68,13 @@ class PairParticleIteratorLinkedCell: public PairParticleIterator {
          */
         std::vector<Cell> neighborCellsVector;
         /**
-         * @brief an iterator pointing to the the neighbor of the current cell
+         * @brief an iterator pointing to the neighbor of the current cell
          */
         std::vector<Cell>::iterator neighborCell;
         /**
-         * @brief an iterator pointing to the end of the neighborCell iterator
+         * @brief an iterator pointing to the end of the neighbor cells
          */
-        std::vector<Cell>::iterator neighborCellEnd;
+        std::vector<Cell>::iterator neighborEnd;
         /**
          * @brief an iterator pointing to the current particle within the partner cell to create pairs with
          */
@@ -103,4 +107,31 @@ class PairParticleIteratorLinkedCell: public PairParticleIterator {
          * @brief a set containing all particles for which all paris have been iterated through
          */
         std::unordered_set<Particle, ParticleHash, ParticleEqual> completedPairs;
+
+        // TODO
+        void stepToNextPair();
+
+        /**
+         * @brief skips cells until currentCell reaches the next non-empty cell. If the currentCell is non-empty no step is executed
+         */
+        void currentStepToViableCell();
+
+        /**
+         * @brief skips particles within currentCell until a particle is reached, with which pairs can be formed.
+         * If currentParticle already points to such a particle, no steps are executed
+         */
+        void currentStepToViableParticle();
+
+        /**
+         * @brief skips cells and particles until neighborCell reaches the next non-empty cell which contains particles that can form
+         * a pair. neigborParticle is then set to such a particle
+         * If those conditions are already satisfied, no steps are executed
+         */
+        void neighborStepToViableCell();
+
+        /**
+         * @brief skips particles within neighborCell until a particle is reached, with which a pair can be formed.
+         * If neighborParticle already points to such a particle, no steps are executed
+         */
+        void neighborStepToViableParticle();
 };
