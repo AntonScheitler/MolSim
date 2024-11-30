@@ -37,13 +37,23 @@ class ParticleContainerLinkedCellTest : public testing::Test {
         std::unordered_set<Particle, ParticleHash, ParticleEqual> particlesSet;
         std::vector<Particle> particlesVector;
 
-        std::array<double, 3> domainSize = {99, 99, 1};
+        std::array<double, 3> domainSize1 = {99, 99, 1};
+        std::array<double, 3> domainSize2 = {99, 33, 1};
         double cutoffRadius = 33;
-        ParticleContainerLinkedCell empty{domainSize, cutoffRadius};
-        ParticleContainerLinkedCell container{domainSize, cutoffRadius};
+        ParticleContainerLinkedCell empty{domainSize1, cutoffRadius};
+        ParticleContainerLinkedCell container{domainSize1, cutoffRadius};
+        ParticleContainerLinkedCell pairsContainer{domainSize2, cutoffRadius};
 
         void SetUp() override {
             for (double y = 0; y < 3; y++) {
+                std::array<double, 3> pos = {y * pairsContainer.getCellSize()[0] + 7, 7, 0.5 };
+                Particle p = {pos, {0, 0, 0}, 1};
+                pairsContainer.addParticle(p);
+
+                std::array<double, 3> pos3 = {y * pairsContainer.getCellSize()[0] + 10, 7, 0.5 };
+                Particle p3 = {pos3, {0, 0, 0}, 1};
+                pairsContainer.addParticle(p3);
+
                 for (double x = 0; x < 3; x++) {
                     // create two particles per cell
                     std::array<double, 3> pos1 = {x * container.getCellSize()[0] + 7, y * container.getCellSize()[1] + 7, 0.5 };
@@ -113,7 +123,7 @@ TEST_F(ParticleContainerLinkedCellTest, EmptyParticleContainerLinkedCellPairIter
  */
 TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellPairIteratorTest) {
     size_t count = 0;
-    for (auto it = container.beginPairParticle(); *it != *(container.endPairParticle()); ++*it) {
+    for (auto it = pairsContainer.beginPairParticle(); *it != *(pairsContainer.endPairParticle()); ++*it) {
         std::pair<Particle&, Particle&> pair = **it;
         //EXPECT_TRUE(pairsSet.count(pair) == 1);
         //pairsSet.erase(pair);
