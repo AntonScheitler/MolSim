@@ -14,9 +14,6 @@
     currentCell = currentCellArg;
     currentCellEnd = currentCellEndArg;
     stepToNonEmptyBoundaryCell(false);
-    if (currentCell == currentCellEnd) {
-        return;
-    }
 }
 
 void PairParticleIteratorBoundaryNHalo::incrementCurrentCellIdx() {

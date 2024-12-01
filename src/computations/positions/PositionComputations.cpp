@@ -14,10 +14,9 @@ void PositionComputations::stoermerVerlet(ParticleContainer& particles, double d
     }
 }
 
-void PositionComputations::resetPositions(ParticleContainer &particles) {
+void PositionComputations::updateOldX(ParticleContainer &particles) {
     for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
         Particle particle = **it;
         particle.setOldX(particle.getX());
-        particle.setX({0, 0, 0});
     }
 }

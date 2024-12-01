@@ -8,6 +8,7 @@
 #include "particle/container/ParticleContainer.h"
 #include "particle/container/ParticleContainerLinkedCell.h"
 #include <chrono>
+#include <cstdlib>
 #include <ctime>
 
 Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
@@ -30,15 +31,11 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
             // use lennard-jones for the molecule collision
         case collision:
             before = [this]() {
-                VelocityComputations::applyBrownianMotion2D(simData.getParticles(),
-                                                            simData.getAverageVelocity());
+                VelocityComputations::applyBrownianMotion2D(simData.getParticles(), simData.getAverageVelocity());
             };
             step = [this]() {
                 PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
-
-                ForceComputations::resetForces(simData.getParticles());
-                ForceComputations::computeLennardJonesPotential(simData.getParticles(), simData.getEpsilon(),
-                                                                simData.getSigma());
+                ForceComputations::resetForces(simData.getParticles()); ForceComputations::computeLennardJonesPotential(simData.getParticles(), simData.getEpsilon(), simData.getSigma());
                 VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
 
             };
@@ -52,19 +49,20 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                                                             simData.getAverageVelocity());
             };
             step = [this]() {
-                PositionComputations::resetPositions(simData.getParticles());
+                // save previous position and update the position of particles in the mesh based on the new one
+                PositionComputations::updateOldX(simData.getParticles());
                 PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
-
-                ParticleContainerLinkedCell* container = dynamic_cast<ParticleContainerLinkedCell*>(&simData.getParticles());
-                if(container) {
-                    container->correctAllParticleIndecies();
+                ParticleContainerLinkedCell* containerLinkedCell = dynamic_cast<ParticleContainerLinkedCell*>(&simData.getParticles());
+                if(containerLinkedCell) {
+                    containerLinkedCell->correctAllParticleIndecies();
+                    ForceComputations::resetForces(simData.getParticles());
+                    ForceComputations::computeLennardJonesPotential(simData.getParticles(), simData.getEpsilon(), simData.getSigma());
+                    ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell, simData.getEpsilon(), simData.getSigma());
+                    VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
+                } else {
+                    SPDLOG_ERROR("Linked Cell Simulation is not using Linked Cell Container. Aborting...");
+                    exit(EXIT_FAILURE);
                 }
-
-                ForceComputations::resetForces(simData.getParticles());
-                ForceComputations::computeLennardJonesPotential(simData.getParticles(), simData.getEpsilon(),
-                                                                simData.getSigma());
-                VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
-
             };
             after = [this]() {};
             logger = spdlog::stdout_color_mt("CollisionSimulationLinkedCell");

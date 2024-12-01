@@ -11,11 +11,7 @@ PairParticleIteratorLinkedCell::PairParticleIteratorLinkedCell( std::vector<Cell
     numCells = numCellsArg;
     currentCell = it;
     end = endArg;
-
     currentStepToViableCell(false);
-    if (currentCell == end) {
-        return;
-    }
 }
 
 void PairParticleIteratorLinkedCell::incrementCurrCellIdx() {

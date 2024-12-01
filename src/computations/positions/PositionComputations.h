@@ -11,5 +11,5 @@ class PositionComputations {
          * @param deltaT_arg the timestep size used by the simulation
          */
         static void stoermerVerlet(ParticleContainer& particles, double deltaT);
-        static void resetPositions(ParticleContainer &particles);
+        static void updateOldX(ParticleContainer &particles);
 };
