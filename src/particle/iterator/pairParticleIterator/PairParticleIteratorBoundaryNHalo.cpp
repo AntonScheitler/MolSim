@@ -13,6 +13,7 @@
     boundaryConfig = boundaryConfigArg;
     currentCell = currentCellArg;
     currentCellEnd = currentCellEndArg;
+    // skip forward to the first cell which needs ghosts
     stepToNonEmptyBoundaryCell(false);
 }
 
@@ -33,18 +34,23 @@ void  PairParticleIteratorBoundaryNHalo::stepToNonEmptyBoundaryCell(bool stepToN
             incrementCurrentCellIdx();
         }
         stepToNext = true;
+        // search for a non-empty boundary cell
         while (currentCell != currentCellEnd && (!currentCell->isBoundary || currentCell->getParticles().empty())) {
             ++currentCell;
             incrementCurrentCellIdx();
         }
 
+        // if there are no non-empty boundary cells, return
         if (currentCell == currentCellEnd) {
             return;
         }
+        // if one has been found, currentParticle is updated
         currentParticle = currentCell->getParticles().begin();
+        // the ghost particles for the boundary particle need to be computed
         ghostsVector = createGhostParticles();
         currentGhost = ghostsVector.begin();
         currentGhostEnd = ghostsVector.end();
+        // if there are no ghost particles for the boundary particle (because the boundary is outflowing, etc.), repeat
     } while (currentGhost == currentGhostEnd);
 }
 
@@ -106,10 +112,13 @@ PairParticleIteratorBoundaryNHalo::reference  PairParticleIteratorBoundaryNHalo:
 }
 
 PairParticleIteratorBoundaryNHalo& PairParticleIteratorBoundaryNHalo::operator++() {
+    // get the next ghost particle
     currentGhost++;
     if (currentGhost == currentGhostEnd) {
+        // move to the next particle if there are no more ghosts
         currentParticle++;
         if (currentParticle == currentCell->getParticles().end()) {
+            // search for the next boundary cell which needs ghosts
             stepToNonEmptyBoundaryCell(true);
             return *this;
         }
@@ -123,6 +132,7 @@ PairParticleIteratorBoundaryNHalo& PairParticleIteratorBoundaryNHalo::operator++
 bool PairParticleIteratorBoundaryNHalo::operator!=(const PairParticleIterator &other) {
     auto casted = dynamic_cast<const PairParticleIteratorBoundaryNHalo*>(&other);
     if (casted) {
+        // this has a high false-positive rate because this is sufficient to distinguish the iterator from the end
         return currentCell != casted->currentCell;
     } 
     return true;

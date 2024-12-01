@@ -8,40 +8,46 @@
 
 
 /**
- * @brief an iterator which enables iteration over pairs of particles. The elements of those pairs are always
- * distinct ordering is not considered. This means, that a specific pair <a, b> will only appear once when
- * iterating. <b, a> will never show itself in an iteration
+ * @brief an iterator which enables iteration over pairs of particles when using the linked cell algorithm.
+ * Any specific pair <a, b> will only appear once when iterating. <b, a> will never show itself in an iteration
  */
 class PairParticleIteratorLinkedCell: public PairParticleIterator {
     public:
         /**
          * @brief create an instance of a PairParticleIterator for the Linked Cell algorithm
-         * @param particleContainer the particleContainer to form the pairs for
+         * @param it an iterator pointing to the start of the mesh 
+         * @param end an iterator pointing to the end of the mesh 
+         * @param meshArg the mesh to iterate through 
+         * @param numCellsArg the number of cells per dimension of the mesh
          * @return an instance of the Linked Cell PairParticleIterator
          */
         PairParticleIteratorLinkedCell(std::vector<Cell>::iterator it, std::vector<Cell>::iterator end, std::vector<Cell>& meshArg, std::array<size_t, 3> numCellsArg);
         /**
          * @brief Dereference this PairParticleIterator, i.e. get the current pair of Particles
-         * @return std::pair of Particles
+         * @return a pair of particles
          */
         reference operator*() override;
         /**
-         * @brief Increment this iterator, i.e. get the next distinct pair of particles
-         * @return this PairParticleIterator updated
+         * @brief increments the iterator to get the next distinct pair of particles    
+         * @return the incremented iterator
          */
         PairParticleIteratorLinkedCell& operator++() override;
         /**
-         * @brief check whether this PairParticleIterator is not equal to another PairParticleIterator
-         * @param other other PairParticleIterator
-         * @return True if iterators not equal
+         * @brief check whether this PairParticleIterator is not equal to another PairParticleIterator. The
+         * false-positive rate of this comparator is quite large since it is sufficient to distinguish it from the end 
+         * @param other the other PairParticleIterator
+         * @return whether or not the provided iterator is different from this one 
          */
         bool operator!=(const PairParticleIterator &other) override;
         /**
-         * @brief determines the vector of neighbors for the current cell
+         * @brief computes a vector of neighbors for the current cell
          * @return the vector of neighbors for the current cell
          */
         std::vector<Cell> getNeighborCells();
 
+        /**
+         * @brief increments the currentCellIdx
+         */
         void incrementCurrCellIdx();
 
     private:
@@ -108,26 +114,24 @@ class PairParticleIteratorLinkedCell: public PairParticleIterator {
         /**
          * @brief a set containing all particles for which all paris have been iterated through
          */
-        std::unordered_set<Particle, ParticleHash, ParticleEqual> completedPairs;
-
-        // TODO
-        void stepToNextPair();
+        std::unordered_set<Particle, ParticleHash, ParticleEqual> completedParticles;
 
         /**
-         * @brief skips cells until currentCell reaches the next non-empty cell. If the currentCell is non-empty no step is executed
+         * @brief skips cells until currentCell reaches the next non-empty cell for which there are still pairs to be computed
+         * @param stepBefore if false, the currentCell will not change if it already points to a cell for which there
+         * are still pairs to be computed
          */
         void currentStepToViableCell(bool stepBefore);
 
         /**
-         * @brief skips particles within currentCell until a particle is reached, with which pairs can be formed.
+         * @brief skips particles within the currentCell until a particle is reached, for which there are pairs which need to be computed.
          * If currentParticle already points to such a particle, no steps are executed
          */
         void currentStepToViableParticle();
 
         /**
-         * @brief skips cells and particles until neighborCell reaches the next non-empty cell which contains particles that can form
-         * a pair. neigborParticle is then set to such a particle
-         * If those conditions are already satisfied, no steps are executed
+         * @brief skips neighbor cells until a cell is reached with which pairs can be formed
+         * @param stepBefore if false, the neighborCell will not change if it already points to a cell with which pairs can be formed
          */
         void neighborStepToViableCell(bool stepBefore);
 
