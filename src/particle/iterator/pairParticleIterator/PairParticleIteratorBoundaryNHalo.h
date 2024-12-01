@@ -4,7 +4,7 @@
 #include <particle/Particle.h>
 #include <vector>
 #include <particle/cell/Cell.h>
-
+#include <particle/boundary/Boundary.h>
 
 /**
  * @brief an iterator which enables iteration over pairs of particles. The elements of those pairs are always
@@ -19,9 +19,11 @@ class PairParticleIteratorBoundaryNHalo: public PairParticleIterator {
          * @param meshArg the mesh of which the boundary will be iterated through
          * @param numCellsArg the number of cells per dimension of the mesh
          * @param cellSizeArg the size of a cell
+         * @param boundaryConfigArg the boundary configuration of the container this iterator iterates through
          * @return an instance of a PairParticleIterator for boundary and halo cells 
          */
-        PairParticleIteratorBoundaryNHalo(std::vector<Cell>::iterator currentCellArg, std::vector<Cell> meshArg, std::array<size_t, 3> numCellsArg, std::array<double, 3> cellSizeArg);
+        PairParticleIteratorBoundaryNHalo(std::vector<Cell>::iterator currentCellArg, std::vector<Cell> meshArg, std::array<size_t, 3> numCellsArg, std::array<double, 3> cellSizeArg,
+                struct boundaryConfig boundaryConfigArg);
         /**
          * @brief dereferences this PairParticleIterator and gets the current particle/ghost pair. The second particle in any
          * pair is a ghost particle. So in a pair <a, b>, a would be a real particle and b the ghost
@@ -40,11 +42,10 @@ class PairParticleIteratorBoundaryNHalo: public PairParticleIterator {
          */
         bool operator!=(const PairParticleIterator &other) override;
         /**
-         * @brief returns the ghost particles for the specified particle
-         * @param particle the particle to determine the ghosts for
+         * @brief returns the ghost particles for the currentParticle 
          * @return the vector of ghosts
          */
-        std::vector<Particle> createGhostParticles(Particle& particle);
+        std::vector<Particle> createGhostParticles();
     private:
         /**
          * @brief the mesh to iterate through 
@@ -80,7 +81,10 @@ class PairParticleIteratorBoundaryNHalo: public PairParticleIterator {
          * @brief the size of a cell in the mesh
          */
         std::array<double, 3> cellSize;
-
+        /**
+         * @brief the boundary configuration for the container this iterator runs on
+         */
+        struct boundaryConfig boundaryConfig;
         /**
          * @brief increments a 3D idx inplace
          * @param idx the idx to increment

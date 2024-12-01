@@ -1,4 +1,4 @@
-#include "../src/particle/container/ParticleContainerLinkedCell.h"
+#include <particle/container/ParticleContainerLinkedCell.h>
 #include <cstddef>
 #include <gtest/gtest.h>
 #include <unordered_set>
@@ -20,12 +20,7 @@ class ParticleContainerLinkedCellTest : public testing::Test {
 
         struct PairHash {
             size_t operator()(const std::pair<Particle, Particle>& pair) const {
-                return (std::hash<double>()(pair.first.getX()[0]) << 6) ^
-                    (std::hash<double>()(pair.first.getX()[1]) << 4) ^
-                    (std::hash<double>()(pair.first.getX()[2]) << 2) ^
-                    (std::hash<double>()(pair.second.getX()[0]) << 6) ^
-                    (std::hash<double>()(pair.second.getX()[1]) << 4) ^
-                    (std::hash<double>()(pair.second.getX()[2]) << 2);
+                return 0;
             }
         };
         struct PairEqual {
@@ -42,46 +37,24 @@ class ParticleContainerLinkedCellTest : public testing::Test {
         double cutoffRadius = 33;
         ParticleContainerLinkedCell empty{domainSize1, cutoffRadius};
         ParticleContainerLinkedCell container{domainSize1, cutoffRadius};
-        ParticleContainerLinkedCell pairsContainer{domainSize2, cutoffRadius};
+        ParticleContainerLinkedCell pairsContainer{domainSize2, cutoffRadius, {{ghost, ghost}, {ghost, ghost}, {outflow, outflow}}};
 
         void SetUp() override {
+
+            // container: 3x3 mesh of cells, 2 particles per cell
             for (double y = 0; y < 3; y++) {
-                std::array<double, 3> pos = {y * pairsContainer.getCellSize()[0] + 7, 7, 0.5 };
-                Particle p = {pos, {0, 0, 0}, 1};
-                pairsContainer.addParticle(p);
-
-                std::array<double, 3> pos3 = {y * pairsContainer.getCellSize()[0] + 10, 7, 0.5 };
-                Particle p3 = {pos3, {0, 0, 0}, 1};
-                pairsContainer.addParticle(p3);
-
                 for (double x = 0; x < 3; x++) {
-                    // create two particles per cell
                     std::array<double, 3> pos1 = {x * container.getCellSize()[0] + 7, y * container.getCellSize()[1] + 7, 0.5 };
-                    Particle p1 = {pos1, {0, 0, 0}, 1};
-                    container.addParticle(p1);
-
                     std::array<double, 3> pos2 = {x * container.getCellSize()[0] + 10, y * container.getCellSize()[1] + 10, 0.5 };
+                    Particle p1 = {pos1, {0, 0, 0}, 1};
                     Particle p2 = {pos2, {0, 0, 0}, 1};
+                    container.addParticle(p1);
                     container.addParticle(p2);
-
-                    // add the particles to the vector 
-                    particlesVector.push_back(p1);
-                    particlesVector.push_back(p2);
+                    // add all particles to the set
                     particlesSet.insert(p1);
                     particlesSet.insert(p2);
                 }
             }
-            pairsSet.insert(std::make_pair(particlesVector[0], particlesVector[1]));
-            pairsSet.insert(std::make_pair(particlesVector[0], particlesVector[2]));
-            pairsSet.insert(std::make_pair(particlesVector[0], particlesVector[3]));
-            pairsSet.insert(std::make_pair(particlesVector[1], particlesVector[2]));
-            pairsSet.insert(std::make_pair(particlesVector[1], particlesVector[3]));
-            pairsSet.insert(std::make_pair(particlesVector[2], particlesVector[3]));
-            pairsSet.insert(std::make_pair(particlesVector[2], particlesVector[4]));
-            pairsSet.insert(std::make_pair(particlesVector[2], particlesVector[5]));
-            pairsSet.insert(std::make_pair(particlesVector[3], particlesVector[4]));
-            pairsSet.insert(std::make_pair(particlesVector[3], particlesVector[5]));
-            pairsSet.insert(std::make_pair(particlesVector[4], particlesVector[5]));
         }
 };
 
@@ -122,13 +95,57 @@ TEST_F(ParticleContainerLinkedCellTest, EmptyParticleContainerLinkedCellPairIter
  * @brief checks if all particle pairs are returned by the iterator 
  */
 TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellPairIteratorTest) {
+    // pairsContainer: single row of cells, 2 particles per cell
+    for (double x = 0; x < 3; x++) {
+        std::array<double, 3> pos1 = {x * pairsContainer.getCellSize()[0] + 7, 7, 0.5 };
+        std::array<double, 3> pos2 = {x * pairsContainer.getCellSize()[0] + 10, 7, 0.5 };
+        Particle p1 = {pos1, {0, 0, 0}, 1};
+        Particle p2 = {pos2, {0, 0, 0}, 1};
+        pairsContainer.addParticle(p1);
+        pairsContainer.addParticle(p2);
+        particlesVector.push_back(p1);
+        particlesVector.push_back(p2);
+    }
+    // add all pairs to the set
+    for (size_t start = 0; start < 3; start += 2) {
+        for (size_t i = start; i < start + 4 - 1; i++) {
+            for (size_t j = i + 1; j < start + 4; j++) {
+                pairsSet.insert(std::make_pair(particlesVector[i], particlesVector[j]));
+            }
+        }
+    }
+    // count the number pairs produced when iterating
     size_t count = 0;
+    // test if all pairs are returned
     for (auto it = pairsContainer.beginPairParticle(); *it != *(pairsContainer.endPairParticle()); ++*it) {
         std::pair<Particle&, Particle&> pair = **it;
-        //EXPECT_TRUE(pairsSet.count(pair) == 1);
-        //pairsSet.erase(pair);
+        EXPECT_TRUE(pairsSet.count(pair) == 1);
         count++;
     }
-    EXPECT_TRUE(count == 11);
-    //EXPECT_TRUE(pairsSet.size() == 0);
+    EXPECT_TRUE(pairsSet.size() == count);
+
+
+    // clear the middle cell
+    pairsContainer.getMesh()[1].getParticles().clear();
+    // update the expected pairs
+    pairsSet.clear();
+    pairsSet.insert(std::make_pair(particlesVector[0], particlesVector[1]));
+    pairsSet.insert(std::make_pair(particlesVector[4], particlesVector[5]));
+    // reset count
+    count = 0;
+    // test if all pairs are returned
+    for (auto it = pairsContainer.beginPairParticle(); *it != *(pairsContainer.endPairParticle()); ++*it) {
+        std::pair<Particle&, Particle&> pair = **it;
+        EXPECT_TRUE(pairsSet.count(pair) == 1);
+        count++;
+    }
+    EXPECT_TRUE(pairsSet.size() == count);
+}
+
+
+/**
+ * @brief checks the ghost particles for all particles in the boundary are computed correctly
+ */
+TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellGhostParticleTest) {
+
 }

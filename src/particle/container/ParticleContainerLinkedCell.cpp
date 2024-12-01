@@ -1,13 +1,14 @@
-#include <algorithm>
 #include <particle/container/ParticleContainerLinkedCell.h>
 #include "particle/iterator/pairParticleIterator/PairParticleIteratorLinkedCell.h"
 #include "particle/iterator/particleIterator/ParticleIteratorLinkedCell.h"
 #include <utils/ArrayUtils.h>
 #include "spdlogConfig.h"
 
-ParticleContainerLinkedCell::ParticleContainerLinkedCell(std::array<double, 3> domainSizeArg, double cutoffRadiusArg) {
+ParticleContainerLinkedCell::ParticleContainerLinkedCell(std::array<double, 3> domainSizeArg, double cutoffRadiusArg, 
+        struct boundaryConfig boundaryConfigArg) {
     domainSize = domainSizeArg;
     cutoffRadius = cutoffRadiusArg;
+    boundaryConfig = boundaryConfigArg;
     // initialize size for cells
     cellSize = {cutoffRadius, cutoffRadius, 1};
 

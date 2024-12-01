@@ -17,9 +17,11 @@ public:
          * @brief creates an instance of a particle container for the linked cell algorithm 
          * @param domainSizeArg the size of the domain
          * @param cutoffRadiusArg radius past which forces between particles don't need to be computed
+         * @param boundaryConfigArg the configuration of the boundaries of this container (defaults to outflow everywhere)
          * @return an instance of the particle container for the linked cell algorithm
          */
-        ParticleContainerLinkedCell(std::array<double, 3> domainSizeArg, double cutoffRadiusArg);
+        ParticleContainerLinkedCell(std::array<double, 3> domainSizeArg, double cutoffRadiusArg,
+                struct boundaryConfig boundaryConfigArg={{outflow, outflow}, {outflow, outflow}, {outflow, outflow}});
 
         void addParticle(const Particle &particle) override;
         int size() override;
@@ -31,7 +33,6 @@ public:
         double getAverageVelocity() override;
         void setAverageVelocity(double averageVelocityArg) override;
         Particle& getParticle(int index) override;
-
 
         /**
          * @brief provides an iterator for iterating through pairs of boundary particles and their ghosts. The first
@@ -72,10 +73,23 @@ public:
          * @brief mesh contains all grid cells
          */
         std::vector<Cell> mesh;;
-        std::array<double, 3> domainSize;      // size of the domain of this particleContainer
-        double cutoffRadius; // = cutoffRadius
+        /**
+         * @brief the size of the domain for the container
+         */
+        std::array<double, 3> domainSize;
+        /**
+         * @brief the cutoffRadius past which no computations between particle pairs should take place.
+         * the mesh is always divided so that the cutoffradius for a particle extends at most to the particles in the
+         * neighboring cells 
+         */
+        double cutoffRadius;
         std::array<double, 3> cellSize; // dimensions of one cell
         std::array<size_t, 3> numCells; // number of cells per dimensions
+                                        //
+        /**
+         * @brief the boundary configuration for this linked cell container
+         */
+        struct boundaryConfig boundaryConfig;
         /**
          * @brief corrects the index of a particle in the linked cell container mesh based on it's position
          * @param p the particle to correct the position of
