@@ -80,11 +80,11 @@ std::unique_ptr<PairParticleIterator> ParticleContainerLinkedCell::endPairPartic
 }
 
 PairParticleIteratorBoundaryNHalo ParticleContainerLinkedCell::beginPairGhost() {
-    return {mesh.begin(), mesh, numCells, cellSize};
+    return {mesh.begin(), mesh.end(), mesh, numCells, cellSize, boundaryConfig};
 }
 
 PairParticleIteratorBoundaryNHalo ParticleContainerLinkedCell::endPairGhost() {
-    return {mesh.end(), mesh, numCells, cellSize};
+    return {mesh.end(), mesh.end(), mesh, numCells, cellSize, boundaryConfig};
 }
 
 int ParticleContainerLinkedCell::size() {

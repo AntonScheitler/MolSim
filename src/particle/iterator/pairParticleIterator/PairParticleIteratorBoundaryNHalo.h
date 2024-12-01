@@ -22,8 +22,8 @@ class PairParticleIteratorBoundaryNHalo: public PairParticleIterator {
          * @param boundaryConfigArg the boundary configuration of the container this iterator iterates through
          * @return an instance of a PairParticleIterator for boundary and halo cells 
          */
-        PairParticleIteratorBoundaryNHalo(std::vector<Cell>::iterator currentCellArg, std::vector<Cell> meshArg, std::array<size_t, 3> numCellsArg, std::array<double, 3> cellSizeArg,
-                struct boundaryConfig boundaryConfigArg);
+        PairParticleIteratorBoundaryNHalo(std::vector<Cell>::iterator currentCellArg, std::vector<Cell>::iterator currentCellEndArg, std::vector<Cell> meshArg, std::array<size_t, 3> numCellsArg, 
+                std::array<double, 3> cellSizeArg, struct boundaryConfig boundaryConfigArg);
         /**
          * @brief dereferences this PairParticleIterator and gets the current particle/ghost pair. The second particle in any
          * pair is a ghost particle. So in a pair <a, b>, a would be a real particle and b the ghost
@@ -60,10 +60,17 @@ class PairParticleIteratorBoundaryNHalo: public PairParticleIterator {
          */
         std::vector<Cell>::iterator currentCell;
         /**
+         * @brief an iterator pointing to the end of the mesh
+         */
+        std::vector<Cell>::iterator currentCellEnd;
+        /**
          * @brief an iterator pointing to the current particle within the current cell
          */
         std::vector<Particle>::iterator currentParticle;
-
+        /**
+         * @brief a vector of the ghost particles of the current particle
+         */
+        std::vector<Particle> ghostsVector;
         /**
          * @brief an iterator pointing to the ghost particles for the currentParticle
          */
@@ -86,8 +93,8 @@ class PairParticleIteratorBoundaryNHalo: public PairParticleIterator {
          */
         struct boundaryConfig boundaryConfig;
         /**
-         * @brief increments a 3D idx inplace
-         * @param idx the idx to increment
+         * @brief increments the currentCellIdx
          */
-        void incrementIdx3D(std::array<int, 3>& idx);
+        void incrementCurrentCellIdx();
+        void stepToNonEmptyBoundaryCell(bool stepToNext);
 };
