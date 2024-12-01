@@ -9,7 +9,7 @@
 /**
  * @brief manages a set of particles using the linked cell algorithm
  */
-class ParticleContainerLinkedCell : ParticleContainer {
+class ParticleContainerLinkedCell : public ParticleContainer {
 
 public:
 
@@ -57,9 +57,9 @@ public:
          */
         int continuousCoordsToIndex(std::array<double, 3> coord);
         /**
-         * @brief corrects the indecies of all particles in the linked cell container mesh based on their position
+         * @brief corrects the indices of all particles in the linked cell container mesh based on their position
          */
-        void correctAllParticleIndecies();
+        void correctAllParticleIndices();
         std::vector<Cell>& getMesh();
         Cell& getCell(int idx);
         std::array<size_t, 3> getNumCells();
@@ -81,7 +81,7 @@ public:
         double cutoffRadius;
         std::array<double, 3> cellSize; // dimensions of one cell
         std::array<size_t, 3> numCells; // number of cells per dimensions
-                                        //
+
         /**
          * @brief the boundary configuration for this linked cell container
          */

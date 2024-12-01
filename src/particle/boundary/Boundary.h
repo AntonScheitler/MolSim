@@ -3,9 +3,10 @@
  * @brief the types of boundaries this linked cell container can have
  */
 #include <array>
-enum BoundaryTypes {
+
+enum BoundaryType {
     outflow,
-    ghost
+    reflect
 };
 
 /**
@@ -14,7 +15,7 @@ enum BoundaryTypes {
  * its end. i.e. x[0] is the boundary type to the "left" of the mesh and x[1] is that to the "right" of the mesh
  */
 struct boundaryConfig {
-            std::array<BoundaryTypes, 2> x;
-            std::array<BoundaryTypes, 2> y;
-            std::array<BoundaryTypes, 2> z;
+    std::array<BoundaryType, 2> x;
+    std::array<BoundaryType, 2> y;
+    std::array<BoundaryType, 2> z;
 };

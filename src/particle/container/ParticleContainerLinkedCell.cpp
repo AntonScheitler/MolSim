@@ -114,14 +114,13 @@ void ParticleContainerLinkedCell::correctParticleIndex(Particle& p) {
     }
 }
 
-void ParticleContainerLinkedCell::correctAllParticleIndecies() {
+void ParticleContainerLinkedCell::correctAllParticleIndices() {
     for(auto& c : mesh) {
         for(auto& p : c.getParticles()) {
             correctParticleIndex(p);
         }
     }
 }
-
 
 std::array<size_t, 3> ParticleContainerLinkedCell::getNumCells() {
     return numCells;

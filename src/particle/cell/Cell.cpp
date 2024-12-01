@@ -1,4 +1,5 @@
 #include "Cell.h"
+#include <bits/stdc++.h>
 
 Cell::Cell(bool isBoundaryArg) {
     isBoundary = isBoundaryArg;
@@ -13,6 +14,5 @@ std::vector<Particle>& Cell::getParticles() {
 }
 
 void Cell::removeParticle(Particle &particle) {
-    // TODO: fix
-//    particles.erase(std::find(particles.begin(), particles.end(), particle));
+    particles.erase(std::find(particles.begin(), particles.end(), particle));
 }

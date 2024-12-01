@@ -9,7 +9,6 @@
 #include "particle/container/ParticleContainerLinkedCell.h"
 #include <chrono>
 #include <cstdlib>
-#include <ctime>
 
 Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
 
@@ -54,7 +53,7 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                 PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
                 ParticleContainerLinkedCell* containerLinkedCell = dynamic_cast<ParticleContainerLinkedCell*>(&simData.getParticles());
                 if(containerLinkedCell) {
-                    containerLinkedCell->correctAllParticleIndecies();
+                    containerLinkedCell->correctAllParticleIndices();
                     ForceComputations::resetForces(simData.getParticles());
                     ForceComputations::computeLennardJonesPotential(simData.getParticles(), simData.getEpsilon(), simData.getSigma());
                     ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell, simData.getEpsilon(), simData.getSigma());

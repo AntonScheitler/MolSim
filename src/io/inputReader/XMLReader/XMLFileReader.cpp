@@ -8,13 +8,14 @@
 #include "io/inputReader/ParticleGenerator.h"
 #include "ParameterParser.h"
 #include <particle/container/ParticleContainerLinkedCell.h>
+#include <particle/container/ParticleContainerDirectSum.h>
+#include <particle/boundary/Boundary.h>
 
 
 namespace inputReader {
     XMLFileReader::XMLFileReader(SimulationData &simDataArg) : simData(simDataArg) {
         this->logger = spdlog::stdout_color_st("XMLFileReader");
         SPDLOG_LOGGER_DEBUG(logger, "Initialized XMLFileReader");
-
     }
 
     XMLFileReader::~XMLFileReader() {
@@ -32,9 +33,26 @@ namespace inputReader {
         double r;
         int type = 0;
 
-        // TODO create ParticleContainer based on info in xml (directSum or linkedCell)
-        ParticleContainer *particles = ParticleContainerLinkedCell(std::array<double, 3>(0, 0, 0), 0);
-        simData.setParticles(particles);
+
+        ParticleContainer *particles;
+        if (simParser->parameters().present() && simParser->parameters()->containerType().present()) {
+            std::string particleContainerType = simParser->parameters()->containerType().get();
+
+            // TODO include simParser, correct init. of boundaryConditions and container parameters
+
+            if (particleContainerType == "sum") {
+                ParticleContainerDirectSum containerDirectSum{};
+                particles = &containerDirectSum;
+            } else if (particleContainerType == "linked") {
+                struct boundaryConfig config{std::array<BoundaryType, 2>{outflow, outflow},
+                                             std::array<BoundaryType, 2>{outflow, outflow},
+                                             std::array<BoundaryType, 2>{outflow, outflow}};
+                ParticleContainerLinkedCell containerLinkedCell{std::array<double, 3>{0, 0, 0}, 0,
+                                                                config};
+                particles = &containerLinkedCell;
+            }
+            simData.setParticles(*particles);
+        } else SPDLOG_ERROR("invalid xml configuration: no container type specified");
 
         std::cout << "entering XML parsing with filename" << filename << std::endl;
 
@@ -87,7 +105,7 @@ namespace inputReader {
 
                 simData.setAverageVelocity(cuboid.brownianMotion());
 
-                ParticleGenerator::generateCuboid(particles, x, v, d, m, h, type);
+                ParticleGenerator::generateCuboid(*particles, x, v, d, m, h, type);
 
                 type++;
             }
