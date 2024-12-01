@@ -93,7 +93,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellPairIteratorT
     // a helper vector to create pairs 
     std::vector<Particle> particlesVector{};
     // single row of cells, 2 particles per cell
-    ParticleContainerLinkedCell pairsContainer{{99, 33, 1}, 33, {{ghost, ghost}, {ghost, ghost}, {outflow, outflow}}};
+    ParticleContainerLinkedCell pairsContainer{{99, 33, 1}, 33, {{reflect, reflect}, {reflect, reflect}, {outflow, outflow}}};
     for (double x = 0; x < 3; x++) {
         std::array<double, 3> pos1 = {x * pairsContainer.getCellSize()[0] + 7, 7, 0.5 };
         std::array<double, 3> pos2 = {x * pairsContainer.getCellSize()[0] + 10, 7, 0.5 };
@@ -146,7 +146,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellPairIteratorT
  */
 TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellGhostParticleTest) {
     // 3x3 mesh of cells, 1 particle per cell 
-    ParticleContainerLinkedCell container{{99, 99, 1}, 33, {{ghost, ghost}, {ghost, ghost}, {outflow, outflow}}};
+    ParticleContainerLinkedCell container{{99, 99, 1}, 33, {{reflect, reflect}, {reflect, reflect}, {outflow, outflow}}};
     // set of expected ghost/particle pairs
     std::unordered_set<std::pair<Particle, Particle>, PairHash, PairEqual> pairsSet;
 
@@ -190,7 +190,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellGhostParticle
  */
 TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellGhostParticleTestWithSpecialBoundary) {
     // 3x3 mesh of cells, 1 particle per cell 
-    ParticleContainerLinkedCell container{{99, 99, 1}, 33, {{ghost, outflow}, {ghost, outflow}, {outflow, outflow}}};
+    ParticleContainerLinkedCell container{{99, 99, 1}, 33, {{reflect, outflow}, {reflect, outflow}, {outflow, outflow}}};
     // set of expected ghost/particle pairs
     std::unordered_set<std::pair<Particle, Particle>, PairHash, PairEqual> pairsSet;
 

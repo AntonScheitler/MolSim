@@ -23,8 +23,8 @@ namespace inputReader {
     }
 
 
-    void XMLFileReader::readFile(ParticleContainer &particles, char *filename) {
-        particles.setAverageVelocity(0);
+    void XMLFileReader::readCometFile(char *filename) {
+        simData.setAverageVelocity(0);
         std::array<double, 3> x{};
         std::array<double, 3> v{};
         std::array<int, 3> d{};

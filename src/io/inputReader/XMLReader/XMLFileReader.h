@@ -28,7 +28,14 @@ namespace inputReader {
          * @param particles the particles to store the information in
          * @param filename the name of the file to read from
          */
-        void readFile(ParticleContainer &particles, char *filename);
+        void readCollisionFile(char *filename);
+        /**
+         * @brief xml file reader specifically for the Comet simulation
+         * @param particles the particles to store the information in
+         * @param filename the name of the file to read from
+         */
+        void readCometFile(char *filename);
+        void readDropFile(char *filename);
 
 
     private:

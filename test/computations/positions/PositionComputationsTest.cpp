@@ -32,7 +32,7 @@ protected:
         a.setF({{9, 0, 7}});
         b.setF({{2, 10, 6}});
 
-        particles = ParticleContainerDirectSum({{a,b}});
+        particles = ParticleContainerDirectSum({std::vector<Particle>{a,b}});
     }
 };
 

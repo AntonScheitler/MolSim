@@ -49,7 +49,7 @@ namespace inputReader {
 
     void FileReader::readXML(SimulationData &simData, char *filename) {
         XMLFileReader xmlFileReader(simData);
-        xmlFileReader.readCometFile(simData, filename);
+        xmlFileReader.readCometFile(filename);
     }
 
 } // namespace inputReader
