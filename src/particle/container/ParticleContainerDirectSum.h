@@ -2,7 +2,6 @@
 #include <vector>
 #include "../Particle.h"
 #include "particle/iterator/pairParticleIterator/PairParticleIterator.h"
-#include "particle/iterator/particleIterator/ParticleIteratorDirectSum.h"
 #include <particle/iterator/pairParticleIterator/PairParticleIteratorDirectSum.h>
 #include <particle/container/ParticleContainer.h>
 
@@ -48,8 +47,4 @@ class ParticleContainerDirectSum : public ParticleContainer {
          * @brief the particles wrapped by this container
          */
         std::vector<Particle> particles;
-//        /**
-//         * @brief the average brownian velocity of the particles
-//         */
-//        double averageVelocity;
 };

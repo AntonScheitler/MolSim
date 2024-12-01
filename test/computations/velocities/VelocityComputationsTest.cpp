@@ -36,7 +36,7 @@ protected:
         a.setF({{1, 6, 9}});
         b.setF({{4, 7, 5}});
 
-        particles = ParticleContainerDirectSum({{a,b}}, 0.1);
+        particles = ParticleContainerDirectSum({{a,b}});
     }
 };
 

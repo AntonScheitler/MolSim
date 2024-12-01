@@ -25,7 +25,7 @@ protected:
         a.setM(6);
         b.setM(1);
 
-        particles = ParticleContainerDirectSum({{a,b}}, 0.1);
+        particles = ParticleContainerDirectSum({{a,b}});
         SPDLOG_INFO("ForceComputationsTest setUp done");
     }
 };

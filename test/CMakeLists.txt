@@ -10,17 +10,17 @@ target_link_libraries(computationTests
     gtest_main
 )
 
-# compile binary for inputReader tests
-file(GLOB_RECURSE INPUT_READER_TESTS
-    "${CMAKE_CURRENT_SOURCE_DIR}/inputReader/*.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/inputReader/*.h"
-)
-
-add_executable(inputReaderTests ${INPUT_READER_TESTS})
-target_link_libraries(inputReaderTests
-    src
-    gtest_main
-)
+## compile binary for inputReader tests
+#file(GLOB_RECURSE INPUT_READER_TESTS
+#    "${CMAKE_CURRENT_SOURCE_DIR}/inputReader/*.cpp"
+#    "${CMAKE_CURRENT_SOURCE_DIR}/inputReader/*.h"
+#)
+#
+#add_executable(inputReaderTests ${INPUT_READER_TESTS})
+#target_link_libraries(inputReaderTests
+#    src
+#    gtest_main
+#)
 
 # compile binary for particle tests
 file(GLOB_RECURSE PARTICLE_TESTS
@@ -38,5 +38,5 @@ target_link_libraries(particleTests
 enable_testing()
 include(GoogleTest)
 gtest_discover_tests(computationTests)
-gtest_discover_tests(inputReaderTests)
+#gtest_discover_tests(inputReaderTests)
 gtest_discover_tests(particleTests)

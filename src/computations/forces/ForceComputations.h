@@ -1,4 +1,5 @@
 #include "particle/container/ParticleContainer.h"
+#include "particle/container/ParticleContainerLinkedCell.h"
 
 /**
  * @brief a class wrapping force-computing functions and their utility functions
@@ -20,6 +21,15 @@ class ForceComputations {
 
         /**
          * @brief updates the old force and resets the current force for all particles
+         * @param particles the particles to reset the forces of
          */
         static void resetForces(ParticleContainer& particles);
+
+        /**
+         * @brief computes the repulsion, the boundary particles suffer from the ghost particles
+         * @param particles the particles to get the boundary particles from
+         * @param epsilon epsilon for computation of Lennard Jones Potential
+         * @param sigma sigma for computation of Lennard Jones Potential
+         */
+        static void computeGhostParticleRepulsion(ParticleContainerLinkedCell& particles, double epsilon, double sigma);
 };

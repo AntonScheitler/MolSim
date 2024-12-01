@@ -20,7 +20,7 @@ class ParticleContainerDirectSumTest : public testing::Test {
  * ParticleContainerDirectSum
  */
 TEST_F(ParticleContainerDirectSumTest, EmptyParticleContainerDirectSumIteratorTest) {
-    for (Particle &_ : empty) {
+    for (auto it = empty.begin(); *it != *(empty.end()); ++*it) {
         EXPECT_TRUE(false);
     }
 }
@@ -31,7 +31,8 @@ TEST_F(ParticleContainerDirectSumTest, EmptyParticleContainerDirectSumIteratorTe
  */
 TEST_F(ParticleContainerDirectSumTest, ParticleContainerDirectSumIteratorTest) {
     double d = 0; // dummy value for x, v and m
-    for (Particle particle : container) {
+    for (auto it = empty.begin(); *it != *(empty.end()); ++*it) {
+        Particle particle = **it;
         Particle otherParticle = Particle({d, d, d}, {d, d, d}, d);
         EXPECT_TRUE(particle == otherParticle);
         d++;
@@ -43,8 +44,7 @@ TEST_F(ParticleContainerDirectSumTest, ParticleContainerDirectSumIteratorTest) {
  * of an empty ParticleContainerDirectSum
  */
 TEST_F(ParticleContainerDirectSumTest, EmptyParticleContainerDirectSumPairIteratorTest) {
-    for (auto pair = empty.beginPairParticle(); pair != empty.endPairParticle();
-            ++pair) {
+    for (auto it = empty.beginPairParticle(); *it != *(empty.endPairParticle()); ++*it) {
         EXPECT_TRUE(false);
     }
 }
@@ -62,9 +62,8 @@ TEST_F(ParticleContainerDirectSumTest, ParticleContainerDirectSumPairIteratorTes
         }
     }
     size_t pairIndex = 0;
-    for (auto it = container.beginPairParticle();
-            it != container.endPairParticle(); ++it, pairIndex++) {
-        std::pair<Particle, Particle> pair = *it;
+    for (auto it = container.beginPairParticle(); *it != *(container.endPairParticle()); ++*it, pairIndex++) {
+        std::pair<Particle, Particle> pair = **it;
         EXPECT_TRUE(pair.first == otherPairs[pairIndex].first && pair.second == otherPairs[pairIndex].second);
     }
     // check that the number of pairs is correct

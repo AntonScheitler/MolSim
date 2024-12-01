@@ -1,6 +1,5 @@
-#include "particle/container/ParticleContainer.h"
 #include "spdlogConfig.h"
-#include "../../simulation/simulationData.h"
+#include <simulation/SimulationData.h>
 
 namespace inputReader {
     /**
