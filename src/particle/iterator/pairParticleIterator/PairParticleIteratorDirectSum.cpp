@@ -28,5 +28,5 @@ bool PairParticleIteratorDirectSum::operator!=(const PairParticleIterator &other
     if (casted) {
         return first != casted->first || second != casted->second || end != casted->end;
     } 
-    return false;
+    return true;
 }

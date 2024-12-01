@@ -1,13 +1,14 @@
-#include <algorithm>
 #include <particle/container/ParticleContainerLinkedCell.h>
 #include "particle/iterator/pairParticleIterator/PairParticleIteratorLinkedCell.h"
 #include "particle/iterator/particleIterator/ParticleIteratorLinkedCell.h"
 #include <utils/ArrayUtils.h>
 #include "spdlogConfig.h"
 
-ParticleContainerLinkedCell::ParticleContainerLinkedCell(std::array<double, 3> domainSizeArg, double cutoffRadiusArg) {
+ParticleContainerLinkedCell::ParticleContainerLinkedCell(std::array<double, 3> domainSizeArg, double cutoffRadiusArg, 
+        struct boundaryConfig boundaryConfigArg) {
     domainSize = domainSizeArg;
     cutoffRadius = cutoffRadiusArg;
+    boundaryConfig = boundaryConfigArg;
     // initialize size for cells
     cellSize = {cutoffRadius, cutoffRadius, 1};
 
@@ -79,11 +80,11 @@ std::unique_ptr<PairParticleIterator> ParticleContainerLinkedCell::endPairPartic
 }
 
 PairParticleIteratorBoundaryNHalo ParticleContainerLinkedCell::beginPairGhost() {
-    return {mesh.begin(), mesh, numCells, cellSize};
+    return {mesh.begin(), mesh.end(), mesh, numCells, cellSize, boundaryConfig};
 }
 
 PairParticleIteratorBoundaryNHalo ParticleContainerLinkedCell::endPairGhost() {
-    return {mesh.end(), mesh, numCells, cellSize};
+    return {mesh.end(), mesh.end(), mesh, numCells, cellSize, boundaryConfig};
 }
 
 int ParticleContainerLinkedCell::size() {

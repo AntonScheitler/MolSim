@@ -4,6 +4,10 @@
 ParticleIteratorLinkedCell::ParticleIteratorLinkedCell(std::vector<Cell>::iterator it, std::vector<Cell>::iterator endArg) {
     currentCell = it;
     end = endArg;
+    stepToNonEmptyCell();
+    if (it == endArg) {
+        return;
+    }
     currentParticle = currentCell->getParticles().begin();
 }
 
@@ -15,10 +19,10 @@ ParticleIteratorLinkedCell &ParticleIteratorLinkedCell::operator++() {
     ++currentParticle;
     if (currentParticle == currentCell->getParticles().end()) {
         ++currentCell;
+        stepToNonEmptyCell();
         if (currentCell == end) {
             return *this;
         }
-        currentParticle = currentCell->getParticles().begin();
     }
     return *this;
 }
@@ -28,5 +32,14 @@ bool ParticleIteratorLinkedCell::operator!=(const ParticleIterator &other) {
     if (casted) {
         return currentCell != casted->currentCell;
     } 
-    return false;
+    return true;
+}
+
+void ParticleIteratorLinkedCell::stepToNonEmptyCell() {
+    while (currentCell != end && currentCell->getParticles().size() == 0) {
+        ++currentCell;
+    }
+    if (currentCell != end) {
+        currentParticle = currentCell->getParticles().begin();
+    }
 }

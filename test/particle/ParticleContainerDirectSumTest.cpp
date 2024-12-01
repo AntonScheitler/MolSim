@@ -1,7 +1,7 @@
-#include "../../src/particle/container/ParticleContainerDirectSum.h"
+#include "../src/particle/container/ParticleContainerDirectSum.h"
 #include <gtest/gtest.h>
 
-class ParticleContainerTest : public testing::Test {
+class ParticleContainerDirectSumTest : public testing::Test {
     protected:
         ParticleContainerDirectSum empty;
         ParticleContainerDirectSum container;
@@ -17,9 +17,9 @@ class ParticleContainerTest : public testing::Test {
 
 /**
  * @brief checks if there is nothing returned when iterating through an empty
- * ParticleContainer
+ * ParticleContainerDirectSum
  */
-TEST_F(ParticleContainerTest, EmptyParticleContainerIteratorTest) {
+TEST_F(ParticleContainerDirectSumTest, EmptyParticleContainerDirectSumIteratorTest) {
     for (Particle &_ : empty) {
         EXPECT_TRUE(false);
     }
@@ -29,7 +29,7 @@ TEST_F(ParticleContainerTest, EmptyParticleContainerIteratorTest) {
  * @brief checks if the Particles returned by the Iterator are in the correct
  * order
  */
-TEST_F(ParticleContainerTest, ParticleContainerIteratorTest) {
+TEST_F(ParticleContainerDirectSumTest, ParticleContainerDirectSumIteratorTest) {
     double d = 0; // dummy value for x, v and m
     for (Particle particle : container) {
         Particle otherParticle = Particle({d, d, d}, {d, d, d}, d);
@@ -40,9 +40,9 @@ TEST_F(ParticleContainerTest, ParticleContainerIteratorTest) {
 
 /**
  * @brief checks if there is nothing returned when iterating through the pairs
- * of an empty ParticleContainer
+ * of an empty ParticleContainerDirectSum
  */
-TEST_F(ParticleContainerTest, EmptyParticleContainerPairIteratorTest) {
+TEST_F(ParticleContainerDirectSumTest, EmptyParticleContainerDirectSumPairIteratorTest) {
     for (auto pair = empty.beginPairParticle(); pair != empty.endPairParticle();
             ++pair) {
         EXPECT_TRUE(false);
@@ -53,7 +53,7 @@ TEST_F(ParticleContainerTest, EmptyParticleContainerPairIteratorTest) {
  * @brief checks if the Particle pairs returned by the PairParticleIterator are correct and the number of pairs
  * is correct
  */
-TEST_F(ParticleContainerTest, ParticleContainerPairIteratorTest) {
+TEST_F(ParticleContainerDirectSumTest, ParticleContainerDirectSumPairIteratorTest) {
     std::vector<std::pair<Particle, Particle>> otherPairs = {};
     for (double i = 0; i < 3; i++) {
         for (double j = i + 1; j < 4; j++) {

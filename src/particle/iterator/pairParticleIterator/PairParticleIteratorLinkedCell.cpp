@@ -1,32 +1,53 @@
 #include "particle/iterator/pairParticleIterator/PairParticleIterator.h"
+#include "utils/ArrayUtils.h"
 #include <array>
 #include <cstddef>
 #include <particle/iterator/pairParticleIterator/PairParticleIteratorLinkedCell.h>
 
-PairParticleIteratorLinkedCell::PairParticleIteratorLinkedCell(std::vector<Cell>::iterator it, std::vector<Cell>::iterator end, std::vector<Cell>& meshArg, std::array<size_t, 3> numCellsArg) {
+PairParticleIteratorLinkedCell::PairParticleIteratorLinkedCell( std::vector<Cell>::iterator it, std::vector<Cell>::iterator endArg, std::vector<Cell> &meshArg, std::array<size_t, 3> numCellsArg) {
     completedPairs.clear();
-    currentCellIdx = 0;
+    currentCellIdx = {0, 0, 0};
     mesh = meshArg;
     numCells = numCellsArg;
     currentCell = it;
+    end = endArg;
 
-    // dont initialize the other variables if it already points to the end
-    if (it == end){
+    currentStepToViableCell(false);
+    if (currentCell == end) {
         return;
     }
-
-    // initialize iterator
-    currentParticle = (*currentCell).getParticles().begin();
 
     // get iterator and end of iterator for neighbors of the current cell
     neighborCellsVector = getNeighborCells();
     neighborCell = neighborCellsVector.begin();
-    neighborParticle = (*neighborCell).getParticles().begin();
-
-    // move to the first valid pair
-    while ((*currentParticle) == (*neighborParticle) || (completedPairs.count(*neighborParticle) > 0)) {
-        ++(*this);
+    neighborEnd = neighborCellsVector.end();
+    neighborStepToViableCell(false);
+    while (neighborCell == neighborEnd) {
+        // add the current particle to the set of particles for which all pairs have been computed
+        completedPairs.insert(*currentParticle);
+        ++currentParticle;
+        currentStepToViableParticle();
+        if (currentParticle == (*currentCell).getParticles().end()) {
+            currentStepToViableCell(true);
+            if (currentCell == end) {
+                return;
+            }
+            neighborCellsVector = getNeighborCells();
+        }
+        neighborCell = neighborCellsVector.begin();
+        neighborEnd = neighborCellsVector.end();
+        neighborStepToViableCell(false);
     }
+}
+
+void PairParticleIteratorLinkedCell::incrementCurrCellIdx() {
+    if (currentCellIdx[0] == numCells[0] - 1) {
+        if (currentCellIdx[1] == numCells[1] - 1) {
+            currentCellIdx[2] = (currentCellIdx[2] + 1) % numCells[2];
+        }
+        currentCellIdx[1] = (currentCellIdx[1] + 1) % numCells[1];
+    }
+    currentCellIdx[0] = (currentCellIdx[0] + 1) % numCells[0];
 }
 
 std::vector<Cell> PairParticleIteratorLinkedCell::getNeighborCells() {
@@ -34,53 +55,110 @@ std::vector<Cell> PairParticleIteratorLinkedCell::getNeighborCells() {
     for (int z = -1; z < 2; z++) {
         for (int y = -1; y < 2; y++) {
             for (int x = -1; x < 2; x++) {
-                int neighborIdx = currentCellIdx + x + (y * numCells[0]) + (z * numCells[0] * numCells[1]);
-                if (neighborIdx >= 0 && neighborIdx < mesh.size()) {
-                    neighborCells.push_back(mesh[neighborIdx]);
-                }
+                std::array<int, 3> neighborCoords = ArrayUtils::elementWisePairOp(
+                        currentCellIdx, {x, y, z}, std::plus<>());
+                if (neighborCoords[0] < 0 || neighborCoords[1] < 0 || neighborCoords[2] < 0 || 
+                        neighborCoords[0] >= numCells[0] || neighborCoords[1] >= numCells[1] || neighborCoords[2] >= numCells[2]) continue;
+
+                int neighborIdx = neighborCoords[0] + (neighborCoords[1] * numCells[0]) + (neighborCoords[2] * numCells[0] * numCells[1]);
+                neighborCells.push_back(mesh[neighborIdx]);
             }
         }
     }
     return neighborCells;
 }
 
-PairParticleIteratorLinkedCell::reference PairParticleIteratorLinkedCell::operator*() {
+
+PairParticleIteratorLinkedCell::reference
+PairParticleIteratorLinkedCell::operator*() {
     return {*currentParticle, *neighborParticle};
 }
 
-
-PairParticleIteratorLinkedCell& PairParticleIteratorLinkedCell::operator++() {
-    neighborParticle++;
-    if (neighborParticle == (*neighborCell).getParticles().end()) {
-        neighborCell++;
-        if (neighborCell == neighborCellsVector.end()) {
+PairParticleIteratorLinkedCell &PairParticleIteratorLinkedCell::operator++() {
+    // step to the next viable neighbor particle
+    ++neighborParticle;
+    neighborStepToViableParticle();
+    // go to the next neighbor cell if all neighbor particles have been iterated
+    // through
+    if (neighborParticle == neighborCell->getParticles().end()) {
+        // step to the next non-empty neighbor cell which contains viable particles
+        neighborStepToViableCell(true);
+        while (neighborCell == neighborEnd) {
+            // add the current particle to the set of particles for which all pairs
+            // have been computed
             completedPairs.insert(*currentParticle);
-            currentParticle++;
+            ++currentParticle;
+            currentStepToViableParticle();
             if (currentParticle == (*currentCell).getParticles().end()) {
-                currentCell++;
-                if (currentCell == mesh.end()) {
+                currentStepToViableCell(true);
+                if (currentCell == end) {
                     return *this;
                 }
-                currentCellIdx++;
                 neighborCellsVector = getNeighborCells();
-                currentParticle = (*currentCell).getParticles().begin();
             }
             neighborCell = neighborCellsVector.begin();
+            neighborEnd = neighborCellsVector.end();
+            neighborStepToViableCell(false);
         }
-        neighborParticle = (*neighborCell).getParticles().begin();
-    }
-    // todo do-while instead?
-    if ((*currentParticle) == (*neighborParticle) || (completedPairs.count(*neighborParticle) > 0)) {
-        return ++(*this);
     }
     return *this;
 }
 
-bool PairParticleIteratorLinkedCell::operator!=(const PairParticleIterator &other) {
-    auto casted = dynamic_cast<const PairParticleIteratorLinkedCell*>(&other);
+bool PairParticleIteratorLinkedCell::operator!=(
+        const PairParticleIterator &other) {
+    auto casted = dynamic_cast<const PairParticleIteratorLinkedCell *>(&other);
     if (casted) {
         return currentCell != casted->currentCell;
-    } 
-    return false;
+    }
+    return true;
 }
 
+void PairParticleIteratorLinkedCell::currentStepToViableCell(bool stepBefore) {
+    do {
+        if (stepBefore) {
+            ++currentCell;
+            incrementCurrCellIdx();
+        }
+        stepBefore = true;
+        while (currentCell != end && currentCell->getParticles().size() == 0) {
+            ++currentCell;
+            incrementCurrCellIdx();
+        }
+        if (currentCell == end) {
+            return;
+        }
+        currentParticle = currentCell->getParticles().begin();
+        currentStepToViableParticle();
+    } while (currentCell != end &&
+            currentParticle == currentCell->getParticles().end());
+}
+
+void PairParticleIteratorLinkedCell::currentStepToViableParticle() {
+    while (currentParticle != currentCell->getParticles().end() &&
+            completedPairs.count(*currentParticle) > 0) {
+        ++currentParticle;
+    }
+}
+
+void PairParticleIteratorLinkedCell::neighborStepToViableCell(bool stepBefore) {
+    do {
+        if (stepBefore) ++neighborCell;
+        stepBefore = true;
+        while (neighborCell != neighborEnd && neighborCell->getParticles().size() == 0) {
+            ++neighborCell;
+        }
+        if (neighborCell == neighborEnd) {
+            return;
+        }
+        neighborParticle = neighborCell->getParticles().begin();
+        neighborStepToViableParticle();
+    } while (neighborCell != neighborEnd &&
+            neighborParticle == neighborCell->getParticles().end());
+}
+
+void PairParticleIteratorLinkedCell::neighborStepToViableParticle() {
+    while (neighborParticle != neighborCell->getParticles().end() &&
+            ((*currentParticle) == (*neighborParticle) || (completedPairs.count(*neighborParticle) > 0))) {
+        ++neighborParticle;
+    }
+}
