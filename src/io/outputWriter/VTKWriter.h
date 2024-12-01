@@ -29,6 +29,7 @@ namespace outputWriter {
 
             std::string baseName = "MD_vtk";
             std::shared_ptr<spdlog::logger> logger;
+
             /**
              * @brief set up internal data structures and prepare to plot a particle.
              */

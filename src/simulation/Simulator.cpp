@@ -34,7 +34,9 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
             };
             step = [this]() {
                 PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
-                ForceComputations::resetForces(simData.getParticles()); ForceComputations::computeLennardJonesPotential(simData.getParticles(), simData.getEpsilon(), simData.getSigma());
+                ForceComputations::resetForces(simData.getParticles());
+                ForceComputations::computeLennardJonesPotential(simData.getParticles(), simData.getEpsilon(),
+                                                                simData.getSigma());
                 VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
 
             };
@@ -51,12 +53,14 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                 // save previous position and update the position of particles in the mesh based on the new one
                 PositionComputations::updateOldX(simData.getParticles());
                 PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
-                ParticleContainerLinkedCell* containerLinkedCell = dynamic_cast<ParticleContainerLinkedCell*>(&simData.getParticles());
-                if(containerLinkedCell) {
+                ParticleContainerLinkedCell *containerLinkedCell = dynamic_cast<ParticleContainerLinkedCell *>(&simData.getParticles());
+                if (containerLinkedCell) {
                     containerLinkedCell->correctAllParticleIndices();
                     ForceComputations::resetForces(simData.getParticles());
-                    ForceComputations::computeLennardJonesPotential(simData.getParticles(), simData.getEpsilon(), simData.getSigma());
-                    ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell, simData.getEpsilon(), simData.getSigma());
+                    ForceComputations::computeLennardJonesPotential(simData.getParticles(), simData.getEpsilon(),
+                                                                    simData.getSigma());
+                    ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell, simData.getEpsilon(),
+                                                                     simData.getSigma());
                     VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
                 } else {
                     SPDLOG_ERROR("Linked Cell Simulation is not using Linked Cell Container. Aborting...");
@@ -93,7 +97,7 @@ void Simulator::simulate() {
     }
 
     if (simData.getBench()) {
-        ParticleContainer& particlesBefore = simData.getParticles();
+        ParticleContainer &particlesBefore = simData.getParticles();
         for (int i = 0; i < numIterations; i++) {
             // turn off logging when benchmarking except for errors
             spdlog::set_level(spdlog::level::err);
@@ -122,14 +126,13 @@ void Simulator::runSimulationLoop() {
     double currentTime = simData.getStartTime();
     int iteration = 0;
     outputWriter::VTKWriter writer(simData.getBaseName());
-    SPDLOG_LOGGER_INFO(logger, "Basename: {0}.", simData.getBaseName());
-
 
     before();
     // compute position, force and velocity for all particles each iteration
     while (currentTime < simData.getEndTime()) {
         step();
         iteration++;
+
         if (iteration % simData.getWriteFrequency() == 0 && !simData.getBench()) {
             // write output on every 10th iteration
             writer.plotParticles(simData.getParticles(), iteration);

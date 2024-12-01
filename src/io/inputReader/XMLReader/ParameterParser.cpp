@@ -22,12 +22,15 @@ namespace ParameterParser {
             if (xmlParser->parameters()->t_start().present()) {
                 simData.setStartTime(xmlParser->parameters()->t_start().get());
             }
+        }
+        if(xmlParser->output().present()) {
             if (xmlParser->output()->baseName().present()) {
                 simData.setBaseName(xmlParser->output()->baseName().get());
             }
             if (xmlParser->output()->writeFrequency().present()) {
                 simData.setWriteFrequency(xmlParser->output()->writeFrequency().get());
             }
+
         }
     }
 }

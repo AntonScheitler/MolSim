@@ -1,6 +1,7 @@
 #include "computations/forces/ForceComputations.h"
 #include "computations/positions/PositionComputations.h"
 #include "computations/velocities/VelocityComputations.h"
+#include "io/inputReader/TxtFileReader.h"
 #include "simulation/Simulator.h"
 #include "spdlogConfig.h"
 #include <particle/container/ParticleContainerDirectSum.h>

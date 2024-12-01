@@ -23,8 +23,8 @@ namespace inputReader {
     }
 
 
-    void XMLFileReader::readCometFile(SimulationData &simData, char *filename) {
-        simData.setAverageVelocity(0);
+    void XMLFileReader::readFile(ParticleContainer &particles, char *filename) {
+        particles.setAverageVelocity(0);
         std::array<double, 3> x{};
         std::array<double, 3> v{};
         std::array<int, 3> d{};
@@ -34,26 +34,6 @@ namespace inputReader {
         int type = 0;
 
 
-        ParticleContainer *particles;
-        if (simParser->parameters().present() && simParser->parameters()->containerType().present()) {
-            std::string particleContainerType = simParser->parameters()->containerType().get();
-
-            // TODO include simParser, correct init. of boundaryConditions and container parameters
-
-            if (particleContainerType == "sum") {
-                ParticleContainerDirectSum containerDirectSum{};
-                particles = &containerDirectSum;
-            } else if (particleContainerType == "linked") {
-                struct boundaryConfig config{std::array<BoundaryType, 2>{outflow, outflow},
-                                             std::array<BoundaryType, 2>{outflow, outflow},
-                                             std::array<BoundaryType, 2>{outflow, outflow}};
-                ParticleContainerLinkedCell containerLinkedCell{std::array<double, 3>{0, 0, 0}, 0,
-                                                                config};
-                particles = &containerLinkedCell;
-            }
-            simData.setParticles(*particles);
-        } else SPDLOG_ERROR("invalid xml configuration: no container type specified");
-
         std::cout << "entering XML parsing with filename" << filename << std::endl;
 
         std::ifstream inputFile(filename);
@@ -62,7 +42,30 @@ namespace inputReader {
         }
         try {
 
-            std::unique_ptr<simulation> simParser = simulation_(inputFile, xml_schema::flags::dont_validate);
+//        std::unique_ptr<simulation> simParser = simulation_(inputFile, xml_schema::flags::dont_validate);
+            std::unique_ptr<simulation> simParser = simulation_(inputFile);
+
+
+            ParticleContainer *particles;
+            if (simParser->parameters().present() && simParser->parameters()->containerType().present()) {
+                std::string particleContainerType = simParser->parameters()->containerType().get();
+
+                // TODO include simParser, correct init. of boundaryConditions and container parameters
+
+                if (particleContainerType == "sum") {
+                    ParticleContainerDirectSum containerDirectSum{};
+                    particles = &containerDirectSum;
+                } else if (particleContainerType == "linked") {
+                    struct boundaryConfig config{std::array<BoundaryType, 2>{outflow, outflow},
+                                                 std::array<BoundaryType, 2>{outflow, outflow},
+                                                 std::array<BoundaryType, 2>{outflow, outflow}};
+                    ParticleContainerLinkedCell containerLinkedCell{std::array<double, 3>{0, 0, 0}, 0,
+                                                                    config};
+                    particles = &containerLinkedCell;
+                }
+                simData.setParticles(*particles);
+            } else
+                SPDLOG_ERROR("invalid xml configuration: no container type specified");
 
 
             ParameterParser::readParams(simData, simParser);
@@ -139,4 +142,3 @@ namespace inputReader {
         }
     }
 }
-

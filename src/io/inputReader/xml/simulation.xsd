@@ -31,6 +31,12 @@
                             <xsd:element name="epsilon" type="xsd:double" minOccurs="0"/>
                             <xsd:element name="sigma" type="xsd:double" minOccurs="0"/>
                             <xsd:element name="t_start" type="xsd:double" minOccurs="0"/>
+                            <!--Container Type values: sum for Direct Sum Container & linked for Linked Cell Container-->
+                            <xsd:element name="containerType" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="domainSize" type="vectorType" minOccurs="0"/>
+                            <xsd:element name="cutoff" type="xsd:double" minOccurs="0"/>
+                            <!--Boundry Condition values: outflow  or reflecting-->
+                            <xsd:element name="boundry" type="xsd:string" minOccurs="0"/>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>
@@ -46,8 +52,6 @@
                                         <xsd:element name="coordinate" type="vectorType"/>
                                         <xsd:element name="velocity" type="vectorType"/>
                                         <xsd:element name="mass" type="xsd:double"/>
-
-
                                     </xsd:sequence>
                                 </xsd:complexType>
                             </xsd:element>

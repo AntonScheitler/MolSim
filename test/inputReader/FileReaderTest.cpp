@@ -1,4 +1,4 @@
-#include "../../src/inputReader/FileReader.h"
+#include "../../src/io/inputReader/FileReader.h"
 #include <gtest/gtest.h>
 
 class FileReaderTest : public testing::Test {

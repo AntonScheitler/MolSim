@@ -24,8 +24,7 @@ namespace outputWriter {
     }
 
     void VTKWriter::plotParticles(ParticleContainer &particles, int iteration) {
-        SPDLOG_LOGGER_INFO(logger, "enter plotParticles");
-        SPDLOG_LOGGER_INFO(logger, "VTK baseName {0} finished.", baseName);
+
         initializeOutput(particles.size());
         for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
             Particle particle = **it;

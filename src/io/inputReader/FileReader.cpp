@@ -33,12 +33,12 @@ namespace inputReader {
         }
     }
 
-    void FileReader::readJson(SimulationData& simData, char *filename) {
+    void FileReader::readJson(SimulationData &simData, char *filename) {
         JsonFileReader jsonReader{simData};
         jsonReader.readFile(simData, filename);
     }
 
-    void FileReader::readTxt(SimulationData& simData, char *filename) {
+    void FileReader::readTxt(SimulationData &simData, char *filename) {
         TxtFileReader txtReader{simData};
         if (simData.getSimType() == comet) {
             txtReader.readCometFile(simData, filename);
@@ -47,10 +47,9 @@ namespace inputReader {
         }
     }
 
-    void FileReader::readXML(SimulationData& simData, char *filename) {
+    void FileReader::readXML(SimulationData &simData, char *filename) {
         XMLFileReader xmlFileReader(simData);
         xmlFileReader.readCometFile(simData, filename);
     }
-
 
 } // namespace inputReader
