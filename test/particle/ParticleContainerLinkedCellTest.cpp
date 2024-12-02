@@ -285,7 +285,7 @@ TEST_F(ParticleContainerLinkedCellTest, CellRemoveParticleTest) {
 }
 
 /**
- * @brief checks that the particles in the mesh with different boundaries behave correctly
+ * @brief checks that the particle flows out of the mesh when all boundaries are outflowing
  */
 TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryOutflowTest) {
 
@@ -338,7 +338,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryOutfl
 }
 
 /**
- * @brief checks that the particles in the mesh with different boundaries behave correctly
+ * @brief checks that the particles stays in the mesh when all boundaries are reflecting
  */
 TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryReflectTest) {
 
@@ -389,5 +389,61 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryRefle
         }
     }
     // particle b should still be in the container
+    EXPECT_TRUE(particlePresent);
+}
+
+/**
+ * @brief checks that the particle stays in the mesh when all boundaries are reflecting and the particle
+ * moves diagonally onto one corner
+ */
+TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellDiagonalBoundaryTest) {
+
+
+    ParticleContainerLinkedCell container{{3, 3, 1}, 1, {{reflect, reflect}, {reflect, reflect}, {outflow, outflow}}};
+
+    /*            reflect
+     *           +-------+
+     *           |       |
+     *   reflect |       | reflect (x)
+     *           +-------+
+     *            reflect (y)
+     */
+
+    // particle b should reflect at the corner (high x, high y) boundary
+    Particle b{{1.5, 1.5, 0}, {10.0, 10.0, 0}, 1, 1};
+
+    container.addParticle(b);
+
+    // deltaT needs to be small enough for reflecting
+    double deltaT = 0.0002;
+    double epsilon = 5;
+    double sigma = 1;
+
+    // run simulation step
+    int iterations = 1000;
+    for (int i = 0; i < iterations; i++) {
+        PositionComputations::updateOldX(container);
+        PositionComputations::stoermerVerlet(container, deltaT);
+        container.correctAllParticleIndices();
+
+        ForceComputations::resetForces(container);
+        ForceComputations::computeLennardJonesPotential(container, epsilon,
+                                                        sigma);
+        ForceComputations::computeGhostParticleRepulsion(container, epsilon,
+                                                         sigma);
+        VelocityComputations::stoermerVerlet(container, deltaT);
+    }
+
+    // check that particle is present
+    bool particlePresent = false;
+    for (int i = 0; i < container.getMesh().size(); i++) {
+        Cell &c = container.getCell(i);
+        auto particles = c.getParticles();
+        if (!particles.empty()) {
+            EXPECT_EQ(particles[0].getType(), 1);
+            particlePresent = true;
+        }
+    }
+    // particle should still be in the container
     EXPECT_TRUE(particlePresent);
 }
