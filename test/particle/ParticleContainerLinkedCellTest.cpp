@@ -7,6 +7,8 @@
 #include <computations/forces/ForceComputations.h>
 #include <computations/velocities/VelocityComputations.h>
 #include "spdlogConfig.h"
+#include "io/outputWriter/VTKWriter.h"
+
 
 class ParticleContainerLinkedCellTest : public testing::Test {
 protected:
@@ -413,6 +415,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellDiagonalBound
     Particle b{{1.5, 1.5, 0}, {10.0, 10.0, 0}, 1, 1};
 
     container.addParticle(b);
+    outputWriter::VTKWriter writer("MD_test_vtk");
 
     // deltaT needs to be small enough for reflecting
     double deltaT = 0.0002;
@@ -432,6 +435,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellDiagonalBound
         ForceComputations::computeGhostParticleRepulsion(container, epsilon,
                                                          sigma);
         VelocityComputations::stoermerVerlet(container, deltaT);
+        writer.plotParticles(container, i);
     }
 
     // check that particle is present
