@@ -10,7 +10,7 @@
         <domainSize>
             <x>120</x>
             <y>50</y>
-            <z>0</z>
+            <z>1</z>
         </domainSize>
         <cutoff>3.0</cutoff>
     </parameters>
