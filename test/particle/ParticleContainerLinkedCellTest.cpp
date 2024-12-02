@@ -277,7 +277,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellGhostParticle
 
 TEST_F(ParticleContainerLinkedCellTest, CellRemoveParticleTest) {
     // test container cell add and remove particle
-    Cell c = Cell{false};
+    Cell c = Cell{false, 0};
     Particle x{0};
     c.addParticle(x);
     c.removeParticle(x);
