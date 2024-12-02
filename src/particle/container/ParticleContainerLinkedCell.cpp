@@ -105,23 +105,18 @@ std::unique_ptr<ParticleContainer> ParticleContainerLinkedCell::copy() {
 
 bool ParticleContainerLinkedCell::correctParticleIndex(Particle &p) {
 
-    // TODO: ghost particle interaction when boundaryCondition is reflecting
-    // checks particle if it should be removed because it is outflowing the grid
-
     int oldCellIndex = continuousCoordsToIndex(p.getOldX());
     int newCellIndex = continuousCoordsToIndex(p.getX());
     // particle is not in its original cell anymore
     if (oldCellIndex != newCellIndex) {
-        if (oldCellIndex != -1) {
-            Cell oldCell = getCell(oldCellIndex);
-//            oldCell.removeParticle(p);
-            SPDLOG_INFO("removing particle from cell {0}", oldCellIndex);
-        }
+
+        SPDLOG_DEBUG("removing particle from cell {0}", oldCellIndex);
         // check if the cell is still within bounds
         if (newCellIndex != -1) {
-            Cell newCell = getCell(newCellIndex);
+            Cell& newCell = getCell(newCellIndex);
             newCell.addParticle(p);
-        }
+            SPDLOG_DEBUG("adding particle into cell {0}", newCellIndex);
+        } else SPDLOG_DEBUG("particle outflowing");
         return true;
     }
     return false;

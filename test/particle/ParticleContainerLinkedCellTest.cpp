@@ -275,45 +275,39 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellGhostParticle
     EXPECT_TRUE(count == pairsSet.size());
 }
 
-/**
- * @brief checks that the particles in the mesh with different boundaries behave correctly
- */
-TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryTest) {
-    ParticleContainerLinkedCell container{{10, 10, 1}, 2, {{outflow, outflow}, {reflect, reflect}, {outflow, outflow}}};
-
-    /*            reflect
-     *           +-------+
-     *           |       |
-     *   outflow |       | outflow (x)
-     *           +-------+
-     *            reflect (y)
-     */
-
-    // test container cell
+TEST_F(ParticleContainerLinkedCellTest, CellRemoveParticleTest) {
+    // test container cell add and remove particle
     Cell c = Cell{false};
     Particle x{0};
     c.addParticle(x);
     c.removeParticle(x);
     EXPECT_EQ(c.size(), 0);
+}
+
+/**
+ * @brief checks that the particles in the mesh with different boundaries behave correctly
+ */
+TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryOutflowTest) {
+
+
+    ParticleContainerLinkedCell container{{3, 3, 1}, 1, {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}};
+
+    /*            outflow
+     *           +-------+
+     *           |       |
+     *   outflow |       | outflow (x)
+     *           +-------+
+     *            outflow (y)
+     */
 
     // particle a should move out of the high x boundary (outflow) (cell 17)
-    Particle a{{5.0, 7.0, 0}, {1.0, 0, 0}, 1, 0};
-    // particle b should reflect at the low y boundary (cell 12)
-    Particle b{{5.0, 5.0, 0}, {0, 1.0, 0}, 1, 1};
+    Particle a{{1.0, 1.0, 0}, {1.0, 0, 0}, 1, 0};
 
     container.addParticle(a);
-    container.addParticle(b);
 
-    double deltaT = 0.5;;
+    double deltaT = 0.5;
     double epsilon = 5;
     double sigma = 1;
-
-    for(int i = 0; i < container.getMesh().size(); i++) {
-        Cell& cell = container.getCell(i);
-        if(!cell.getParticles().empty()) {
-            SPDLOG_INFO("cell {0} has particle with type {1}", i, cell.getParticles()[0].getType());
-        }
-    }
 
     // run simulation step
     int iterations = 10;
@@ -330,23 +324,70 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryTest)
         VelocityComputations::stoermerVerlet(container, deltaT);
     }
 
-    if(!container.getCell(17).getParticles().empty()) {
-        Particle& particle = container.getCell(17).getParticles()[0];
-    }
-    if(!container.getCell(12).getParticles().empty()) {
-        Particle& particle = container.getCell(12).getParticles()[0];
-    }
-
     // check
-    // expect that particle a (type 0) is not in the container anymore
-    // expect that particle b (type 1) is still in the container
+    bool particlePresent = false;
     for(int i = 0; i < container.getMesh().size(); i++) {
-        Cell c = container.getCell(i);
+        Cell& c = container.getCell(i);
         auto particles = c.getParticles();
         if(!particles.empty()) {
-            std::cout << particles[0].getX()[0] << "," << particles[0].getX()[1] << "," << particles[0].getX()[2] << std::endl;
-            EXPECT_EQ(particles[0].getType(), 1);
+            particlePresent = true;
         }
     }
+    // expect that particle a (type 0) is not in the container anymore
+    EXPECT_FALSE(particlePresent);
 }
 
+/**
+ * @brief checks that the particles in the mesh with different boundaries behave correctly
+ */
+TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryReflectTest) {
+
+
+    ParticleContainerLinkedCell container{{3, 3, 1}, 1, {{reflect, reflect}, {reflect, reflect}, {outflow, outflow}}};
+
+    /*            reflect
+     *           +-------+
+     *           |       |
+     *   reflect |       | reflect (x)
+     *           +-------+
+     *            reflect (y)
+     */
+
+    // particle b should reflect at the low y boundary (cell 12)
+    Particle b{{1.0, 1.0, 0}, {0, 1.0, 0}, 1, 1};
+
+    container.addParticle(b);
+
+    // deltaT needs to be small enough for reflecting
+    double deltaT = 0.0002;
+    double epsilon = 5;
+    double sigma = 1;
+
+    // run simulation step
+    int iterations = 100;
+    for (int i = 0; i < iterations; i++) {
+        PositionComputations::updateOldX(container);
+        PositionComputations::stoermerVerlet(container, deltaT);
+        container.correctAllParticleIndices();
+
+        ForceComputations::resetForces(container);
+        ForceComputations::computeLennardJonesPotential(container, epsilon,
+                                                        sigma);
+        ForceComputations::computeGhostParticleRepulsion(container, epsilon,
+                                                         sigma);
+        VelocityComputations::stoermerVerlet(container, deltaT);
+    }
+
+    // check that particle is present
+    bool particlePresent = false;
+    for (int i = 0; i < container.getMesh().size(); i++) {
+        Cell &c = container.getCell(i);
+        auto particles = c.getParticles();
+        if (!particles.empty()) {
+            EXPECT_EQ(particles[0].getType(), 1);
+            particlePresent = true;
+        }
+    }
+    // particle b should still be in the container
+    EXPECT_TRUE(particlePresent);
+}
