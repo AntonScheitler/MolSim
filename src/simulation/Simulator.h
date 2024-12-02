@@ -18,7 +18,7 @@ class Simulator {
          */
         void simulate();
     private:
-        SimulationData simData;
+        SimulationData& simData;
         std::shared_ptr<spdlog::logger> logger;
 
         /**

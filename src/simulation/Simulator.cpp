@@ -9,6 +9,7 @@
 #include "particle/container/ParticleContainerLinkedCell.h"
 #include <chrono>
 #include <cstdlib>
+#include <memory>
 
 Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
 
@@ -53,7 +54,7 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                 // save previous position and update the position of particles in the mesh based on the new one
                 PositionComputations::updateOldX(simData.getParticles());
                 PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
-                ParticleContainerLinkedCell *containerLinkedCell = dynamic_cast<ParticleContainerLinkedCell *>(&simData.getParticles());
+                auto containerLinkedCell = dynamic_cast<ParticleContainerLinkedCell*>(&(simData.getParticles()));
                 if (containerLinkedCell) {
                     containerLinkedCell->correctAllParticleIndices();
                     ForceComputations::resetForces(simData.getParticles());
@@ -97,7 +98,7 @@ void Simulator::simulate() {
     }
 
     if (simData.getBench()) {
-        ParticleContainer &particlesBefore = simData.getParticles();
+        ParticleContainer& particlesBefore = simData.getParticles();
         for (int i = 0; i < numIterations; i++) {
             // turn off logging when benchmarking except for errors
             spdlog::set_level(spdlog::level::err);

@@ -15,8 +15,8 @@ ParticleContainerLinkedCell::ParticleContainerLinkedCell(std::array<double, 3> d
     // adjust cell size depending on the domain size
     for (int i = 0; i < 3; i++) {
         // the number of cells per dimension is rounded down
-        // this means, the cutoffRadius will always fit in a cell, if it'c center is
-        // at the center of the cell
+        // this means, the dimensions of a cell will always be greater or equal to the cutoff radius, unless the domain
+        // is smaller than the cutoff radius of course
         // there should be at least once cell per dimension
         numCells[i] = std::max((int) floor(domainSize[i] / cellSize[i]), 1);
         cellSize[i] = domainSize[i] / (1.0 * numCells[i]);
@@ -93,6 +93,10 @@ int ParticleContainerLinkedCell::size() {
         size += i.getParticles().size();
     }
     return size;
+}
+
+std::unique_ptr<ParticleContainer> ParticleContainerLinkedCell::copy() {
+    return std::make_unique<ParticleContainerLinkedCell>(*this);
 }
 
 void ParticleContainerLinkedCell::correctParticleIndex(Particle& p) {

@@ -36,6 +36,6 @@ namespace inputReader {
          * @brief a specific logger for the JsonFileReader
          */
         std::shared_ptr<spdlog::logger> logger;
-        SimulationData simData;
+        SimulationData& simData;
     };
 } // namespace inputReader

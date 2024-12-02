@@ -1,3 +1,4 @@
+#include "particle/container/ParticleContainerDirectSum.h"
 #include "spdlog/spdlog.h"
 #include <iostream>
 #include <simulation/SimulationData.h>
@@ -6,8 +7,9 @@
 #include <particle/container/ParticleContainer.h>
 #include <io/inputReader/FileReader.h>
 
-SimulationData::SimulationData(ParticleContainer& particlesArg) : particles(particlesArg) {
+SimulationData::SimulationData() {
     // set default values
+    particles = std::unique_ptr<ParticleContainer>(new ParticleContainerDirectSum());
     simType = SimulationType::collisionLinkedCell;
     startTime = 0;
     endTime = 5;
@@ -122,7 +124,7 @@ int SimulationData::parseOptions(int argc, char* argsv[]) {
 
 void SimulationData::readParticles(SimulationType, char* fileName) {
     inputReader::FileReader fileReader(*this);
-    fileReader.readFile(particles, fileName);
+    fileReader.readFile(fileName);
 }
 
 SimulationType SimulationData::getSimType() {
@@ -154,19 +156,19 @@ bool SimulationData::getBench() {
 }
 
 ParticleContainer& SimulationData::getParticles() {
-    return particles;
+    return *particles;
 }
 
-void SimulationData::setParticles(ParticleContainer& particlesArg) {
-    this->particles = particlesArg;
+void SimulationData::setParticles(std::unique_ptr<ParticleContainer> particlesArg) {
+    particles = std::move(particlesArg);
 }
 
 void SimulationData::setSimType(SimulationType s) {
     this->simType = s;
 }
 
-void SimulationData::setParticlesCopy(const ParticleContainer& particlesArg) {
-    particles = particlesArg;
+void SimulationData::setParticlesCopy(ParticleContainer& particlesArg) {
+    particles = particlesArg.copy();
 }
 
 

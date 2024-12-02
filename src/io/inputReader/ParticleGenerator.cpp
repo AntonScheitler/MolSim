@@ -19,7 +19,7 @@ namespace inputReader {
         }
     }
 
-    void ParticleGenerator::generateDisc(ParticleContainer &particles, std::array<double, 3> center,
+    void ParticleGenerator::generateDisc(ParticleContainer& particles, std::array<double, 3> center,
                                          std::array<double, 3> v, double r, double m, double h, int type) {
         //todo
         std::array<double, 3> tempx{};

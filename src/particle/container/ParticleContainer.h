@@ -21,6 +21,8 @@ public:
      * @return the number of particles in the ParticleContainer
      */
     virtual int size() = 0;
+
+    virtual std::unique_ptr<ParticleContainer> copy() = 0;
 //    /**
 //     * @brief returns the average velocity that exists due to brownian motion
 //     * @return the average velocity that exists due to brownian motion

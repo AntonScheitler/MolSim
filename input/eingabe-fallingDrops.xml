@@ -6,7 +6,13 @@
         <t_end>10</t_end>
         <epsilon>5</epsilon>
         <sigma>1.0</sigma>
-        <writeFrequency>10</writeFrequency>
+        <containerType>linked</containerType>
+        <domainSize>
+            <x>120</x>
+            <y>50</y>
+            <z>0</z>
+        </domainSize>
+        <cutoff>3.0</cutoff>
     </parameters>
     <clusters>
         <disc>

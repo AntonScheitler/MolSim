@@ -28,6 +28,7 @@ class ParticleContainerDirectSum : public ParticleContainer {
 
         void addParticle(const Particle &particle) override;
         int size() override;
+        std::unique_ptr<ParticleContainer> copy() override;
         Particle& getParticle(int index);
         std::unique_ptr<ParticleIterator> begin() override;
         std::unique_ptr<ParticleIterator> end() override;
