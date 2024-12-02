@@ -21,6 +21,8 @@ void Cell::removeParticle(Particle &particle) {
         particles.erase(it);
     } else
         SPDLOG_WARN("cannot remove particle from cell because it is not contained");
+}
 
-
+int Cell::size() {
+    return particles.size();
 }

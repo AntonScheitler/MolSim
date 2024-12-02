@@ -4,8 +4,8 @@
 #include <utils/ArrayUtils.h>
 #include "spdlogConfig.h"
 
-ParticleContainerLinkedCell::ParticleContainerLinkedCell(std::array<double, 3> domainSizeArg, double cutoffRadiusArg, 
-        struct boundaryConfig boundaryConfigArg) {
+ParticleContainerLinkedCell::ParticleContainerLinkedCell(std::array<double, 3> domainSizeArg, double cutoffRadiusArg,
+                                                         struct boundaryConfig boundaryConfigArg) {
     domainSize = domainSizeArg;
     cutoffRadius = cutoffRadiusArg;
     boundaryConfig = boundaryConfigArg;
@@ -27,7 +27,7 @@ ParticleContainerLinkedCell::ParticleContainerLinkedCell(std::array<double, 3> d
         for (int y = 0; y < numCells[1]; y++) {
             for (int x = 0; x < numCells[2]; x++) {
                 bool isBoundary = x == 0 || y == 0 || z == 0 || x == numCells[0] - 1 ||
-                    y == numCells[1] - 1 || z == numCells[2] - 1;
+                                  y == numCells[1] - 1 || z == numCells[2] - 1;
                 Cell cell = Cell(isBoundary);
                 mesh.push_back(cell);
             }
@@ -44,22 +44,24 @@ int ParticleContainerLinkedCell::discreteCoordsToIndex(std::array<int, 3> coord)
     if (coord[0] < 0 || coord[1] < 0 || coord[2] < 0) return -1;
     if (coord[0] >= numCells[0] || coord[1] >= numCells[1] || coord[2] >= numCells[2]) return -1;
 
-    return coord[0]  + (coord[1] * numCells[0]) + (coord[2] * numCells[0] * numCells[1]);
+    return coord[0] + (coord[1] * numCells[0]) + (coord[2] * numCells[0] * numCells[1]);
 }
 
-int ParticleContainerLinkedCell::continuousCoordsToIndex( std::array<double, 3> coord) {
+int ParticleContainerLinkedCell::continuousCoordsToIndex(std::array<double, 3> coord) {
     // convert continuous coords into continuous approximation of discrete coords
     std::array<double, 3> approxDiscreteCoords = ArrayUtils::elementWisePairOp(coord, cellSize, std::divides<>());
     // floor continuous approximation of discrete coords to achieve discrete coords
-    return discreteCoordsToIndex(std::array<int, 3>{(int)floor(approxDiscreteCoords[0]), (int)floor(approxDiscreteCoords[1]), (int)floor(approxDiscreteCoords[2])});
+    return discreteCoordsToIndex(
+            std::array<int, 3>{(int) floor(approxDiscreteCoords[0]), (int) floor(approxDiscreteCoords[1]),
+                               (int) floor(approxDiscreteCoords[2])});
 }
 
-std::vector<Cell>& ParticleContainerLinkedCell::getMesh() {
+std::vector<Cell> &ParticleContainerLinkedCell::getMesh() {
     return mesh;
 }
 
 
-Cell& ParticleContainerLinkedCell::getCell(int idx) {
+Cell &ParticleContainerLinkedCell::getCell(int idx) {
     return mesh[idx];
 }
 
@@ -72,11 +74,13 @@ std::unique_ptr<ParticleIterator> ParticleContainerLinkedCell::end() {
 }
 
 std::unique_ptr<PairParticleIterator> ParticleContainerLinkedCell::beginPairParticle() {
-    return std::unique_ptr<PairParticleIterator>(new PairParticleIteratorLinkedCell(mesh.begin(), mesh.end(), mesh, numCells));
+    return std::unique_ptr<PairParticleIterator>(
+            new PairParticleIteratorLinkedCell(mesh.begin(), mesh.end(), mesh, numCells));
 }
 
 std::unique_ptr<PairParticleIterator> ParticleContainerLinkedCell::endPairParticle() {
-    return std::unique_ptr<PairParticleIterator>(new PairParticleIteratorLinkedCell(mesh.end(), mesh.end(), mesh, numCells));
+    return std::unique_ptr<PairParticleIterator>(
+            new PairParticleIteratorLinkedCell(mesh.end(), mesh.end(), mesh, numCells));
 }
 
 PairParticleIteratorBoundaryNHalo ParticleContainerLinkedCell::beginPairGhost() {
@@ -89,7 +93,7 @@ PairParticleIteratorBoundaryNHalo ParticleContainerLinkedCell::endPairGhost() {
 
 int ParticleContainerLinkedCell::size() {
     int size = 0;
-    for (auto& i: mesh) {
+    for (auto &i: mesh) {
         size += i.getParticles().size();
     }
     return size;
@@ -99,29 +103,35 @@ std::unique_ptr<ParticleContainer> ParticleContainerLinkedCell::copy() {
     return std::make_unique<ParticleContainerLinkedCell>(*this);
 }
 
-void ParticleContainerLinkedCell::correctParticleIndex(Particle& p) {
-
-    // TODO: ghost particle interaction when boundaryCondition is reflecting
-    // checks particle if it should be removed because it is outflowing the grid
+bool ParticleContainerLinkedCell::correctParticleIndex(Particle &p) {
 
     int oldCellIndex = continuousCoordsToIndex(p.getOldX());
     int newCellIndex = continuousCoordsToIndex(p.getX());
     // particle is not in its original cell anymore
     if (oldCellIndex != newCellIndex) {
-        Cell oldCell = getCell(oldCellIndex);
-        oldCell.removeParticle(p);
+
+        SPDLOG_DEBUG("removing particle from cell {0}", oldCellIndex);
         // check if the cell is still within bounds
         if (newCellIndex != -1) {
-            Cell newCell = getCell(newCellIndex);
+            Cell& newCell = getCell(newCellIndex);
             newCell.addParticle(p);
-        }
+            SPDLOG_DEBUG("adding particle into cell {0}", newCellIndex);
+        } else SPDLOG_DEBUG("particle outflowing");
+        return true;
     }
+    return false;
 }
 
 void ParticleContainerLinkedCell::correctAllParticleIndices() {
-    for(auto& c : mesh) {
-        for(auto& p : c.getParticles()) {
-            correctParticleIndex(p);
+    for (auto &c: mesh) {
+        std::vector<std::reference_wrapper<Particle>> particlesToRemove{};
+        for (auto &p: c.getParticles()) {
+            if(correctParticleIndex(p)) {
+                particlesToRemove.emplace_back(p);
+            }
+        }
+        for(auto &p : particlesToRemove) {
+            c.removeParticle(p);
         }
     }
 }
