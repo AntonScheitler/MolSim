@@ -15,7 +15,7 @@ namespace inputReader {
         spdlog::drop("FileReader");
     }
 
-    void FileReader::readFile(SimulationData simData, char *filename) {
+    void FileReader::readFile(char *filename) {
         // Extract the file extension
         std::string filestr(filename);
         std::string fileFormat = filestr.substr(filestr.find_last_of('.') + 1);

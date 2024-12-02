@@ -7,6 +7,7 @@
 #include <array>
 #include "io/inputReader/ParticleGenerator.h"
 #include "ParameterParser.h"
+#include <memory>
 #include <particle/container/ParticleContainerLinkedCell.h>
 #include <particle/container/ParticleContainerDirectSum.h>
 #include <particle/boundary/Boundary.h>
@@ -45,18 +46,16 @@ namespace inputReader {
 //        std::unique_ptr<simulation> simParser = simulation_(inputFile, xml_schema::flags::dont_validate);
             std::unique_ptr<simulation> simParser = simulation_(inputFile, xml_schema::flags::dont_validate);
 
-            // use direct sum as default
-            ParticleContainerDirectSum containerDirectSum{};
-            ParticleContainer* particles = &containerDirectSum;
-
-            // use linked cell container if specified
+            // use linked cell if specified
             auto parameters = simParser->parameters();
-            simData.setParticles(*particles);
             if (parameters.present() && parameters->containerType().present() && parameters->containerType().get() == "linked") {
-                ParticleContainerLinkedCell containerLinkedCell{{parameters->domainSize()->x(), parameters->domainSize()->y(), parameters->domainSize()->z()}, 
-                    parameters->cutoff().get()};
-                particles = &containerLinkedCell;
-                simData.setParticles(*particles);
+                auto containerLinkedCell = std::unique_ptr<ParticleContainer>(new ParticleContainerLinkedCell({parameters->domainSize()->x(), parameters->domainSize()->y(), parameters->domainSize()->z()},
+                    parameters->cutoff().get()));
+                simData.setParticles(std::move(containerLinkedCell));
+            } else {
+                // use direct sum as default
+                auto containerDirectSum = std::unique_ptr<ParticleContainer>(new ParticleContainerDirectSum());
+                simData.setParticles(std::move(containerDirectSum));
             }
             ParameterParser::readParams(simData, simParser);
 
@@ -73,7 +72,7 @@ namespace inputReader {
                 v[2] = planet.velocity().z();
                 m = planet.mass();
 
-                particles->addParticle(Particle(x, v, m));
+                simData.getParticles().addParticle(Particle(x, v, m));
                 SPDLOG_LOGGER_DEBUG(logger, "adding particle at coords {0}, {1}, {2}", x[0], x[1], x[2]);
             }
 
@@ -98,7 +97,7 @@ namespace inputReader {
 
                 simData.setAverageVelocity(cuboid.brownianMotion());
 
-                ParticleGenerator::generateCuboid(*particles, x, v, d, m, h, type);
+                ParticleGenerator::generateCuboid(simData.getParticles(), x, v, d, m, h, type);
 
                 type++;
             }
@@ -118,8 +117,7 @@ namespace inputReader {
                 r = disc.radius();
 
                 //Todo implement generateDisc
-                ParticleGenerator::generateDisc(*particles, x, v, r, m, h, type);
-
+                ParticleGenerator::generateDisc(simData.getParticles(), x, v, r, m, h, type);
                 type++;
             }
 

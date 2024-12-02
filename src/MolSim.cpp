@@ -12,8 +12,7 @@ int main(int argc, char *argsv[]) {
     spdlog::set_level(spdlog::level::info);
 
     // setup data for the simulation
-    ParticleContainerDirectSum dummy{};
-    SimulationData simData = SimulationData(dummy); // TODO change this later
+    SimulationData simData = SimulationData(); // TODO change this later
     int fileIdx = simData.parseOptions(argc, argsv);
     simData.readParticles(simData.getSimType(), argsv[fileIdx]);
 

@@ -1,10 +1,5 @@
 #include "simulation/SimulationData.h"
-#include <iostream>
-#include <fstream>
 #include "spdlogConfig.h"
-#include "io/inputReader/xml/simulation.h"
-#include <array>
-#include "io/inputReader/ParticleGenerator.h"
 
 
 namespace inputReader {
@@ -50,7 +45,3 @@ namespace inputReader {
         void readParams();
     };
 } // namespace inputReader
-
-
-
-

@@ -21,7 +21,7 @@ class SimulationData {
         /**
          * @brief creates an instance of the SimulationData class
          */
-        SimulationData(ParticleContainer& particlesArg);
+        SimulationData();
         /**
          * @brief parses command line options and sets class attributes accordingly 
          * @param argc the number of arguments passed to the program
@@ -113,9 +113,9 @@ class SimulationData {
         //template <typename T>
         //typename std::enable_if<std::is_base_of<ParticleContainer, T>::value, void>::type
 
-        void setParticlesCopy(const ParticleContainer& particlesArg);
+        void setParticlesCopy(ParticleContainer& particlesArg);
 
-        void setParticles(ParticleContainer& particles);
+        void setParticles(std::unique_ptr<ParticleContainer> particles);
 
         std::string getBaseName();
 
@@ -146,6 +146,6 @@ class SimulationData {
         int writeFrequency;
         std::string baseName;
         spdlog::level::level_enum level;
-        ParticleContainer& particles;
+        std::unique_ptr<ParticleContainer> particles;
         double averageVelocity;
 };

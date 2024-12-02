@@ -95,6 +95,10 @@ int ParticleContainerLinkedCell::size() {
     return size;
 }
 
+std::unique_ptr<ParticleContainer> ParticleContainerLinkedCell::copy() {
+    return std::make_unique<ParticleContainerLinkedCell>(*this);
+}
+
 void ParticleContainerLinkedCell::correctParticleIndex(Particle& p) {
 
     // TODO: ghost particle interaction when boundaryCondition is reflecting

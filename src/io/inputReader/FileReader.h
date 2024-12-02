@@ -7,7 +7,6 @@
 
 #pragma once
 
-#include "particle/container/ParticleContainer.h"
 #include "spdlogConfig.h"
 #include "simulation/SimulationData.h"
 #include <memory>
@@ -39,7 +38,7 @@ namespace inputReader {
          * @param particles the particles to be filled up
          * @param filename the file to read the particle information from
          */
-        void readFile(SimulationData simData, char *filename);
+        void readFile(char *filename);
 
 
     private:
