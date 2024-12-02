@@ -36,7 +36,10 @@ void PairParticleIteratorLinkedCell::getNeighborCells() {
                         neighborCoords[0] >= numCells[0] || neighborCoords[1] >= numCells[1] || neighborCoords[2] >= numCells[2]) continue;
 
                 int neighborIdx = neighborCoords[0] + (neighborCoords[1] * numCells[0]) + (neighborCoords[2] * numCells[0] * numCells[1]);
-                neighborCellsVector.push_back(mesh[neighborIdx]);
+                Cell& cell = mesh[neighborIdx];
+                if (cell.getParticles().size() > 0) {
+                    neighborCellsVector.push_back(mesh[neighborIdx]);
+                }
             }
         }
     }
@@ -61,7 +64,6 @@ PairParticleIteratorLinkedCell &PairParticleIteratorLinkedCell::operator++() {
             // have been computed
             completedParticles.insert(*currentParticle);
             ++currentParticle;
-            //currentStepToViableParticle();
             if (currentParticle == (*currentCell).getParticles().end()) {
                 currentStepToViableCell(true);
                 return *this;
@@ -96,6 +98,7 @@ void PairParticleIteratorLinkedCell::currentStepToViableCell(bool stepBefore) {
         if (currentCell == end) {
             return;
         }
+        completedParticles.clear();
         currentParticle = currentCell->getParticles().begin();
         getNeighborCells();
         neighborCell = neighborCellsVector.begin();
@@ -104,19 +107,10 @@ void PairParticleIteratorLinkedCell::currentStepToViableCell(bool stepBefore) {
     } while(neighborCell == neighborEnd);
 }
 
-//void PairParticleIteratorLinkedCell::currentStepToViableParticle() {
-//    while (currentParticle != currentCell->getParticles().end()) {
-//        ++currentParticle;
-//    }
-//}
-
 void PairParticleIteratorLinkedCell::neighborStepToViableCell(bool stepBefore) {
     do {
         if (stepBefore) ++neighborCell;
         stepBefore = true;
-        while (neighborCell != neighborEnd && neighborCell->getParticles().size() == 0) {
-            ++neighborCell;
-        }
         if (neighborCell == neighborEnd) {
             return;
         }
