@@ -10,6 +10,7 @@ public:
     void removeParticle(Particle &particle);
     std::vector<Particle>& getParticles();
     bool isBoundary;
+    int size();
 private:
     std::vector<Particle> particles;
 };

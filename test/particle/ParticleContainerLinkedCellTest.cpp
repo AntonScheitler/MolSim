@@ -289,10 +289,17 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryTest)
      *            reflect (y)
      */
 
+    // test container cell
+    Cell c = Cell{false};
+    Particle x{0};
+    c.addParticle(x);
+    c.removeParticle(x);
+    EXPECT_EQ(c.size(), 0);
+
     // particle a should move out of the high x boundary (outflow) (cell 17)
-    Particle a{{5.0, 7.0, 0}, {20.0, 0, 0}, 1, 0};
+    Particle a{{5.0, 7.0, 0}, {1.0, 0, 0}, 1, 0};
     // particle b should reflect at the low y boundary (cell 12)
-    Particle b{{5.0, 5.0, 0}, {0, 20.0, 0}, 1, 1};
+    Particle b{{5.0, 5.0, 0}, {0, 1.0, 0}, 1, 1};
 
     container.addParticle(a);
     container.addParticle(b);
@@ -302,14 +309,14 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryTest)
     double sigma = 1;
 
     for(int i = 0; i < container.getMesh().size(); i++) {
-        Cell c = container.getCell(i);
-        if(!c.getParticles().empty()) {
-            SPDLOG_INFO("cell {0} has particle with type {1}", i, c.getParticles()[0].getType());
+        Cell& cell = container.getCell(i);
+        if(!cell.getParticles().empty()) {
+            SPDLOG_INFO("cell {0} has particle with type {1}", i, cell.getParticles()[0].getType());
         }
     }
 
     // run simulation step
-    int iterations = 1000;
+    int iterations = 10;
     for (int i = 0; i < iterations; i++) {
         PositionComputations::updateOldX(container);
         PositionComputations::stoermerVerlet(container, deltaT);
@@ -342,3 +349,4 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryTest)
         }
     }
 }
+

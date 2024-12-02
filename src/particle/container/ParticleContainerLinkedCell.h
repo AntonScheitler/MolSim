@@ -90,7 +90,8 @@ public:
         /**
          * @brief corrects the index of a particle in the linked cell container mesh based on it's position
          * @param p the particle to correct the position of
+         * @returns true if the particle should be removed from its old cell
          */
-        void correctParticleIndex(Particle& p);
+        bool correctParticleIndex(Particle& p);
 };
 
