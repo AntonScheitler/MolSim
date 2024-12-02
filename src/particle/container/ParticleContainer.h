@@ -5,6 +5,9 @@
 
 #pragma once
 
+/**
+ * @brief base class for different types of particle containers
+ */
 class ParticleContainer {
 public:
     ParticleContainer() = default;
@@ -22,18 +25,13 @@ public:
      */
     virtual int size() = 0;
 
+    /**
+     * @brief copies this particleContainer
+     * @return
+     */
     virtual std::unique_ptr<ParticleContainer> copy() = 0;
-//    /**
-//     * @brief returns the average velocity that exists due to brownian motion
-//     * @return the average velocity that exists due to brownian motion
-//     */
-//    virtual double getAverageVelocity() = 0;
-//    /**
-//     * @brief sets the average velocity that exists due to brownian motion
-//     * @param averageVelocityArg the velocity to set the average velocity to
-//     */
-//    virtual void setAverageVelocity(double averageVelocityArg) = 0;
 
+    // returns iterators
     virtual std::unique_ptr<ParticleIterator> begin() = 0;
     virtual std::unique_ptr<ParticleIterator> end() = 0;
 

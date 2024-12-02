@@ -19,19 +19,10 @@ namespace inputReader {
         ~XMLFileReader();
 
         /**
-         * @brief xml file reader specifically for the Collision simulation
-         * @param particles the particles to store the information in
+         * @brief xml file reader for all simulation types
          * @param filename the name of the file to read from
          */
-        void readCollisionFile(char *filename);
-        /**
-         * @brief xml file reader specifically for the Comet simulation
-         * @param particles the particles to store the information in
-         * @param filename the name of the file to read from
-         */
-        void readCometFile(char *filename);
-        void readDropFile(char *filename);
-
+        void readFile(char *filename);
 
     private:
 
@@ -40,8 +31,10 @@ namespace inputReader {
          */
         std::shared_ptr<spdlog::logger> logger;
 
+        /**
+         * @brief the simulationData where the read information is saved to
+         */
         SimulationData &simData;
 
-        void readParams();
     };
 } // namespace inputReader

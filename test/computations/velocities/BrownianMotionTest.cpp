@@ -1,10 +1,9 @@
 #include "../../../../src/particle/container/ParticleContainerDirectSum.h"
-#include "../../../../src/computations/positions/PositionComputations.h"
 #include <gtest/gtest.h>
 #include "../../../../src/computations/velocities/VelocityComputations.h"
 
 /**
- * @brief Tests the position computations (src/computations/positions) via analytically calculated examples
+ * @brief Tests the brownian motion that is applied on particles
  */
 class BrownianMotionTest : public testing::Test {
 

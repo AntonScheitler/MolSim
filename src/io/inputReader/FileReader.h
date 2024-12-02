@@ -40,14 +40,13 @@ namespace inputReader {
          */
         void readFile(char *filename);
 
-
     private:
         /**
-         * the simulation data to write into
+         * @brief the simulation data to write the information into
          */
         SimulationData &simData;
         /**
-         * a fileReader-specific logger
+         * @brief a fileReader-specific logger
          */
         std::shared_ptr<spdlog::logger> logger;
 
@@ -56,15 +55,20 @@ namespace inputReader {
          * @param particles the particleContainer to write into
          * @param filename the file to read from
          */
-        void readJson(SimulationData& simData, char *filename);
+        void readJson(SimulationData &simData, char *filename);
 
         /**
-         * @brief reads a txt file and writes the particle information into the particleContainer
-         * @param particles the particleContainer to write into
-         * @param filename the file to read from
+         * @brief reads a txt file and  writes the simulation information into the given simData
+         * @param simData the SimulationData to write into
+         * @param filename the name of the file to read from
          */
-        void readTxt(SimulationData& simData, char *filename);
+        void readTxt(SimulationData &simData, char *filename);
 
-        void readXML(SimulationData& simData, char *filename);
+        /**
+         * @brief reads a xml file and writes the simulation information into the given simData
+         * @param simData the SimulationData to write into
+         * @param filename the name of the file to read from
+         */
+        void readXML(SimulationData &simData, char *filename);
     };
 } // namespace inputReader

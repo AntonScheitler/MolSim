@@ -33,6 +33,9 @@ namespace inputReader {
              * @brief a specific logger for the TxtFileReader
              */
             std::shared_ptr<spdlog::logger> logger;
+            /**
+             * @brief the simulation data to write the read information into
+             */
             SimulationData& simData;
     };
 } // namespace inputReader

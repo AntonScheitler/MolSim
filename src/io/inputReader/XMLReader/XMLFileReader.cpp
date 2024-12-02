@@ -24,7 +24,7 @@ namespace inputReader {
     }
 
 
-    void XMLFileReader::readCometFile(char *filename) {
+    void XMLFileReader::readFile(char *filename) {
         simData.setAverageVelocity(0);
         std::array<double, 3> x{};
         std::array<double, 3> v{};

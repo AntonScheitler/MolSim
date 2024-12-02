@@ -1,7 +1,7 @@
 #include "../../particle/container/ParticleContainer.h"
 #include "ParticleGenerator.h"
 #include <math.h>
-#include <iostream>
+#include "spdlogConfig.h"
 
 
 namespace inputReader {
@@ -25,8 +25,7 @@ namespace inputReader {
     void ParticleGenerator::generateDisc(ParticleContainer &particles, std::array<double, 3> center,
                                          std::array<double, 3> v, double r, double m, double h, int type) {
 
-
-        std::cout << "starting disc generator"  << std::endl;
+        SPDLOG_INFO("starting disc generator");
         for (int i = 0; i <= r; ++i) {
             double currentRadius = i * h;
 
@@ -34,7 +33,7 @@ namespace inputReader {
                 particles.addParticle(Particle(center, v, m, type));
                 continue;
             }
-            std::cout << "adding particle in disc generator"  << std::endl;
+            SPDLOG_INFO("adding particle in disc generator");
 
             int particlesPerRing =  static_cast<int>(2 * M_PI * currentRadius / h);
 
@@ -48,10 +47,6 @@ namespace inputReader {
                 particles.addParticle(Particle(tempx, v, m, type));
             }
         }
-        std::cout << "ending disc generator"  << std::endl;
+        SPDLOG_INFO("ending disc generator");
     }
-
-
 }
-
-
