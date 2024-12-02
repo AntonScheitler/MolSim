@@ -45,25 +45,19 @@ namespace inputReader {
 //        std::unique_ptr<simulation> simParser = simulation_(inputFile, xml_schema::flags::dont_validate);
             std::unique_ptr<simulation> simParser = simulation_(inputFile, xml_schema::flags::dont_validate);
 
+            // use direct sum as default
+            ParticleContainerDirectSum containerDirectSum{};
+            ParticleContainer* particles = &containerDirectSum;
 
-            ParticleContainer *particles;
-            if (simParser->parameters().present() && simParser->parameters()->containerType().present()) {
-                std::string particleContainerType = simParser->parameters()->containerType().get();
-
-                // TODO include simParser, correct init. of boundaryConditions and container parameters
-
-                if (particleContainerType == "sum") {
-                    ParticleContainerDirectSum containerDirectSum{};
-                    particles = &containerDirectSum;
-                } else if (particleContainerType == "linked") {
-                    ParticleContainerLinkedCell containerLinkedCell{std::array<double, 3>{0, 0, 0}, 0};
-                    particles = &containerLinkedCell;
-                }
+            // use linked cell container if specified
+            auto parameters = simParser->parameters();
+            simData.setParticles(*particles);
+            if (parameters.present() && parameters->containerType().present() && parameters->containerType().get() == "linked") {
+                ParticleContainerLinkedCell containerLinkedCell{{parameters->domainSize()->x(), parameters->domainSize()->y(), parameters->domainSize()->z()}, 
+                    parameters->cutoff().get()};
+                particles = &containerLinkedCell;
                 simData.setParticles(*particles);
-            } else
-                SPDLOG_ERROR("invalid xml configuration: no container type specified");
-
-
+            }
             ParameterParser::readParams(simData, simParser);
 
             std::cout << "start parsing cuboids" << std::endl;
