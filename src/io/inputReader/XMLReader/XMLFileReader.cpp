@@ -59,7 +59,7 @@ namespace inputReader {
             }
             ParameterParser::readParams(simData, simParser);
 
-            std::cout << "start parsing cuboids" << std::endl;
+            SPDLOG_LOGGER_INFO(logger, "starting parsing cuboids");
 
             for (const auto &planet: simParser->clusters().particle()) {
 
@@ -78,11 +78,11 @@ namespace inputReader {
 
             for (const auto &cuboid: simParser->clusters().cuboid()) {
                 x[0] = cuboid.cornerCoordinates().x();
-                std::cout << "pos x: " << cuboid.cornerCoordinates().x() << std::endl;
+                SPDLOG_LOGGER_DEBUG("pos x: ", cuboid.cornerCoordinates().x());
                 x[1] = cuboid.cornerCoordinates().y();
-                std::cout << "pos y: " << cuboid.cornerCoordinates().y() << std::endl;
+                SPDLOG_LOGGER_DEBUG("pos y: ", cuboid.cornerCoordinates().y());
                 x[2] = cuboid.cornerCoordinates().z();
-                std::cout << "pos z: " << cuboid.cornerCoordinates().x() << std::endl;
+                SPDLOG_LOGGER_DEBUG("pos z: ", cuboid.cornerCoordinates().x());
 
                 v[0] = cuboid.velocity().x();
                 v[1] = cuboid.velocity().y();
