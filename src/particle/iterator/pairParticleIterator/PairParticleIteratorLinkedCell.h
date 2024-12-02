@@ -1,5 +1,6 @@
 #pragma once
 #include "particle/iterator/pairParticleIterator/PairParticleIterator.h"
+#include <cmath>
 #include <cstddef>
 #include <particle/Particle.h>
 #include <unordered_set>
@@ -43,7 +44,7 @@ class PairParticleIteratorLinkedCell: public PairParticleIterator {
          * @brief computes a vector of neighbors for the current cell
          * @return the vector of neighbors for the current cell
          */
-        std::vector<Cell> getNeighborCells();
+        void getNeighborCells();
 
         /**
          * @brief increments the currentCellIdx
@@ -97,9 +98,13 @@ class PairParticleIteratorLinkedCell: public PairParticleIterator {
          */
         struct ParticleHash {
             size_t operator()(const Particle& p) const {
-                return (std::hash<double>()(p.getX()[0]) << 6) ^
-                    (std::hash<double>()(p.getX()[1]) << 4) ^
-                    (std::hash<double>()(p.getX()[2]) << 2);
+                const std::size_t prime1 = 73856093;
+                const std::size_t prime2 = 19349663;
+                const std::size_t prime3 = 83492791;
+
+                return (std::size_t(std::floor(p.getX()[0] * 1e3)) * prime1 ^
+                        std::size_t(std::floor(p.getX()[1] * 1e3)) * prime2 ^
+                        std::size_t(std::floor(p.getX()[2] * 1e3)) * prime3);
             }
         };
         /**
@@ -108,7 +113,7 @@ class PairParticleIteratorLinkedCell: public PairParticleIterator {
          */
         struct ParticleEqual {
             bool operator()(const Particle& p1, const Particle& p2) const {
-                return p1 == p2;
+                return p1.getX() == p2.getX();
             }
         };
         /**
@@ -127,7 +132,7 @@ class PairParticleIteratorLinkedCell: public PairParticleIterator {
          * @brief skips particles within the currentCell until a particle is reached, for which there are pairs which need to be computed.
          * If currentParticle already points to such a particle, no steps are executed
          */
-        void currentStepToViableParticle();
+        //void currentStepToViableParticle();
 
         /**
          * @brief skips neighbor cells until a cell is reached with which pairs can be formed

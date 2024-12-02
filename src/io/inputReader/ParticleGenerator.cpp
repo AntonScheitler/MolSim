@@ -1,5 +1,8 @@
 #include "../../particle/container/ParticleContainer.h"
 #include "ParticleGenerator.h"
+#include <math.h>
+#include <iostream>
+
 
 namespace inputReader {
     void
@@ -19,19 +22,36 @@ namespace inputReader {
         }
     }
 
-    void ParticleGenerator::generateDisc(ParticleContainer& particles, std::array<double, 3> center,
+    void ParticleGenerator::generateDisc(ParticleContainer &particles, std::array<double, 3> center,
                                          std::array<double, 3> v, double r, double m, double h, int type) {
-        //todo
-        std::array<double, 3> tempx{};
-        for (double x = -r; x <= r; x += h) {
-            for (double y = -r; y <= r; y += h) {
-                if (x * x + y * y <= r * r) {  // Check if the point is within the disc
-                    tempx[0] = center[0] + x;
-                    tempx[1] = center[1] + y;
-                    tempx[2] = center[2];  // Z-coordinate remains fixed
-                    particles.addParticle(Particle(tempx, v, m, type));
-                }
+
+
+        std::cout << "starting disc generator"  << std::endl;
+        for (int i = 0; i <= r; ++i) {
+            double currentRadius = i * h;
+
+            if (i == 0) {
+                particles.addParticle(Particle(center, v, m, type));
+                continue;
+            }
+            std::cout << "adding particle in disc generator"  << std::endl;
+
+            int particlesPerRing =  static_cast<int>(2 * M_PI * currentRadius / h);
+
+            for (int j = 0; j < particlesPerRing; ++j) {
+                double angle = (2 * M_PI  / particlesPerRing) * j;
+
+                double x = currentRadius * cos(angle);
+                double y = currentRadius * sin(angle);
+
+                std::array<double, 3> tempx = {center[0] + x, center[1] + y, center[2]};
+                particles.addParticle(Particle(tempx, v, m, type));
             }
         }
+        std::cout << "ending disc generator"  << std::endl;
     }
+
+
 }
+
+
