@@ -43,7 +43,7 @@ namespace inputReader {
         try {
 
 //        std::unique_ptr<simulation> simParser = simulation_(inputFile, xml_schema::flags::dont_validate);
-            std::unique_ptr<simulation> simParser = simulation_(inputFile);
+            std::unique_ptr<simulation> simParser = simulation_(inputFile, xml_schema::flags::dont_validate);
 
 
             ParticleContainer *particles;
@@ -56,11 +56,7 @@ namespace inputReader {
                     ParticleContainerDirectSum containerDirectSum{};
                     particles = &containerDirectSum;
                 } else if (particleContainerType == "linked") {
-                    struct boundaryConfig config{std::array<BoundaryType, 2>{outflow, outflow},
-                                                 std::array<BoundaryType, 2>{outflow, outflow},
-                                                 std::array<BoundaryType, 2>{outflow, outflow}};
-                    ParticleContainerLinkedCell containerLinkedCell{std::array<double, 3>{0, 0, 0}, 0,
-                                                                    config};
+                    ParticleContainerLinkedCell containerLinkedCell{std::array<double, 3>{0, 0, 0}, 0};
                     particles = &containerLinkedCell;
                 }
                 simData.setParticles(*particles);

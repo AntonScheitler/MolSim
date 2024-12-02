@@ -8,7 +8,7 @@
 
 SimulationData::SimulationData(ParticleContainer& particlesArg) : particles(particlesArg) {
     // set default values
-    simType = SimulationType::collision;
+    simType = SimulationType::collisionLinkedCell;
     startTime = 0;
     endTime = 5;
     deltaT = 0.0002;
@@ -25,7 +25,7 @@ int SimulationData::parseOptions(int argc, char* argsv[]) {
         "-d, --delta_t\t\tsize of each timestep. Defaults to 0.014\n"
         "-e, --t_end\t\ttime at which to stop the simulation. Defaults to 1000\n"
         "-l, --log\t\tlog level, default value: 'info'. valid values (high to low):\n\t\t\t\t'trace', 'debug', 'info', 'warn', 'err', 'critical', 'off'\n\t\t\t\t (using any other string will result in logging turned 'off')\n"
-        "-s, --sim_type\t\ttype of simulation to run:\n\t\t\t\t0 - Planets\n\t\t\t\t1 - Collision. Defaults to 1\n"
+        "-s, --sim_type\t\ttype of simulation to run:\n\t\t\t\t0 - Planets\n\t\t\t\t1 - Collision\n\t\t\t\t2 - Collision with linked cell.  Defaults to 2\n"
         "-b, --bench\t\tactivates benchmarking\n"
         "-S, --sigma\t\tinput sigma for Lennard-Jones potential. Defaults to 1\n"
         "-E, --epsilon\t\tinput epsilon for Lennard-Jones potential. Defaults to 5";
@@ -66,8 +66,8 @@ int SimulationData::parseOptions(int argc, char* argsv[]) {
                 break;
             case 's':
                 simTypeNum = std::stoi(optarg);
-                if (simTypeNum < 0 || simTypeNum > 1) {
-                    SPDLOG_LOGGER_ERROR(logger, "simulation type must be between 0-1!");
+                if (simTypeNum < 0 || simTypeNum > 2) {
+                    SPDLOG_LOGGER_ERROR(logger, "simulation type must be between 0-2!");
                     exit(EXIT_FAILURE);
                 }
                 simType = SimulationType(simTypeNum);

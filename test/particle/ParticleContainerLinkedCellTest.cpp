@@ -140,6 +140,41 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellPairIteratorT
     EXPECT_TRUE(pairsSet.size() == count);
 }
 
+TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellPairIteratorSingleCellTest) {
+    // contains all pairs that should be returned by the iterator
+    std::unordered_set<std::pair<Particle, Particle>, PairHash, PairEqual> pairsSet{};
+    // single row of cells, 2 particles per cell
+    ParticleContainerLinkedCell singleCellContainer{{33, 33, 1}, 33};
+
+    // add particle to container (set remains empty for now)
+    Particle p1 = {{7, 7, 0.5 }, {0, 0, 0}, 1};
+    singleCellContainer.addParticle(p1);
+    // test if no pair is returned
+    for (auto it = singleCellContainer.beginPairParticle(); *it != *(singleCellContainer.endPairParticle()); ++*it) {
+        EXPECT_TRUE(false);
+    }
+
+    // add more particles to the cell
+    Particle p2 = {{10, 10, 0.5}, {0, 0, 0}, 1};
+    Particle p3 = {{13, 13, 0.5}, {0, 0, 0}, 1};
+    singleCellContainer.addParticle(p2);
+    singleCellContainer.addParticle(p3);
+    // add pairs to the set of expected pairs
+    pairsSet.insert(std::make_pair(p1, p2));
+    pairsSet.insert(std::make_pair(p1, p3));
+    pairsSet.insert(std::make_pair(p2, p3));
+    // update the expected pairs
+    // reset count
+    size_t count = 0;
+    // test if all pairs are returned
+    for (auto it = singleCellContainer.beginPairParticle(); *it != *(singleCellContainer.endPairParticle()); ++*it) {
+        std::pair<Particle&, Particle&> pair = **it;
+        EXPECT_TRUE(pairsSet.count(pair) == 1);
+        count++;
+    }
+    EXPECT_TRUE(pairsSet.size() == count);
+}
+
 
 /**
  * @brief checks the ghost particles for all particles in the boundary are computed correctly
