@@ -3,8 +3,8 @@
 
 
 PairParticleIteratorDirectSum::PairParticleIteratorDirectSum(std::vector<Particle>::iterator firstArg,
-                                           std::vector<Particle>::iterator secondArg,
-                                           std::vector<Particle>::iterator endArg) {
+                                                             std::vector<Particle>::iterator secondArg,
+                                                             std::vector<Particle>::iterator endArg) {
     first = firstArg;
     second = secondArg;
     end = endArg;
@@ -24,9 +24,9 @@ PairParticleIteratorDirectSum &PairParticleIteratorDirectSum::operator++() {
 }
 
 bool PairParticleIteratorDirectSum::operator!=(const PairParticleIterator &other) {
-    auto casted = dynamic_cast<const PairParticleIteratorDirectSum*>(&other);
+    auto casted = dynamic_cast<const PairParticleIteratorDirectSum *>(&other);
     if (casted) {
         return first != casted->first || second != casted->second || end != casted->end;
-    } 
+    }
     return true;
 }

@@ -5,18 +5,20 @@
 #include "spdlogConfig.h"
 #include "ParticleGenerator.h"
 
+
 namespace inputReader {
 
-    TxtFileReader::TxtFileReader(SimulationData& simulationDataArg) : simData(simulationDataArg) {
+    TxtFileReader::TxtFileReader(SimulationData &simulationDataArg) : simData(simulationDataArg) {
         this->logger = spdlog::stdout_color_st("TxtFileReader");
         SPDLOG_LOGGER_DEBUG(logger, "Initialized TxtFileReader");
     }
+
     TxtFileReader::~TxtFileReader() {
         spdlog::drop("TxtFileReader");
     }
 
 
-    void TxtFileReader::readCometFile(SimulationData& simData, char *filename) {
+    void TxtFileReader::readCometFile(SimulationData &simData, char *filename) {
         simData.setAverageVelocity(0);
         std::array<double, 3> x{};
         std::array<double, 3> v{};
@@ -47,10 +49,10 @@ namespace inputReader {
             for (int i = 0; i < numParticles; i++) {
                 std::istringstream datastream(tmpString);
 
-                for (auto &xj : x) {
+                for (auto &xj: x) {
                     datastream >> xj;
                 }
-                for (auto &vj : v) {
+                for (auto &vj: v) {
                     datastream >> vj;
                 }
                 if (datastream.eof()) {
@@ -69,7 +71,7 @@ namespace inputReader {
         }
     }
 
-    void TxtFileReader::readCollisionFile(SimulationData& simData, char *filename) {
+    void TxtFileReader::readCollisionFile(SimulationData &simData, char *filename) {
         std::array<double, 3> x{};
         std::array<double, 3> v{};
         std::array<int, 3> d{};
@@ -100,10 +102,10 @@ namespace inputReader {
             for (int i = 0; i < numContainer; i++) {
                 std::istringstream datastream(tmpString);
 
-                for (auto &xj : x) {
+                for (auto &xj: x) {
                     datastream >> xj;
                 }
-                for (auto &vj : v) {
+                for (auto &vj: v) {
                     datastream >> vj;
                 }
                 if (datastream.eof()) {
@@ -112,7 +114,7 @@ namespace inputReader {
                 }
                 datastream >> m;
                 datastream >> h;
-                for (auto &dj : d) {
+                for (auto &dj: d) {
                     datastream >> dj;
                 }
                 datastream >> bm;

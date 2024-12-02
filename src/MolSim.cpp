@@ -4,7 +4,6 @@
 #include "io/inputReader/TxtFileReader.h"
 #include "simulation/Simulator.h"
 #include "spdlogConfig.h"
-#include <particle/container/ParticleContainerDirectSum.h>
 
 int main(int argc, char *argsv[]) {
     // default logging level

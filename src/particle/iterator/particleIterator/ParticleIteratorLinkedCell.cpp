@@ -1,7 +1,9 @@
 #include "ParticleIteratorLinkedCell.h"
 #include "particle/iterator/particleIterator/ParticleIterator.h"
 
-ParticleIteratorLinkedCell::ParticleIteratorLinkedCell(std::vector<Cell>::iterator it, std::vector<Cell>::iterator endArg) {
+
+ParticleIteratorLinkedCell::ParticleIteratorLinkedCell(std::vector<Cell>::iterator it,
+                                                       std::vector<Cell>::iterator endArg) {
     currentCell = it;
     end = endArg;
     stepToNonEmptyCell();
@@ -28,10 +30,10 @@ ParticleIteratorLinkedCell &ParticleIteratorLinkedCell::operator++() {
 }
 
 bool ParticleIteratorLinkedCell::operator!=(const ParticleIterator &other) {
-    auto casted = dynamic_cast<const ParticleIteratorLinkedCell*>(&other);
+    auto casted = dynamic_cast<const ParticleIteratorLinkedCell *>(&other);
     if (casted) {
         return currentCell != casted->currentCell;
-    } 
+    }
     return true;
 }
 

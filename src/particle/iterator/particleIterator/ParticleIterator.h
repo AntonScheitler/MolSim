@@ -1,4 +1,5 @@
 #include <particle/Particle.h>
+
 #pragma once
 
 /**
@@ -6,28 +7,31 @@
  */
 class ParticleIterator {
 
-    public:
-        using iterator_category = std::forward_iterator_tag;
-        using reference = Particle&;
-        ParticleIterator() = default;
-        virtual ~ParticleIterator() = default;
-        /**
-         * @brief Dereference current Particle in this ParticleContainer
-         * @return current Particle
-         */
-        virtual reference operator*() = 0;
+public:
+    using iterator_category = std::forward_iterator_tag;
+    using reference = Particle &;
 
-        /**
-         * @brief Increment current Particle in this ParticleContainer
-         * @return this ParticleContainer object
-         */
-        virtual ParticleIterator &operator++() = 0;
+    ParticleIterator() = default;
 
-        /**
-         * @brief Check whether the current Particle of this ParticleContainer is not equal to the current
-         * Particle of another ParticleContainer.
-         * @param other Other ParticleContainer
-         * @return True if the current particles are not equal
-         */
-        virtual bool operator!=(const ParticleIterator& other) = 0;
+    virtual ~ParticleIterator() = default;
+
+    /**
+     * @brief Dereference current Particle in this ParticleContainer
+     * @return current Particle
+     */
+    virtual reference operator*() = 0;
+
+    /**
+     * @brief Increment current Particle in this ParticleContainer
+     * @return this ParticleContainer object
+     */
+    virtual ParticleIterator &operator++() = 0;
+
+    /**
+     * @brief Check whether the current Particle of this ParticleContainer is not equal to the current
+     * Particle of another ParticleContainer.
+     * @param other Other ParticleContainer
+     * @return True if the current particles are not equal
+     */
+    virtual bool operator!=(const ParticleIterator &other) = 0;
 };

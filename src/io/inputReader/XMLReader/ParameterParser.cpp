@@ -23,7 +23,7 @@ namespace ParameterParser {
                 simData.setStartTime(xmlParser->parameters()->t_start().get());
             }
         }
-        if(xmlParser->output().present()) {
+        if (xmlParser->output().present()) {
             if (xmlParser->output()->baseName().present()) {
                 simData.setBaseName(xmlParser->output()->baseName().get());
             }

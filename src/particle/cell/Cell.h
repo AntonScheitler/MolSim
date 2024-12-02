@@ -1,4 +1,5 @@
 #pragma once
+
 #include "vector"
 #include <particle/Particle.h>
 
@@ -14,41 +15,48 @@ public:
      * @param cellIdArg the id of this cell
      */
     Cell(bool isBoundaryCell, size_t cellIdArg);
+
     /**
      * @brief adds a particle to the cell
      * @param particle the particle to add
      */
-    void addParticle(const Particle& particle);
+    void addParticle(const Particle &particle);
+
     /**
      * @brief removes the specified particle from the cell
      * @param particle the particle to remove
      */
     void removeParticle(Particle &particle);
+
     /**
      * @brief returns the particles that are stored in this cell
      * @return the particles as a vector
      */
-    std::vector<Particle>& getParticles();
+    std::vector<Particle> &getParticles();
+
     /**
      * returns the number of particles that are stored in this cell
      * @return number number of particles
      */
     int size();
+
     /**
      * used for comparing this cell to another cell for equality
      * @param other the other cell
      * @return
      */
     bool operator==(const Cell &other);
+
+    /**
+     * @brief the flag which specifies whether this cell is a boundary cell
+     */
+    bool isBoundary;
+
 private:
     /**
      * @brief the vector which stores all particles of this cell
      */
     std::vector<Particle> particles;
-    /**
-     * @brief the flag which specifies whether this cell is a boundary cell
-     */
-    bool isBoundary;
     /**
      * @brief the id of this cell (used for comparing cells)
      */

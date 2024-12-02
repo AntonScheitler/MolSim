@@ -2,6 +2,7 @@
 #include <bits/stdc++.h>
 #include "spdlogConfig.h"
 
+
 Cell::Cell(bool isBoundaryArg, size_t cellIdArg) {
     isBoundary = isBoundaryArg;
     cellId = cellIdArg;

@@ -10,7 +10,6 @@
 #include <memory>
 #include <particle/container/ParticleContainerLinkedCell.h>
 #include <particle/container/ParticleContainerDirectSum.h>
-#include <particle/boundary/Boundary.h>
 
 
 namespace inputReader {
@@ -48,9 +47,11 @@ namespace inputReader {
 
             // use linked cell if specified
             auto parameters = simParser->parameters();
-            if (parameters.present() && parameters->containerType().present() && parameters->containerType().get() == "linked") {
-                auto containerLinkedCell = std::unique_ptr<ParticleContainer>(new ParticleContainerLinkedCell({parameters->domainSize()->x(), parameters->domainSize()->y(), parameters->domainSize()->z()},
-                    parameters->cutoff().get()));
+            if (parameters.present() && parameters->containerType().present() &&
+                parameters->containerType().get() == "linked") {
+                auto containerLinkedCell = std::unique_ptr<ParticleContainer>(new ParticleContainerLinkedCell(
+                        {parameters->domainSize()->x(), parameters->domainSize()->y(), parameters->domainSize()->z()},
+                        parameters->cutoff().get()));
                 simData.setParticles(std::move(containerLinkedCell));
             } else {
                 // use direct sum as default

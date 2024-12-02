@@ -115,10 +115,11 @@ bool ParticleContainerLinkedCell::correctParticleIndex(Particle &p) {
         SPDLOG_DEBUG("removing particle from cell {0}", oldCellIndex);
         // check if the cell is still within bounds
         if (newCellIndex != -1) {
-            Cell& newCell = getCell(newCellIndex);
+            Cell &newCell = getCell(newCellIndex);
             newCell.addParticle(p);
             SPDLOG_DEBUG("adding particle into cell {0}", newCellIndex);
-        } else SPDLOG_DEBUG("particle outflowing");
+        } else
+            SPDLOG_DEBUG("particle outflowing");
         return true;
     }
     return false;
@@ -128,11 +129,11 @@ void ParticleContainerLinkedCell::correctAllParticleIndices() {
     for (auto &c: mesh) {
         std::vector<std::reference_wrapper<Particle>> particlesToRemove{};
         for (auto &p: c.getParticles()) {
-            if(correctParticleIndex(p)) {
+            if (correctParticleIndex(p)) {
                 particlesToRemove.emplace_back(p);
             }
         }
-        for(auto &p : particlesToRemove) {
+        for (auto &p: particlesToRemove) {
             c.removeParticle(p);
         }
     }

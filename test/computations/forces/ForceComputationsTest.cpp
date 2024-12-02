@@ -25,7 +25,7 @@ protected:
         a.setM(6);
         b.setM(1);
 
-        particles = ParticleContainerDirectSum({std::vector<Particle>{a,b}});
+        particles = ParticleContainerDirectSum({std::vector<Particle>{a, b}});
         SPDLOG_INFO("ForceComputationsTest setUp done");
     }
 };

@@ -1,12 +1,12 @@
 #include "../../particle/container/ParticleContainer.h"
 #include "ParticleGenerator.h"
-#include <math.h>
+#include <cmath>
 #include "spdlogConfig.h"
 
 
 namespace inputReader {
     void
-    ParticleGenerator::generateCuboid(ParticleContainer& particles, std::array<double, 3> x, std::array<double, 3> v,
+    ParticleGenerator::generateCuboid(ParticleContainer &particles, std::array<double, 3> x, std::array<double, 3> v,
                                       std::array<int, 3> d, double m, double h, int type) {
         std::array<double, 3> tempx{};
         for (int j = 0; j < d[0]; ++j) {
@@ -35,10 +35,10 @@ namespace inputReader {
             }
             SPDLOG_INFO("adding particle in disc generator");
 
-            int particlesPerRing =  static_cast<int>(2 * M_PI * currentRadius / h);
+            int particlesPerRing = static_cast<int>(2 * M_PI * currentRadius / h);
 
             for (int j = 0; j < particlesPerRing; ++j) {
-                double angle = (2 * M_PI  / particlesPerRing) * j;
+                double angle = (2 * M_PI / particlesPerRing) * j;
 
                 double x = currentRadius * cos(angle);
                 double y = currentRadius * sin(angle);

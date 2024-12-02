@@ -18,13 +18,13 @@ protected:
 TEST_F(BrownianMotionTest, BrownianMotion2DTest) {
     double averageVelocity = 0.1;
 
-    Particle particle{{0,0,0}, {1.0, 1.0, 10.0}, 1, 0};
+    Particle particle{{0, 0, 0}, {1.0, 1.0, 10.0}, 1, 0};
     std::vector<Particle> particles{particle};
     ParticleContainerDirectSum container{particles};
 
     VelocityComputations::applyBrownianMotion2D(container, averageVelocity);
 
-    Particle& p = container.getParticle(0);
+    Particle &p = container.getParticle(0);
 
     EXPECT_TRUE(p.getV()[0] >= 1 - 5 * averageVelocity && p.getV()[0] <= 1 + 5 * averageVelocity);
     EXPECT_TRUE(p.getV()[1] >= 1 - 5 * averageVelocity && p.getV()[1] <= 1 + 5 * averageVelocity);
@@ -37,13 +37,13 @@ TEST_F(BrownianMotionTest, BrownianMotion2DTest) {
 TEST_F(BrownianMotionTest, BrownianMotion3DTest) {
     double averageVelocity = 0.1;
 
-    Particle particle{{0,0,0}, {1.0, 1.0, 1.0}, 1, 0};
+    Particle particle{{0, 0, 0}, {1.0, 1.0, 1.0}, 1, 0};
     std::vector<Particle> particles{particle};
     ParticleContainerDirectSum container{particles};
 
     VelocityComputations::applyBrownianMotion3D(container, averageVelocity);
 
-    Particle& p = container.getParticle(0);
+    Particle &p = container.getParticle(0);
 
     EXPECT_TRUE(p.getV()[0] >= 1 - 5 * averageVelocity && p.getV()[0] <= 1 + 5 * averageVelocity);
     EXPECT_TRUE(p.getV()[1] >= 1 - 5 * averageVelocity && p.getV()[1] <= 1 + 5 * averageVelocity);

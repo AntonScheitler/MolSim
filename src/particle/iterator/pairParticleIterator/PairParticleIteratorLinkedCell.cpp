@@ -4,7 +4,11 @@
 #include <cstddef>
 #include <particle/iterator/pairParticleIterator/PairParticleIteratorLinkedCell.h>
 
-PairParticleIteratorLinkedCell::PairParticleIteratorLinkedCell( std::vector<Cell>::iterator it, std::vector<Cell>::iterator endArg, std::vector<Cell> &meshArg, std::array<size_t, 3> numCellsArg) {
+
+PairParticleIteratorLinkedCell::PairParticleIteratorLinkedCell(std::vector<Cell>::iterator it,
+                                                               std::vector<Cell>::iterator endArg,
+                                                               std::vector<Cell> &meshArg,
+                                                               std::array<size_t, 3> numCellsArg) {
     completedParticles.clear();
     currentCellIdx = {0, 0, 0};
     mesh = meshArg;
@@ -25,18 +29,21 @@ void PairParticleIteratorLinkedCell::incrementCurrCellIdx() {
 }
 
 void PairParticleIteratorLinkedCell::getNeighborCells() {
-    neighborCellsVector.clear(); 
+    neighborCellsVector.clear();
     for (int z = 0; z < 2; z++) {
         for (int y = 0; y < 2; y++) {
             for (int x = -1; x < 2; x++) {
                 if (x == -1 && y == 0 && z == 0) continue;
                 std::array<int, 3> neighborCoords = ArrayUtils::elementWisePairOp(
                         currentCellIdx, {x, y, z}, std::plus<>());
-                if (neighborCoords[0] < 0 || neighborCoords[1] < 0 || neighborCoords[2] < 0 || 
-                        neighborCoords[0] >= numCells[0] || neighborCoords[1] >= numCells[1] || neighborCoords[2] >= numCells[2]) continue;
+                if (neighborCoords[0] < 0 || neighborCoords[1] < 0 || neighborCoords[2] < 0 ||
+                    neighborCoords[0] >= numCells[0] || neighborCoords[1] >= numCells[1] ||
+                    neighborCoords[2] >= numCells[2])
+                    continue;
 
-                int neighborIdx = neighborCoords[0] + (neighborCoords[1] * numCells[0]) + (neighborCoords[2] * numCells[0] * numCells[1]);
-                Cell& cell = mesh[neighborIdx];
+                int neighborIdx = neighborCoords[0] + (neighborCoords[1] * numCells[0]) +
+                                  (neighborCoords[2] * numCells[0] * numCells[1]);
+                Cell &cell = mesh[neighborIdx];
                 if (cell.getParticles().size() > 0) {
                     neighborCellsVector.push_back(mesh[neighborIdx]);
                 }
@@ -76,7 +83,7 @@ PairParticleIteratorLinkedCell &PairParticleIteratorLinkedCell::operator++() {
     return *this;
 }
 
-bool PairParticleIteratorLinkedCell::operator!=( const PairParticleIterator &other) {
+bool PairParticleIteratorLinkedCell::operator!=(const PairParticleIterator &other) {
     auto casted = dynamic_cast<const PairParticleIteratorLinkedCell *>(&other);
     if (casted) {
         return currentCell != casted->currentCell;
@@ -104,7 +111,7 @@ void PairParticleIteratorLinkedCell::currentStepToViableCell(bool stepBefore) {
         neighborCell = neighborCellsVector.begin();
         neighborEnd = neighborCellsVector.end();
         neighborStepToViableCell(false);
-    } while(neighborCell == neighborEnd);
+    } while (neighborCell == neighborEnd);
 }
 
 void PairParticleIteratorLinkedCell::neighborStepToViableCell(bool stepBefore) {
@@ -121,7 +128,7 @@ void PairParticleIteratorLinkedCell::neighborStepToViableCell(bool stepBefore) {
 
 void PairParticleIteratorLinkedCell::neighborStepToViableParticle() {
     while (neighborParticle != neighborCell->getParticles().end() && *currentCell == *neighborCell &&
-               ((*currentParticle) == (*neighborParticle) || (completedParticles.count(*neighborParticle) > 0))) {
+           ((*currentParticle) == (*neighborParticle) || (completedParticles.count(*neighborParticle) > 0))) {
         ++neighborParticle;
     }
 }

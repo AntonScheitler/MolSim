@@ -4,8 +4,8 @@
 #include "ParticleGenerator.h"
 #include <nlohmann/json.hpp>
 
-using json = nlohmann::json;
 
+using json = nlohmann::json;
 
 namespace inputReader {
 

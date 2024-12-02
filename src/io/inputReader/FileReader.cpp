@@ -4,6 +4,7 @@
 #include "io/inputReader/XMLReader/XMLFileReader.h"
 #include "spdlogConfig.h"
 
+
 namespace inputReader {
 
     FileReader::FileReader(SimulationData &simDataArg) : simData(simDataArg) {

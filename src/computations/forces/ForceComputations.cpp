@@ -1,11 +1,9 @@
 #include <array>
 #include <cmath>
 #include <utility>
-
 #include "../../utils/ArrayUtils.h"
 #include "particle/container/ParticleContainer.h"
 #include "ForceComputations.h"
-#include "spdlog/spdlog.h"
 #include "spdlogConfig.h"
 
 void ForceComputations::computeGravity(ParticleContainer &particles) {

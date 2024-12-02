@@ -15,6 +15,7 @@ public:
     using reference = std::pair<Particle &, Particle &>;
 
     PairParticleIterator() = default;
+
     virtual ~PairParticleIterator() = default;
 
     /**

@@ -11,6 +11,7 @@
 class ParticleContainer {
 public:
     ParticleContainer() = default;
+
     virtual ~ParticleContainer() = default;
 
     /**
@@ -33,8 +34,10 @@ public:
 
     // returns iterators
     virtual std::unique_ptr<ParticleIterator> begin() = 0;
+
     virtual std::unique_ptr<ParticleIterator> end() = 0;
 
     virtual std::unique_ptr<PairParticleIterator> beginPairParticle() = 0;
+
     virtual std::unique_ptr<PairParticleIterator> endPairParticle() = 0;
 };

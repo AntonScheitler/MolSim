@@ -73,7 +73,7 @@ std::string Particle::toString() const {
 
 bool Particle::operator==(const Particle &other) const {
     return (x == other.x) and (v == other.v) and (f == other.f) and
-        (type == other.type) and (m == other.m) and (oldF == other.oldF);
+           (type == other.type) and (m == other.m) and (oldF == other.oldF);
 }
 
 void Particle::setM(double newM) {

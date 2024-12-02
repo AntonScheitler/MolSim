@@ -6,6 +6,7 @@
 #include "particle/iterator/particleIterator/ParticleIterator.h"
 #include "particle/iterator/particleIterator/ParticleIteratorDirectSum.h"
 
+
 ParticleContainerDirectSum::ParticleContainerDirectSum() {
     particles = std::vector<Particle>{};
 }
@@ -26,7 +27,7 @@ std::unique_ptr<ParticleContainer> ParticleContainerDirectSum::copy() {
     return std::make_unique<ParticleContainerDirectSum>(*this);
 }
 
-Particle& ParticleContainerDirectSum::getParticle(int index) {
+Particle &ParticleContainerDirectSum::getParticle(int index) {
     return particles.at(index);
 }
 
@@ -42,14 +43,18 @@ std::unique_ptr<ParticleIterator> ParticleContainerDirectSum::end() {
 // pair particle iterator
 std::unique_ptr<PairParticleIterator> ParticleContainerDirectSum::beginPairParticle() {
     if (particles.empty()) {
-        return std::unique_ptr<PairParticleIterator>(new PairParticleIteratorDirectSum(particles.begin(), particles.begin(), particles.end()));
+        return std::unique_ptr<PairParticleIterator>(
+                new PairParticleIteratorDirectSum(particles.begin(), particles.begin(), particles.end()));
     }
-    return std::unique_ptr<PairParticleIterator>(new PairParticleIteratorDirectSum(particles.begin(), ++(particles.begin()), particles.end()));
+    return std::unique_ptr<PairParticleIterator>(
+            new PairParticleIteratorDirectSum(particles.begin(), ++(particles.begin()), particles.end()));
 }
 
 std::unique_ptr<PairParticleIterator> ParticleContainerDirectSum::endPairParticle() {
     if (particles.empty()) {
-        return std::unique_ptr<PairParticleIterator>(new PairParticleIteratorDirectSum(particles.end(), particles.end(), particles.end()));
+        return std::unique_ptr<PairParticleIterator>(
+                new PairParticleIteratorDirectSum(particles.end(), particles.end(), particles.end()));
     }
-    return std::unique_ptr<PairParticleIterator>(new PairParticleIteratorDirectSum(--(particles.end()), particles.end(), particles.end()));
+    return std::unique_ptr<PairParticleIterator>(
+            new PairParticleIteratorDirectSum(--(particles.end()), particles.end(), particles.end()));
 }

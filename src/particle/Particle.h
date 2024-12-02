@@ -17,128 +17,131 @@
  */
 class Particle {
 
-    private:
-        std::array<double, 3> oldX;
-        /**
-         * @brief Position of the particle
-         */
-        std::array<double, 3> x;
+private:
+    std::array<double, 3> oldX;
+    /**
+     * @brief Position of the particle
+     */
+    std::array<double, 3> x;
 
-        /**
-         * @brief Velocity of the particle
-         */
-        std::array<double, 3> v;
+    /**
+     * @brief Velocity of the particle
+     */
+    std::array<double, 3> v;
 
-        /**
-         * @brief Force effective on this particle
-         */
-        std::array<double, 3> f;
+    /**
+     * @brief Force effective on this particle
+     */
+    std::array<double, 3> f;
 
-        /**
-         * @brief Force which was effective on this particle
-         */
-        std::array<double, 3> oldF;
+    /**
+     * @brief Force which was effective on this particle
+     */
+    std::array<double, 3> oldF;
 
-        /**
-         * @brief Mass of this particle
-         */
-        double m;
+    /**
+     * @brief Mass of this particle
+     */
+    double m;
 
-        /**
-         * @brief Type of the particle. Use it for whatever you want (e.g. to separate
-         * molecules belonging to different bodies, matters, and so on)
-         */
-        int type;
-    public:
-        explicit Particle(int typeArg = 0);
+    /**
+     * @brief Type of the particle. Use it for whatever you want (e.g. to separate
+     * molecules belonging to different bodies, matters, and so on)
+     */
+    int type;
+public:
+    explicit Particle(int typeArg = 0);
 
-        Particle(const Particle &other);
+    Particle(const Particle &other);
 
-        Particle(
-                // for visualization, we need always 3 coordinates
-                // -> in case of 2d, we use only the first and the second
-                std::array<double, 3> xArg, std::array<double, 3> vArg, double mArg,
-                int typeArg = 0);
+    Particle(
+            // for visualization, we need always 3 coordinates
+            // -> in case of 2d, we use only the first and the second
+            std::array<double, 3> xArg, std::array<double, 3> vArg, double mArg,
+            int typeArg = 0);
 
-        virtual ~Particle();
+    virtual ~Particle();
 
-        const std::array<double, 3> &getOldX() const;
-        void setOldX(std::array<double, 3> oldXArg);
-        /**
-        * @brief Returns the position of the particle
-        * @return position of the particle
-        */
-        const std::array<double, 3> &getX() const;
+    const std::array<double, 3> &getOldX() const;
 
-        /**
-         * @brief Set the position of the particle
-         * @param newX new position of the particle
-         */
-        void setX(std::array<double, 3> newX);
+    void setOldX(std::array<double, 3> oldXArg);
 
-        /**
-         * @brief Get the velocity of the particle
-         * @return velocity of particle
-         */
-        const std::array<double, 3> &getV() const;
+    /**
+    * @brief Returns the position of the particle
+    * @return position of the particle
+    */
+    const std::array<double, 3> &getX() const;
 
-        /**
-         * @brief Set the new velocity of the particle
-         * @param newV new velocity
-         */
-        void setV(std::array<double, 3> newV);
+    /**
+     * @brief Set the position of the particle
+     * @param newX new position of the particle
+     */
+    void setX(std::array<double, 3> newX);
 
-        /**
-         * @brief Get the force acting on this particle
-         * @return force of particle
-         */
-        const std::array<double, 3> &getF() const;
+    /**
+     * @brief Get the velocity of the particle
+     * @return velocity of particle
+     */
+    const std::array<double, 3> &getV() const;
 
-        /**
-         * @brief Get the old force that was acting on this particle
-         * @return old force of particle
-         */
-        const std::array<double, 3> &getOldF() const;
+    /**
+     * @brief Set the new velocity of the particle
+     * @param newV new velocity
+     */
+    void setV(std::array<double, 3> newV);
 
-        /**
-         * @brief Set the force of this particle
-         * @param newF new force
-         */
-        void setF(std::array<double, 3> newF);
+    /**
+     * @brief Get the force acting on this particle
+     * @return force of particle
+     */
+    const std::array<double, 3> &getF() const;
 
-        /**
-         * @brief Set the old force of this particle
-         * @param newF old force
-         */
-        void setOldF(std::array<double, 3> newF);
+    /**
+     * @brief Get the old force that was acting on this particle
+     * @return old force of particle
+     */
+    const std::array<double, 3> &getOldF() const;
 
-        /**
-         * @brief Set the new mass of this particle
-         * @param newM new mass
-         */
-        void setM(double newM);
-        /**
-         * @brief Get the mass of this particle
-         * @return mass of this particle
-         */
-        double getM() const;
+    /**
+     * @brief Set the force of this particle
+     * @param newF new force
+     */
+    void setF(std::array<double, 3> newF);
 
-        /**
-         * @brief Get the type of this particle
-         * @return type of this particle
-         */
-        int getType() const;
+    /**
+     * @brief Set the old force of this particle
+     * @param newF old force
+     */
+    void setOldF(std::array<double, 3> newF);
 
-        /**
-         * @brief checks if two particles are equal
-         * @param other the particle to compare with
-         */
-        bool operator==(const Particle &other) const;
+    /**
+     * @brief Set the new mass of this particle
+     * @param newM new mass
+     */
+    void setM(double newM);
 
-        /**
-         * @brief converts information about this particle into a string
-         */
-        std::string toString() const;
+    /**
+     * @brief Get the mass of this particle
+     * @return mass of this particle
+     */
+    double getM() const;
+
+    /**
+     * @brief Get the type of this particle
+     * @return type of this particle
+     */
+    int getType() const;
+
+    /**
+     * @brief checks if two particles are equal
+     * @param other the particle to compare with
+     */
+    bool operator==(const Particle &other) const;
+
+    /**
+     * @brief converts information about this particle into a string
+     */
+    std::string toString() const;
 };
 
 std::ostream &operator<<(std::ostream &stream, Particle &p);
