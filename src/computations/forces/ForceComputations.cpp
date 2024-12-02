@@ -49,7 +49,7 @@ void ForceComputations::computeLennardJonesPotential(ParticleContainer &particle
 
 void ForceComputations::resetForces(ParticleContainer &particles) {
     for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
-        Particle particle = **it;
+        Particle& particle = **it;
         particle.setOldF(particle.getF());
         particle.setF({0, 0, 0});
     }
