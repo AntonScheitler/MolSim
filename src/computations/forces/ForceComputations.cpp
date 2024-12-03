@@ -60,7 +60,7 @@ void ForceComputations::computeGhostParticleRepulsion(ParticleContainerLinkedCel
 
         std::array<double, 3> distanceVector = ArrayUtils::elementWisePairOp(pair.first.getX(), pair.second.getX(), std::minus<>());
         double distance = ArrayUtils::L2Norm(distanceVector);
-        // dont compute force if it is not repulsive 
+        // don't compute force if it is not repulsive
         if (distance == 0 || distance >= (std::pow(2.0, 1.0/6.0) * sigma)) continue;
         double factor = (-24.0 * epsilon) / std::pow(distance, 2) * (std::pow(sigma / distance, 6) - 2 * std::pow(sigma / distance, 12));
         std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(factor, distanceVector, std::multiplies<>());

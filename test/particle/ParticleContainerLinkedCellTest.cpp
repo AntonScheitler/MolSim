@@ -310,7 +310,6 @@ TEST_F(ParticleContainerLinkedCellTest, CellRemoveParticleTest) {
  */
 TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryOutflowTest) {
 
-
     ParticleContainerLinkedCell container{{3, 3, 1}, 1, {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}};
 
     /*            outflow
@@ -326,12 +325,12 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryOutfl
 
     container.addParticle(a);
 
-    double deltaT = 0.5;
+    double deltaT = 0.002;
     double epsilon = 5;
     double sigma = 1;
 
     // run simulation step
-    int iterations = 10;
+    int iterations = 2000;
     for (int i = 0; i < iterations; i++) {
         PositionComputations::updateOldX(container);
         PositionComputations::stoermerVerlet(container, deltaT);
@@ -362,7 +361,6 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryOutfl
  * @brief checks that the particles stays in the mesh when all boundaries are reflecting
  */
 TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryReflectTest) {
-
 
     ParticleContainerLinkedCell container{{3, 3, 1}, 1, {{reflect, reflect}, {reflect, reflect}, {outflow, outflow}}};
 
@@ -419,7 +417,6 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryRefle
  */
 TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellDiagonalBoundaryTest) {
 
-
     ParticleContainerLinkedCell container{{3, 3, 1}, 1, {{reflect, reflect}, {reflect, reflect}, {outflow, outflow}}};
 
     /*            reflect
@@ -441,7 +438,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellDiagonalBound
     double sigma = 1;
 
     // run simulation step
-    int iterations = 1000;
+    int iterations = 2000;
     for (int i = 0; i < iterations; i++) {
         PositionComputations::updateOldX(container);
         PositionComputations::stoermerVerlet(container, deltaT);
