@@ -1,6 +1,6 @@
 #include "simulation/SimulationData.h"
 #include "spdlogConfig.h"
-
+#include "particle/boundary/Boundary.h"
 
 namespace inputReader {
     /**
@@ -35,6 +35,7 @@ namespace inputReader {
          * @brief the simulationData where the read information is saved to
          */
         SimulationData &simData;
+        BoundaryType getEnum(std::string b);
 
     };
 } // namespace inputReader

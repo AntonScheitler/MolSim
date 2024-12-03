@@ -36,7 +36,16 @@
                             <xsd:element name="domainSize" type="vectorType" minOccurs="0"/>
                             <xsd:element name="cutoff" type="xsd:double" minOccurs="0"/>
                             <!--Boundry Condition values: outflow  or reflecting-->
-                            <xsd:element name="boundry" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="boundry" minOccurs="0">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="xTop" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="xBottom" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="yLeft" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="yRight" type="xsd:string" minOccurs="0"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>
