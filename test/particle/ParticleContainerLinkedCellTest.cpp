@@ -93,6 +93,26 @@ TEST_F(ParticleContainerLinkedCellTest, EmptyParticleContainerLinkedCellPairIter
         EXPECT_TRUE(false);
     }
 }
+/**
+ * @brief checks if the number of pairs returned by the pair iterator is correct
+ */
+TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellPairIteratorNumPairsTest) {
+    ParticleContainerLinkedCell pairsContainer{{8, 8, 1}, 2, {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}};
+    for (double y = 0; y < 4; y++) {
+        for (double x = 0; x < 4; x++) {
+            pairsContainer.addParticle({{2 * x + 1, 2 * y + 1, 0.5}, {0, 0, 0}, 1});
+        }
+    }
+
+    // count the number pairs produced when iterating
+    size_t count = 0;
+    // test if all pairs are returned
+    for (auto it = pairsContainer.beginPairParticle(); *it != *(pairsContainer.endPairParticle()); ++*it) {
+        std::pair<Particle &, Particle &> pair = **it;
+        count++;
+    }
+    EXPECT_TRUE(count == 42);
+}
 
 /**
  * @brief checks if all particle pairs are returned by the iterator 
@@ -103,8 +123,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellPairIteratorT
     // a helper vector to create pairs 
     std::vector<Particle> particlesVector{};
     // single row of cells, 2 particles per cell
-    ParticleContainerLinkedCell pairsContainer{{99, 33, 1}, 33,
-                                               {{reflect, reflect}, {reflect, reflect}, {outflow, outflow}}};
+    ParticleContainerLinkedCell pairsContainer{{99, 33, 1}, 33, {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}};
     for (double x = 0; x < 3; x++) {
         std::array<double, 3> pos1 = {x * pairsContainer.getCellSize()[0] + 7, 7, 0.5};
         std::array<double, 3> pos2 = {x * pairsContainer.getCellSize()[0] + 10, 7, 0.5};

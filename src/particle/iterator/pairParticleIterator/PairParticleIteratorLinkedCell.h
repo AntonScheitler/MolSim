@@ -139,7 +139,7 @@ class PairParticleIteratorLinkedCell : public PairParticleIterator {
          * @brief skips particles within the currentCell until a particle is reached, for which there are pairs which need to be computed.
          * If currentParticle already points to such a particle, no steps are executed
          */
-        //void currentStepToViableParticle();
+        void currentStepToViableParticle();
 
         /**
          * @brief skips neighbor cells until a cell is reached with which pairs can be formed
