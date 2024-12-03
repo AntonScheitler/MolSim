@@ -42,7 +42,6 @@ namespace inputReader {
         }
         try {
 
-//        std::unique_ptr<simulation> simParser = simulation_(inputFile, xml_schema::flags::dont_validate);
             std::unique_ptr<simulation> simParser = simulation_(inputFile, xml_schema::flags::dont_validate);
 
             // use linked cell if specified
@@ -117,7 +116,6 @@ namespace inputReader {
                 h = disc.meshWidth();
                 r = disc.radius();
 
-                //Todo implement generateDisc
                 ParticleGenerator::generateDisc(simData.getParticles(), x, v, r, m, h, type);
                 type++;
             }

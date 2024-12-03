@@ -40,6 +40,7 @@ The executable offers the following options:
 - `-s, --sim_type`: Type of simulation to run (default: 1):
   - 0 - Planet Simulation (simulation of some planets from our solar system and Halley's Comet which also spins around the sun with a high revolution period)
   - 1 - Collision of Cuboids (simulation of 2 (or more) 2-dimensional cuboids consisting of molecules colliding)
+  - 2 - Collision of cuboids using the (performance-enhancing) linked-cell algorithm
 - `-b, --bench`: Activates benchmarking: The simulation will be run 10 times without producing any file output or logging. The execution times for all simulations will then be averaged
 - `-E, --epsilon`: Epsilon parameter for Lennard-Jones potential
 - `-S, --sigma`: Sigma parameter for Lennard-Jones potential

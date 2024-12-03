@@ -28,9 +28,6 @@ namespace inputReader {
         std::ifstream inputFile(filename);
         std::string tmpString;
 
-        // TODO create correct ParticleContainer
-//        simData.setParticles
-
         if (inputFile.is_open()) {
 
             getline(inputFile, tmpString);
