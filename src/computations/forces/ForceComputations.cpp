@@ -1,14 +1,14 @@
 #include <array>
 #include <cmath>
-
+#include <utility>
 #include "../../utils/ArrayUtils.h"
-#include "particle/ParticleContainer.h"
+#include "particle/container/ParticleContainer.h"
 #include "ForceComputations.h"
 #include "spdlogConfig.h"
 
 void ForceComputations::computeGravity(ParticleContainer &particles) {
-    for (auto it = particles.beginPairParticle(); it != particles.endPairParticle(); ++it) {
-        std::pair<Particle &, Particle &> pair = *it;
+    for (auto it = particles.beginPairParticle(); *it != *(particles.endPairParticle()); it->operator++()) {
+        std::pair<Particle &, Particle &> pair = **it;
         std::array<double, 3> newForce = {0, 0, 0};
 
         // gravity computation according to the formula
@@ -30,8 +30,8 @@ void ForceComputations::computeGravity(ParticleContainer &particles) {
 
 void ForceComputations::computeLennardJonesPotential(ParticleContainer &particles, double epsilon, double sigma) {
     // iterate through all pairs of particles and calculate lennard-jones potential
-    for (auto it = particles.beginPairParticle(); it != particles.endPairParticle(); ++it) {
-        std::pair<Particle &, Particle &> pair = *it;
+    for (auto it = particles.beginPairParticle(); *it != *(particles.endPairParticle()); it->operator++()) {
+        std::pair<Particle &, Particle &> pair = **it;
 
         std::array<double, 3> distanceVector = ArrayUtils::elementWisePairOp(pair.first.getX(), pair.second.getX(), std::minus<>());
         double distance = ArrayUtils::L2Norm(distanceVector);
@@ -47,11 +47,23 @@ void ForceComputations::computeLennardJonesPotential(ParticleContainer &particle
 }
 
 void ForceComputations::resetForces(ParticleContainer &particles) {
-    for (Particle &particle: particles) {
+    for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
+        Particle& particle = **it;
         particle.setOldF(particle.getF());
         particle.setF({0, 0, 0});
     }
 }
 
+void ForceComputations::computeGhostParticleRepulsion(ParticleContainerLinkedCell& particles, double epsilon, double sigma) {
+    for (auto it = particles.beginPairGhost(); it != particles.endPairGhost(); ++it) {
+        std::pair<Particle&, Particle&> pair = *it;
 
-
+        std::array<double, 3> distanceVector = ArrayUtils::elementWisePairOp(pair.first.getX(), pair.second.getX(), std::minus<>());
+        double distance = ArrayUtils::L2Norm(distanceVector);
+        // don't compute force if it is not repulsive
+        if (distance == 0 || distance >= (std::pow(2.0, 1.0/6.0) * sigma)) continue;
+        double factor = (-24.0 * epsilon) / std::pow(distance, 2) * (std::pow(sigma / distance, 6) - 2 * std::pow(sigma / distance, 12));
+        std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(factor, distanceVector, std::multiplies<>());
+        pair.first.setF(ArrayUtils::elementWisePairOp(pair.first.getF(), force, std::plus<>()));
+    }
+}

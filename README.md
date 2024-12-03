@@ -32,17 +32,19 @@ To run the program, execute the following command
 For the input file use for example `../input/eingabe-sonne.txt`.
 
 The executable offers the following options:
-- `-d, --delta_t`: The size of each timestep in seconds. Default value: 0.014
-- `-e, --t_end`: Time in seconds at which to stop the simulation. Default value: 1000
+- `-d, --delta_t`: The size of each timestep. Default value: 0.014
+- `-e, --t_end`: Time at which to stop the simulation. Default value: 1000 
 - `-l, --log`: Log level. Valid values (high to low):
   'trace', 'debug', 'info', 'warn', 'err', 'critical', 'off'
   (using any other string will result in logging turned 'off'). Default value: 'info'
 - `-s, --sim_type`: Type of simulation to run (default: 1):
-  - 0 - Planet Simulation
-  - 1 - Collision of Cuboids
-- `-b, --bench`: Activate benchmarking
+  - 0 - Planet Simulation (simulation of some planets from our solar system and Halley's Comet which also spins around the sun with a high revolution period)
+  - 1 - Collision of Cuboids (simulation of 2 (or more) 2-dimensional cuboids consisting of molecules colliding)
+  - 2 - Collision of cuboids using the (performance-enhancing) linked-cell algorithm
+- `-b, --bench`: Activates benchmarking: The simulation will be run 10 times without producing any file output or logging. The execution times for all simulations will then be averaged
 - `-E, --epsilon`: Epsilon parameter for Lennard-Jones potential
 - `-S, --sigma`: Sigma parameter for Lennard-Jones potential
+
 
 
 ### Unit Tests

@@ -17,12 +17,8 @@ class Simulator {
          * @brief runs the simulation
          */
         void simulate();
-        /**
-         * @brief runs the simulation in benchmark mode. This means that no outputs are produced 
-         */
-        void simulateBench();
     private:
-        SimulationData simData;
+        SimulationData& simData;
         std::shared_ptr<spdlog::logger> logger;
 
         /**
@@ -37,4 +33,10 @@ class Simulator {
          * @brief pointer to a function to run after a simulation
          */
         std::function<void(void)> after;
+
+        /**
+         * @brief runs the core simulation loop. This function gets called a number of times when benchmarking and just
+         * once if benchmarking is disabled
+         */
+        void runSimulationLoop();
 };

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<simulation>
+    <parameters>
+
+    </parameters>
+    <clusters>
+        <cuboid>
+            <cornerCoordinates>
+                <x>0.0</x>
+                <y>0.0</y>
+                <z>0.0</z>
+            </cornerCoordinates>
+            <dimensions>
+                <x>40</x>
+                <y>8</y>
+                <z>1</z>
+            </dimensions>
+            <velocity>
+                <x>0.0</x>
+                <y>0.0</y>
+                <z>0.0</z>
+            </velocity>
+            <meshWidth>1.1225</meshWidth>
+            <mass>1.0</mass>
+            <brownianMotion>0.1</brownianMotion>
+        </cuboid>
+        <cuboid>
+            <cornerCoordinates>
+                <x>15.0</x>
+                <y>15.0</y>
+                <z>0.0</z>
+            </cornerCoordinates>
+            <dimensions>
+                <x>8</x>
+                <y>8</y>
+                <z>1</z>
+            </dimensions>
+            <velocity>
+                <x>0.0</x>
+                <y>-10.0</y>
+                <z>0.0</z>
+            </velocity>
+            <meshWidth>1.1225</meshWidth>
+            <mass>1.0</mass>
+            <brownianMotion>0.1</brownianMotion>
+        </cuboid>
+    </clusters>
+</simulation>
