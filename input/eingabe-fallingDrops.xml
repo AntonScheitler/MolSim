@@ -13,6 +13,12 @@
             <z>1</z>
         </domainSize>
         <cutoff>3.0</cutoff>
+        <boundry>
+            <xTop>outflow</xTop>
+            <xBottom>reflecting</xBottom>
+            <yLeft>reflecting</yLeft>
+            <yRight>reflecting</yRight>
+        </boundry>
     </parameters>
     <clusters>
         <disc>

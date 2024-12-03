@@ -2,12 +2,7 @@
 
 <simulation>
     <parameters>
-        <t_end>
-            5
-        </t_end>
-        <delta_t>
-            1
-        </delta_t>
+
     </parameters>
     <clusters>
         <cuboid>
