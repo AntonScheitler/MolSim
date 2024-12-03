@@ -540,6 +540,130 @@ cuboid (const cuboid_sequence& s)
 }
 
 
+// boundry
+// 
+
+const boundry::xTop_optional& boundry::
+xTop () const
+{
+  return this->xTop_;
+}
+
+boundry::xTop_optional& boundry::
+xTop ()
+{
+  return this->xTop_;
+}
+
+void boundry::
+xTop (const xTop_type& x)
+{
+  this->xTop_.set (x);
+}
+
+void boundry::
+xTop (const xTop_optional& x)
+{
+  this->xTop_ = x;
+}
+
+void boundry::
+xTop (::std::unique_ptr< xTop_type > x)
+{
+  this->xTop_.set (std::move (x));
+}
+
+const boundry::xBottom_optional& boundry::
+xBottom () const
+{
+  return this->xBottom_;
+}
+
+boundry::xBottom_optional& boundry::
+xBottom ()
+{
+  return this->xBottom_;
+}
+
+void boundry::
+xBottom (const xBottom_type& x)
+{
+  this->xBottom_.set (x);
+}
+
+void boundry::
+xBottom (const xBottom_optional& x)
+{
+  this->xBottom_ = x;
+}
+
+void boundry::
+xBottom (::std::unique_ptr< xBottom_type > x)
+{
+  this->xBottom_.set (std::move (x));
+}
+
+const boundry::yLeft_optional& boundry::
+yLeft () const
+{
+  return this->yLeft_;
+}
+
+boundry::yLeft_optional& boundry::
+yLeft ()
+{
+  return this->yLeft_;
+}
+
+void boundry::
+yLeft (const yLeft_type& x)
+{
+  this->yLeft_.set (x);
+}
+
+void boundry::
+yLeft (const yLeft_optional& x)
+{
+  this->yLeft_ = x;
+}
+
+void boundry::
+yLeft (::std::unique_ptr< yLeft_type > x)
+{
+  this->yLeft_.set (std::move (x));
+}
+
+const boundry::yRight_optional& boundry::
+yRight () const
+{
+  return this->yRight_;
+}
+
+boundry::yRight_optional& boundry::
+yRight ()
+{
+  return this->yRight_;
+}
+
+void boundry::
+yRight (const yRight_type& x)
+{
+  this->yRight_.set (x);
+}
+
+void boundry::
+yRight (const yRight_optional& x)
+{
+  this->yRight_ = x;
+}
+
+void boundry::
+yRight (::std::unique_ptr< yRight_type > x)
+{
+  this->yRight_.set (std::move (x));
+}
+
+
 // particle
 // 
 
@@ -1540,6 +1664,145 @@ operator= (const clusters& x)
 
 clusters::
 ~clusters ()
+{
+}
+
+// boundry
+//
+
+boundry::
+boundry ()
+: ::xml_schema::type (),
+  xTop_ (this),
+  xBottom_ (this),
+  yLeft_ (this),
+  yRight_ (this)
+{
+}
+
+boundry::
+boundry (const boundry& x,
+         ::xml_schema::flags f,
+         ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  xTop_ (x.xTop_, f, this),
+  xBottom_ (x.xBottom_, f, this),
+  yLeft_ (x.yLeft_, f, this),
+  yRight_ (x.yRight_, f, this)
+{
+}
+
+boundry::
+boundry (const ::xercesc::DOMElement& e,
+         ::xml_schema::flags f,
+         ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  xTop_ (this),
+  xBottom_ (this),
+  yLeft_ (this),
+  yRight_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void boundry::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // xTop
+    //
+    if (n.name () == "xTop" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< xTop_type > r (
+        xTop_traits::create (i, f, this));
+
+      if (!this->xTop_)
+      {
+        this->xTop_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // xBottom
+    //
+    if (n.name () == "xBottom" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< xBottom_type > r (
+        xBottom_traits::create (i, f, this));
+
+      if (!this->xBottom_)
+      {
+        this->xBottom_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // yLeft
+    //
+    if (n.name () == "yLeft" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< yLeft_type > r (
+        yLeft_traits::create (i, f, this));
+
+      if (!this->yLeft_)
+      {
+        this->yLeft_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // yRight
+    //
+    if (n.name () == "yRight" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< yRight_type > r (
+        yRight_traits::create (i, f, this));
+
+      if (!this->yRight_)
+      {
+        this->yRight_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    break;
+  }
+}
+
+boundry* boundry::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class boundry (*this, f, c);
+}
+
+boundry& boundry::
+operator= (const boundry& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->xTop_ = x.xTop_;
+    this->xBottom_ = x.xBottom_;
+    this->yLeft_ = x.yLeft_;
+    this->yRight_ = x.yRight_;
+  }
+
+  return *this;
+}
+
+boundry::
+~boundry ()
 {
 }
 
@@ -2818,6 +3081,60 @@ operator<< (::xercesc::DOMElement& e, const clusters& i)
         e));
 
     s << *b;
+  }
+}
+
+void
+operator<< (::xercesc::DOMElement& e, const boundry& i)
+{
+  e << static_cast< const ::xml_schema::type& > (i);
+
+  // xTop
+  //
+  if (i.xTop ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "xTop",
+        e));
+
+    s << *i.xTop ();
+  }
+
+  // xBottom
+  //
+  if (i.xBottom ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "xBottom",
+        e));
+
+    s << *i.xBottom ();
+  }
+
+  // yLeft
+  //
+  if (i.yLeft ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "yLeft",
+        e));
+
+    s << *i.yLeft ();
+  }
+
+  // yRight
+  //
+  if (i.yRight ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "yRight",
+        e));
+
+    s << *i.yRight ();
   }
 }
 

@@ -51,7 +51,10 @@ namespace inputReader {
                 parameters->containerType().get() == "linked") {
                 auto containerLinkedCell = std::unique_ptr<ParticleContainer>(new ParticleContainerLinkedCell(
                         {parameters->domainSize()->x(), parameters->domainSize()->y(), parameters->domainSize()->z()},
-                        parameters->cutoff().get()));
+                        parameters->cutoff().get(), {
+                            {getEnum(parameters->boundry()->xBottom().get()), getEnum(parameters->boundry()->xTop().get())},
+                            {getEnum(parameters->boundry()->yLeft().get()), getEnum(parameters->boundry()->yRight().get())},
+                            {outflow, outflow}}));
                 simData.setParticles(std::move(containerLinkedCell));
             } else {
                 // use direct sum as default
@@ -128,6 +131,13 @@ namespace inputReader {
         } catch (const std::exception &e) {
             std::cerr << "Standard exception: " << e.what() << std::endl;
             exit(-1);
+        }
+    }
+    BoundaryType XMLFileReader::getEnum(std::string b) {
+        if (b == "reflecting") {
+            return reflect;
+        } else{
+            return outflow;
         }
     }
 }

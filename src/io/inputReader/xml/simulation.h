@@ -257,6 +257,7 @@ class simulation;
 class output;
 class parameters;
 class clusters;
+class boundry;
 class particle;
 class disc;
 class cuboid;
@@ -687,7 +688,7 @@ class parameters: public ::xml_schema::type
 
   // boundry
   //
-  typedef ::xml_schema::string boundry_type;
+  typedef ::boundry boundry_type;
   typedef ::xsd::cxx::tree::optional< boundry_type > boundry_optional;
   typedef ::xsd::cxx::tree::traits< boundry_type, char > boundry_traits;
 
@@ -834,6 +835,129 @@ class clusters: public ::xml_schema::type
   particle_sequence particle_;
   disc_sequence disc_;
   cuboid_sequence cuboid_;
+};
+
+class boundry: public ::xml_schema::type
+{
+  public:
+  // xTop
+  //
+  typedef ::xml_schema::string xTop_type;
+  typedef ::xsd::cxx::tree::optional< xTop_type > xTop_optional;
+  typedef ::xsd::cxx::tree::traits< xTop_type, char > xTop_traits;
+
+  const xTop_optional&
+  xTop () const;
+
+  xTop_optional&
+  xTop ();
+
+  void
+  xTop (const xTop_type& x);
+
+  void
+  xTop (const xTop_optional& x);
+
+  void
+  xTop (::std::unique_ptr< xTop_type > p);
+
+  // xBottom
+  //
+  typedef ::xml_schema::string xBottom_type;
+  typedef ::xsd::cxx::tree::optional< xBottom_type > xBottom_optional;
+  typedef ::xsd::cxx::tree::traits< xBottom_type, char > xBottom_traits;
+
+  const xBottom_optional&
+  xBottom () const;
+
+  xBottom_optional&
+  xBottom ();
+
+  void
+  xBottom (const xBottom_type& x);
+
+  void
+  xBottom (const xBottom_optional& x);
+
+  void
+  xBottom (::std::unique_ptr< xBottom_type > p);
+
+  // yLeft
+  //
+  typedef ::xml_schema::string yLeft_type;
+  typedef ::xsd::cxx::tree::optional< yLeft_type > yLeft_optional;
+  typedef ::xsd::cxx::tree::traits< yLeft_type, char > yLeft_traits;
+
+  const yLeft_optional&
+  yLeft () const;
+
+  yLeft_optional&
+  yLeft ();
+
+  void
+  yLeft (const yLeft_type& x);
+
+  void
+  yLeft (const yLeft_optional& x);
+
+  void
+  yLeft (::std::unique_ptr< yLeft_type > p);
+
+  // yRight
+  //
+  typedef ::xml_schema::string yRight_type;
+  typedef ::xsd::cxx::tree::optional< yRight_type > yRight_optional;
+  typedef ::xsd::cxx::tree::traits< yRight_type, char > yRight_traits;
+
+  const yRight_optional&
+  yRight () const;
+
+  yRight_optional&
+  yRight ();
+
+  void
+  yRight (const yRight_type& x);
+
+  void
+  yRight (const yRight_optional& x);
+
+  void
+  yRight (::std::unique_ptr< yRight_type > p);
+
+  // Constructors.
+  //
+  boundry ();
+
+  boundry (const ::xercesc::DOMElement& e,
+           ::xml_schema::flags f = 0,
+           ::xml_schema::container* c = 0);
+
+  boundry (const boundry& x,
+           ::xml_schema::flags f = 0,
+           ::xml_schema::container* c = 0);
+
+  virtual boundry*
+  _clone (::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0) const;
+
+  boundry&
+  operator= (const boundry& x);
+
+  virtual 
+  ~boundry ();
+
+  // Implementation.
+  //
+  protected:
+  void
+  parse (::xsd::cxx::xml::dom::parser< char >&,
+         ::xml_schema::flags);
+
+  protected:
+  xTop_optional xTop_;
+  xBottom_optional xBottom_;
+  yLeft_optional yLeft_;
+  yRight_optional yRight_;
 };
 
 class particle: public ::xml_schema::type
@@ -1389,6 +1513,9 @@ operator<< (::xercesc::DOMElement&, const parameters&);
 
 void
 operator<< (::xercesc::DOMElement&, const clusters&);
+
+void
+operator<< (::xercesc::DOMElement&, const boundry&);
 
 void
 operator<< (::xercesc::DOMElement&, const particle&);
