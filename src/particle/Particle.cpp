@@ -12,7 +12,10 @@
 #include <array>
 #include <iostream>
 
+size_t Particle::nextId = 0;
+
 Particle::Particle(int typeArg) {
+    id = nextId++;
     type = typeArg;
     f = {0., 0., 0.};
     oldF = {0., 0., 0.};
@@ -20,6 +23,7 @@ Particle::Particle(int typeArg) {
 }
 
 Particle::Particle(const Particle &other) {
+    id = other.id;
     oldX = other.oldX;
     x = other.x;
     v = other.v;
@@ -33,6 +37,7 @@ Particle::Particle(const Particle &other) {
 // Todo: maybe use initializer list instead of copy?
 Particle::Particle(std::array<double, 3> xArg, std::array<double, 3> vArg,
                    double mArg, int typeArg) {
+    id = nextId++;
     oldX = {0., 0., 0.};
     x = xArg;
     v = vArg;
@@ -65,6 +70,8 @@ double Particle::getM() const { return m; }
 
 int Particle::getType() const { return type; }
 
+size_t Particle::getId() const { return id; }
+
 std::string Particle::toString() const {
     std::stringstream stream;
     stream << "Particle: X:" << x << " v: " << v << " f: " << f << " oldF: " << oldF << " type: " << type;
@@ -72,8 +79,7 @@ std::string Particle::toString() const {
 }
 
 bool Particle::operator==(const Particle &other) const {
-    return (x == other.x) and (v == other.v) and (f == other.f) and
-           (type == other.type) and (m == other.m) and (oldF == other.oldF);
+    return id == other.id;
 }
 
 void Particle::setM(double newM) {

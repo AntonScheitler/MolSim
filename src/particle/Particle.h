@@ -45,6 +45,16 @@ private:
     double m;
 
     /**
+     * @brief the id of a particle. used for comparison
+     */
+    size_t id;
+
+    /**
+     * @brief a static counter which is used to give each particle a unique id
+     */
+    static size_t nextId;
+
+    /**
      * @brief Type of the particle. Use it for whatever you want (e.g. to separate
      * molecules belonging to different bodies, matters, and so on)
      */
@@ -131,6 +141,11 @@ public:
      * @return type of this particle
      */
     int getType() const;
+
+    /**
+     * @brief the the id of the particle
+     */
+    size_t getId() const;
 
     /**
      * @brief checks if two particles are equal

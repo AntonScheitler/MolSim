@@ -7,8 +7,6 @@
 #include <computations/forces/ForceComputations.h>
 #include <computations/velocities/VelocityComputations.h>
 #include "spdlogConfig.h"
-#include "io/outputWriter/VTKWriter.h"
-
 
 class ParticleContainerLinkedCellTest : public testing::Test {
 protected:
@@ -32,7 +30,7 @@ protected:
 
     struct PairEqual {
         bool operator()(const std::pair<Particle, Particle> &p1, const std::pair<Particle, Particle> &p2) const {
-            return (p1.first == p2.first && p1.second == p2.second) || (p1.first == p2.second && p1.second == p2.first);
+            return (p1.first.getX() == p2.first.getX() && p1.second.getX() == p2.second.getX()) || (p1.first.getX() == p2.second.getX() && p1.second.getX() == p2.first.getX());
         }
     };
 

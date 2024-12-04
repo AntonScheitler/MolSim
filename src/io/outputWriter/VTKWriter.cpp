@@ -17,17 +17,14 @@
 namespace outputWriter {
 
     VTKWriter::VTKWriter(std::string baseName) : baseName(baseName){
-
         this->logger = spdlog::stdout_color_st("VTKWriter");
         SPDLOG_LOGGER_DEBUG(logger, "Initialized VTKWriter");
-
     }
 
     void VTKWriter::plotParticles(ParticleContainer &particles, int iteration) {
-
         initializeOutput(particles.size());
         for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
-            Particle particle = **it;
+            Particle& particle = **it;
             plotParticle(particle);
         }
         writeFile(baseName, iteration);

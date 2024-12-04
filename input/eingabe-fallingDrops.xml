@@ -14,10 +14,10 @@
         </domainSize>
         <cutoff>3.0</cutoff>
         <boundry>
-            <xTop>outflow</xTop>
-            <xBottom>reflecting</xBottom>
-            <yLeft>reflecting</yLeft>
-            <yRight>reflecting</yRight>
+            <xTop>reflect</xTop>
+            <xBottom>reflect</xBottom>
+            <yLeft>reflect</yLeft>
+            <yRight>reflect</yRight>
         </boundry>
     </parameters>
     <clusters>
