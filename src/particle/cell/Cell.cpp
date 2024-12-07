@@ -17,12 +17,8 @@ std::vector<Particle> &Cell::getParticles() {
 }
 
 void Cell::removeParticle(Particle &particle) {
-    auto it = std::find(
-            particles.begin(), particles.end(), particle);
-    if (it != particles.end()) {
-        particles.erase(it);
-    } else
-        SPDLOG_WARN("cannot remove particle from cell because it is not contained");
+    auto it = std::find(particles.begin(), particles.end(), particle);
+    particles.erase(it);
 }
 
 int Cell::size() {

@@ -139,6 +139,9 @@ void Simulator::runSimulationLoop() {
         }
         SPDLOG_LOGGER_INFO(logger, "Iteration {0} finished.", iteration);
         currentTime += simData.getDeltaT();
+        if (iteration == 99) {
+            int j = 1;
+        }
     }
     after();
     SPDLOG_LOGGER_INFO(logger, "output written. Terminating...");

@@ -127,14 +127,10 @@ bool ParticleContainerLinkedCell::correctParticleIndex(Particle &p) {
 
 void ParticleContainerLinkedCell::correctAllParticleIndices() {
     for (auto &c: mesh) {
-        std::vector<std::reference_wrapper<Particle>> particlesToRemove{};
         for (auto &p: c.getParticles()) {
             if (correctParticleIndex(p)) {
-                particlesToRemove.emplace_back(p);
+                c.removeParticle(p);
             }
-        }
-        for (auto &p: particlesToRemove) {
-            c.removeParticle(p);
         }
     }
 }

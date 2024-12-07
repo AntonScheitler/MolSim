@@ -8,8 +8,8 @@
         <sigma>1.0</sigma>
         <containerType>linked</containerType>
         <domainSize>
-            <x>180</x>
-            <y>90</y>
+            <x>100</x>
+            <y>100</y>
             <z>1</z>
         </domainSize>
         <cutoff>3.0</cutoff>
@@ -28,8 +28,8 @@
                 <z>0.0</z>
             </cornerCoordinates>
             <dimensions>
-                <x>100</x>
-                <y>20</y>
+                <x>40</x>
+                <y>8</y>
                 <z>1</z>
             </dimensions>
             <velocity>
@@ -43,13 +43,13 @@
         </cuboid>
         <cuboid>
             <cornerCoordinates>
-                <x>70.0</x>
+                <x>40.0</x>
                 <y>60.0</y>
                 <z>0.0</z>
             </cornerCoordinates>
             <dimensions>
-                <x>20</x>
-                <y>20</y>
+                <x>8</x>
+                <y>8</y>
                 <z>1</z>
             </dimensions>
             <velocity>
