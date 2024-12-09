@@ -299,7 +299,7 @@ TEST_F(ParticleContainerLinkedCellTest, CellRemoveParticleTest) {
     Cell c = Cell{false, 0};
     Particle x{0};
     c.addParticle(x);
-    c.removeParticle(x);
+    c.removeParticle(x.getId());
     EXPECT_EQ(c.size(), 0);
 }
 
