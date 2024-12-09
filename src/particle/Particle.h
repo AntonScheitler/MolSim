@@ -70,10 +70,21 @@ public:
             std::array<double, 3> xArg, std::array<double, 3> vArg, double mArg,
             int typeArg = 0);
 
+    /**
+     * @brief destruct the Particle
+     */
     virtual ~Particle();
 
+    /**
+     * @brief gets the old position of this particle
+     * @return old position
+     */
     const std::array<double, 3> &getOldX() const;
 
+    /**
+     * @brief set the old position of this particle
+     * @param oldXArg old position
+     */
     void setOldX(std::array<double, 3> oldXArg);
 
     /**

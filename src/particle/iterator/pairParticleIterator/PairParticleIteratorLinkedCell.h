@@ -113,7 +113,7 @@ class PairParticleIteratorLinkedCell : public PairParticleIterator {
         };
 
         /**
-         * @brief a set containing all particles for which all paris have been iterated through
+         * @brief a set containing all particles for which all pairs have been iterated through
          */
         std::unordered_set<Particle, ParticleHash, ParticleEqual> completedParticles;
 
