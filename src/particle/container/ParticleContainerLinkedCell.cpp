@@ -18,8 +18,8 @@ ParticleContainerLinkedCell::ParticleContainerLinkedCell(std::array<double, 3> d
         // this means, the dimensions of a cell will always be greater or equal to the cutoff radius, unless the domain
         // is smaller than the cutoff radius of course
         // there should be at least once cell per dimension
-        numCells[i] = std::max((int) floor(domainSize[i] / cellSize[i]), 1);
-        cellSize[i] = domainSize[i] / (1.0 * numCells[i]);
+        numCells[i] = std::max(static_cast<int>(floor(domainSize[i] / cellSize[i])), 1);
+        cellSize[i] = domainSize[i] / numCells[i];
     }
 
     // add all cells to the mesh
