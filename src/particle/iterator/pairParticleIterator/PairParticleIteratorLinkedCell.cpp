@@ -26,10 +26,9 @@ void PairParticleIteratorLinkedCell::incrementCurrCellIdx() {
 
 void PairParticleIteratorLinkedCell::getNeighborCells() {
     neighborCellsVector.clear();
-    for (int z = 0; z < 2; z++) {
-        for (int y = 0; y < 2; y++) {
+    for (int z = -1; z < 2; z++) {
+        for (int y = -1; y < 2; y++) {
             for (int x = -1; x < 2; x++) {
-                if (x == -1 && y == 0 && z == 0) continue;
                 std::array<int, 3> neighborCoords = ArrayUtils::elementWisePairOp(
                         currentCellIdx, {x, y, z}, std::plus<>());
                 if (neighborCoords[0] < 0 || neighborCoords[1] < 0 || neighborCoords[2] < 0 ||
@@ -39,7 +38,7 @@ void PairParticleIteratorLinkedCell::getNeighborCells() {
                 int neighborIdx = neighborCoords[0] + (neighborCoords[1] * numCells[0]) + (neighborCoords[2] * numCells[0] * numCells[1]);
                 Cell& cell = mesh[neighborIdx];
                 if (cell.getParticles().size() > 0) {
-                    neighborCellsVector.push_back(&mesh[neighborIdx]);
+                    neighborCellsVector.push_back(&(mesh[neighborIdx]));
                 }
             }
         }
@@ -99,7 +98,6 @@ void PairParticleIteratorLinkedCell::currentStepToViableCell(bool stepBefore) {
         if (currentCell == end) {
             return;
         }
-        completedParticles.clear();
         currentParticle = currentCell->getParticles().begin();
         getNeighborCells();
         neighborCell = neighborCellsVector.begin();

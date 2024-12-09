@@ -50,12 +50,11 @@ int ParticleContainerLinkedCell::discreteCoordsToIndex(std::array<int, 3> coord)
 }
 
 int ParticleContainerLinkedCell::continuousCoordsToIndex(std::array<double, 3> coord) {
-    // convert continuous coords into continuous approximation of discrete coords
-    std::array<double, 3> approxDiscreteCoords = ArrayUtils::elementWisePairOp(coord, cellSize, std::divides<>());
+    int coordX = floor(coord[0] / cellSize[0]);
+    int coordY = floor(coord[1] / cellSize[1]);
+    int coordZ = floor(coord[2] / cellSize[2]);
     // floor continuous approximation of discrete coords to achieve discrete coords
-    return discreteCoordsToIndex(
-            std::array<int, 3>{(int) floor(approxDiscreteCoords[0]), (int) floor(approxDiscreteCoords[1]),
-                               (int) floor(approxDiscreteCoords[2])});
+    return discreteCoordsToIndex({coordX, coordY, coordZ});
 }
 
 std::vector<Cell> &ParticleContainerLinkedCell::getMesh() {
@@ -115,8 +114,7 @@ bool ParticleContainerLinkedCell::correctParticleIndex(Particle &p) {
         SPDLOG_DEBUG("removing particle from cell {0}", oldCellIndex);
         // check if the cell is still within bounds
         if (newCellIndex != -1) {
-            Cell &newCell = getCell(newCellIndex);
-            newCell.addParticle(p);
+            addParticle(p);
             SPDLOG_DEBUG("adding particle into cell {0}", newCellIndex);
         } else
             SPDLOG_DEBUG("particle outflowing");

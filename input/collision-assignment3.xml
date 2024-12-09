@@ -8,11 +8,11 @@
         <sigma>1.0</sigma>
         <containerType>linked</containerType>
         <domainSize>
-            <x>100</x>
-            <y>100</y>
+            <x>5</x>
+            <y>65</y>
             <z>1</z>
         </domainSize>
-        <cutoff>3.0</cutoff>
+        <cutoff>5.0</cutoff>
         <boundry>
             <xTop>outflow</xTop>
             <xBottom>outflow</xBottom>
@@ -21,6 +21,7 @@
         </boundry>
     </parameters>
     <clusters>
+    <!--
         <cuboid>
             <cornerCoordinates>
                 <x>20.0</x>
@@ -41,15 +42,16 @@
             <mass>1.0</mass>
             <brownianMotion>0.0</brownianMotion>
         </cuboid>
+        -->
         <cuboid>
             <cornerCoordinates>
-                <x>40.0</x>
+                <x>0.0</x>
                 <y>60.0</y>
                 <z>0.0</z>
             </cornerCoordinates>
             <dimensions>
-                <x>8</x>
-                <y>8</y>
+                <x>4</x>
+                <y>4</y>
                 <z>1</z>
             </dimensions>
             <velocity>
