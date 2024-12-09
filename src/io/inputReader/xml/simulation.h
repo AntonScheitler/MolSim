@@ -257,6 +257,7 @@ class simulation;
 class output;
 class parameters;
 class clusters;
+class thermo;
 class boundry;
 class particle;
 class disc;
@@ -420,11 +421,30 @@ class simulation: public ::xml_schema::type
   void
   clusters (::std::unique_ptr< clusters_type > p);
 
+  // thermo
+  //
+  typedef ::thermo thermo_type;
+  typedef ::xsd::cxx::tree::traits< thermo_type, char > thermo_traits;
+
+  const thermo_type&
+  thermo () const;
+
+  thermo_type&
+  thermo ();
+
+  void
+  thermo (const thermo_type& x);
+
+  void
+  thermo (::std::unique_ptr< thermo_type > p);
+
   // Constructors.
   //
-  simulation (const clusters_type&);
+  simulation (const clusters_type&,
+              const thermo_type&);
 
-  simulation (::std::unique_ptr< clusters_type >);
+  simulation (::std::unique_ptr< clusters_type >,
+              ::std::unique_ptr< thermo_type >);
 
   simulation (const ::xercesc::DOMElement& e,
               ::xml_schema::flags f = 0,
@@ -455,6 +475,7 @@ class simulation: public ::xml_schema::type
   output_optional output_;
   parameters_optional parameters_;
   ::xsd::cxx::tree::one< clusters_type > clusters_;
+  ::xsd::cxx::tree::one< thermo_type > thermo_;
 };
 
 class output: public ::xml_schema::type
@@ -835,6 +856,104 @@ class clusters: public ::xml_schema::type
   particle_sequence particle_;
   disc_sequence disc_;
   cuboid_sequence cuboid_;
+};
+
+class thermo: public ::xml_schema::type
+{
+  public:
+  // init_T
+  //
+  typedef ::xml_schema::double_ init_T_type;
+  typedef ::xsd::cxx::tree::traits< init_T_type, char, ::xsd::cxx::tree::schema_type::double_ > init_T_traits;
+
+  const init_T_type&
+  init_T () const;
+
+  init_T_type&
+  init_T ();
+
+  void
+  init_T (const init_T_type& x);
+
+  // n
+  //
+  typedef ::xml_schema::double_ n_type;
+  typedef ::xsd::cxx::tree::traits< n_type, char, ::xsd::cxx::tree::schema_type::double_ > n_traits;
+
+  const n_type&
+  n () const;
+
+  n_type&
+  n ();
+
+  void
+  n (const n_type& x);
+
+  // target
+  //
+  typedef ::xml_schema::double_ target_type;
+  typedef ::xsd::cxx::tree::traits< target_type, char, ::xsd::cxx::tree::schema_type::double_ > target_traits;
+
+  const target_type&
+  target () const;
+
+  target_type&
+  target ();
+
+  void
+  target (const target_type& x);
+
+  // maxStep
+  //
+  typedef ::xml_schema::double_ maxStep_type;
+  typedef ::xsd::cxx::tree::traits< maxStep_type, char, ::xsd::cxx::tree::schema_type::double_ > maxStep_traits;
+
+  const maxStep_type&
+  maxStep () const;
+
+  maxStep_type&
+  maxStep ();
+
+  void
+  maxStep (const maxStep_type& x);
+
+  // Constructors.
+  //
+  thermo (const init_T_type&,
+          const n_type&,
+          const target_type&,
+          const maxStep_type&);
+
+  thermo (const ::xercesc::DOMElement& e,
+          ::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0);
+
+  thermo (const thermo& x,
+          ::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0);
+
+  virtual thermo*
+  _clone (::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0) const;
+
+  thermo&
+  operator= (const thermo& x);
+
+  virtual 
+  ~thermo ();
+
+  // Implementation.
+  //
+  protected:
+  void
+  parse (::xsd::cxx::xml::dom::parser< char >&,
+         ::xml_schema::flags);
+
+  protected:
+  ::xsd::cxx::tree::one< init_T_type > init_T_;
+  ::xsd::cxx::tree::one< n_type > n_;
+  ::xsd::cxx::tree::one< target_type > target_;
+  ::xsd::cxx::tree::one< maxStep_type > maxStep_;
 };
 
 class boundry: public ::xml_schema::type
@@ -1513,6 +1632,9 @@ operator<< (::xercesc::DOMElement&, const parameters&);
 
 void
 operator<< (::xercesc::DOMElement&, const clusters&);
+
+void
+operator<< (::xercesc::DOMElement&, const thermo&);
 
 void
 operator<< (::xercesc::DOMElement&, const boundry&);

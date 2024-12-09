@@ -185,6 +185,30 @@ clusters (::std::unique_ptr< clusters_type > x)
   this->clusters_.set (std::move (x));
 }
 
+const simulation::thermo_type& simulation::
+thermo () const
+{
+  return this->thermo_.get ();
+}
+
+simulation::thermo_type& simulation::
+thermo ()
+{
+  return this->thermo_.get ();
+}
+
+void simulation::
+thermo (const thermo_type& x)
+{
+  this->thermo_.set (x);
+}
+
+void simulation::
+thermo (::std::unique_ptr< thermo_type > x)
+{
+  this->thermo_.set (std::move (x));
+}
+
 
 // output
 // 
@@ -537,6 +561,82 @@ void clusters::
 cuboid (const cuboid_sequence& s)
 {
   this->cuboid_ = s;
+}
+
+
+// thermo
+// 
+
+const thermo::init_T_type& thermo::
+init_T () const
+{
+  return this->init_T_.get ();
+}
+
+thermo::init_T_type& thermo::
+init_T ()
+{
+  return this->init_T_.get ();
+}
+
+void thermo::
+init_T (const init_T_type& x)
+{
+  this->init_T_.set (x);
+}
+
+const thermo::n_type& thermo::
+n () const
+{
+  return this->n_.get ();
+}
+
+thermo::n_type& thermo::
+n ()
+{
+  return this->n_.get ();
+}
+
+void thermo::
+n (const n_type& x)
+{
+  this->n_.set (x);
+}
+
+const thermo::target_type& thermo::
+target () const
+{
+  return this->target_.get ();
+}
+
+thermo::target_type& thermo::
+target ()
+{
+  return this->target_.get ();
+}
+
+void thermo::
+target (const target_type& x)
+{
+  this->target_.set (x);
+}
+
+const thermo::maxStep_type& thermo::
+maxStep () const
+{
+  return this->maxStep_.get ();
+}
+
+thermo::maxStep_type& thermo::
+maxStep ()
+{
+  return this->maxStep_.get ();
+}
+
+void thermo::
+maxStep (const maxStep_type& x)
+{
+  this->maxStep_.set (x);
 }
 
 
@@ -1111,20 +1211,24 @@ vectorType::
 //
 
 simulation::
-simulation (const clusters_type& clusters)
+simulation (const clusters_type& clusters,
+            const thermo_type& thermo)
 : ::xml_schema::type (),
   output_ (this),
   parameters_ (this),
-  clusters_ (clusters, this)
+  clusters_ (clusters, this),
+  thermo_ (thermo, this)
 {
 }
 
 simulation::
-simulation (::std::unique_ptr< clusters_type > clusters)
+simulation (::std::unique_ptr< clusters_type > clusters,
+            ::std::unique_ptr< thermo_type > thermo)
 : ::xml_schema::type (),
   output_ (this),
   parameters_ (this),
-  clusters_ (std::move (clusters), this)
+  clusters_ (std::move (clusters), this),
+  thermo_ (std::move (thermo), this)
 {
 }
 
@@ -1135,7 +1239,8 @@ simulation (const simulation& x,
 : ::xml_schema::type (x, f, c),
   output_ (x.output_, f, this),
   parameters_ (x.parameters_, f, this),
-  clusters_ (x.clusters_, f, this)
+  clusters_ (x.clusters_, f, this),
+  thermo_ (x.thermo_, f, this)
 {
 }
 
@@ -1146,7 +1251,8 @@ simulation (const ::xercesc::DOMElement& e,
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
   output_ (this),
   parameters_ (this),
-  clusters_ (this)
+  clusters_ (this),
+  thermo_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -1207,6 +1313,20 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // thermo
+    //
+    if (n.name () == "thermo" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< thermo_type > r (
+        thermo_traits::create (i, f, this));
+
+      if (!thermo_.present ())
+      {
+        this->thermo_.set (::std::move (r));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -1214,6 +1334,13 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
   {
     throw ::xsd::cxx::tree::expected_element< char > (
       "clusters",
+      "");
+  }
+
+  if (!thermo_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "thermo",
       "");
   }
 }
@@ -1234,6 +1361,7 @@ operator= (const simulation& x)
     this->output_ = x.output_;
     this->parameters_ = x.parameters_;
     this->clusters_ = x.clusters_;
+    this->thermo_ = x.thermo_;
   }
 
   return *this;
@@ -1664,6 +1792,164 @@ operator= (const clusters& x)
 
 clusters::
 ~clusters ()
+{
+}
+
+// thermo
+//
+
+thermo::
+thermo (const init_T_type& init_T,
+        const n_type& n,
+        const target_type& target,
+        const maxStep_type& maxStep)
+: ::xml_schema::type (),
+  init_T_ (init_T, this),
+  n_ (n, this),
+  target_ (target, this),
+  maxStep_ (maxStep, this)
+{
+}
+
+thermo::
+thermo (const thermo& x,
+        ::xml_schema::flags f,
+        ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  init_T_ (x.init_T_, f, this),
+  n_ (x.n_, f, this),
+  target_ (x.target_, f, this),
+  maxStep_ (x.maxStep_, f, this)
+{
+}
+
+thermo::
+thermo (const ::xercesc::DOMElement& e,
+        ::xml_schema::flags f,
+        ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  init_T_ (this),
+  n_ (this),
+  target_ (this),
+  maxStep_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void thermo::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // init_T
+    //
+    if (n.name () == "init_T" && n.namespace_ ().empty ())
+    {
+      if (!init_T_.present ())
+      {
+        this->init_T_.set (init_T_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // n
+    //
+    if (n.name () == "n" && n.namespace_ ().empty ())
+    {
+      if (!n_.present ())
+      {
+        this->n_.set (n_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // target
+    //
+    if (n.name () == "target" && n.namespace_ ().empty ())
+    {
+      if (!target_.present ())
+      {
+        this->target_.set (target_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // maxStep
+    //
+    if (n.name () == "maxStep" && n.namespace_ ().empty ())
+    {
+      if (!maxStep_.present ())
+      {
+        this->maxStep_.set (maxStep_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    break;
+  }
+
+  if (!init_T_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "init_T",
+      "");
+  }
+
+  if (!n_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "n",
+      "");
+  }
+
+  if (!target_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "target",
+      "");
+  }
+
+  if (!maxStep_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "maxStep",
+      "");
+  }
+}
+
+thermo* thermo::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class thermo (*this, f, c);
+}
+
+thermo& thermo::
+operator= (const thermo& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->init_T_ = x.init_T_;
+    this->n_ = x.n_;
+    this->target_ = x.target_;
+    this->maxStep_ = x.maxStep_;
+  }
+
+  return *this;
+}
+
+thermo::
+~thermo ()
 {
 }
 
@@ -2890,6 +3176,17 @@ operator<< (::xercesc::DOMElement& e, const simulation& i)
 
     s << i.clusters ();
   }
+
+  // thermo
+  //
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "thermo",
+        e));
+
+    s << i.thermo ();
+  }
 }
 
 void
@@ -3081,6 +3378,56 @@ operator<< (::xercesc::DOMElement& e, const clusters& i)
         e));
 
     s << *b;
+  }
+}
+
+void
+operator<< (::xercesc::DOMElement& e, const thermo& i)
+{
+  e << static_cast< const ::xml_schema::type& > (i);
+
+  // init_T
+  //
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "init_T",
+        e));
+
+    s << ::xml_schema::as_double(i.init_T ());
+  }
+
+  // n
+  //
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "n",
+        e));
+
+    s << ::xml_schema::as_double(i.n ());
+  }
+
+  // target
+  //
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "target",
+        e));
+
+    s << ::xml_schema::as_double(i.target ());
+  }
+
+  // maxStep
+  //
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "maxStep",
+        e));
+
+    s << ::xml_schema::as_double(i.maxStep ());
   }
 }
 

@@ -134,9 +134,10 @@ void Simulator::runSimulationLoop() {
         iteration++;
 
         if (!simData.getBench()) {
-        //if (iteration % simData.getWriteFrequency() == 0 && !simData.getBench()) {
+        if (iteration % simData.getWriteFrequency() == 0 && !simData.getBench()) {
             // write output on every 10th iteration
             writer.plotParticles(simData.getParticles(), iteration);
+            }
         }
         SPDLOG_LOGGER_INFO(logger, "Iteration {0} finished.", iteration);
         currentTime += simData.getDeltaT();

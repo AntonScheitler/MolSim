@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <simulation>
+    <output>
+        <writeFrequency>10</writeFrequency>
+    </output>
     <parameters>
         <delta_t>0.00005</delta_t>
         <t_end>10</t_end>
@@ -14,10 +17,10 @@
         </domainSize>
         <cutoff>3.0</cutoff>
         <boundry>
-            <xTop>reflect</xTop>
-            <xBottom>reflect</xBottom>
-            <yLeft>reflect</yLeft>
-            <yRight>reflect</yRight>
+            <xTop>reflecting</xTop>
+            <xBottom>reflecting</xBottom>
+            <yLeft>reflecting</yLeft>
+            <yRight>reflecting</yRight>
         </boundry>
     </parameters>
     <clusters>

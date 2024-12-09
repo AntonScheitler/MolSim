@@ -15,6 +15,8 @@
     <xsd:element name="simulation">
         <xsd:complexType>
             <xsd:sequence>
+
+
                 <xsd:element name="output" minOccurs="0">
                     <xsd:complexType>
                         <xsd:sequence>
@@ -23,6 +25,8 @@
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>
+
+
                 <xsd:element name="parameters" minOccurs="0">
                     <xsd:complexType>
                         <xsd:sequence>
@@ -102,6 +106,18 @@
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>
+
+                <xsd:element name="thermo">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="init_T" type="xsd:double"/>
+                            <xsd:element name="n" type="xsd:double"/>
+                            <xsd:element name="target" type="xsd:double"/>
+                            <xsd:element name="maxStep" type="xsd:double"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
