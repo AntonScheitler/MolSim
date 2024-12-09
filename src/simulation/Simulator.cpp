@@ -139,9 +139,6 @@ void Simulator::runSimulationLoop() {
             writer.plotParticles(simData.getParticles(), iteration);
         }
         SPDLOG_LOGGER_INFO(logger, "Iteration {0} finished.", iteration);
-        if (iteration == 669) {
-            int i = 1;
-        }
         currentTime += simData.getDeltaT();
     }
     after();

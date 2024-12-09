@@ -26,7 +26,7 @@ public:
      * @brief removes the specified particle from the cell
      * @param particle the particle to remove
      */
-    void removeParticle(Particle &particle);
+    void removeParticle(size_t particleId);
 
     /**
      * @brief returns the particles that are stored in this cell

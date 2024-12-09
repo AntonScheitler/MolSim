@@ -1,5 +1,8 @@
 #include "Cell.h"
+#include <algorithm>
 #include <bits/stdc++.h>
+#include <cstdlib>
+#include "spdlog/spdlog.h"
 #include "spdlogConfig.h"
 
 
@@ -16,8 +19,13 @@ std::vector<Particle> &Cell::getParticles() {
     return particles;
 }
 
-void Cell::removeParticle(Particle &particle) {
-    auto it = std::find(particles.begin(), particles.end(), particle);
+void Cell::removeParticle(size_t particleId) {
+    auto it = std::find_if(particles.begin(), particles.end(),
+                   [particleId](const Particle& particle) { return particle.getId() == particleId; });
+    if (it == particles.end()) {
+        SPDLOG_ERROR("SOMETHING VERY TERRIBLE HAS HAPPENED :(");
+        exit(EXIT_FAILURE);
+    }
     particles.erase(it);
 }
 
