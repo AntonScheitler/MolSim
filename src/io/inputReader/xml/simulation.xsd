@@ -111,9 +111,9 @@
                     <xsd:complexType>
                         <xsd:sequence>
                             <xsd:element name="init_T" type="xsd:double"/>
-                            <xsd:element name="n" type="xsd:double"/>
-                            <xsd:element name="target" type="xsd:double"/>
-                            <xsd:element name="maxStep" type="xsd:double"/>
+                            <xsd:element name="n" type="xsd:double" />
+                            <xsd:element name="target" type="xsd:double" minOccurs="0"/>
+                            <xsd:element name="maxStep" type="xsd:double" minOccurs="0"/>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>

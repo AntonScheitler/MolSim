@@ -894,37 +894,43 @@ class thermo: public ::xml_schema::type
   // target
   //
   typedef ::xml_schema::double_ target_type;
+  typedef ::xsd::cxx::tree::optional< target_type > target_optional;
   typedef ::xsd::cxx::tree::traits< target_type, char, ::xsd::cxx::tree::schema_type::double_ > target_traits;
 
-  const target_type&
+  const target_optional&
   target () const;
 
-  target_type&
+  target_optional&
   target ();
 
   void
   target (const target_type& x);
 
+  void
+  target (const target_optional& x);
+
   // maxStep
   //
   typedef ::xml_schema::double_ maxStep_type;
+  typedef ::xsd::cxx::tree::optional< maxStep_type > maxStep_optional;
   typedef ::xsd::cxx::tree::traits< maxStep_type, char, ::xsd::cxx::tree::schema_type::double_ > maxStep_traits;
 
-  const maxStep_type&
+  const maxStep_optional&
   maxStep () const;
 
-  maxStep_type&
+  maxStep_optional&
   maxStep ();
 
   void
   maxStep (const maxStep_type& x);
 
+  void
+  maxStep (const maxStep_optional& x);
+
   // Constructors.
   //
   thermo (const init_T_type&,
-          const n_type&,
-          const target_type&,
-          const maxStep_type&);
+          const n_type&);
 
   thermo (const ::xercesc::DOMElement& e,
           ::xml_schema::flags f = 0,
@@ -954,8 +960,8 @@ class thermo: public ::xml_schema::type
   protected:
   ::xsd::cxx::tree::one< init_T_type > init_T_;
   ::xsd::cxx::tree::one< n_type > n_;
-  ::xsd::cxx::tree::one< target_type > target_;
-  ::xsd::cxx::tree::one< maxStep_type > maxStep_;
+  target_optional target_;
+  maxStep_optional maxStep_;
 };
 
 class boundary: public ::xml_schema::type

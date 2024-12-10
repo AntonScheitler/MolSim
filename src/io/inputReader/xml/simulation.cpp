@@ -609,16 +609,16 @@ n (const n_type& x)
   this->n_.set (x);
 }
 
-const thermo::target_type& thermo::
+const thermo::target_optional& thermo::
 target () const
 {
-  return this->target_.get ();
+  return this->target_;
 }
 
-thermo::target_type& thermo::
+thermo::target_optional& thermo::
 target ()
 {
-  return this->target_.get ();
+  return this->target_;
 }
 
 void thermo::
@@ -627,22 +627,34 @@ target (const target_type& x)
   this->target_.set (x);
 }
 
-const thermo::maxStep_type& thermo::
-maxStep () const
+void thermo::
+target (const target_optional& x)
 {
-  return this->maxStep_.get ();
+  this->target_ = x;
 }
 
-thermo::maxStep_type& thermo::
+const thermo::maxStep_optional& thermo::
+maxStep () const
+{
+  return this->maxStep_;
+}
+
+thermo::maxStep_optional& thermo::
 maxStep ()
 {
-  return this->maxStep_.get ();
+  return this->maxStep_;
 }
 
 void thermo::
 maxStep (const maxStep_type& x)
 {
   this->maxStep_.set (x);
+}
+
+void thermo::
+maxStep (const maxStep_optional& x)
+{
+  this->maxStep_ = x;
 }
 
 
@@ -1797,14 +1809,12 @@ clusters::
 
 thermo::
 thermo (const init_T_type& init_T,
-        const n_type& n,
-        const target_type& target,
-        const maxStep_type& maxStep)
+        const n_type& n)
 : ::xml_schema::type (),
   init_T_ (init_T, this),
   n_ (n, this),
-  target_ (target, this),
-  maxStep_ (maxStep, this)
+  target_ (this),
+  maxStep_ (this)
 {
 }
 
@@ -1873,7 +1883,7 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
     //
     if (n.name () == "target" && n.namespace_ ().empty ())
     {
-      if (!target_.present ())
+      if (!this->target_)
       {
         this->target_.set (target_traits::create (i, f, this));
         continue;
@@ -1884,7 +1894,7 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
     //
     if (n.name () == "maxStep" && n.namespace_ ().empty ())
     {
-      if (!maxStep_.present ())
+      if (!this->maxStep_)
       {
         this->maxStep_.set (maxStep_traits::create (i, f, this));
         continue;
@@ -1905,20 +1915,6 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
   {
     throw ::xsd::cxx::tree::expected_element< char > (
       "n",
-      "");
-  }
-
-  if (!target_.present ())
-  {
-    throw ::xsd::cxx::tree::expected_element< char > (
-      "target",
-      "");
-  }
-
-  if (!maxStep_.present ())
-  {
-    throw ::xsd::cxx::tree::expected_element< char > (
-      "maxStep",
       "");
   }
 }
@@ -3408,24 +3404,26 @@ operator<< (::xercesc::DOMElement& e, const thermo& i)
 
   // target
   //
+  if (i.target ())
   {
     ::xercesc::DOMElement& s (
       ::xsd::cxx::xml::dom::create_element (
         "target",
         e));
 
-    s << ::xml_schema::as_double(i.target ());
+    s << ::xml_schema::as_double(*i.target ());
   }
 
   // maxStep
   //
+  if (i.maxStep ())
   {
     ::xercesc::DOMElement& s (
       ::xsd::cxx::xml::dom::create_element (
         "maxStep",
         e));
 
-    s << ::xml_schema::as_double(i.maxStep ());
+    s << ::xml_schema::as_double(*i.maxStep ());
   }
 }
 
