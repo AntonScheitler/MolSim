@@ -40,6 +40,7 @@ namespace inputReader {
         if (!inputFile) {
             throw std::runtime_error("Failed to open XML file.");
         }
+
         try {
 
 //        std::unique_ptr<simulation> simParser = simulation_(inputFile, xml_schema::flags::dont_validate);
@@ -105,8 +106,7 @@ namespace inputReader {
 
                 type++;
             }
-
-
+            
             for (const auto &disc: simParser->clusters().disc()) {
                 x[0] = disc.center().x();
                 x[1] = disc.center().y();

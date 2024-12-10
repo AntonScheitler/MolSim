@@ -33,4 +33,12 @@ namespace ParameterParser {
 
         }
     }
+    void readThermo(SimulationData &simData, const std::unique_ptr<simulation> &xmlParser) {
+        if(xmlParser->thermo().present()){
+            simData.activateThermostat();
+            simData.setInitialTemp(xmlParser->thermo()->init_T());
+            simData.setThermoFrequency(xmlParser->thermo()->n());
+            simData.setMaxDeltaTemp(xmlParser->thermo()->maxStep());
+        }
+    }
 }

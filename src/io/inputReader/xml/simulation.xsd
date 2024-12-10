@@ -39,7 +39,7 @@
                             <xsd:element name="containerType" type="xsd:string" minOccurs="0"/>
                             <xsd:element name="domainSize" type="vectorType" minOccurs="0"/>
                             <xsd:element name="cutoff" type="xsd:double" minOccurs="0"/>
-                            <!--Boundry Condition values: outflow  or reflecting-->
+                            <!--Boundary Condition values: outflow  or reflecting-->
                             <xsd:element name="boundary" minOccurs="0">
                                 <xsd:complexType>
                                     <xsd:sequence>
