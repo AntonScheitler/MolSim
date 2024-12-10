@@ -12,7 +12,7 @@ void TemperatureComputations::initTemp(ParticleContainer& particles, double aver
         maxBoltzVelocity[2] = 0; // TODO: update this depending on number of dimensions
         std::array<double, 3> v = ArrayUtils::elementWiseScalarOp(factor, maxBoltzVelocity, std::multiplies<>());
         particle.setV(v);
-        SPDLOG_INFO("init v: {0}, {1}, {2}", v[0], v[1], v[2]);
+        SPDLOG_DEBUG("init v: {0}, {1}, {2}", v[0], v[1], v[2]);
     }
 }
 
@@ -29,7 +29,7 @@ double TemperatureComputations::calculateCurrentSystemTemp(ParticleContainer &pa
     }
 
     temp = temp / (particles.size() * 2); //TODO: number of dimensions instead of 2
-    SPDLOG_INFO("current system temp: {0}", temp);
+    SPDLOG_DEBUG("current system temp: {0}", temp);
     return temp;
 }
 
@@ -54,6 +54,6 @@ void TemperatureComputations::updateTemp(ParticleContainer& particles, double ta
 
         std::array<double, 3> newV = ArrayUtils::elementWiseScalarOp(beta, particle.getV(), std::multiplies<>());
         particle.setV(newV);
-        SPDLOG_INFO("new v: {0}, {1}, {2}", newV[0], newV[1], newV[2]);
+        SPDLOG_DEBUG("new v: {0}, {1}, {2}", newV[0], newV[1], newV[2]);
     }
 }
