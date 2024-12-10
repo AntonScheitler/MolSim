@@ -21,6 +21,7 @@ SimulationData::SimulationData() {
     baseName = "MD_vtk";
     writeFrequency = 10;
     averageVelocity = 0;
+    thermostat = false;
 }
 
 int SimulationData::parseOptions(int argc, char *argsv[]) {

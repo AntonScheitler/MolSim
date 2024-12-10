@@ -1,15 +1,18 @@
 #include "./TemperatureComputations.h"
 #include "utils/ArrayUtils.h"
 #include "utils/MaxwellBoltzmannDistribution.h"
+#include "spdlogConfig.h"
 
 
-void TemperatureComputations::initTemp(ParticleContainer& particles, double initialTemp) {
+void TemperatureComputations::initTemp(ParticleContainer& particles, double averageVelocity, double initialTemp) {
     for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
         Particle& particle = **it;
         double factor = sqrt(initialTemp / particle.getM());
-        std::array<double, 3> maxBoltzVelocity = maxwellBoltzmannDistributedVelocity(factor, 3);
+        std::array<double, 3> maxBoltzVelocity = maxwellBoltzmannDistributedVelocity(averageVelocity, 3);
         maxBoltzVelocity[2] = 0; // TODO: update this depending on number of dimensions
-        particle.setV(maxBoltzVelocity);
+        std::array<double, 3> v = ArrayUtils::elementWiseScalarOp(factor, maxBoltzVelocity, std::multiplies<>());
+        particle.setV(v);
+        SPDLOG_INFO("init v: {0}, {1}, {2}", v[0], v[1], v[2]);
     }
 }
 
@@ -25,39 +28,32 @@ double TemperatureComputations::calculateCurrentSystemTemp(ParticleContainer &pa
         temp += particle.getM() * vScalarProduct;
     }
 
-    return temp / particles.size() * 2; //TODO: number of dimensions instead of 2
+    temp = temp / (particles.size() * 2); //TODO: number of dimensions instead of 2
+    SPDLOG_INFO("current system temp: {0}", temp);
+    return temp;
 }
 
 void TemperatureComputations::updateTemp(ParticleContainer& particles, double targetTemp, double maxDeltaTemp) {
 
     double currentTemp = calculateCurrentSystemTemp(particles);
-    if(currentTemp == targetTemp) return;
 
     double newTemp;
     if(targetTemp > currentTemp) {
-        if(targetTemp < currentTemp + maxDeltaTemp) {
-            newTemp = targetTemp;
-        } else {
-            newTemp = currentTemp + maxDeltaTemp;
-        }
+        newTemp = std::min(currentTemp + maxDeltaTemp, targetTemp);
     } else {
-        if(targetTemp > currentTemp - maxDeltaTemp) {
-            newTemp = targetTemp;
-        } else {
-            newTemp = currentTemp - maxDeltaTemp;
-        }
+        newTemp = std::max(currentTemp - maxDeltaTemp, targetTemp);
     }
 
+
     // temperature scaling fact
-    double beta = sqrt(newTemp / currentTemp);
+    double beta = currentTemp == 0 ? 1 : sqrt(newTemp / currentTemp);
 
     // update all velocities of all particles
     for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
         Particle& particle = **it;
 
-        std::array<double, 3> v = particle.getV();
-        v[0] *= beta;
-        v[1] *= beta;
-        v[2] *= beta;
+        std::array<double, 3> newV = ArrayUtils::elementWiseScalarOp(beta, particle.getV(), std::multiplies<>());
+        particle.setV(newV);
+        SPDLOG_INFO("new v: {0}, {1}, {2}", newV[0], newV[1], newV[2]);
     }
 }
