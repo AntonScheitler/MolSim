@@ -1,12 +1,9 @@
-#include "spdlogConfig.h"
 #include "computations/forces/ForceComputations.h"
 #include "computations/positions/PositionComputations.h"
 #include "computations/velocities/VelocityComputations.h"
-#include "inputReader/TxtFileReader.h"
-#include <cstdlib>
-#include <unistd.h>
-#include <getopt.h>
+#include "io/inputReader/TxtFileReader.h"
 #include "simulation/Simulator.h"
+#include "spdlogConfig.h"
 
 int main(int argc, char *argsv[]) {
     // default logging level
@@ -20,10 +17,6 @@ int main(int argc, char *argsv[]) {
 
     // perform the simulation/benchmark it
     Simulator simulator{simData};
-    if (simData.getBench()) {
-        simulator.simulateBench();
-    } else {
-        simulator.simulate();
-    }
+    simulator.simulate();
     return 0;
 }

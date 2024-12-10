@@ -2,9 +2,13 @@ name: Makefile CI
 
 on:
   push:
-    branches: [ "assignment2/submission" ]
+    branches:
+      - master
+      - '*/submission'
   pull_request:
-    branches: [ "assignment2/submission" ]
+    branches:
+      - master
+      - '*/submission'
 
 jobs:
   build:
@@ -16,12 +20,12 @@ jobs:
 
       - name: install dependencies
         run:
-          sudo apt-get update && sudo apt-get install -y 
-          build-essential 
-          cmake 
-          gcc 
-          g++ 
-          gdb 
+          sudo apt-get update && sudo apt-get install -y
+          build-essential
+          cmake
+          gcc
+          g++
+          gdb
           clang
           libxerces-c-dev
           && sudo apt-get clean
@@ -34,10 +38,9 @@ jobs:
           && make
 
       - name: run unit tests
-        run: 
+        run:
           cd build
           && cd test
           && ctest
-
 
 

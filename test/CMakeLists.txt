@@ -10,7 +10,7 @@ target_link_libraries(computationTests
     gtest_main
 )
 
-# compile binary for inputReader tests
+## compile binary for inputReader tests
 file(GLOB_RECURSE INPUT_READER_TESTS
     "${CMAKE_CURRENT_SOURCE_DIR}/inputReader/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/inputReader/*.h"
@@ -24,8 +24,8 @@ target_link_libraries(inputReaderTests
 
 # compile binary for particle tests
 file(GLOB_RECURSE PARTICLE_TESTS
-    "${CMAKE_CURRENT_SOURCE_DIR}/particle/*.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/particle/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/particle/ParticleContainerLinkedCellTest.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/particle/ParticleContainerLinkedCellTest.h"
 )
 
 add_executable(particleTests ${PARTICLE_TESTS})

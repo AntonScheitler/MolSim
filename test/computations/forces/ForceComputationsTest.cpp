@@ -1,6 +1,7 @@
-#include "../../../../src/particle/ParticleContainer.h"
 #include "../../../../src/computations/forces/ForceComputations.h"
 #include <gtest/gtest.h>
+#include "../../../src/spdlogConfig.h"
+#include "../../../src/particle/container/ParticleContainerDirectSum.h"
 
 /**
  * @brief Tests the force computations (src/computations/forces) via analytically calculated examples
@@ -8,7 +9,7 @@
 class ForceComputationsTest : public testing::Test {
 protected:
 
-    ParticleContainer particles;
+    ParticleContainerDirectSum particles;
 
     // executed before each test
     void SetUp() override {
@@ -24,8 +25,8 @@ protected:
         a.setM(6);
         b.setM(1);
 
-        particles = ParticleContainer({{a,b}}, 0.1);
-        std::cout << "inited tests" << std::endl;
+        particles = ParticleContainerDirectSum({std::vector<Particle>{a, b}});
+        SPDLOG_INFO("ForceComputationsTest setUp done");
     }
 };
 

@@ -1,5 +1,6 @@
-#include "../../src/inputReader/FileReader.h"
+#include "../../src/io/inputReader/FileReader.h"
 #include <gtest/gtest.h>
+#include "../../../../src/particle/container/ParticleContainerDirectSum.h"
 
 class FileReaderTest : public testing::Test {
 
@@ -7,7 +8,12 @@ protected:
     SimulationData simulationData{};
 
     void testCometSim(char *inputFile);
+
     void testCollisionSim(char *inputFile);
+
+    void SetUp() override {
+        simulationData = SimulationData();
+    }
 
 };
 
@@ -28,7 +34,7 @@ void expectArrayCorrect(std::array<double, 3> v, double x0, double x1, double x2
  * @brief checks if all particles have the same position, velocity and mass as specified in the test input file
  * @param p particleContainer containing the particles
  */
-void expectParticlesCometSimCorrect(ParticleContainer &p) {
+void expectParticlesCometSimCorrect(ParticleContainerDirectSum &p) {
     // particle 0
     expectArrayCorrect(p.getParticle(0).getX(), 0, 0, 0);
     expectArrayCorrect(p.getParticle(0).getV(), 0, 0, 0);
@@ -54,7 +60,7 @@ void expectParticlesCometSimCorrect(ParticleContainer &p) {
  * @brief checks if all particles have the same position, velocity and mass as specified in the test input file
  * @param p particleContainer containing the particles
  */
-void expectParticlesCollisionSimCorrect(ParticleContainer &p) {
+void expectParticlesCollisionSimCorrect(ParticleContainerDirectSum &p) {
     // cuboid 0
     // particle 0
     expectArrayCorrect(p.getParticle(0).getX(), 0, 0, 0);
@@ -84,11 +90,11 @@ void expectParticlesCollisionSimCorrect(ParticleContainer &p) {
  * @param inputFile path of the input file
  */
 void FileReaderTest::testCometSim(char *inputFile) {
-    simulationData.setSimType(simulationType::comet);
+    simulationData.setSimType(SimulationType::comet);
     inputReader::FileReader fileReader = inputReader::FileReader(simulationData);
-    ParticleContainer p{};
-    fileReader.readFile(p, inputFile);
-    expectParticlesCometSimCorrect(p);
+    fileReader.readFile(inputFile);
+    ParticleContainerDirectSum* containerDirectSum = dynamic_cast<ParticleContainerDirectSum *>(&(simulationData.getParticles()));
+    expectParticlesCometSimCorrect(*containerDirectSum);
 }
 
 /**
@@ -97,11 +103,11 @@ void FileReaderTest::testCometSim(char *inputFile) {
  * @param inputFile path of the input file
  */
 void FileReaderTest::testCollisionSim(char *inputFile) {
-    simulationData.setSimType(simulationType::collision);
+    simulationData.setSimType(SimulationType::collision);
     inputReader::FileReader fileReader = inputReader::FileReader(simulationData);
-    ParticleContainer p{};
-    fileReader.readFile(p, inputFile);
-    expectParticlesCollisionSimCorrect(p);
+    fileReader.readFile(inputFile);
+    ParticleContainerDirectSum* containerDirectSum = dynamic_cast<ParticleContainerDirectSum *>(&(simulationData.getParticles()));
+    expectParticlesCollisionSimCorrect(*containerDirectSum);
 }
 
 /**
@@ -129,8 +135,5 @@ TEST_F(FileReaderTest, JsonFileReaderCollisionSimInputTest) {
  * @brief tests the txtFileReader for cuboid collision simulation input file
  */
 TEST_F(FileReaderTest, TxtFileReaderCollisionSimInputTest) {
-    testCollisionSim((char*) "../../testInput/test-input-cuboids.txt");
+    testCollisionSim((char *) "../../testInput/test-input-cuboids.txt");
 }
-
-
-
