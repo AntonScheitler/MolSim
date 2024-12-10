@@ -47,6 +47,26 @@ void ForceComputations::computeLennardJonesPotential(ParticleContainer &particle
     }
 }
 
+void ForceComputations::computeLennardJonesPotentialCutoff(ParticleContainer &particles, double epsilon, double sigma, double cutoff) {
+    // iterate through all pairs of particles and calculate lennard-jones potential
+    for (auto it = particles.beginPairParticle(); *it != *(particles.endPairParticle()); it->operator++()) {
+        std::pair<Particle &, Particle &> pair = **it;
+
+        std::array<double, 3> distanceVector = ArrayUtils::elementWisePairOp(pair.first.getX(), pair.second.getX(), std::minus<>());
+        double distance = ArrayUtils::L2Norm(distanceVector);
+        // don't consider particles which are further apart than the cutoff radius
+        if (distance == 0 || distance > cutoff) continue;
+        double dist = std::pow(sigma / distance, 2);
+
+        double factor = (-24.0 * epsilon) / std::pow(distance, 2) * (std::pow(dist, 3) - 2 * std::pow(dist, 6));
+
+        std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(factor, distanceVector, std::multiplies<>());
+        pair.first.setF(ArrayUtils::elementWisePairOp(pair.first.getF(), force, std::plus<>()));
+        std::array<double, 3> revForce = ArrayUtils::elementWiseScalarOp(-1, force, std::multiplies<>());
+        pair.second.setF(ArrayUtils::elementWisePairOp(pair.second.getF(), revForce, std::plus<>()));
+    }
+}
+
 void ForceComputations::computeGhostParticleRepulsion(ParticleContainerLinkedCell& particles, double epsilon, double sigma) {
     for (auto it = particles.beginPairGhost(); it != particles.endPairGhost(); ++it) {
         std::pair<Particle&, Particle&> pair = *it;

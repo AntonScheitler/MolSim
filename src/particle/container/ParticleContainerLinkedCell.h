@@ -83,6 +83,8 @@ public:
 
     std::array<double, 3> getCellSize();
 
+    double getCutoffRadius();
+
 private:
     /**
      * @brief mesh contains all grid cells

@@ -57,8 +57,8 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                 if (containerLinkedCell) {
                     containerLinkedCell->correctAllParticleIndices();
                     ForceComputations::resetForces(simData.getParticles());
-                    ForceComputations::computeLennardJonesPotential(simData.getParticles(), simData.getEpsilon(),
-                                                                    simData.getSigma());
+                    ForceComputations::computeLennardJonesPotentialCutoff(simData.getParticles(), simData.getEpsilon(),
+                                                                    simData.getSigma(), containerLinkedCell->getCutoffRadius());
                     ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell, simData.getEpsilon(),
                                                                      simData.getSigma());
                     VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
