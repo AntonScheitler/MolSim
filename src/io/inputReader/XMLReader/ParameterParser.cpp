@@ -38,7 +38,10 @@ namespace ParameterParser {
             simData.activateThermostat();
             simData.setInitialTemp(xmlParser->thermo()->init_T());
             simData.setThermoFrequency(xmlParser->thermo()->n());
-            simData.setMaxDeltaTemp(xmlParser->thermo()->maxStep());
+            double targetTempArg = (xmlParser->thermo()->target().present()) ? (xmlParser->thermo()->target().get()) : xmlParser->thermo()->init_T();
+            simData.setTargetTemp(targetTempArg);
+            double maxStep =  (xmlParser->thermo()->maxStep().present()) ? (xmlParser->thermo()->maxStep().get()) : std::numeric_limits<double>::infinity();
+            simData.setMaxDeltaTemp(maxStep);
         }
     }
 }
