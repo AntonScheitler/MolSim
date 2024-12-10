@@ -8,14 +8,14 @@
         <sigma>1.0</sigma>
         <containerType>linked</containerType>
         <domainSize>
-            <x>180</x>
-            <y>90</y>
+            <x>50</x>
+            <y>50</y>
             <z>1</z>
         </domainSize>
         <cutoff>3.0</cutoff>
         <boundry>
-            <xTop>outflow</xTop>
-            <xBottom>outflow</xBottom>
+            <xTop>periodic</xTop>
+            <xBottom>periodic</xBottom>
             <yLeft>outflow</yLeft>
             <yRight>outflow</yRight>
         </boundry>
@@ -23,13 +23,13 @@
     <clusters>
         <cuboid>
             <cornerCoordinates>
-                <x>20.0</x>
-                <y>20.0</y>
+                <x>0.0</x>
+                <y>10.0</y>
                 <z>0.0</z>
             </cornerCoordinates>
             <dimensions>
-                <x>100</x>
-                <y>20</y>
+                <x>5</x>
+                <y>30</y>
                 <z>1</z>
             </dimensions>
             <velocity>
@@ -43,18 +43,18 @@
         </cuboid>
         <cuboid>
             <cornerCoordinates>
-                <x>70.0</x>
-                <y>60.0</y>
+                <x>40.0</x>
+                <y>30.0</y>
                 <z>0.0</z>
             </cornerCoordinates>
             <dimensions>
-                <x>20</x>
-                <y>20</y>
+                <x>5</x>
+                <y>5</y>
                 <z>1</z>
             </dimensions>
             <velocity>
-                <x>0.0</x>
-                <y>-10.0</y>
+                <x>20.0</x>
+                <y>0.0</y>
                 <z>0.0</z>
             </velocity>
             <meshWidth>1.1225</meshWidth>

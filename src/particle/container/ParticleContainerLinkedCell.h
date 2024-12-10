@@ -71,6 +71,12 @@ public:
     int continuousCoordsToIndex(std::array<double, 3> coord);
 
     /**
+     * @brief applies periodic boundaries to the specified array
+     * @param coord the coordinate array to apply the periodic boundaries to 
+     */
+    std::array<double, 3> applyPeriodicBoundaries(std::array<double, 3> coord);
+
+    /**
      * @brief corrects the indices of all particles in the linked cell container mesh based on their position
      */
     void correctAllParticleIndices();

@@ -1,4 +1,5 @@
 #include "XMLFileReader.h"
+#include "particle/boundary/Boundary.h"
 #include "simulation/SimulationData.h"
 #include <iostream>
 #include <fstream>
@@ -136,7 +137,9 @@ namespace inputReader {
     BoundaryType XMLFileReader::getEnum(std::string b) {
         if (b == "reflecting") {
             return reflect;
-        } else{
+        } else if (b == "periodic"){
+            return periodic;
+        } else {
             return outflow;
         }
     }

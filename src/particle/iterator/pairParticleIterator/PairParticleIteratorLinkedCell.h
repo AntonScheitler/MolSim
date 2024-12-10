@@ -1,5 +1,6 @@
 #pragma once
 
+#include "particle/boundary/Boundary.h"
 #include "particle/iterator/pairParticleIterator/PairParticleIterator.h"
 #include <cmath>
 #include <cstddef>
@@ -24,7 +25,7 @@ class PairParticleIteratorLinkedCell : public PairParticleIterator {
          * @return an instance of the Linked Cell PairParticleIterator
          */
         PairParticleIteratorLinkedCell(std::vector<Cell>::iterator it, std::vector<Cell>::iterator end,
-                std::vector<Cell> &meshArg, std::array<size_t, 3> numCellsArg);
+                std::vector<Cell> &meshArg, std::array<size_t, 3> numCellsArg, struct boundaryConfig boundarConfigArg);
 
         /**
          * @brief Dereference this PairParticleIterator, i.e. get the current pair of Particles
@@ -49,6 +50,10 @@ class PairParticleIteratorLinkedCell : public PairParticleIterator {
          * @brief the mesh to iterate through 
          */
         std::vector<Cell>& mesh;
+        /**
+         * @brief the configuration of the boundary
+         */
+        struct boundaryConfig boundaryConfig;
         /**
          * @brief the mesh index of the current cell
          */

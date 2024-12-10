@@ -1,16 +1,20 @@
+#include "particle/boundary/Boundary.h"
 #include "particle/iterator/pairParticleIterator/PairParticleIterator.h"
 #include "spdlogConfig.h"
 #include "utils/ArrayUtils.h"
 #include <array>
 #include <cstddef>
 #include <particle/iterator/pairParticleIterator/PairParticleIteratorLinkedCell.h>
+#include <unordered_set>
 
-PairParticleIteratorLinkedCell::PairParticleIteratorLinkedCell(std::vector<Cell>::iterator it, std::vector<Cell>::iterator endArg, std::vector<Cell> &meshArg, std::array<size_t, 3> numCellsArg): mesh(meshArg) {
+PairParticleIteratorLinkedCell::PairParticleIteratorLinkedCell(std::vector<Cell>::iterator it, std::vector<Cell>::iterator endArg, std::vector<Cell> &meshArg, std::array<size_t, 3> numCellsArg,
+        struct boundaryConfig boundaryConfigArg): mesh(meshArg) {
     completedParticles.clear();
     currentCellIdx = {0, 0, 0};
     numCells = numCellsArg;
     currentCell = it;
     end = endArg;
+    boundaryConfig = boundaryConfigArg;
     currentStepToViableCell(false);
 }
 
@@ -26,20 +30,32 @@ void PairParticleIteratorLinkedCell::incrementCurrCellIdx() {
 
 void PairParticleIteratorLinkedCell::getNeighborCells() {
     neighborCellsVector.clear();
-    for (int z = 0; z < 2; z++) {
-        for (int y = 0; y < 2; y++) {
+    std::unordered_set<int> neighborIdxs = {};
+    for (int z = -1; z < 2; z++) {
+        for (int y = -1; y < 2; y++) {
             for (int x = -1; x < 2; x++) {
-                if (x == -1 && y == 0 && z == 0) continue;
                 std::array<int, 3> neighborCoords = ArrayUtils::elementWisePairOp(
                         currentCellIdx, {x, y, z}, std::plus<>());
-                if (neighborCoords[0] < 0 || neighborCoords[1] < 0 || neighborCoords[2] < 0 ||
-                    neighborCoords[0] >= numCells[0] || neighborCoords[1] >= numCells[1] ||
-                    neighborCoords[2] >= numCells[2])
-                    continue;
-                int neighborIdx = neighborCoords[0] + (neighborCoords[1] * numCells[0]) + (neighborCoords[2] * numCells[0] * numCells[1]);
+                if ((neighborCoords[0] < 0 && boundaryConfig.x[0] != periodic) || 
+                        (neighborCoords[1] < 0 && boundaryConfig.y[0] != periodic) || 
+                            (neighborCoords[2] < 0 && boundaryConfig.z[0] != periodic)) continue;
+
+                if ((neighborCoords[0] >= numCells[0] && boundaryConfig.x[1] != periodic) || 
+                        (neighborCoords[1] >= numCells[1] && boundaryConfig.y[1] != periodic) || 
+                            (neighborCoords[2] >= numCells[2] && boundaryConfig.z[1] != periodic)) continue;
+
+                // if coord is not out of bounds, use periodic behavior
+                double newX = (neighborCoords[0] + numCells[0]) % numCells[0];
+                double newY = (neighborCoords[1] + numCells[1]) % numCells[1];
+                double newZ = (neighborCoords[2] + numCells[2]) % numCells[2];
+
+                int neighborIdx = newX + (newY * numCells[0]) + (newZ * numCells[0] * numCells[1]);
+                if (neighborIdxs.count(neighborIdx) > 0) continue;
+
                 Cell& cell = mesh[neighborIdx];
                 if (cell.getParticles().size() > 0) {
                     neighborCellsVector.push_back(&(mesh[neighborIdx]));
+                    neighborIdxs.insert(neighborIdx);
                 }
             }
         }
@@ -99,7 +115,6 @@ void PairParticleIteratorLinkedCell::currentStepToViableCell(bool stepBefore) {
         if (currentCell == end) {
             return;
         }
-        completedParticles.clear();
         currentParticle = currentCell->getParticles().begin();
         getNeighborCells();
         neighborCell = neighborCellsVector.begin();
