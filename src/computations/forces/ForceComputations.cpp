@@ -36,21 +36,14 @@ void ForceComputations::computeLennardJonesPotential(ParticleContainer &particle
         std::array<double, 3> distanceVector = ArrayUtils::elementWisePairOp(pair.first.getX(), pair.second.getX(), std::minus<>());
         double distance = ArrayUtils::L2Norm(distanceVector);
         if (distance == 0) continue;
+        double dist = std::pow(sigma / distance, 2);
 
-        double factor = (-24.0 * epsilon) / std::pow(distance, 2) * (std::pow(sigma / distance, 6) - 2 * std::pow(sigma / distance, 12));
+        double factor = (-24.0 * epsilon) / std::pow(distance, 2) * (std::pow(dist, 3) - 2 * std::pow(dist, 6));
 
         std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(factor, distanceVector, std::multiplies<>());
         pair.first.setF(ArrayUtils::elementWisePairOp(pair.first.getF(), force, std::plus<>()));
         std::array<double, 3> revForce = ArrayUtils::elementWiseScalarOp(-1, force, std::multiplies<>());
         pair.second.setF(ArrayUtils::elementWisePairOp(pair.second.getF(), revForce, std::plus<>()));
-    }
-}
-
-void ForceComputations::resetForces(ParticleContainer &particles) {
-    for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
-        Particle& particle = **it;
-        particle.setOldF(particle.getF());
-        particle.setF({0, 0, 0});
     }
 }
 
@@ -62,8 +55,18 @@ void ForceComputations::computeGhostParticleRepulsion(ParticleContainerLinkedCel
         double distance = ArrayUtils::L2Norm(distanceVector);
         // don't compute force if it is not repulsive
         if (distance == 0 || distance >= (std::pow(2.0, 1.0/6.0) * sigma)) continue;
-        double factor = (-24.0 * epsilon) / std::pow(distance, 2) * (std::pow(sigma / distance, 6) - 2 * std::pow(sigma / distance, 12));
+        double dist = std::pow(sigma / distance, 2);
+
+        double factor = (-24.0 * epsilon) / std::pow(distance, 2) * (std::pow(dist, 3) - 2 * std::pow(dist, 6));
         std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(factor, distanceVector, std::multiplies<>());
         pair.first.setF(ArrayUtils::elementWisePairOp(pair.first.getF(), force, std::plus<>()));
+    }
+}
+
+void ForceComputations::resetForces(ParticleContainer &particles) {
+    for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
+        Particle& particle = **it;
+        particle.setOldF(particle.getF());
+        particle.setF({0, 0, 0});
     }
 }

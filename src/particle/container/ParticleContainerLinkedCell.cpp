@@ -1,3 +1,4 @@
+#include <memory>
 #include <particle/container/ParticleContainerLinkedCell.h>
 #include "particle/iterator/pairParticleIterator/PairParticleIteratorLinkedCell.h"
 #include "particle/iterator/particleIterator/ParticleIteratorLinkedCell.h"
@@ -67,21 +68,21 @@ Cell &ParticleContainerLinkedCell::getCell(int idx) {
 }
 
 std::unique_ptr<ParticleIterator> ParticleContainerLinkedCell::begin() {
-    return std::unique_ptr<ParticleIterator>(new ParticleIteratorLinkedCell(mesh.begin(), mesh.end()));
+    return std::make_unique<ParticleIteratorLinkedCell>(ParticleIteratorLinkedCell(mesh.begin(), mesh.end()));
 }
 
 std::unique_ptr<ParticleIterator> ParticleContainerLinkedCell::end() {
-    return std::unique_ptr<ParticleIterator>(new ParticleIteratorLinkedCell(mesh.end(), mesh.end()));
+    return std::make_unique<ParticleIteratorLinkedCell>(ParticleIteratorLinkedCell(mesh.end(), mesh.end()));
 }
 
 std::unique_ptr<PairParticleIterator> ParticleContainerLinkedCell::beginPairParticle() {
-    return std::unique_ptr<PairParticleIterator>(
-            new PairParticleIteratorLinkedCell(mesh.begin(), mesh.end(), mesh, numCells));
+    return std::make_unique<PairParticleIteratorLinkedCell>(
+            PairParticleIteratorLinkedCell(mesh.begin(), mesh.end(), mesh, numCells));
 }
 
 std::unique_ptr<PairParticleIterator> ParticleContainerLinkedCell::endPairParticle() {
-    return std::unique_ptr<PairParticleIterator>(
-            new PairParticleIteratorLinkedCell(mesh.end(), mesh.end(), mesh, numCells));
+    return std::make_unique<PairParticleIteratorLinkedCell>(
+            PairParticleIteratorLinkedCell(mesh.end(), mesh.end(), mesh, numCells));
 }
 
 PairParticleIteratorBoundaryNHalo ParticleContainerLinkedCell::beginPairGhost() {
