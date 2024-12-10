@@ -185,22 +185,28 @@ clusters (::std::unique_ptr< clusters_type > x)
   this->clusters_.set (std::move (x));
 }
 
-const simulation::thermo_type& simulation::
+const simulation::thermo_optional& simulation::
 thermo () const
 {
-  return this->thermo_.get ();
+  return this->thermo_;
 }
 
-simulation::thermo_type& simulation::
+simulation::thermo_optional& simulation::
 thermo ()
 {
-  return this->thermo_.get ();
+  return this->thermo_;
 }
 
 void simulation::
 thermo (const thermo_type& x)
 {
   this->thermo_.set (x);
+}
+
+void simulation::
+thermo (const thermo_optional& x)
+{
+  this->thermo_ = x;
 }
 
 void simulation::
@@ -475,34 +481,34 @@ cutoff (const cutoff_optional& x)
   this->cutoff_ = x;
 }
 
-const parameters::boundry_optional& parameters::
-boundry () const
+const parameters::boundary_optional& parameters::
+boundary () const
 {
-  return this->boundry_;
+  return this->boundary_;
 }
 
-parameters::boundry_optional& parameters::
-boundry ()
+parameters::boundary_optional& parameters::
+boundary ()
 {
-  return this->boundry_;
-}
-
-void parameters::
-boundry (const boundry_type& x)
-{
-  this->boundry_.set (x);
+  return this->boundary_;
 }
 
 void parameters::
-boundry (const boundry_optional& x)
+boundary (const boundary_type& x)
 {
-  this->boundry_ = x;
+  this->boundary_.set (x);
 }
 
 void parameters::
-boundry (::std::unique_ptr< boundry_type > x)
+boundary (const boundary_optional& x)
 {
-  this->boundry_.set (std::move (x));
+  this->boundary_ = x;
+}
+
+void parameters::
+boundary (::std::unique_ptr< boundary_type > x)
+{
+  this->boundary_.set (std::move (x));
 }
 
 
@@ -640,124 +646,124 @@ maxStep (const maxStep_type& x)
 }
 
 
-// boundry
+// boundary
 // 
 
-const boundry::xTop_optional& boundry::
+const boundary::xTop_optional& boundary::
 xTop () const
 {
   return this->xTop_;
 }
 
-boundry::xTop_optional& boundry::
+boundary::xTop_optional& boundary::
 xTop ()
 {
   return this->xTop_;
 }
 
-void boundry::
+void boundary::
 xTop (const xTop_type& x)
 {
   this->xTop_.set (x);
 }
 
-void boundry::
+void boundary::
 xTop (const xTop_optional& x)
 {
   this->xTop_ = x;
 }
 
-void boundry::
+void boundary::
 xTop (::std::unique_ptr< xTop_type > x)
 {
   this->xTop_.set (std::move (x));
 }
 
-const boundry::xBottom_optional& boundry::
+const boundary::xBottom_optional& boundary::
 xBottom () const
 {
   return this->xBottom_;
 }
 
-boundry::xBottom_optional& boundry::
+boundary::xBottom_optional& boundary::
 xBottom ()
 {
   return this->xBottom_;
 }
 
-void boundry::
+void boundary::
 xBottom (const xBottom_type& x)
 {
   this->xBottom_.set (x);
 }
 
-void boundry::
+void boundary::
 xBottom (const xBottom_optional& x)
 {
   this->xBottom_ = x;
 }
 
-void boundry::
+void boundary::
 xBottom (::std::unique_ptr< xBottom_type > x)
 {
   this->xBottom_.set (std::move (x));
 }
 
-const boundry::yLeft_optional& boundry::
+const boundary::yLeft_optional& boundary::
 yLeft () const
 {
   return this->yLeft_;
 }
 
-boundry::yLeft_optional& boundry::
+boundary::yLeft_optional& boundary::
 yLeft ()
 {
   return this->yLeft_;
 }
 
-void boundry::
+void boundary::
 yLeft (const yLeft_type& x)
 {
   this->yLeft_.set (x);
 }
 
-void boundry::
+void boundary::
 yLeft (const yLeft_optional& x)
 {
   this->yLeft_ = x;
 }
 
-void boundry::
+void boundary::
 yLeft (::std::unique_ptr< yLeft_type > x)
 {
   this->yLeft_.set (std::move (x));
 }
 
-const boundry::yRight_optional& boundry::
+const boundary::yRight_optional& boundary::
 yRight () const
 {
   return this->yRight_;
 }
 
-boundry::yRight_optional& boundry::
+boundary::yRight_optional& boundary::
 yRight ()
 {
   return this->yRight_;
 }
 
-void boundry::
+void boundary::
 yRight (const yRight_type& x)
 {
   this->yRight_.set (x);
 }
 
-void boundry::
+void boundary::
 yRight (const yRight_optional& x)
 {
   this->yRight_ = x;
 }
 
-void boundry::
+void boundary::
 yRight (::std::unique_ptr< yRight_type > x)
 {
   this->yRight_.set (std::move (x));
@@ -1211,24 +1217,22 @@ vectorType::
 //
 
 simulation::
-simulation (const clusters_type& clusters,
-            const thermo_type& thermo)
+simulation (const clusters_type& clusters)
 : ::xml_schema::type (),
   output_ (this),
   parameters_ (this),
   clusters_ (clusters, this),
-  thermo_ (thermo, this)
+  thermo_ (this)
 {
 }
 
 simulation::
-simulation (::std::unique_ptr< clusters_type > clusters,
-            ::std::unique_ptr< thermo_type > thermo)
+simulation (::std::unique_ptr< clusters_type > clusters)
 : ::xml_schema::type (),
   output_ (this),
   parameters_ (this),
   clusters_ (std::move (clusters), this),
-  thermo_ (std::move (thermo), this)
+  thermo_ (this)
 {
 }
 
@@ -1320,7 +1324,7 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       ::std::unique_ptr< thermo_type > r (
         thermo_traits::create (i, f, this));
 
-      if (!thermo_.present ())
+      if (!this->thermo_)
       {
         this->thermo_.set (::std::move (r));
         continue;
@@ -1334,13 +1338,6 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
   {
     throw ::xsd::cxx::tree::expected_element< char > (
       "clusters",
-      "");
-  }
-
-  if (!thermo_.present ())
-  {
-    throw ::xsd::cxx::tree::expected_element< char > (
-      "thermo",
       "");
   }
 }
@@ -1486,7 +1483,7 @@ parameters ()
   containerType_ (this),
   domainSize_ (this),
   cutoff_ (this),
-  boundry_ (this)
+  boundary_ (this)
 {
 }
 
@@ -1503,7 +1500,7 @@ parameters (const parameters& x,
   containerType_ (x.containerType_, f, this),
   domainSize_ (x.domainSize_, f, this),
   cutoff_ (x.cutoff_, f, this),
-  boundry_ (x.boundry_, f, this)
+  boundary_ (x.boundary_, f, this)
 {
 }
 
@@ -1520,7 +1517,7 @@ parameters (const ::xercesc::DOMElement& e,
   containerType_ (this),
   domainSize_ (this),
   cutoff_ (this),
-  boundry_ (this)
+  boundary_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -1633,16 +1630,16 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
-    // boundry
+    // boundary
     //
-    if (n.name () == "boundry" && n.namespace_ ().empty ())
+    if (n.name () == "boundary" && n.namespace_ ().empty ())
     {
-      ::std::unique_ptr< boundry_type > r (
-        boundry_traits::create (i, f, this));
+      ::std::unique_ptr< boundary_type > r (
+        boundary_traits::create (i, f, this));
 
-      if (!this->boundry_)
+      if (!this->boundary_)
       {
-        this->boundry_.set (::std::move (r));
+        this->boundary_.set (::std::move (r));
         continue;
       }
     }
@@ -1672,7 +1669,7 @@ operator= (const parameters& x)
     this->containerType_ = x.containerType_;
     this->domainSize_ = x.domainSize_;
     this->cutoff_ = x.cutoff_;
-    this->boundry_ = x.boundry_;
+    this->boundary_ = x.boundary_;
   }
 
   return *this;
@@ -1953,11 +1950,11 @@ thermo::
 {
 }
 
-// boundry
+// boundary
 //
 
-boundry::
-boundry ()
+boundary::
+boundary ()
 : ::xml_schema::type (),
   xTop_ (this),
   xBottom_ (this),
@@ -1966,10 +1963,10 @@ boundry ()
 {
 }
 
-boundry::
-boundry (const boundry& x,
-         ::xml_schema::flags f,
-         ::xml_schema::container* c)
+boundary::
+boundary (const boundary& x,
+          ::xml_schema::flags f,
+          ::xml_schema::container* c)
 : ::xml_schema::type (x, f, c),
   xTop_ (x.xTop_, f, this),
   xBottom_ (x.xBottom_, f, this),
@@ -1978,10 +1975,10 @@ boundry (const boundry& x,
 {
 }
 
-boundry::
-boundry (const ::xercesc::DOMElement& e,
-         ::xml_schema::flags f,
-         ::xml_schema::container* c)
+boundary::
+boundary (const ::xercesc::DOMElement& e,
+          ::xml_schema::flags f,
+          ::xml_schema::container* c)
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
   xTop_ (this),
   xBottom_ (this),
@@ -1995,7 +1992,7 @@ boundry (const ::xercesc::DOMElement& e,
   }
 }
 
-void boundry::
+void boundary::
 parse (::xsd::cxx::xml::dom::parser< char >& p,
        ::xml_schema::flags f)
 {
@@ -2065,15 +2062,15 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
   }
 }
 
-boundry* boundry::
+boundary* boundary::
 _clone (::xml_schema::flags f,
         ::xml_schema::container* c) const
 {
-  return new class boundry (*this, f, c);
+  return new class boundary (*this, f, c);
 }
 
-boundry& boundry::
-operator= (const boundry& x)
+boundary& boundary::
+operator= (const boundary& x)
 {
   if (this != &x)
   {
@@ -2087,8 +2084,8 @@ operator= (const boundry& x)
   return *this;
 }
 
-boundry::
-~boundry ()
+boundary::
+~boundary ()
 {
 }
 
@@ -3179,13 +3176,14 @@ operator<< (::xercesc::DOMElement& e, const simulation& i)
 
   // thermo
   //
+  if (i.thermo ())
   {
     ::xercesc::DOMElement& s (
       ::xsd::cxx::xml::dom::create_element (
         "thermo",
         e));
 
-    s << i.thermo ();
+    s << *i.thermo ();
   }
 }
 
@@ -3320,16 +3318,16 @@ operator<< (::xercesc::DOMElement& e, const parameters& i)
     s << ::xml_schema::as_double(*i.cutoff ());
   }
 
-  // boundry
+  // boundary
   //
-  if (i.boundry ())
+  if (i.boundary ())
   {
     ::xercesc::DOMElement& s (
       ::xsd::cxx::xml::dom::create_element (
-        "boundry",
+        "boundary",
         e));
 
-    s << *i.boundry ();
+    s << *i.boundary ();
   }
 }
 
@@ -3432,7 +3430,7 @@ operator<< (::xercesc::DOMElement& e, const thermo& i)
 }
 
 void
-operator<< (::xercesc::DOMElement& e, const boundry& i)
+operator<< (::xercesc::DOMElement& e, const boundary& i)
 {
   e << static_cast< const ::xml_schema::type& > (i);
 

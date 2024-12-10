@@ -40,7 +40,7 @@
                             <xsd:element name="domainSize" type="vectorType" minOccurs="0"/>
                             <xsd:element name="cutoff" type="xsd:double" minOccurs="0"/>
                             <!--Boundry Condition values: outflow  or reflecting-->
-                            <xsd:element name="boundry" minOccurs="0">
+                            <xsd:element name="boundary" minOccurs="0">
                                 <xsd:complexType>
                                     <xsd:sequence>
                                         <xsd:element name="xTop" type="xsd:string" minOccurs="0"/>
@@ -107,7 +107,7 @@
                     </xsd:complexType>
                 </xsd:element>
 
-                <xsd:element name="thermo">
+                <xsd:element name="thermo" minOccurs="0">
                     <xsd:complexType>
                         <xsd:sequence>
                             <xsd:element name="init_T" type="xsd:double"/>

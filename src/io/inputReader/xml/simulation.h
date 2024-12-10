@@ -258,7 +258,7 @@ class output;
 class parameters;
 class clusters;
 class thermo;
-class boundry;
+class boundary;
 class particle;
 class disc;
 class cuboid;
@@ -424,27 +424,29 @@ class simulation: public ::xml_schema::type
   // thermo
   //
   typedef ::thermo thermo_type;
+  typedef ::xsd::cxx::tree::optional< thermo_type > thermo_optional;
   typedef ::xsd::cxx::tree::traits< thermo_type, char > thermo_traits;
 
-  const thermo_type&
+  const thermo_optional&
   thermo () const;
 
-  thermo_type&
+  thermo_optional&
   thermo ();
 
   void
   thermo (const thermo_type& x);
 
   void
+  thermo (const thermo_optional& x);
+
+  void
   thermo (::std::unique_ptr< thermo_type > p);
 
   // Constructors.
   //
-  simulation (const clusters_type&,
-              const thermo_type&);
+  simulation (const clusters_type&);
 
-  simulation (::std::unique_ptr< clusters_type >,
-              ::std::unique_ptr< thermo_type >);
+  simulation (::std::unique_ptr< clusters_type >);
 
   simulation (const ::xercesc::DOMElement& e,
               ::xml_schema::flags f = 0,
@@ -475,7 +477,7 @@ class simulation: public ::xml_schema::type
   output_optional output_;
   parameters_optional parameters_;
   ::xsd::cxx::tree::one< clusters_type > clusters_;
-  ::xsd::cxx::tree::one< thermo_type > thermo_;
+  thermo_optional thermo_;
 };
 
 class output: public ::xml_schema::type
@@ -707,26 +709,26 @@ class parameters: public ::xml_schema::type
   void
   cutoff (const cutoff_optional& x);
 
-  // boundry
+  // boundary
   //
-  typedef ::boundry boundry_type;
-  typedef ::xsd::cxx::tree::optional< boundry_type > boundry_optional;
-  typedef ::xsd::cxx::tree::traits< boundry_type, char > boundry_traits;
+  typedef ::boundary boundary_type;
+  typedef ::xsd::cxx::tree::optional< boundary_type > boundary_optional;
+  typedef ::xsd::cxx::tree::traits< boundary_type, char > boundary_traits;
 
-  const boundry_optional&
-  boundry () const;
+  const boundary_optional&
+  boundary () const;
 
-  boundry_optional&
-  boundry ();
-
-  void
-  boundry (const boundry_type& x);
+  boundary_optional&
+  boundary ();
 
   void
-  boundry (const boundry_optional& x);
+  boundary (const boundary_type& x);
 
   void
-  boundry (::std::unique_ptr< boundry_type > p);
+  boundary (const boundary_optional& x);
+
+  void
+  boundary (::std::unique_ptr< boundary_type > p);
 
   // Constructors.
   //
@@ -766,7 +768,7 @@ class parameters: public ::xml_schema::type
   containerType_optional containerType_;
   domainSize_optional domainSize_;
   cutoff_optional cutoff_;
-  boundry_optional boundry_;
+  boundary_optional boundary_;
 };
 
 class clusters: public ::xml_schema::type
@@ -956,7 +958,7 @@ class thermo: public ::xml_schema::type
   ::xsd::cxx::tree::one< maxStep_type > maxStep_;
 };
 
-class boundry: public ::xml_schema::type
+class boundary: public ::xml_schema::type
 {
   public:
   // xTop
@@ -1045,25 +1047,25 @@ class boundry: public ::xml_schema::type
 
   // Constructors.
   //
-  boundry ();
+  boundary ();
 
-  boundry (const ::xercesc::DOMElement& e,
-           ::xml_schema::flags f = 0,
-           ::xml_schema::container* c = 0);
+  boundary (const ::xercesc::DOMElement& e,
+            ::xml_schema::flags f = 0,
+            ::xml_schema::container* c = 0);
 
-  boundry (const boundry& x,
-           ::xml_schema::flags f = 0,
-           ::xml_schema::container* c = 0);
+  boundary (const boundary& x,
+            ::xml_schema::flags f = 0,
+            ::xml_schema::container* c = 0);
 
-  virtual boundry*
+  virtual boundary*
   _clone (::xml_schema::flags f = 0,
           ::xml_schema::container* c = 0) const;
 
-  boundry&
-  operator= (const boundry& x);
+  boundary&
+  operator= (const boundary& x);
 
   virtual 
-  ~boundry ();
+  ~boundary ();
 
   // Implementation.
   //
@@ -1637,7 +1639,7 @@ void
 operator<< (::xercesc::DOMElement&, const thermo&);
 
 void
-operator<< (::xercesc::DOMElement&, const boundry&);
+operator<< (::xercesc::DOMElement&, const boundary&);
 
 void
 operator<< (::xercesc::DOMElement&, const particle&);
