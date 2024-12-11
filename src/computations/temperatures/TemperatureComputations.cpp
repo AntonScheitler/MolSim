@@ -9,7 +9,8 @@ void TemperatureComputations::initTemp(ParticleContainer& particles, double init
         double factor = sqrt(initialTemp / particle.getM());
         std::array<double, 3> maxBoltzVelocity = maxwellBoltzmannDistributedVelocity(factor, 3);
         maxBoltzVelocity[2] = 0; // TODO: update this depending on number of dimensions
-        particle.setV(maxBoltzVelocity);
+        particle.setV(ArrayUtils::elementWisePairOp(particle.getV(), maxBoltzVelocity, std::plus<>()));
+
     }
 }
 
