@@ -7,7 +7,7 @@
 class TemperatureComputations {
     public:
         static void updateTemp(ParticleContainer& particles, double targetTemp, double maxDeltaTemp);
-        static void initTemp(ParticleContainer& particles, double initialTemp);
-    private:
+        static void initTemp(ParticleContainer& particles, double averageVelocity, double initialTemp);
         static double calculateCurrentSystemTemp(ParticleContainer& particles);
+    private:
 };
