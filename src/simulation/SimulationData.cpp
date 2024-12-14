@@ -1,48 +1,52 @@
-#include "particle/ParticleContainer.h"
+#include "particle/container/ParticleContainerDirectSum.h"
 #include "spdlog/spdlog.h"
 #include <iostream>
 #include <simulation/SimulationData.h>
 #include <getopt.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
-#include <inputReader/FileReader.h>
+#include <particle/container/ParticleContainer.h>
+#include <io/inputReader/FileReader.h>
 
 
 SimulationData::SimulationData() {
     // set default values
-    simType = simulationType::collision;
+    particles = std::unique_ptr<ParticleContainer>(new ParticleContainerDirectSum());
+    simType = SimulationType::collisionLinkedCell;
     startTime = 0;
-    endTime = 1000;
-    deltaT = 0.014;
+    endTime = 5;
+    deltaT = 0.0002;
     epsilon = 5;
     sigma = 1;
     bench = false;
+    baseName = "MD_vtk";
+    writeFrequency = 10;
 }
 
-int SimulationData::parseOptions(int argc, char* argsv[]) {
+int SimulationData::parseOptions(int argc, char *argsv[]) {
     // define usage text
     std::string usageText = "Usage: ./MolSim [OPTIONS] INPUT_FILE\n"
-        "-d, --delta_t\t\tsize of each timestep. Defaults to 0.014\n"
-        "-e, --t_end\t\ttime at which to stop the simulation. Defaults to 1000\n"
-        "-l, --log\t\tlog level, default value: 'info'. valid values (high to low):\n\t\t\t\t'trace', 'debug', 'info', 'warn', 'err', 'critical', 'off'\n\t\t\t\t (using any other string will result in logging turned 'off')\n"
-        "-s, --sim_type\t\ttype of simulation to run:\n\t\t\t\t0 - Planets\n\t\t\t\t1 - Collision. Defaults to 1\n"
-        "-b, --bench\t\tactivates benchmarking\n"
-        "-S, --sigma\t\tinput sigma for Lennard-Jones potential. Defaults to 1\n"
-        "-E, --epsilon\t\tinput epsilon for Lennard-Jones potential. Defaults to 5";
+                            "-d, --delta_t\t\tsize of each timestep. Defaults to 0.014\n"
+                            "-e, --t_end\t\ttime at which to stop the simulation. Defaults to 1000\n"
+                            "-l, --log\t\tlog level, default value: 'info'. valid values (high to low):\n\t\t\t\t'trace', 'debug', 'info', 'warn', 'err', 'critical', 'off'\n\t\t\t\t (using any other string will result in logging turned 'off')\n"
+                            "-s, --sim_type\t\ttype of simulation to run:\n\t\t\t\t0 - Planets\n\t\t\t\t1 - Collision\n\t\t\t\t2 - Collision with linked cell.  Defaults to 2\n"
+                            "-b, --bench\t\tactivates benchmarking\n"
+                            "-S, --sigma\t\tinput sigma for Lennard-Jones potential. Defaults to 1\n"
+                            "-E, --epsilon\t\tinput epsilon for Lennard-Jones potential. Defaults to 5";
 
     // setup option parsing
     int c;
     int simTypeNum;
-    const char* const shortOpts = "d:e:l:s:hbE:S:";
+    const char *const shortOpts = "d:e:l:s:hbE:S:";
     const option longOpts[] = {
-        {"delta_t", required_argument, nullptr, 'd'},
-        {"t_end", required_argument, nullptr, 'e'},
-        {"log", required_argument, nullptr, 'l'},
-        {"sim_type", required_argument, nullptr, 's'},
-        {"help", no_argument, nullptr, 'h'},
-        {"bench", no_argument, nullptr, 'b'},
-        {"epsilon", required_argument, nullptr, 'E'},
-        {"sigma", required_argument, nullptr, 'S'},
-        {nullptr, no_argument, nullptr, 0}
+            {"delta_t",  required_argument, nullptr, 'd'},
+            {"t_end",    required_argument, nullptr, 'e'},
+            {"log",      required_argument, nullptr, 'l'},
+            {"sim_type", required_argument, nullptr, 's'},
+            {"help",     no_argument,       nullptr, 'h'},
+            {"bench",    no_argument,       nullptr, 'b'},
+            {"epsilon",  required_argument, nullptr, 'E'},
+            {"sigma",    required_argument, nullptr, 'S'},
+            {nullptr,    no_argument,       nullptr, 0}
     };
 
     auto logger = spdlog::stdout_color_mt("Parsing");
@@ -65,11 +69,11 @@ int SimulationData::parseOptions(int argc, char* argsv[]) {
                 break;
             case 's':
                 simTypeNum = std::stoi(optarg);
-                if (simTypeNum < 0 || simTypeNum > 1) {
-                    SPDLOG_LOGGER_ERROR(logger, "simulation type must be between 0-1!");
+                if (simTypeNum < 0 || simTypeNum > 2) {
+                    SPDLOG_LOGGER_ERROR(logger, "simulation type must be between 0-2!");
                     exit(EXIT_FAILURE);
                 }
-                simType = simulationType(simTypeNum);
+                simType = SimulationType(simTypeNum);
                 break;
             case 'h':
                 SPDLOG_LOGGER_INFO(logger, usageText);
@@ -77,7 +81,7 @@ int SimulationData::parseOptions(int argc, char* argsv[]) {
             case 'l':
                 level = spdlog::level::from_str(std::string(optarg));
 
-                if(level >= 0 && level <= 6) {
+                if (level >= 0 && level <= 6) {
                     spdlog::set_level(level);
                 } else {
                     spdlog::set_level(spdlog::level::info);
@@ -119,12 +123,12 @@ int SimulationData::parseOptions(int argc, char* argsv[]) {
     return optind;
 }
 
-void SimulationData::readParticles(simulationType, char* fileName) {
+void SimulationData::readParticles(SimulationType, char *fileName) {
     inputReader::FileReader fileReader(*this);
-    fileReader.readFile(particles, fileName);
+    fileReader.readFile(fileName);
 }
 
-simulationType SimulationData::getSimType() {
+SimulationType SimulationData::getSimType() {
     return simType;
 }
 
@@ -152,16 +156,63 @@ bool SimulationData::getBench() {
     return bench;
 }
 
-ParticleContainer& SimulationData::getParticles() {
-    return particles;
+ParticleContainer &SimulationData::getParticles() {
+    return *particles;
 }
 
-void SimulationData::setSimType(simulationType s) {
+void SimulationData::setParticles(std::unique_ptr<ParticleContainer> particlesArg) {
+    particles = std::move(particlesArg);
+}
+
+void SimulationData::setSimType(SimulationType s) {
     this->simType = s;
 }
 
-void SimulationData::setParticlesCopy(ParticleContainer particlesArg) {
-    particles = particlesArg;
+void SimulationData::setParticlesCopy(ParticleContainer &particlesArg) {
+    particles = particlesArg.copy();
 }
 
 
+void SimulationData::setEndTime(double endTime) {
+    SimulationData::endTime = endTime;
+}
+
+void SimulationData::setStartTime(double startTime) {
+    SimulationData::startTime = startTime;
+}
+
+void SimulationData::setDeltaT(double deltaT) {
+    SimulationData::deltaT = deltaT;
+}
+
+void SimulationData::setEpsilon(double epsilon) {
+    SimulationData::epsilon = epsilon;
+}
+
+void SimulationData::setSigma(double sigma) {
+    SimulationData::sigma = sigma;
+}
+
+std::string SimulationData::getBaseName() {
+    return baseName;
+}
+
+void SimulationData::setBaseName(const std::string &baseName) {
+    SimulationData::baseName = baseName;
+}
+
+int SimulationData::getWriteFrequency() const {
+    return writeFrequency;
+}
+
+void SimulationData::setWriteFrequency(int writeFrequency) {
+    SimulationData::writeFrequency = writeFrequency;
+}
+
+void SimulationData::setAverageVelocity(double averageVelocityArg) {
+    this->averageVelocity = averageVelocityArg;
+}
+
+double SimulationData::getAverageVelocity() {
+    return averageVelocity;
+}

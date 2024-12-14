@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<simulation>
+    <parameters>
+        <delta_t>0.00005</delta_t>
+        <t_end>10</t_end>
+        <epsilon>5</epsilon>
+        <sigma>1.0</sigma>
+        <containerType>linked</containerType>
+        <domainSize>
+            <x>120</x>
+            <y>50</y>
+            <z>1</z>
+        </domainSize>
+        <cutoff>3.0</cutoff>
+        <boundry>
+            <xTop>reflect</xTop>
+            <xBottom>reflect</xBottom>
+            <yLeft>reflect</yLeft>
+            <yRight>reflect</yRight>
+        </boundry>
+    </parameters>
+    <clusters>
+        <disc>
+            <center>
+                <x>60</x>
+                <y>25</y>
+                <z>0</z>
+            </center>
+            <velocity>
+                <x>0</x>
+                <y>-10</y>
+                <z>0</z>
+            </velocity>
+            <mass>1.0</mass>
+            <meshWidth>1.1225</meshWidth>
+            <radius>15</radius>
+        </disc>
+    </clusters>
+</simulation>
