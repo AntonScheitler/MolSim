@@ -27,8 +27,8 @@
                 <z>0.0</z>
             </cornerCoordinates>
             <dimensions>
-                <x>1</x>
-                <y>1</y>
+                <x>4</x>
+                <y>30</y>
                 <z>1</z>
             </dimensions>
             <velocity>
@@ -43,12 +43,12 @@
         <cuboid>
             <cornerCoordinates>
                 <x>40</x>
-                <y>10</y>
+                <y>30</y>
                 <z>0.0</z>
             </cornerCoordinates>
             <dimensions>
-                <x>1</x>
-                <y>1</y>
+                <x>4</x>
+                <y>4</y>
                 <z>1</z>
             </dimensions>
             <velocity>

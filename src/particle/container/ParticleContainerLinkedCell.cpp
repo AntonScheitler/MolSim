@@ -159,9 +159,7 @@ std::array<double, 3> ParticleContainerLinkedCell::getPeriodicDistance(std::arra
         if ((v[0] == 0 || std::signbit(intersection[0]) == std::signbit(v[0])) &&
                     (v[1] == 0 || std::signbit(intersection[1]) == std::signbit(v[1])) &&
                         (v[2] == 0 || std::signbit(intersection[2]) == std::signbit(v[2]))) {
-            intersection[0] = -1.0 * intersection[0];
-            intersection[1] = -1.0 * intersection[1];
-            intersection[2] = -1.0 * intersection[2];
+            intersection[axis] *= -1.0;
         } 
         // subtract the distance along the periodic axis
         // note that the intersection is facing the opposite way of v

@@ -133,8 +133,7 @@ void Simulator::runSimulationLoop() {
         step();
         iteration++;
 
-        if (!simData.getBench()) {
-        //if (iteration % simData.getWriteFrequency() == 0 && !simData.getBench()) {
+        if (iteration % simData.getWriteFrequency() == 0 && !simData.getBench()) {
             // write output on every ith iteration
             writer.plotParticles(simData.getParticles(), iteration);
         }
