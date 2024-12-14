@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <simulation>
     <parameters>
         <delta_t>0.0005</delta_t>
@@ -28,8 +27,8 @@
                 <z>0.0</z>
             </cornerCoordinates>
             <dimensions>
-                <x>5</x>
-                <y>30</y>
+                <x>1</x>
+                <y>1</y>
                 <z>1</z>
             </dimensions>
             <velocity>
@@ -43,13 +42,13 @@
         </cuboid>
         <cuboid>
             <cornerCoordinates>
-                <x>40.0</x>
-                <y>30.0</y>
+                <x>40</x>
+                <y>10</y>
                 <z>0.0</z>
             </cornerCoordinates>
             <dimensions>
-                <x>5</x>
-                <y>5</y>
+                <x>1</x>
+                <y>1</y>
                 <z>1</z>
             </dimensions>
             <velocity>

@@ -1,9 +1,11 @@
 #include <array>
 #include <cmath>
+#include <type_traits>
 #include <utility>
 #include "../../utils/ArrayUtils.h"
 #include "particle/container/ParticleContainer.h"
 #include "ForceComputations.h"
+#include "spdlog/spdlog.h"
 #include "spdlogConfig.h"
 
 void ForceComputations::computeGravity(ParticleContainer &particles) {
@@ -47,13 +49,19 @@ void ForceComputations::computeLennardJonesPotential(ParticleContainer &particle
     }
 }
 
-void ForceComputations::computeLennardJonesPotentialCutoff(ParticleContainer &particles, double epsilon, double sigma, double cutoff) {
+void ForceComputations::computeLennardJonesPotentialCutoff(ParticleContainerLinkedCell &particles, double epsilon, double sigma, double cutoff) {
     // iterate through all pairs of particles and calculate lennard-jones potential
     for (auto it = particles.beginPairParticle(); *it != *(particles.endPairParticle()); it->operator++()) {
         std::pair<Particle &, Particle &> pair = **it;
 
-        std::array<double, 3> distanceVector = ArrayUtils::elementWisePairOp(pair.first.getX(), pair.second.getX(), std::minus<>());
-        double distance = ArrayUtils::L2Norm(distanceVector);
+        std::array<double, 3> naiveDistanceVector = ArrayUtils::elementWisePairOp(pair.first.getX(), pair.second.getX(), std::minus<>());
+        std::array<double, 3> periodicDistanceVector = particles.getPeriodicDistance(pair.first.getX(), naiveDistanceVector);
+        double naiveDistance = ArrayUtils::L2Norm(naiveDistanceVector);
+        double periodicDistance = ArrayUtils::L2Norm(periodicDistanceVector);
+        //double distance = naiveDistance;
+        //auto distanceVector = naiveDistanceVector; 
+        double distance = std::min(naiveDistance, periodicDistance);
+        std::array<double, 3> distanceVector = naiveDistance < periodicDistance ? naiveDistanceVector : periodicDistanceVector;
         // don't consider particles which are further apart than the cutoff radius
         if (distance == 0 || distance > cutoff) continue;
         double dist = std::pow(sigma / distance, 2);

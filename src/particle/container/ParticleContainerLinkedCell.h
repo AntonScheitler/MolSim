@@ -71,6 +71,16 @@ public:
     int continuousCoordsToIndex(std::array<double, 3> coord);
 
     /**
+     * @brief determinesthe distance between two points across periodic boundaries. The distance is defined via a point and a
+     * vector. The periodic distance must be across two boundaries which are marked as periodic
+     * @param coord a point that the periodic distance passes through
+     * @param v a vector to base the periodic distance off of
+     * @return the periodic distance vector that is based off of v and passes through coord. if there is no such vector,
+     * for example if it is across non-periodic boundaries, then an array of DOUBLE_MAX_VALUE is returned
+     */
+    std::array<double, 3> getPeriodicDistance(std::array<double, 3> coord, std::array<double, 3> v);
+
+    /**
      * @brief applies periodic boundaries to the specified array
      * @param coord the coordinate array to apply the periodic boundaries to 
      */
@@ -120,5 +130,12 @@ private:
      * @returns true if the particle should be removed from its old cell
      */
     bool correctParticleIndex(Particle &p);
+
+    /**
+     * @brief determines if the given point is inside the domain
+     * @param coord the point to check
+     * @return true if coord is in the domain, false otherwise
+     */
+    bool isPointInDomain(std::array<double, 3> coord);
 };
 

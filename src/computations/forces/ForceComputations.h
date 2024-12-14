@@ -26,7 +26,7 @@ class ForceComputations {
          * @param sigmaArg sigma for computation of Lennard Jones Potential
          * @param cutoff the radius past which particles are not considered for the force computation
          */
-        static void computeLennardJonesPotentialCutoff(ParticleContainer &particles, double epsilon, double sigma, double cutoff);
+        static void computeLennardJonesPotentialCutoff(ParticleContainerLinkedCell &particles, double epsilon, double sigma, double cutoff);
 
         /**
          * @brief updates the old force and resets the current force for all particles
