@@ -78,7 +78,7 @@ public:
      * @return the periodic distance vector that is based off of v and passes through coord. if there is no such vector,
      * for example if it is across non-periodic boundaries, then an array of DOUBLE_MAX_VALUE is returned
      */
-    std::array<double, 3> getPeriodicDistance(std::array<double, 3> coord, std::array<double, 3> v);
+    std::array<double, 3> getPeriodicDistanceVector(const std::array<double, 3>& point1, const std::array<double, 3>& point2, std::array<double, 3>& v);
 
     /**
      * @brief applies periodic boundaries to the specified array

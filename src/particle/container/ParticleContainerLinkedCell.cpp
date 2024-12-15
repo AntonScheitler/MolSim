@@ -141,64 +141,25 @@ bool ParticleContainerLinkedCell::isPointInDomain(std::array<double, 3> coord) {
     return true;
 }
 
-std::array<double, 3> ParticleContainerLinkedCell::getPeriodicDistance(std::array<double, 3> coord, std::array<double, 3> v) {
-    std::vector<std::array<double, 3>> boundaryPoints = {};
-
-    // adds a boundary point to the boundaryPoints vector if it is a valid boundary
-    auto addBoundaryPoint = [&](double coefficient) {
-        std::array<double, 3> boundaryPoint = ArrayUtils::elementWisePairOp(coord, ArrayUtils::elementWiseScalarOp(coefficient, v, std::multiplies<>()), std::plus<>());
-        if (isPointInDomain(boundaryPoint)) {
-            boundaryPoints.push_back(boundaryPoint);
-        }
-    };
-
-    auto computePeriodicVector = [&](int axis) {
-        auto intersection = ArrayUtils::elementWisePairOp(boundaryPoints[0], boundaryPoints[1], std::minus<>());
-
-        // if intersection is facing the same way as the original distance vector v, invert it
-        if ((v[0] == 0 || std::signbit(intersection[0]) == std::signbit(v[0])) &&
-                    (v[1] == 0 || std::signbit(intersection[1]) == std::signbit(v[1])) &&
-                        (v[2] == 0 || std::signbit(intersection[2]) == std::signbit(v[2]))) {
-            intersection[axis] *= -1.0;
-        } 
-        // subtract the distance along the periodic axis
-        // note that the intersection is facing the opposite way of v
-        intersection[axis] += v[axis];
-        return intersection;
-    };
-
-    // try to add boundary points for every periodic axis
-    if (v[0] != 0 && boundaryConfig.x[0] == periodic) {
-        addBoundaryPoint((0 - coord[0]) / v[0]);
-        addBoundaryPoint(((numCells[0] * cellSize[0]) - coord[0]) / v[0]);
-        if (boundaryPoints.size() == 2) {
-            return computePeriodicVector(0);
+std::array<double, 3> ParticleContainerLinkedCell::getPeriodicDistanceVector(const std::array<double, 3>& point1, const std::array<double, 3>& point2, std::array<double, 3>& v) {
+    std::array<double, 3> periodicDistanceVector = v;
+    // iterate through every axis
+    for (int axis = 0; axis < 3; axis++) {
+        // check if point1 is on one side of the boundary of the given axis and point2 is on the other 
+        if ((point1[axis] < 0 + cellSize[axis] && point2[axis] > (cellSize[axis] * numCells[axis]) - cellSize[axis]) ||
+              (point2[axis] < 0 + cellSize[axis] && point1[axis] > (cellSize[axis] * numCells[axis]) - cellSize[axis])) {
+            // for every axis where point1 and point2 are on opposite ends of the boundary, invert the distance vector
+            // and subtract/add the distance between the boundaries to it
+            periodicDistanceVector[axis] *= -1.0;
+            periodicDistanceVector[axis] = periodicDistanceVector[axis] < 0 ? 
+                                                (cellSize[axis] * numCells[axis]) + periodicDistanceVector[axis]
+                                            : periodicDistanceVector[axis] > 0 ?
+                                                 (cellSize[axis] * numCells[axis]) - periodicDistanceVector[axis]
+                                            :
+                                                periodicDistanceVector[axis];
         }
     }
-    if (v[1] != 0 && boundaryConfig.y[0] == periodic) {
-        addBoundaryPoint((0 - coord[1]) / v[1]);
-        addBoundaryPoint(((numCells[1] * cellSize[1]) - coord[1]) / v[1]);
-        if (boundaryPoints.size() == 2) {
-            return computePeriodicVector(1);
-        }
-    }
-    if (v[2] != 0 && boundaryConfig.z[0] == periodic) {
-        addBoundaryPoint((0 - coord[2]) / v[2]);
-        addBoundaryPoint(((numCells[2] * cellSize[2]) - coord[2]) / v[2]);
-        if (boundaryPoints.size() == 2) {
-            return computePeriodicVector(2);
-        }
-    }
-
-    // there shouldn't be more than two valid boundary points
-    if (boundaryPoints.size() > 2) {
-            SPDLOG_ERROR("Incorrect number of boundary points: {0}", boundaryPoints.size());
-            exit(EXIT_FAILURE);
-    }
-    // return double max value if the intersection cannot be formed across periodic boundaries
-    return  std::array<double, 3>{std::numeric_limits<double>::max(),
-                                    std::numeric_limits<double>::max(),
-                                        std::numeric_limits<double>::max()};
+    return periodicDistanceVector;
 }
 
 std::vector<Cell> &ParticleContainerLinkedCell::getMesh() {

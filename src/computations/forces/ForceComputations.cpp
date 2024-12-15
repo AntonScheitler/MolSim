@@ -1,11 +1,9 @@
 #include <array>
 #include <cmath>
-#include <type_traits>
 #include <utility>
 #include "../../utils/ArrayUtils.h"
 #include "particle/container/ParticleContainer.h"
 #include "ForceComputations.h"
-#include "spdlog/spdlog.h"
 #include "spdlogConfig.h"
 
 void ForceComputations::computeGravity(ParticleContainer &particles) {
@@ -55,7 +53,7 @@ void ForceComputations::computeLennardJonesPotentialCutoff(ParticleContainerLink
         std::pair<Particle &, Particle &> pair = **it;
 
         std::array<double, 3> naiveDistanceVector = ArrayUtils::elementWisePairOp(pair.first.getX(), pair.second.getX(), std::minus<>());
-        std::array<double, 3> periodicDistanceVector = particles.getPeriodicDistance(pair.first.getX(), naiveDistanceVector);
+        std::array<double, 3> periodicDistanceVector = particles.getPeriodicDistanceVector(pair.first.getX(), pair.second.getX(), naiveDistanceVector);
         double naiveDistance = ArrayUtils::L2Norm(naiveDistanceVector);
         double periodicDistance = ArrayUtils::L2Norm(periodicDistanceVector);
         //double distance = naiveDistance;

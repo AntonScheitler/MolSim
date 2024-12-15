@@ -15,14 +15,14 @@
         <boundry>
             <xTop>periodic</xTop>
             <xBottom>periodic</xBottom>
-            <yLeft>outflow</yLeft>
-            <yRight>outflow</yRight>
+            <yLeft>reflecting</yLeft>
+            <yRight>reflecting</yRight>
         </boundry>
     </parameters>
     <clusters>
         <cuboid>
             <cornerCoordinates>
-                <x>0.0</x>
+                <x>1.0</x>
                 <y>10.0</y>
                 <z>0.0</z>
             </cornerCoordinates>
@@ -42,13 +42,13 @@
         </cuboid>
         <cuboid>
             <cornerCoordinates>
-                <x>40</x>
-                <y>30</y>
+                <x>40.0</x>
+                <y>30.0</y>
                 <z>0.0</z>
             </cornerCoordinates>
             <dimensions>
-                <x>4</x>
-                <y>4</y>
+                <x>1</x>
+                <y>1</y>
                 <z>1</z>
             </dimensions>
             <velocity>
