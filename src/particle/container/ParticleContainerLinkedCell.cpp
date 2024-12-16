@@ -146,17 +146,20 @@ std::array<double, 3> ParticleContainerLinkedCell::getPeriodicDistanceVector(con
     // iterate through every axis
     for (int axis = 0; axis < 3; axis++) {
         // check if point1 is on one side of the boundary of the given axis and point2 is on the other 
-        if ((point1[axis] < 0 + cellSize[axis] && point2[axis] > (cellSize[axis] * numCells[axis]) - cellSize[axis]) ||
-              (point2[axis] < 0 + cellSize[axis] && point1[axis] > (cellSize[axis] * numCells[axis]) - cellSize[axis])) {
-            // for every axis where point1 and point2 are on opposite ends of the boundary, invert the distance vector
-            // and subtract/add the distance between the boundaries to it
-            periodicDistanceVector[axis] *= -1.0;
-            periodicDistanceVector[axis] = periodicDistanceVector[axis] < 0 ? 
-                                                (cellSize[axis] * numCells[axis]) + periodicDistanceVector[axis]
-                                            : periodicDistanceVector[axis] > 0 ?
-                                                 (cellSize[axis] * numCells[axis]) - periodicDistanceVector[axis]
-                                            :
-                                                periodicDistanceVector[axis];
+        if ((axis == 0 && boundaryConfig.x[0] == periodic) || (axis == 1 && boundaryConfig.y[0] == periodic) ||
+                (axis == 2 && boundaryConfig.z[0] == periodic)) {
+            if ((point1[axis] < 0 + cellSize[axis] && point2[axis] > (cellSize[axis] * numCells[axis]) - cellSize[axis]) ||
+                  (point2[axis] < 0 + cellSize[axis] && point1[axis] > (cellSize[axis] * numCells[axis]) - cellSize[axis])) {
+                // for every axis where point1 and point2 are on opposite ends of the boundary, invert the distance vector
+                // and subtract/add the distance between the boundaries to it
+                periodicDistanceVector[axis] *= -1.0;
+                periodicDistanceVector[axis] = periodicDistanceVector[axis] < 0 ? 
+                                                    (cellSize[axis] * numCells[axis]) + periodicDistanceVector[axis]
+                                                : periodicDistanceVector[axis] > 0 ?
+                                                     (cellSize[axis] * numCells[axis]) - periodicDistanceVector[axis]
+                                                :
+                                                    periodicDistanceVector[axis];
+            }
         }
     }
     return periodicDistanceVector;
