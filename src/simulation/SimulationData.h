@@ -138,6 +138,26 @@ public:
 
     double getAverageVelocity();
 
+    //thermo
+    size_t getThermoFrequency();
+    double getInitialTemp();
+    double getTargetTemp();
+    double getMaxDeltaTemp();
+
+
+    void setThermoFrequency(size_t thermoFrequencyArg);
+    void setInitialTemp(double initialTempArg);
+    void setTargetTemp(double targetTempArg);
+    void setMaxDeltaTemp(double maxDeltaTempArg);
+
+
+    void activateThermostat();
+    void deactivateThermostat();
+
+    bool isThermostat();
+
+    double getGrav();
+    void setGrav(double gravArg);
 
 private:
     SimulationType simType;
@@ -152,4 +172,11 @@ private:
     spdlog::level::level_enum level;
     std::unique_ptr<ParticleContainer> particles;
     double averageVelocity;
+    // thermo
+    size_t thermoFrequency;
+    double initialTemp;
+    double targetTemp;
+    double maxDeltaTemp;
+    bool thermostat;
+    double grav;
 };

@@ -28,7 +28,7 @@ class Simulator {
         /**
          * @brief pointer to a function to run in every step of a simulation
          */
-        std::function<void(void)> step;
+        std::function<void(size_t)> step;
         /**
          * @brief pointer to a function to run after a simulation
          */

@@ -224,3 +224,6 @@ std::array<double, 3> ParticleContainerLinkedCell::getCellSize() {
 double ParticleContainerLinkedCell::getCutoffRadius() {
     return cutoffRadius;
 }
+
+
+

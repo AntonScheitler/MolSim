@@ -59,6 +59,11 @@ private:
      * molecules belonging to different bodies, matters, and so on)
      */
     int type;
+
+    double epsilon;
+
+    double sigma;
+
 public:
     explicit Particle(int typeArg = 0);
 
@@ -168,6 +173,15 @@ public:
      * @brief converts information about this particle into a string
      */
     std::string toString() const;
+
+
+    double getSigma() const;
+
+    void setSigma(double sigma);
+
+    double getEpsilon() const;
+
+    void setEpsilon(double epsilon);
 };
 
 std::ostream &operator<<(std::ostream &stream, Particle &p);

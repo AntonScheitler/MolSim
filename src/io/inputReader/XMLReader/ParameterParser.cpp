@@ -22,6 +22,9 @@ namespace ParameterParser {
             if (xmlParser->parameters()->t_start().present()) {
                 simData.setStartTime(xmlParser->parameters()->t_start().get());
             }
+            if (xmlParser->parameters()->grav().present()) {
+                simData.setGrav(xmlParser->parameters()->grav().get());
+            }
         }
         if (xmlParser->output().present()) {
             if (xmlParser->output()->baseName().present()) {
@@ -31,6 +34,17 @@ namespace ParameterParser {
                 simData.setWriteFrequency(xmlParser->output()->writeFrequency().get());
             }
 
+        }
+    }
+    void readThermo(SimulationData &simData, const std::unique_ptr<simulation> &xmlParser) {
+        if(xmlParser->thermo().present()){
+            simData.activateThermostat();
+            simData.setInitialTemp(xmlParser->thermo()->init_T());
+            simData.setThermoFrequency(xmlParser->thermo()->n());
+            double targetTempArg = (xmlParser->thermo()->target().present()) ? (xmlParser->thermo()->target().get()) : xmlParser->thermo()->init_T();
+            simData.setTargetTemp(targetTempArg);
+            double maxStep =  (xmlParser->thermo()->maxStep().present()) ? (xmlParser->thermo()->maxStep().get()) : std::numeric_limits<double>::infinity();
+            simData.setMaxDeltaTemp(maxStep);
         }
     }
 }

@@ -2,6 +2,7 @@
 #include "computations/forces/ForceComputations.h"
 #include "computations/positions/PositionComputations.h"
 #include "computations/velocities/VelocityComputations.h"
+#include "computations/temperatures/TemperatureComputations.h"
 #include "io/outputWriter/VTKWriter.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/spdlog.h"
@@ -17,10 +18,11 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
         // use gravity for the comet simulation
         case comet:
             before = [this]() {};
-            step = [this]() {
+            step = [this](size_t iteration) {
                 PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
                 ForceComputations::resetForces(simData.getParticles());
                 ForceComputations::computeGravity(simData.getParticles());
+                ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav());
                 VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
             };
             after = [this]() {};
@@ -32,11 +34,12 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
             before = [this]() {
                 VelocityComputations::applyBrownianMotion2D(simData.getParticles(), simData.getAverageVelocity());
             };
-            step = [this]() {
+            step = [this](size_t iteration) {
                 PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
                 ForceComputations::resetForces(simData.getParticles());
                 ForceComputations::computeLennardJonesPotential(simData.getParticles(), simData.getEpsilon(),
                                                                 simData.getSigma());
+                ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav());
                 VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
 
             };
@@ -46,10 +49,15 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
             break;
         case collisionLinkedCell:
             before = [this]() {
-                VelocityComputations::applyBrownianMotion2D(simData.getParticles(),
+                if(simData.isThermostat()) {
+                    TemperatureComputations::initTemp(simData.getParticles(), simData.getInitialTemp());
+                }
+                if(simData.getAverageVelocity() == 0) {
+                    VelocityComputations::applyBrownianMotion2D(simData.getParticles(),
                                                             simData.getAverageVelocity());
+                }
             };
-            step = [this]() {
+            step = [this](size_t iteration) {
                 // save previous position and update the position of particles in the mesh based on the new one
                 PositionComputations::updateOldX(simData.getParticles());
                 PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
@@ -59,9 +67,16 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                     ForceComputations::resetForces(simData.getParticles());
                     ForceComputations::computeLennardJonesPotentialCutoff(*containerLinkedCell, simData.getEpsilon(),
                                                                     simData.getSigma(), containerLinkedCell->getCutoffRadius());
+                    ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav());
                     ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell, simData.getEpsilon(),
                                                                      simData.getSigma());
                     VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
+
+                    if(simData.isThermostat() && iteration % simData.getThermoFrequency() == 0) {
+                        // calculate current temperature of system
+                        TemperatureComputations::updateTemp(simData.getParticles(), simData.getTargetTemp(), simData.getMaxDeltaTemp());
+                    }
+
                 } else {
                     SPDLOG_ERROR("Linked Cell Simulation is not using Linked Cell Container. Aborting...");
                     exit(EXIT_FAILURE);
@@ -76,7 +91,7 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
 
 void Simulator::simulate() {
     std::chrono::high_resolution_clock::rep totalDuration;
-    int numIterations;
+    size_t numIterations;
 
     if (simData.getBench()) {
         // overwrite logging settings
@@ -130,13 +145,16 @@ void Simulator::runSimulationLoop() {
     before();
     // compute position, force and velocity for all particles each iteration
     while (currentTime < simData.getEndTime()) {
-        step();
+        step(iteration);
         iteration++;
 
+        if (!simData.getBench()) {
         if (iteration % simData.getWriteFrequency() == 0 && !simData.getBench()) {
-            // write output on every ith iteration
-            writer.plotParticles(simData.getParticles(), iteration);
+            // write output on every 10th iteration
+                writer.plotParticles(simData.getParticles(), iteration);
+            }
         }
+
         SPDLOG_LOGGER_INFO(logger, "Iteration {0} finished.", iteration);
         currentTime += simData.getDeltaT();
     }
