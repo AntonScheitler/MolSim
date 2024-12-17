@@ -156,8 +156,10 @@ public:
 
     bool isThermostat();
 
+
     double getGrav();
     void setGrav(double gravArg);
+
 
 private:
     SimulationType simType;
@@ -178,5 +180,7 @@ private:
     double targetTemp;
     double maxDeltaTemp;
     bool thermostat;
+
     double grav;
+
 };

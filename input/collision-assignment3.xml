@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <simulation>
     <parameters>
         <delta_t>0.0005</delta_t>
@@ -7,12 +8,11 @@
         <sigma>1.0</sigma>
         <containerType>linked</containerType>
         <domainSize>
-            <x>50</x>
-            <y>50</y>
+            <x>180</x>
+            <y>90</y>
             <z>1</z>
         </domainSize>
         <cutoff>3.0</cutoff>
-
         <boundary>
             <xTop>outflow</xTop>
             <xBottom>outflow</xBottom>
@@ -23,13 +23,13 @@
     <clusters>
         <cuboid>
             <cornerCoordinates>
-                <x>0.0</x>
-                <y>10.0</y>
+                <x>20.0</x>
+                <y>20.0</y>
                 <z>0.0</z>
             </cornerCoordinates>
             <dimensions>
-                <x>4</x>
-                <y>30</y>
+                <x>100</x>
+                <y>20</y>
                 <z>1</z>
             </dimensions>
             <velocity>
@@ -43,18 +43,18 @@
         </cuboid>
         <cuboid>
             <cornerCoordinates>
-                <x>40.0</x>
-                <y>30.0</y>
+                <x>70.0</x>
+                <y>60.0</y>
                 <z>0.0</z>
             </cornerCoordinates>
             <dimensions>
-                <x>4</x>
-                <y>4</y>
+                <x>20</x>
+                <y>20</y>
                 <z>1</z>
             </dimensions>
             <velocity>
-                <x>20.0</x>
-                <y>0.0</y>
+                <x>0.0</x>
+                <y>-10.0</y>
                 <z>0.0</z>
             </velocity>
             <meshWidth>1.1225</meshWidth>

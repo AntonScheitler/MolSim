@@ -38,13 +38,13 @@ void ForceComputations::computeLennardJonesPotential(ParticleContainer &particle
     for (auto it = particles.beginPairParticle(); *it != *(particles.endPairParticle()); it->operator++()) {
         std::pair<Particle &, Particle &> pair = **it;
 
-       /* if(pair.first.getSigma() != pair.second.getSigma()){
+        if(pair.first.getSigma() != pair.second.getSigma()){
             sigma = (pair.first.getSigma() + pair.second.getSigma())/2;
         }
         if(pair.first.getEpsilon() != pair.second.getEpsilon()){
             epsilon = sqrt(pair.first.getEpsilon() * pair.second.getSigma());
         }
-*/
+
         std::array<double, 3> distanceVector = ArrayUtils::elementWisePairOp(pair.first.getX(), pair.second.getX(),
                                                                              std::minus<>());
         double distance = ArrayUtils::L2Norm(distanceVector);
@@ -54,6 +54,7 @@ void ForceComputations::computeLennardJonesPotential(ParticleContainer &particle
 
         double factor = (-24.0 * epsilon) / std::pow(distance, 2) *
                         (std::pow(sigmaDivDistance, 6) - 2 * std::pow(sigmaDivDistance, 12));
+
 
         std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(factor, distanceVector, std::multiplies<>());
         pair.first.setF(ArrayUtils::elementWisePairOp(pair.first.getF(), force, std::plus<>()));
@@ -81,6 +82,7 @@ void ForceComputations::computeLennardJonesPotentialCutoff(ParticleContainerLink
 
         double factor = (-24.0 * epsilon) / std::pow(distance, 2) * (std::pow(dist, 3) - 2 * std::pow(dist, 6));
 
+
         std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(factor, distanceVector, std::multiplies<>());
         pair.first.setF(ArrayUtils::elementWisePairOp(pair.first.getF(), force, std::plus<>()));
         std::array<double, 3> revForce = ArrayUtils::elementWiseScalarOp(-1, force, std::multiplies<>());
@@ -96,6 +98,7 @@ void ForceComputations::resetForces(ParticleContainer &particles) {
     }
 }
 
+
 void ForceComputations::addExternalForces(ParticleContainer &particles, double grav) {
     for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
         Particle &particle = **it;
@@ -109,6 +112,7 @@ void
 ForceComputations::computeGhostParticleRepulsion(ParticleContainerLinkedCell &particles, double epsilon, double sigma) {
     for (auto it = particles.beginPairGhost(); it != particles.endPairGhost(); ++it) {
         std::pair<Particle &, Particle &> pair = *it;
+
 
         std::array<double, 3> distanceVector = ArrayUtils::elementWisePairOp(pair.first.getX(), pair.second.getX(),
                                                                              std::minus<>());

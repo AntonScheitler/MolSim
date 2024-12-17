@@ -22,7 +22,9 @@
             <yLeft>reflecting</yLeft>
             <yRight>reflecting</yRight>
         </boundary>
+
         <grav>-12.44</grav>
+
     </parameters>
     <clusters>
         <disc>

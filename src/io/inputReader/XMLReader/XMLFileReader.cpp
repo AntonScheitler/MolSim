@@ -54,8 +54,10 @@ namespace inputReader {
                 auto containerLinkedCell = std::unique_ptr<ParticleContainer>(new ParticleContainerLinkedCell(
                         {parameters->domainSize()->x(), parameters->domainSize()->y(), parameters->domainSize()->z()},
                         parameters->cutoff().get(), {
-                            {getEnum(parameters->boundary()->yLeft().get()), getEnum(parameters->boundary()->yRight().get())},
-                            {getEnum(parameters->boundary()->xBottom().get()), getEnum(parameters->boundary()->xTop().get())},
+
+                            {getEnum(parameters->boundary()->yLeft()), getEnum(parameters->boundary()->yRight())},
+                            {getEnum(parameters->boundary()->xBottom()), getEnum(parameters->boundary()->xTop())},
+
                             {outflow, outflow}}));
                 simData.setParticles(std::move(containerLinkedCell));
             } else {

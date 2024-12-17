@@ -49,12 +49,14 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
             break;
         case collisionLinkedCell:
             before = [this]() {
-                if(simData.isThermostat()) {
-                    TemperatureComputations::initTemp(simData.getParticles(), simData.getInitialTemp());
-                }
-                if(simData.getAverageVelocity() == 0) {
+
+                if (simData.isThermostat()) {
+                    TemperatureComputations::initTemp(simData.getParticles(), simData.getAverageVelocity(),
+                                                      simData.getInitialTemp());
+                } else {
                     VelocityComputations::applyBrownianMotion2D(simData.getParticles(),
-                                                            simData.getAverageVelocity());
+                                                                simData.getAverageVelocity());
+
                 }
             };
             step = [this](size_t iteration) {
@@ -72,9 +74,12 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                                                                      simData.getSigma());
                     VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
 
-                    if(simData.isThermostat() && iteration % simData.getThermoFrequency() == 0) {
+
+                    if (simData.isThermostat() && iteration % simData.getThermoFrequency() == 0) {
                         // calculate current temperature of system
-                        TemperatureComputations::updateTemp(simData.getParticles(), simData.getTargetTemp(), simData.getMaxDeltaTemp());
+                        TemperatureComputations::updateTemp(simData.getParticles(), simData.getTargetTemp(),
+                                                            simData.getMaxDeltaTemp());
+
                     }
 
                 } else {
@@ -148,16 +153,21 @@ void Simulator::runSimulationLoop() {
         step(iteration);
         iteration++;
 
-        if (!simData.getBench()) {
+
+
         if (iteration % simData.getWriteFrequency() == 0 && !simData.getBench()) {
             // write output on every 10th iteration
-                writer.plotParticles(simData.getParticles(), iteration);
-            }
+            writer.plotParticles(simData.getParticles(), iteration);
         }
+
 
         SPDLOG_LOGGER_INFO(logger, "Iteration {0} finished.", iteration);
         currentTime += simData.getDeltaT();
     }
     after();
     SPDLOG_LOGGER_INFO(logger, "output written. Terminating...");
+}
+
+Simulator::~Simulator() {
+    spdlog::drop(logger->name());
 }
