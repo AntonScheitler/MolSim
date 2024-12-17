@@ -37,6 +37,7 @@ class Simulator {
         /**
          * @brief runs the core simulation loop. This function gets called a number of times when benchmarking and just
          * once if benchmarking is disabled
+         * @return the number of particles updated during the simulation
          */
-        void runSimulationLoop();
+        size_t runSimulationLoop();
 };

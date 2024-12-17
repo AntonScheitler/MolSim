@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <simulation>
     <parameters>
-        <delta_t>0.0005</delta_t>
-        <t_end>20</t_end>
+        <delta_t>0.005</delta_t>
+        <t_end>2</t_end>
         <epsilon>5</epsilon>
         <sigma>1.0</sigma>
         <containerType>linked</containerType>

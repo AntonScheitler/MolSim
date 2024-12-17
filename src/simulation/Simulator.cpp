@@ -7,6 +7,7 @@
 #include "spdlog/spdlog.h"
 #include "particle/container/ParticleContainer.h"
 #include "particle/container/ParticleContainerLinkedCell.h"
+#include <algorithm>
 #include <chrono>
 #include <cstdlib>
 
@@ -97,20 +98,21 @@ void Simulator::simulate() {
     }
 
     if (simData.getBench()) {
-        ParticleContainer &particlesBefore = simData.getParticles();
+        std::unique_ptr<ParticleContainer> particlesBefore = simData.getParticles().copy();
         for (int i = 0; i < numIterations; i++) {
             // turn off logging when benchmarking except for errors
             spdlog::set_level(spdlog::level::err);
-            simData.setParticlesCopy(particlesBefore);
+            simData.setParticles(particlesBefore->copy());
             auto start = std::chrono::high_resolution_clock::now();
 
-            runSimulationLoop();
+            size_t numUpdatedParticles = runSimulationLoop();
 
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
                     std::chrono::high_resolution_clock::now() - start);
             // turn logging back on to communicate results
             spdlog::set_level(spdlog::level::info);
             SPDLOG_LOGGER_INFO(logger, "Simulation no. {0} took {1} ms", i + 1, duration.count());
+            SPDLOG_LOGGER_INFO(logger, "{0} particles updated per second", (numUpdatedParticles * 1000.0) / duration.count());
             totalDuration += duration.count();
         }
         SPDLOG_LOGGER_INFO(logger, "Simulation took {0} ms on average", (totalDuration / numIterations));
@@ -121,8 +123,9 @@ void Simulator::simulate() {
 
 }
 
-void Simulator::runSimulationLoop() {
+size_t Simulator::runSimulationLoop() {
     // prepare for iteration
+    size_t numUpdatedParticles = 0;
     double currentTime = simData.getStartTime();
     int iteration = 0;
     outputWriter::VTKWriter writer(simData.getBaseName());
@@ -130,6 +133,7 @@ void Simulator::runSimulationLoop() {
     before();
     // compute position, force and velocity for all particles each iteration
     while (currentTime < simData.getEndTime()) {
+        numUpdatedParticles += simData.getParticles().size();
         step();
         iteration++;
 
@@ -142,4 +146,5 @@ void Simulator::runSimulationLoop() {
     }
     after();
     SPDLOG_LOGGER_INFO(logger, "output written. Terminating...");
+    return numUpdatedParticles;
 }
