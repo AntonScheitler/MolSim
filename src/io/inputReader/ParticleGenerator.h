@@ -1,5 +1,5 @@
 #pragma once
-#include <particle/container/ParticleContainer.h>
+//#include <particle/container/ParticleContainer.h>
 
 #include <array>
 namespace inputReader {
@@ -17,9 +17,11 @@ namespace inputReader {
          * @param m the mass of one particle
          * @param h the space between each particle
          * @param type the type of particles
+         * @param e epsilon value of particles
+         * @param s sigma value of particles
          */
         static void generateCuboid(ParticleContainer& particles, std::array<double, 3> x, std::array<double, 3> v,
-                                      std::array<int, 3> d, double m, double h, int type);
+                                      std::array<int, 3> d, double m, double h, int type, double e, double s);
         /**
          * @brief generates a disc consisting of particles
          * @param particle the container to write the particles into
@@ -29,8 +31,10 @@ namespace inputReader {
          * @param m the mass of each particle
          * @param h the space between particles
          * @param type the type of particles
+         * @param e epsilon value of particles
+         * @param s sigma value of particles
          */
         static void generateDisc(ParticleContainer& particles, std::array<double, 3> center,
-                                            std::array<double, 3> v, double r, double m, double h, int type);
+                                            std::array<double, 3> v, double r, double m, double h, int type, double e, double s);
     };
 }

@@ -257,7 +257,8 @@ class simulation;
 class output;
 class parameters;
 class clusters;
-class boundry;
+class thermo;
+class boundary;
 class particle;
 class disc;
 class cuboid;
@@ -420,6 +421,27 @@ class simulation: public ::xml_schema::type
   void
   clusters (::std::unique_ptr< clusters_type > p);
 
+  // thermo
+  //
+  typedef ::thermo thermo_type;
+  typedef ::xsd::cxx::tree::optional< thermo_type > thermo_optional;
+  typedef ::xsd::cxx::tree::traits< thermo_type, char > thermo_traits;
+
+  const thermo_optional&
+  thermo () const;
+
+  thermo_optional&
+  thermo ();
+
+  void
+  thermo (const thermo_type& x);
+
+  void
+  thermo (const thermo_optional& x);
+
+  void
+  thermo (::std::unique_ptr< thermo_type > p);
+
   // Constructors.
   //
   simulation (const clusters_type&);
@@ -455,6 +477,7 @@ class simulation: public ::xml_schema::type
   output_optional output_;
   parameters_optional parameters_;
   ::xsd::cxx::tree::one< clusters_type > clusters_;
+  thermo_optional thermo_;
 };
 
 class output: public ::xml_schema::type
@@ -686,26 +709,44 @@ class parameters: public ::xml_schema::type
   void
   cutoff (const cutoff_optional& x);
 
-  // boundry
+  // boundary
   //
-  typedef ::boundry boundry_type;
-  typedef ::xsd::cxx::tree::optional< boundry_type > boundry_optional;
-  typedef ::xsd::cxx::tree::traits< boundry_type, char > boundry_traits;
+  typedef ::boundary boundary_type;
+  typedef ::xsd::cxx::tree::optional< boundary_type > boundary_optional;
+  typedef ::xsd::cxx::tree::traits< boundary_type, char > boundary_traits;
 
-  const boundry_optional&
-  boundry () const;
+  const boundary_optional&
+  boundary () const;
 
-  boundry_optional&
-  boundry ();
-
-  void
-  boundry (const boundry_type& x);
+  boundary_optional&
+  boundary ();
 
   void
-  boundry (const boundry_optional& x);
+  boundary (const boundary_type& x);
 
   void
-  boundry (::std::unique_ptr< boundry_type > p);
+  boundary (const boundary_optional& x);
+
+  void
+  boundary (::std::unique_ptr< boundary_type > p);
+
+  // grav
+  //
+  typedef ::xml_schema::double_ grav_type;
+  typedef ::xsd::cxx::tree::optional< grav_type > grav_optional;
+  typedef ::xsd::cxx::tree::traits< grav_type, char, ::xsd::cxx::tree::schema_type::double_ > grav_traits;
+
+  const grav_optional&
+  grav () const;
+
+  grav_optional&
+  grav ();
+
+  void
+  grav (const grav_type& x);
+
+  void
+  grav (const grav_optional& x);
 
   // Constructors.
   //
@@ -745,7 +786,8 @@ class parameters: public ::xml_schema::type
   containerType_optional containerType_;
   domainSize_optional domainSize_;
   cutoff_optional cutoff_;
-  boundry_optional boundry_;
+  boundary_optional boundary_;
+  grav_optional grav_;
 };
 
 class clusters: public ::xml_schema::type
@@ -837,7 +879,111 @@ class clusters: public ::xml_schema::type
   cuboid_sequence cuboid_;
 };
 
-class boundry: public ::xml_schema::type
+class thermo: public ::xml_schema::type
+{
+  public:
+  // init_T
+  //
+  typedef ::xml_schema::double_ init_T_type;
+  typedef ::xsd::cxx::tree::traits< init_T_type, char, ::xsd::cxx::tree::schema_type::double_ > init_T_traits;
+
+  const init_T_type&
+  init_T () const;
+
+  init_T_type&
+  init_T ();
+
+  void
+  init_T (const init_T_type& x);
+
+  // n
+  //
+  typedef ::xml_schema::double_ n_type;
+  typedef ::xsd::cxx::tree::traits< n_type, char, ::xsd::cxx::tree::schema_type::double_ > n_traits;
+
+  const n_type&
+  n () const;
+
+  n_type&
+  n ();
+
+  void
+  n (const n_type& x);
+
+  // target
+  //
+  typedef ::xml_schema::double_ target_type;
+  typedef ::xsd::cxx::tree::optional< target_type > target_optional;
+  typedef ::xsd::cxx::tree::traits< target_type, char, ::xsd::cxx::tree::schema_type::double_ > target_traits;
+
+  const target_optional&
+  target () const;
+
+  target_optional&
+  target ();
+
+  void
+  target (const target_type& x);
+
+  void
+  target (const target_optional& x);
+
+  // maxStep
+  //
+  typedef ::xml_schema::double_ maxStep_type;
+  typedef ::xsd::cxx::tree::optional< maxStep_type > maxStep_optional;
+  typedef ::xsd::cxx::tree::traits< maxStep_type, char, ::xsd::cxx::tree::schema_type::double_ > maxStep_traits;
+
+  const maxStep_optional&
+  maxStep () const;
+
+  maxStep_optional&
+  maxStep ();
+
+  void
+  maxStep (const maxStep_type& x);
+
+  void
+  maxStep (const maxStep_optional& x);
+
+  // Constructors.
+  //
+  thermo (const init_T_type&,
+          const n_type&);
+
+  thermo (const ::xercesc::DOMElement& e,
+          ::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0);
+
+  thermo (const thermo& x,
+          ::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0);
+
+  virtual thermo*
+  _clone (::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0) const;
+
+  thermo&
+  operator= (const thermo& x);
+
+  virtual 
+  ~thermo ();
+
+  // Implementation.
+  //
+  protected:
+  void
+  parse (::xsd::cxx::xml::dom::parser< char >&,
+         ::xml_schema::flags);
+
+  protected:
+  ::xsd::cxx::tree::one< init_T_type > init_T_;
+  ::xsd::cxx::tree::one< n_type > n_;
+  target_optional target_;
+  maxStep_optional maxStep_;
+};
+
+class boundary: public ::xml_schema::type
 {
   public:
   // xTop
@@ -926,25 +1072,25 @@ class boundry: public ::xml_schema::type
 
   // Constructors.
   //
-  boundry ();
+  boundary ();
 
-  boundry (const ::xercesc::DOMElement& e,
-           ::xml_schema::flags f = 0,
-           ::xml_schema::container* c = 0);
+  boundary (const ::xercesc::DOMElement& e,
+            ::xml_schema::flags f = 0,
+            ::xml_schema::container* c = 0);
 
-  boundry (const boundry& x,
-           ::xml_schema::flags f = 0,
-           ::xml_schema::container* c = 0);
+  boundary (const boundary& x,
+            ::xml_schema::flags f = 0,
+            ::xml_schema::container* c = 0);
 
-  virtual boundry*
+  virtual boundary*
   _clone (::xml_schema::flags f = 0,
           ::xml_schema::container* c = 0) const;
 
-  boundry&
-  operator= (const boundry& x);
+  boundary&
+  operator= (const boundary& x);
 
   virtual 
-  ~boundry ();
+  ~boundary ();
 
   // Implementation.
   //
@@ -1011,6 +1157,42 @@ class particle: public ::xml_schema::type
   void
   mass (const mass_type& x);
 
+  // epsilon
+  //
+  typedef ::xml_schema::double_ epsilon_type;
+  typedef ::xsd::cxx::tree::optional< epsilon_type > epsilon_optional;
+  typedef ::xsd::cxx::tree::traits< epsilon_type, char, ::xsd::cxx::tree::schema_type::double_ > epsilon_traits;
+
+  const epsilon_optional&
+  epsilon () const;
+
+  epsilon_optional&
+  epsilon ();
+
+  void
+  epsilon (const epsilon_type& x);
+
+  void
+  epsilon (const epsilon_optional& x);
+
+  // sigma
+  //
+  typedef ::xml_schema::double_ sigma_type;
+  typedef ::xsd::cxx::tree::optional< sigma_type > sigma_optional;
+  typedef ::xsd::cxx::tree::traits< sigma_type, char, ::xsd::cxx::tree::schema_type::double_ > sigma_traits;
+
+  const sigma_optional&
+  sigma () const;
+
+  sigma_optional&
+  sigma ();
+
+  void
+  sigma (const sigma_type& x);
+
+  void
+  sigma (const sigma_optional& x);
+
   // Constructors.
   //
   particle (const coordinate_type&,
@@ -1050,6 +1232,8 @@ class particle: public ::xml_schema::type
   ::xsd::cxx::tree::one< coordinate_type > coordinate_;
   ::xsd::cxx::tree::one< velocity_type > velocity_;
   ::xsd::cxx::tree::one< mass_type > mass_;
+  epsilon_optional epsilon_;
+  sigma_optional sigma_;
 };
 
 class disc: public ::xml_schema::type
@@ -1131,6 +1315,42 @@ class disc: public ::xml_schema::type
   void
   radius (const radius_type& x);
 
+  // epsilon
+  //
+  typedef ::xml_schema::double_ epsilon_type;
+  typedef ::xsd::cxx::tree::optional< epsilon_type > epsilon_optional;
+  typedef ::xsd::cxx::tree::traits< epsilon_type, char, ::xsd::cxx::tree::schema_type::double_ > epsilon_traits;
+
+  const epsilon_optional&
+  epsilon () const;
+
+  epsilon_optional&
+  epsilon ();
+
+  void
+  epsilon (const epsilon_type& x);
+
+  void
+  epsilon (const epsilon_optional& x);
+
+  // sigma
+  //
+  typedef ::xml_schema::double_ sigma_type;
+  typedef ::xsd::cxx::tree::optional< sigma_type > sigma_optional;
+  typedef ::xsd::cxx::tree::traits< sigma_type, char, ::xsd::cxx::tree::schema_type::double_ > sigma_traits;
+
+  const sigma_optional&
+  sigma () const;
+
+  sigma_optional&
+  sigma ();
+
+  void
+  sigma (const sigma_type& x);
+
+  void
+  sigma (const sigma_optional& x);
+
   // Constructors.
   //
   disc (const center_type&,
@@ -1176,6 +1396,8 @@ class disc: public ::xml_schema::type
   ::xsd::cxx::tree::one< mass_type > mass_;
   ::xsd::cxx::tree::one< meshWidth_type > meshWidth_;
   ::xsd::cxx::tree::one< radius_type > radius_;
+  epsilon_optional epsilon_;
+  sigma_optional sigma_;
 };
 
 class cuboid: public ::xml_schema::type
@@ -1274,6 +1496,42 @@ class cuboid: public ::xml_schema::type
   void
   brownianMotion (const brownianMotion_type& x);
 
+  // epsilon
+  //
+  typedef ::xml_schema::double_ epsilon_type;
+  typedef ::xsd::cxx::tree::optional< epsilon_type > epsilon_optional;
+  typedef ::xsd::cxx::tree::traits< epsilon_type, char, ::xsd::cxx::tree::schema_type::double_ > epsilon_traits;
+
+  const epsilon_optional&
+  epsilon () const;
+
+  epsilon_optional&
+  epsilon ();
+
+  void
+  epsilon (const epsilon_type& x);
+
+  void
+  epsilon (const epsilon_optional& x);
+
+  // sigma
+  //
+  typedef ::xml_schema::double_ sigma_type;
+  typedef ::xsd::cxx::tree::optional< sigma_type > sigma_optional;
+  typedef ::xsd::cxx::tree::traits< sigma_type, char, ::xsd::cxx::tree::schema_type::double_ > sigma_traits;
+
+  const sigma_optional&
+  sigma () const;
+
+  sigma_optional&
+  sigma ();
+
+  void
+  sigma (const sigma_type& x);
+
+  void
+  sigma (const sigma_optional& x);
+
   // Constructors.
   //
   cuboid (const cornerCoordinates_type&,
@@ -1322,6 +1580,8 @@ class cuboid: public ::xml_schema::type
   ::xsd::cxx::tree::one< meshWidth_type > meshWidth_;
   ::xsd::cxx::tree::one< mass_type > mass_;
   ::xsd::cxx::tree::one< brownianMotion_type > brownianMotion_;
+  epsilon_optional epsilon_;
+  sigma_optional sigma_;
 };
 
 #include <iosfwd>
@@ -1515,7 +1775,10 @@ void
 operator<< (::xercesc::DOMElement&, const clusters&);
 
 void
-operator<< (::xercesc::DOMElement&, const boundry&);
+operator<< (::xercesc::DOMElement&, const thermo&);
+
+void
+operator<< (::xercesc::DOMElement&, const boundary&);
 
 void
 operator<< (::xercesc::DOMElement&, const particle&);

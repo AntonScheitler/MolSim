@@ -1,5 +1,6 @@
 #include "particle/container/ParticleContainer.h"
 #include "particle/container/ParticleContainerLinkedCell.h"
+#include <map>
 
 /**
  * @brief a class wrapping force-computing functions and their utility functions
@@ -18,6 +19,7 @@ class ForceComputations {
          * @param sigmaArg sigma for computation of Lennard Jones Potential
          */
         static void computeLennardJonesPotential(ParticleContainer& particles, double epsilonArg, double sigmaArg);
+
         /**
          * @brief computes the lennard jones potential between each pair of molecules in the given ParticleContainer
          * that are not further apart than the cutoff radius
@@ -28,11 +30,14 @@ class ForceComputations {
          */
         static void computeLennardJonesPotentialCutoff(ParticleContainer &particles, double epsilon, double sigma, double cutoff);
 
+
         /**
          * @brief updates the old force and resets the current force for all particles
          * @param particles the particles to reset the forces of
          */
         static void resetForces(ParticleContainer& particles);
+
+        static void addExternalForces(ParticleContainer& particles, double grav);
 
         /**
          * @brief computes the repulsion, the boundary particles suffer from the ghost particles
@@ -41,4 +46,8 @@ class ForceComputations {
          * @param sigma sigma for computation of Lennard Jones Potential
          */
         static void computeGhostParticleRepulsion(ParticleContainerLinkedCell& particles, double epsilon, double sigma);
+
+/*private:
+     static std::map<std::pair<double, double> , double > epsilons;
+    static std::map<std::pair<double, double> , double > sigmas;*/
 };

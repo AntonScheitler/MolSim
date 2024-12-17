@@ -15,6 +15,8 @@
     <xsd:element name="simulation">
         <xsd:complexType>
             <xsd:sequence>
+
+
                 <xsd:element name="output" minOccurs="0">
                     <xsd:complexType>
                         <xsd:sequence>
@@ -23,6 +25,8 @@
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>
+
+
                 <xsd:element name="parameters" minOccurs="0">
                     <xsd:complexType>
                         <xsd:sequence>
@@ -35,8 +39,8 @@
                             <xsd:element name="containerType" type="xsd:string" minOccurs="0"/>
                             <xsd:element name="domainSize" type="vectorType" minOccurs="0"/>
                             <xsd:element name="cutoff" type="xsd:double" minOccurs="0"/>
-                            <!--Boundry Condition values: outflow  or reflecting-->
-                            <xsd:element name="boundry" minOccurs="0">
+                            <!--Boundary Condition values: outflow  or reflecting-->
+                            <xsd:element name="boundary" minOccurs="0">
                                 <xsd:complexType>
                                     <xsd:sequence>
                                         <xsd:element name="xTop" type="xsd:string" minOccurs="0"/>
@@ -46,6 +50,7 @@
                                     </xsd:sequence>
                                 </xsd:complexType>
                             </xsd:element>
+                            <xsd:element name="grav" type="xsd:double" minOccurs="0"/>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>
@@ -61,6 +66,8 @@
                                         <xsd:element name="coordinate" type="vectorType"/>
                                         <xsd:element name="velocity" type="vectorType"/>
                                         <xsd:element name="mass" type="xsd:double"/>
+                                        <xsd:element name="epsilon" type="xsd:double" minOccurs="0"/>
+                                        <xsd:element name="sigma" type="xsd:double" minOccurs="0"/>
                                     </xsd:sequence>
                                 </xsd:complexType>
                             </xsd:element>
@@ -74,9 +81,14 @@
                                         <xsd:element name="velocity" type="vectorType"/>
 
                                         <xsd:element name="mass" type="xsd:double"/>
+
                                         <xsd:element name="meshWidth" type="xsd:double"/>
+
                                         <xsd:element name="radius" type="xsd:double"/>
 
+                                        <xsd:element name="epsilon" type="xsd:double" minOccurs="0"/>
+
+                                        <xsd:element name="sigma" type="xsd:double" minOccurs="0"/>
                                     </xsd:sequence>
                                 </xsd:complexType>
                             </xsd:element>
@@ -95,6 +107,9 @@
                                         <xsd:element name="mass" type="xsd:double"/>
                                         <xsd:element name="brownianMotion" type="xsd:double"/>
 
+                                        <xsd:element name="epsilon" type="xsd:double" minOccurs="0"/>
+
+                                        <xsd:element name="sigma" type="xsd:double" minOccurs="0"/>
                                     </xsd:sequence>
                                 </xsd:complexType>
                             </xsd:element>
@@ -102,6 +117,18 @@
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>
+
+                <xsd:element name="thermo" minOccurs="0">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="init_T" type="xsd:double"/>
+                            <xsd:element name="n" type="xsd:double" />
+                            <xsd:element name="target" type="xsd:double" minOccurs="0"/>
+                            <xsd:element name="maxStep" type="xsd:double" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>

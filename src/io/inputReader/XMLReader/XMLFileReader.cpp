@@ -40,6 +40,7 @@ namespace inputReader {
         if (!inputFile) {
             throw std::runtime_error("Failed to open XML file.");
         }
+
         try {
 
 //        std::unique_ptr<simulation> simParser = simulation_(inputFile, xml_schema::flags::dont_validate);
@@ -52,8 +53,8 @@ namespace inputReader {
                 auto containerLinkedCell = std::unique_ptr<ParticleContainer>(new ParticleContainerLinkedCell(
                         {parameters->domainSize()->x(), parameters->domainSize()->y(), parameters->domainSize()->z()},
                         parameters->cutoff().get(), {
-                            {getEnum(parameters->boundry()->xBottom().get()), getEnum(parameters->boundry()->xTop().get())},
-                            {getEnum(parameters->boundry()->yLeft().get()), getEnum(parameters->boundry()->yRight().get())},
+                            {getEnum(parameters->boundary()->xBottom().get()), getEnum(parameters->boundary()->xTop().get())},
+                            {getEnum(parameters->boundary()->yLeft().get()), getEnum(parameters->boundary()->yRight().get())},
                             {outflow, outflow}}));
                 simData.setParticles(std::move(containerLinkedCell));
             } else {
@@ -75,8 +76,10 @@ namespace inputReader {
                 v[1] = planet.velocity().y();
                 v[2] = planet.velocity().z();
                 m = planet.mass();
-
-                simData.getParticles().addParticle(Particle(x, v, m));
+                Particle temp = Particle(x, v, m);
+                temp.setSigma(planet.sigma().present() ? planet.sigma().get() : simData.getSigma());
+                temp.setEpsilon(planet.epsilon().present() ? planet.epsilon().get() : simData.getEpsilon());
+                simData.getParticles().addParticle(temp);
                 SPDLOG_LOGGER_DEBUG(logger, "adding particle at coords {0}, {1}, {2}", x[0], x[1], x[2]);
             }
 
@@ -101,12 +104,14 @@ namespace inputReader {
 
                 simData.setAverageVelocity(cuboid.brownianMotion());
 
-                ParticleGenerator::generateCuboid(simData.getParticles(), x, v, d, m, h, type);
+                double epsilon = cuboid.epsilon().present() ? cuboid.epsilon().get() : simData.getEpsilon();
+                double sigma = cuboid.sigma().present() ? cuboid.sigma().get() : simData.getSigma();
+
+                ParticleGenerator::generateCuboid(simData.getParticles(), x, v, d, m, h, type, epsilon, sigma);
 
                 type++;
             }
-
-
+            
             for (const auto &disc: simParser->clusters().disc()) {
                 x[0] = disc.center().x();
                 x[1] = disc.center().y();
@@ -120,8 +125,10 @@ namespace inputReader {
                 h = disc.meshWidth();
                 r = disc.radius();
 
-                //Todo implement generateDisc
-                ParticleGenerator::generateDisc(simData.getParticles(), x, v, r, m, h, type);
+                double epsilon = disc.epsilon().present() ? disc.epsilon().get() : simData.getEpsilon();
+                double sigma = disc.sigma().present() ? disc.sigma().get() : simData.getSigma();
+
+                ParticleGenerator::generateDisc(simData.getParticles(), x, v, r, m, h, type, epsilon, sigma);
                 type++;
             }
 

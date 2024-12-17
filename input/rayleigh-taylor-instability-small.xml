@@ -3,33 +3,32 @@
 <simulation>
     <parameters>
         <delta_t>0.0005</delta_t>
-        <t_end>20</t_end>
-        <epsilon>5</epsilon>
-        <sigma>1.0</sigma>
+        <t_end>25</t_end>
         <containerType>linked</containerType>
         <domainSize>
-            <x>180</x>
-            <y>90</y>
+            <x>63</x>
+            <y>36</y>
             <z>1</z>
         </domainSize>
-        <cutoff>3.0</cutoff>
+        <cutoff>2.5</cutoff>
         <boundary>
-            <xTop>outflow</xTop>
-            <xBottom>outflow</xBottom>
-            <yLeft>outflow</yLeft>
-            <yRight>outflow</yRight>
+            <xTop>reflecting</xTop>
+            <xBottom>reflecting</xBottom>
+            <yLeft>reflecting</yLeft>
+            <yRight>reflecting</yRight>
         </boundary>
+        <grav>-12.44</grav>
     </parameters>
     <clusters>
         <cuboid>
             <cornerCoordinates>
-                <x>20.0</x>
-                <y>20.0</y>
+                <x>0.6</x>
+                <y>2.0</y>
                 <z>0.0</z>
             </cornerCoordinates>
             <dimensions>
-                <x>100</x>
-                <y>20</y>
+                <x>50</x>
+                <y>14</y>
                 <z>1</z>
             </dimensions>
             <velocity>
@@ -37,29 +36,37 @@
                 <y>0.0</y>
                 <z>0.0</z>
             </velocity>
-            <meshWidth>1.1225</meshWidth>
+            <meshWidth>1.2</meshWidth>
             <mass>1.0</mass>
             <brownianMotion>0.0</brownianMotion>
+            <epsilon>1.0</epsilon>
+            <sigma>1.0</sigma>
         </cuboid>
         <cuboid>
             <cornerCoordinates>
-                <x>70.0</x>
-                <y>60.0</y>
+                <x>0.6</x>
+                <y>19.0</y>
                 <z>0.0</z>
             </cornerCoordinates>
             <dimensions>
-                <x>20</x>
-                <y>20</y>
+                <x>50</x>
+                <y>14</y>
                 <z>1</z>
             </dimensions>
             <velocity>
                 <x>0.0</x>
-                <y>-10.0</y>
+                <y>0.0</y>
                 <z>0.0</z>
             </velocity>
-            <meshWidth>1.1225</meshWidth>
+            <meshWidth>1.2</meshWidth>
             <mass>1.0</mass>
             <brownianMotion>0.0</brownianMotion>
+            <epsilon>1.0</epsilon>
+            <sigma>0.9412</sigma>
         </cuboid>
+        <thermo>
+            <init_T>40</init_T>
+            <n>1000</n>
+        </thermo>
     </clusters>
 </simulation>

@@ -185,6 +185,36 @@ clusters (::std::unique_ptr< clusters_type > x)
   this->clusters_.set (std::move (x));
 }
 
+const simulation::thermo_optional& simulation::
+thermo () const
+{
+  return this->thermo_;
+}
+
+simulation::thermo_optional& simulation::
+thermo ()
+{
+  return this->thermo_;
+}
+
+void simulation::
+thermo (const thermo_type& x)
+{
+  this->thermo_.set (x);
+}
+
+void simulation::
+thermo (const thermo_optional& x)
+{
+  this->thermo_ = x;
+}
+
+void simulation::
+thermo (::std::unique_ptr< thermo_type > x)
+{
+  this->thermo_.set (std::move (x));
+}
+
 
 // output
 // 
@@ -451,34 +481,58 @@ cutoff (const cutoff_optional& x)
   this->cutoff_ = x;
 }
 
-const parameters::boundry_optional& parameters::
-boundry () const
+const parameters::boundary_optional& parameters::
+boundary () const
 {
-  return this->boundry_;
+  return this->boundary_;
 }
 
-parameters::boundry_optional& parameters::
-boundry ()
+parameters::boundary_optional& parameters::
+boundary ()
 {
-  return this->boundry_;
-}
-
-void parameters::
-boundry (const boundry_type& x)
-{
-  this->boundry_.set (x);
+  return this->boundary_;
 }
 
 void parameters::
-boundry (const boundry_optional& x)
+boundary (const boundary_type& x)
 {
-  this->boundry_ = x;
+  this->boundary_.set (x);
 }
 
 void parameters::
-boundry (::std::unique_ptr< boundry_type > x)
+boundary (const boundary_optional& x)
 {
-  this->boundry_.set (std::move (x));
+  this->boundary_ = x;
+}
+
+void parameters::
+boundary (::std::unique_ptr< boundary_type > x)
+{
+  this->boundary_.set (std::move (x));
+}
+
+const parameters::grav_optional& parameters::
+grav () const
+{
+  return this->grav_;
+}
+
+parameters::grav_optional& parameters::
+grav ()
+{
+  return this->grav_;
+}
+
+void parameters::
+grav (const grav_type& x)
+{
+  this->grav_.set (x);
+}
+
+void parameters::
+grav (const grav_optional& x)
+{
+  this->grav_ = x;
 }
 
 
@@ -540,124 +594,212 @@ cuboid (const cuboid_sequence& s)
 }
 
 
-// boundry
+// thermo
 // 
 
-const boundry::xTop_optional& boundry::
+const thermo::init_T_type& thermo::
+init_T () const
+{
+  return this->init_T_.get ();
+}
+
+thermo::init_T_type& thermo::
+init_T ()
+{
+  return this->init_T_.get ();
+}
+
+void thermo::
+init_T (const init_T_type& x)
+{
+  this->init_T_.set (x);
+}
+
+const thermo::n_type& thermo::
+n () const
+{
+  return this->n_.get ();
+}
+
+thermo::n_type& thermo::
+n ()
+{
+  return this->n_.get ();
+}
+
+void thermo::
+n (const n_type& x)
+{
+  this->n_.set (x);
+}
+
+const thermo::target_optional& thermo::
+target () const
+{
+  return this->target_;
+}
+
+thermo::target_optional& thermo::
+target ()
+{
+  return this->target_;
+}
+
+void thermo::
+target (const target_type& x)
+{
+  this->target_.set (x);
+}
+
+void thermo::
+target (const target_optional& x)
+{
+  this->target_ = x;
+}
+
+const thermo::maxStep_optional& thermo::
+maxStep () const
+{
+  return this->maxStep_;
+}
+
+thermo::maxStep_optional& thermo::
+maxStep ()
+{
+  return this->maxStep_;
+}
+
+void thermo::
+maxStep (const maxStep_type& x)
+{
+  this->maxStep_.set (x);
+}
+
+void thermo::
+maxStep (const maxStep_optional& x)
+{
+  this->maxStep_ = x;
+}
+
+
+// boundary
+// 
+
+const boundary::xTop_optional& boundary::
 xTop () const
 {
   return this->xTop_;
 }
 
-boundry::xTop_optional& boundry::
+boundary::xTop_optional& boundary::
 xTop ()
 {
   return this->xTop_;
 }
 
-void boundry::
+void boundary::
 xTop (const xTop_type& x)
 {
   this->xTop_.set (x);
 }
 
-void boundry::
+void boundary::
 xTop (const xTop_optional& x)
 {
   this->xTop_ = x;
 }
 
-void boundry::
+void boundary::
 xTop (::std::unique_ptr< xTop_type > x)
 {
   this->xTop_.set (std::move (x));
 }
 
-const boundry::xBottom_optional& boundry::
+const boundary::xBottom_optional& boundary::
 xBottom () const
 {
   return this->xBottom_;
 }
 
-boundry::xBottom_optional& boundry::
+boundary::xBottom_optional& boundary::
 xBottom ()
 {
   return this->xBottom_;
 }
 
-void boundry::
+void boundary::
 xBottom (const xBottom_type& x)
 {
   this->xBottom_.set (x);
 }
 
-void boundry::
+void boundary::
 xBottom (const xBottom_optional& x)
 {
   this->xBottom_ = x;
 }
 
-void boundry::
+void boundary::
 xBottom (::std::unique_ptr< xBottom_type > x)
 {
   this->xBottom_.set (std::move (x));
 }
 
-const boundry::yLeft_optional& boundry::
+const boundary::yLeft_optional& boundary::
 yLeft () const
 {
   return this->yLeft_;
 }
 
-boundry::yLeft_optional& boundry::
+boundary::yLeft_optional& boundary::
 yLeft ()
 {
   return this->yLeft_;
 }
 
-void boundry::
+void boundary::
 yLeft (const yLeft_type& x)
 {
   this->yLeft_.set (x);
 }
 
-void boundry::
+void boundary::
 yLeft (const yLeft_optional& x)
 {
   this->yLeft_ = x;
 }
 
-void boundry::
+void boundary::
 yLeft (::std::unique_ptr< yLeft_type > x)
 {
   this->yLeft_.set (std::move (x));
 }
 
-const boundry::yRight_optional& boundry::
+const boundary::yRight_optional& boundary::
 yRight () const
 {
   return this->yRight_;
 }
 
-boundry::yRight_optional& boundry::
+boundary::yRight_optional& boundary::
 yRight ()
 {
   return this->yRight_;
 }
 
-void boundry::
+void boundary::
 yRight (const yRight_type& x)
 {
   this->yRight_.set (x);
 }
 
-void boundry::
+void boundary::
 yRight (const yRight_optional& x)
 {
   this->yRight_ = x;
 }
 
-void boundry::
+void boundary::
 yRight (::std::unique_ptr< yRight_type > x)
 {
   this->yRight_.set (std::move (x));
@@ -731,6 +873,54 @@ void particle::
 mass (const mass_type& x)
 {
   this->mass_.set (x);
+}
+
+const particle::epsilon_optional& particle::
+epsilon () const
+{
+  return this->epsilon_;
+}
+
+particle::epsilon_optional& particle::
+epsilon ()
+{
+  return this->epsilon_;
+}
+
+void particle::
+epsilon (const epsilon_type& x)
+{
+  this->epsilon_.set (x);
+}
+
+void particle::
+epsilon (const epsilon_optional& x)
+{
+  this->epsilon_ = x;
+}
+
+const particle::sigma_optional& particle::
+sigma () const
+{
+  return this->sigma_;
+}
+
+particle::sigma_optional& particle::
+sigma ()
+{
+  return this->sigma_;
+}
+
+void particle::
+sigma (const sigma_type& x)
+{
+  this->sigma_.set (x);
+}
+
+void particle::
+sigma (const sigma_optional& x)
+{
+  this->sigma_ = x;
 }
 
 
@@ -837,6 +1027,54 @@ void disc::
 radius (const radius_type& x)
 {
   this->radius_.set (x);
+}
+
+const disc::epsilon_optional& disc::
+epsilon () const
+{
+  return this->epsilon_;
+}
+
+disc::epsilon_optional& disc::
+epsilon ()
+{
+  return this->epsilon_;
+}
+
+void disc::
+epsilon (const epsilon_type& x)
+{
+  this->epsilon_.set (x);
+}
+
+void disc::
+epsilon (const epsilon_optional& x)
+{
+  this->epsilon_ = x;
+}
+
+const disc::sigma_optional& disc::
+sigma () const
+{
+  return this->sigma_;
+}
+
+disc::sigma_optional& disc::
+sigma ()
+{
+  return this->sigma_;
+}
+
+void disc::
+sigma (const sigma_type& x)
+{
+  this->sigma_.set (x);
+}
+
+void disc::
+sigma (const sigma_optional& x)
+{
+  this->sigma_ = x;
 }
 
 
@@ -967,6 +1205,54 @@ void cuboid::
 brownianMotion (const brownianMotion_type& x)
 {
   this->brownianMotion_.set (x);
+}
+
+const cuboid::epsilon_optional& cuboid::
+epsilon () const
+{
+  return this->epsilon_;
+}
+
+cuboid::epsilon_optional& cuboid::
+epsilon ()
+{
+  return this->epsilon_;
+}
+
+void cuboid::
+epsilon (const epsilon_type& x)
+{
+  this->epsilon_.set (x);
+}
+
+void cuboid::
+epsilon (const epsilon_optional& x)
+{
+  this->epsilon_ = x;
+}
+
+const cuboid::sigma_optional& cuboid::
+sigma () const
+{
+  return this->sigma_;
+}
+
+cuboid::sigma_optional& cuboid::
+sigma ()
+{
+  return this->sigma_;
+}
+
+void cuboid::
+sigma (const sigma_type& x)
+{
+  this->sigma_.set (x);
+}
+
+void cuboid::
+sigma (const sigma_optional& x)
+{
+  this->sigma_ = x;
 }
 
 
@@ -1115,7 +1401,8 @@ simulation (const clusters_type& clusters)
 : ::xml_schema::type (),
   output_ (this),
   parameters_ (this),
-  clusters_ (clusters, this)
+  clusters_ (clusters, this),
+  thermo_ (this)
 {
 }
 
@@ -1124,7 +1411,8 @@ simulation (::std::unique_ptr< clusters_type > clusters)
 : ::xml_schema::type (),
   output_ (this),
   parameters_ (this),
-  clusters_ (std::move (clusters), this)
+  clusters_ (std::move (clusters), this),
+  thermo_ (this)
 {
 }
 
@@ -1135,7 +1423,8 @@ simulation (const simulation& x,
 : ::xml_schema::type (x, f, c),
   output_ (x.output_, f, this),
   parameters_ (x.parameters_, f, this),
-  clusters_ (x.clusters_, f, this)
+  clusters_ (x.clusters_, f, this),
+  thermo_ (x.thermo_, f, this)
 {
 }
 
@@ -1146,7 +1435,8 @@ simulation (const ::xercesc::DOMElement& e,
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
   output_ (this),
   parameters_ (this),
-  clusters_ (this)
+  clusters_ (this),
+  thermo_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -1207,6 +1497,20 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // thermo
+    //
+    if (n.name () == "thermo" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< thermo_type > r (
+        thermo_traits::create (i, f, this));
+
+      if (!this->thermo_)
+      {
+        this->thermo_.set (::std::move (r));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -1234,6 +1538,7 @@ operator= (const simulation& x)
     this->output_ = x.output_;
     this->parameters_ = x.parameters_;
     this->clusters_ = x.clusters_;
+    this->thermo_ = x.thermo_;
   }
 
   return *this;
@@ -1358,7 +1663,8 @@ parameters ()
   containerType_ (this),
   domainSize_ (this),
   cutoff_ (this),
-  boundry_ (this)
+  boundary_ (this),
+  grav_ (this)
 {
 }
 
@@ -1375,7 +1681,8 @@ parameters (const parameters& x,
   containerType_ (x.containerType_, f, this),
   domainSize_ (x.domainSize_, f, this),
   cutoff_ (x.cutoff_, f, this),
-  boundry_ (x.boundry_, f, this)
+  boundary_ (x.boundary_, f, this),
+  grav_ (x.grav_, f, this)
 {
 }
 
@@ -1392,7 +1699,8 @@ parameters (const ::xercesc::DOMElement& e,
   containerType_ (this),
   domainSize_ (this),
   cutoff_ (this),
-  boundry_ (this)
+  boundary_ (this),
+  grav_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -1505,16 +1813,27 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
-    // boundry
+    // boundary
     //
-    if (n.name () == "boundry" && n.namespace_ ().empty ())
+    if (n.name () == "boundary" && n.namespace_ ().empty ())
     {
-      ::std::unique_ptr< boundry_type > r (
-        boundry_traits::create (i, f, this));
+      ::std::unique_ptr< boundary_type > r (
+        boundary_traits::create (i, f, this));
 
-      if (!this->boundry_)
+      if (!this->boundary_)
       {
-        this->boundry_.set (::std::move (r));
+        this->boundary_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // grav
+    //
+    if (n.name () == "grav" && n.namespace_ ().empty ())
+    {
+      if (!this->grav_)
+      {
+        this->grav_.set (grav_traits::create (i, f, this));
         continue;
       }
     }
@@ -1544,7 +1863,8 @@ operator= (const parameters& x)
     this->containerType_ = x.containerType_;
     this->domainSize_ = x.domainSize_;
     this->cutoff_ = x.cutoff_;
-    this->boundry_ = x.boundry_;
+    this->boundary_ = x.boundary_;
+    this->grav_ = x.grav_;
   }
 
   return *this;
@@ -1667,11 +1987,153 @@ clusters::
 {
 }
 
-// boundry
+// thermo
 //
 
-boundry::
-boundry ()
+thermo::
+thermo (const init_T_type& init_T,
+        const n_type& n)
+: ::xml_schema::type (),
+  init_T_ (init_T, this),
+  n_ (n, this),
+  target_ (this),
+  maxStep_ (this)
+{
+}
+
+thermo::
+thermo (const thermo& x,
+        ::xml_schema::flags f,
+        ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  init_T_ (x.init_T_, f, this),
+  n_ (x.n_, f, this),
+  target_ (x.target_, f, this),
+  maxStep_ (x.maxStep_, f, this)
+{
+}
+
+thermo::
+thermo (const ::xercesc::DOMElement& e,
+        ::xml_schema::flags f,
+        ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  init_T_ (this),
+  n_ (this),
+  target_ (this),
+  maxStep_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void thermo::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // init_T
+    //
+    if (n.name () == "init_T" && n.namespace_ ().empty ())
+    {
+      if (!init_T_.present ())
+      {
+        this->init_T_.set (init_T_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // n
+    //
+    if (n.name () == "n" && n.namespace_ ().empty ())
+    {
+      if (!n_.present ())
+      {
+        this->n_.set (n_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // target
+    //
+    if (n.name () == "target" && n.namespace_ ().empty ())
+    {
+      if (!this->target_)
+      {
+        this->target_.set (target_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // maxStep
+    //
+    if (n.name () == "maxStep" && n.namespace_ ().empty ())
+    {
+      if (!this->maxStep_)
+      {
+        this->maxStep_.set (maxStep_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    break;
+  }
+
+  if (!init_T_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "init_T",
+      "");
+  }
+
+  if (!n_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "n",
+      "");
+  }
+}
+
+thermo* thermo::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class thermo (*this, f, c);
+}
+
+thermo& thermo::
+operator= (const thermo& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->init_T_ = x.init_T_;
+    this->n_ = x.n_;
+    this->target_ = x.target_;
+    this->maxStep_ = x.maxStep_;
+  }
+
+  return *this;
+}
+
+thermo::
+~thermo ()
+{
+}
+
+// boundary
+//
+
+boundary::
+boundary ()
 : ::xml_schema::type (),
   xTop_ (this),
   xBottom_ (this),
@@ -1680,10 +2142,10 @@ boundry ()
 {
 }
 
-boundry::
-boundry (const boundry& x,
-         ::xml_schema::flags f,
-         ::xml_schema::container* c)
+boundary::
+boundary (const boundary& x,
+          ::xml_schema::flags f,
+          ::xml_schema::container* c)
 : ::xml_schema::type (x, f, c),
   xTop_ (x.xTop_, f, this),
   xBottom_ (x.xBottom_, f, this),
@@ -1692,10 +2154,10 @@ boundry (const boundry& x,
 {
 }
 
-boundry::
-boundry (const ::xercesc::DOMElement& e,
-         ::xml_schema::flags f,
-         ::xml_schema::container* c)
+boundary::
+boundary (const ::xercesc::DOMElement& e,
+          ::xml_schema::flags f,
+          ::xml_schema::container* c)
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
   xTop_ (this),
   xBottom_ (this),
@@ -1709,7 +2171,7 @@ boundry (const ::xercesc::DOMElement& e,
   }
 }
 
-void boundry::
+void boundary::
 parse (::xsd::cxx::xml::dom::parser< char >& p,
        ::xml_schema::flags f)
 {
@@ -1779,15 +2241,15 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
   }
 }
 
-boundry* boundry::
+boundary* boundary::
 _clone (::xml_schema::flags f,
         ::xml_schema::container* c) const
 {
-  return new class boundry (*this, f, c);
+  return new class boundary (*this, f, c);
 }
 
-boundry& boundry::
-operator= (const boundry& x)
+boundary& boundary::
+operator= (const boundary& x)
 {
   if (this != &x)
   {
@@ -1801,8 +2263,8 @@ operator= (const boundry& x)
   return *this;
 }
 
-boundry::
-~boundry ()
+boundary::
+~boundary ()
 {
 }
 
@@ -1816,7 +2278,9 @@ particle (const coordinate_type& coordinate,
 : ::xml_schema::type (),
   coordinate_ (coordinate, this),
   velocity_ (velocity, this),
-  mass_ (mass, this)
+  mass_ (mass, this),
+  epsilon_ (this),
+  sigma_ (this)
 {
 }
 
@@ -1827,7 +2291,9 @@ particle (::std::unique_ptr< coordinate_type > coordinate,
 : ::xml_schema::type (),
   coordinate_ (std::move (coordinate), this),
   velocity_ (std::move (velocity), this),
-  mass_ (mass, this)
+  mass_ (mass, this),
+  epsilon_ (this),
+  sigma_ (this)
 {
 }
 
@@ -1838,7 +2304,9 @@ particle (const particle& x,
 : ::xml_schema::type (x, f, c),
   coordinate_ (x.coordinate_, f, this),
   velocity_ (x.velocity_, f, this),
-  mass_ (x.mass_, f, this)
+  mass_ (x.mass_, f, this),
+  epsilon_ (x.epsilon_, f, this),
+  sigma_ (x.sigma_, f, this)
 {
 }
 
@@ -1849,7 +2317,9 @@ particle (const ::xercesc::DOMElement& e,
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
   coordinate_ (this),
   velocity_ (this),
-  mass_ (this)
+  mass_ (this),
+  epsilon_ (this),
+  sigma_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -1907,6 +2377,28 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // epsilon
+    //
+    if (n.name () == "epsilon" && n.namespace_ ().empty ())
+    {
+      if (!this->epsilon_)
+      {
+        this->epsilon_.set (epsilon_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // sigma
+    //
+    if (n.name () == "sigma" && n.namespace_ ().empty ())
+    {
+      if (!this->sigma_)
+      {
+        this->sigma_.set (sigma_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -1948,6 +2440,8 @@ operator= (const particle& x)
     this->coordinate_ = x.coordinate_;
     this->velocity_ = x.velocity_;
     this->mass_ = x.mass_;
+    this->epsilon_ = x.epsilon_;
+    this->sigma_ = x.sigma_;
   }
 
   return *this;
@@ -1972,7 +2466,9 @@ disc (const center_type& center,
   velocity_ (velocity, this),
   mass_ (mass, this),
   meshWidth_ (meshWidth, this),
-  radius_ (radius, this)
+  radius_ (radius, this),
+  epsilon_ (this),
+  sigma_ (this)
 {
 }
 
@@ -1987,7 +2483,9 @@ disc (::std::unique_ptr< center_type > center,
   velocity_ (std::move (velocity), this),
   mass_ (mass, this),
   meshWidth_ (meshWidth, this),
-  radius_ (radius, this)
+  radius_ (radius, this),
+  epsilon_ (this),
+  sigma_ (this)
 {
 }
 
@@ -2000,7 +2498,9 @@ disc (const disc& x,
   velocity_ (x.velocity_, f, this),
   mass_ (x.mass_, f, this),
   meshWidth_ (x.meshWidth_, f, this),
-  radius_ (x.radius_, f, this)
+  radius_ (x.radius_, f, this),
+  epsilon_ (x.epsilon_, f, this),
+  sigma_ (x.sigma_, f, this)
 {
 }
 
@@ -2013,7 +2513,9 @@ disc (const ::xercesc::DOMElement& e,
   velocity_ (this),
   mass_ (this),
   meshWidth_ (this),
-  radius_ (this)
+  radius_ (this),
+  epsilon_ (this),
+  sigma_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -2093,6 +2595,28 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // epsilon
+    //
+    if (n.name () == "epsilon" && n.namespace_ ().empty ())
+    {
+      if (!this->epsilon_)
+      {
+        this->epsilon_.set (epsilon_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // sigma
+    //
+    if (n.name () == "sigma" && n.namespace_ ().empty ())
+    {
+      if (!this->sigma_)
+      {
+        this->sigma_.set (sigma_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -2150,6 +2674,8 @@ operator= (const disc& x)
     this->mass_ = x.mass_;
     this->meshWidth_ = x.meshWidth_;
     this->radius_ = x.radius_;
+    this->epsilon_ = x.epsilon_;
+    this->sigma_ = x.sigma_;
   }
 
   return *this;
@@ -2176,7 +2702,9 @@ cuboid (const cornerCoordinates_type& cornerCoordinates,
   velocity_ (velocity, this),
   meshWidth_ (meshWidth, this),
   mass_ (mass, this),
-  brownianMotion_ (brownianMotion, this)
+  brownianMotion_ (brownianMotion, this),
+  epsilon_ (this),
+  sigma_ (this)
 {
 }
 
@@ -2193,7 +2721,9 @@ cuboid (::std::unique_ptr< cornerCoordinates_type > cornerCoordinates,
   velocity_ (std::move (velocity), this),
   meshWidth_ (meshWidth, this),
   mass_ (mass, this),
-  brownianMotion_ (brownianMotion, this)
+  brownianMotion_ (brownianMotion, this),
+  epsilon_ (this),
+  sigma_ (this)
 {
 }
 
@@ -2207,7 +2737,9 @@ cuboid (const cuboid& x,
   velocity_ (x.velocity_, f, this),
   meshWidth_ (x.meshWidth_, f, this),
   mass_ (x.mass_, f, this),
-  brownianMotion_ (x.brownianMotion_, f, this)
+  brownianMotion_ (x.brownianMotion_, f, this),
+  epsilon_ (x.epsilon_, f, this),
+  sigma_ (x.sigma_, f, this)
 {
 }
 
@@ -2221,7 +2753,9 @@ cuboid (const ::xercesc::DOMElement& e,
   velocity_ (this),
   meshWidth_ (this),
   mass_ (this),
-  brownianMotion_ (this)
+  brownianMotion_ (this),
+  epsilon_ (this),
+  sigma_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -2315,6 +2849,28 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // epsilon
+    //
+    if (n.name () == "epsilon" && n.namespace_ ().empty ())
+    {
+      if (!this->epsilon_)
+      {
+        this->epsilon_.set (epsilon_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // sigma
+    //
+    if (n.name () == "sigma" && n.namespace_ ().empty ())
+    {
+      if (!this->sigma_)
+      {
+        this->sigma_.set (sigma_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -2380,6 +2936,8 @@ operator= (const cuboid& x)
     this->meshWidth_ = x.meshWidth_;
     this->mass_ = x.mass_;
     this->brownianMotion_ = x.brownianMotion_;
+    this->epsilon_ = x.epsilon_;
+    this->sigma_ = x.sigma_;
   }
 
   return *this;
@@ -2890,6 +3448,18 @@ operator<< (::xercesc::DOMElement& e, const simulation& i)
 
     s << i.clusters ();
   }
+
+  // thermo
+  //
+  if (i.thermo ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "thermo",
+        e));
+
+    s << *i.thermo ();
+  }
 }
 
 void
@@ -3023,16 +3593,28 @@ operator<< (::xercesc::DOMElement& e, const parameters& i)
     s << ::xml_schema::as_double(*i.cutoff ());
   }
 
-  // boundry
+  // boundary
   //
-  if (i.boundry ())
+  if (i.boundary ())
   {
     ::xercesc::DOMElement& s (
       ::xsd::cxx::xml::dom::create_element (
-        "boundry",
+        "boundary",
         e));
 
-    s << *i.boundry ();
+    s << *i.boundary ();
+  }
+
+  // grav
+  //
+  if (i.grav ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "grav",
+        e));
+
+    s << ::xml_schema::as_double(*i.grav ());
   }
 }
 
@@ -3085,7 +3667,59 @@ operator<< (::xercesc::DOMElement& e, const clusters& i)
 }
 
 void
-operator<< (::xercesc::DOMElement& e, const boundry& i)
+operator<< (::xercesc::DOMElement& e, const thermo& i)
+{
+  e << static_cast< const ::xml_schema::type& > (i);
+
+  // init_T
+  //
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "init_T",
+        e));
+
+    s << ::xml_schema::as_double(i.init_T ());
+  }
+
+  // n
+  //
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "n",
+        e));
+
+    s << ::xml_schema::as_double(i.n ());
+  }
+
+  // target
+  //
+  if (i.target ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "target",
+        e));
+
+    s << ::xml_schema::as_double(*i.target ());
+  }
+
+  // maxStep
+  //
+  if (i.maxStep ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "maxStep",
+        e));
+
+    s << ::xml_schema::as_double(*i.maxStep ());
+  }
+}
+
+void
+operator<< (::xercesc::DOMElement& e, const boundary& i)
 {
   e << static_cast< const ::xml_schema::type& > (i);
 
@@ -3175,6 +3809,30 @@ operator<< (::xercesc::DOMElement& e, const particle& i)
 
     s << ::xml_schema::as_double(i.mass ());
   }
+
+  // epsilon
+  //
+  if (i.epsilon ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "epsilon",
+        e));
+
+    s << ::xml_schema::as_double(*i.epsilon ());
+  }
+
+  // sigma
+  //
+  if (i.sigma ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "sigma",
+        e));
+
+    s << ::xml_schema::as_double(*i.sigma ());
+  }
 }
 
 void
@@ -3235,6 +3893,30 @@ operator<< (::xercesc::DOMElement& e, const disc& i)
         e));
 
     s << ::xml_schema::as_double(i.radius ());
+  }
+
+  // epsilon
+  //
+  if (i.epsilon ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "epsilon",
+        e));
+
+    s << ::xml_schema::as_double(*i.epsilon ());
+  }
+
+  // sigma
+  //
+  if (i.sigma ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "sigma",
+        e));
+
+    s << ::xml_schema::as_double(*i.sigma ());
   }
 }
 
@@ -3307,6 +3989,30 @@ operator<< (::xercesc::DOMElement& e, const cuboid& i)
         e));
 
     s << ::xml_schema::as_double(i.brownianMotion ());
+  }
+
+  // epsilon
+  //
+  if (i.epsilon ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "epsilon",
+        e));
+
+    s << ::xml_schema::as_double(*i.epsilon ());
+  }
+
+  // sigma
+  //
+  if (i.sigma ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "sigma",
+        e));
+
+    s << ::xml_schema::as_double(*i.sigma ());
   }
 }
 

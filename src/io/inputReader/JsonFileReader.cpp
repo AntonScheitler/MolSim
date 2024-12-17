@@ -53,7 +53,7 @@ namespace inputReader {
                 bm = cuboid["brownianMotion"].get<double>();
                 simData.setAverageVelocity(bm);
 
-                ParticleGenerator::generateCuboid(simData.getParticles(), x, v, d, m, h, type);
+                ParticleGenerator::generateCuboid(simData.getParticles(), x, v, d, m, h, type,simData.getEpsilon(), simData.getSigma());
 
                 type++;
 
