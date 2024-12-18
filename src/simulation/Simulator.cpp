@@ -4,6 +4,7 @@
 #include "computations/velocities/VelocityComputations.h"
 #include "computations/temperatures/TemperatureComputations.h"
 #include "io/outputWriter/VTKWriter.h"
+#include <io/outputWriter/CheckpointWriter.h>
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/spdlog.h"
 #include "particle/container/ParticleContainer.h"
@@ -69,9 +70,10 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                     ForceComputations::resetForces(simData.getParticles());
                     ForceComputations::computeLennardJonesPotentialCutoff(*containerLinkedCell, simData.getEpsilon(),
                                                                     simData.getSigma(), containerLinkedCell->getCutoffRadius());
-                    ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav());
+
                     ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell, simData.getEpsilon(),
                                                                      simData.getSigma());
+                    ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav());
                     VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
 
 
@@ -165,6 +167,10 @@ void Simulator::runSimulationLoop() {
         currentTime += simData.getDeltaT();
     }
     after();
+    if(simData.getCheckpoint()){
+        outputWriter::CheckpointWriter checkpointWriter("checker");
+        checkpointWriter.plotParticles(simData.getParticles(), 0);
+    }
     SPDLOG_LOGGER_INFO(logger, "output written. Terminating...");
 }
 

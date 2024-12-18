@@ -22,6 +22,7 @@
                         <xsd:sequence>
                             <xsd:element name="writeFrequency" type="xsd:int" minOccurs="0"/>
                             <xsd:element name="baseName" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="create_checkpoint_file" type="xsd:boolean" minOccurs="0"/>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>
@@ -51,6 +52,13 @@
                                 </xsd:complexType>
                             </xsd:element>
                             <xsd:element name="grav" type="xsd:double" minOccurs="0"/>
+                            <xsd:element name="import_checkpoint" minOccurs="0">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="file_path" type="xsd:string" />
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>
@@ -68,13 +76,7 @@
                                         <xsd:element name="mass" type="xsd:double"/>
                                         <xsd:element name="epsilon" type="xsd:double" minOccurs="0"/>
                                         <xsd:element name="sigma" type="xsd:double" minOccurs="0"/>
-                                        <xsd:element name="equi" minOccurs="0">
-                                            <xsd:complexType>
-                                                <xsd:sequence>
-                                                    <xsd:element name="equi_end" type="xsd:double" />
-                                                </xsd:sequence>
-                                            </xsd:complexType>
-                                        </xsd:element>
+
 
                                     </xsd:sequence>
                                 </xsd:complexType>
@@ -98,13 +100,6 @@
 
                                         <xsd:element name="sigma" type="xsd:double" minOccurs="0"/>
 
-                                        <xsd:element name="equi" minOccurs="0">
-                                            <xsd:complexType>
-                                                <xsd:sequence>
-                                                    <xsd:element name="equi_end" type="xsd:double" />
-                                                </xsd:sequence>
-                                            </xsd:complexType>
-                                        </xsd:element>
 
                                     </xsd:sequence>
                                 </xsd:complexType>
@@ -128,13 +123,6 @@
 
                                         <xsd:element name="sigma" type="xsd:double" minOccurs="0"/>
 
-                                        <xsd:element name="equi" minOccurs="0">
-                                            <xsd:complexType>
-                                                <xsd:sequence>
-                                                    <xsd:element name="equi_end" type="xsd:double" />
-                                                </xsd:sequence>
-                                            </xsd:complexType>
-                                        </xsd:element>
                                     </xsd:sequence>
                                 </xsd:complexType>
                             </xsd:element>

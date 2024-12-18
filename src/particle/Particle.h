@@ -116,6 +116,7 @@ public:
      */
     void setV(std::array<double, 3> newV);
 
+
     /**
      * @brief Get the force acting on this particle
      * @return force of particle
@@ -182,6 +183,8 @@ public:
     double getEpsilon() const;
 
     void setEpsilon(double epsilon);
+
+    void setType(int typeArg);
 };
 
 std::ostream &operator<<(std::ostream &stream, Particle &p);
