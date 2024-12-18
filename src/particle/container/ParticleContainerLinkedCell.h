@@ -90,6 +90,11 @@ public:
      */
     void correctCellMembershipAllParticles();
 
+    /**
+     * @brief computes the neighborCellsMatrix 
+     */
+    void computeNeighborCellsMatrix();
+
     std::vector<Cell> &getMesh();
 
     Cell &getCell(int idx);
@@ -110,6 +115,11 @@ private:
      * @brief the particles of this container
      */
     std::vector<Particle> particles;
+
+    /**
+     * @brief a vector of vectors containing indices for the neighborCells of the cell at the given index 
+     */
+    std::vector<std::vector<size_t>> neighborCellsMatrix;
     /**
      * @brief the size of the domain for the container
      */
@@ -134,12 +144,4 @@ private:
      * @returns true if the particle should be removed from its old cell
      */
     bool correctCellMembershipSingleParticle(size_t particleIdx);
-
-    /**
-     * @brief determines if the given point is inside the domain
-     * @param coord the point to check
-     * @return true if coord is in the domain, false otherwise
-     */
-    bool isPointInDomain(std::array<double, 3> coord);
 };
-

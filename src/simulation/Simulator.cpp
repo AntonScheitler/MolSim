@@ -7,7 +7,6 @@
 #include "spdlog/spdlog.h"
 #include "particle/container/ParticleContainer.h"
 #include "particle/container/ParticleContainerLinkedCell.h"
-#include <algorithm>
 #include <chrono>
 #include <cstdlib>
 
@@ -60,8 +59,10 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                     ForceComputations::resetForces(simData.getParticles());
                     ForceComputations::computeLennardJonesPotentialCutoff(*containerLinkedCell, simData.getEpsilon(),
                                                                     simData.getSigma(), containerLinkedCell->getCutoffRadius());
+                    SPDLOG_DEBUG("computing ghost particle repulsion...");
                     ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell, simData.getEpsilon(),
                                                                      simData.getSigma());
+                    SPDLOG_DEBUG("done");
                     VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
                 } else {
                     SPDLOG_ERROR("Linked Cell Simulation is not using Linked Cell Container. Aborting...");

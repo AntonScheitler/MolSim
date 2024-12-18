@@ -1,7 +1,9 @@
 #pragma once
 
 #include "particle/iterator/pairParticleIterator/PairParticleIterator.h"
+#include <algorithm>
 #include <cstddef>
+#include <memory>
 #include <particle/Particle.h>
 #include <vector>
 #include <particle/cell/Cell.h>
@@ -54,7 +56,7 @@ public:
      * @brief returns the ghost particles for the currentParticle
      * @return the vector of ghosts
      */
-    std::vector<Particle> createGhostParticles();
+    void updateGhostsVector();
 
 private:
     /**
@@ -82,16 +84,16 @@ private:
     /**
      * @brief a vector of the ghost particles of the current particle
      */
-    std::vector<Particle> ghostsVector;
+    std::vector<std::unique_ptr<Particle>> ghostsVector;
     /**
      * @brief an iterator pointing to the ghost particles for the currentParticle
      */
-    std::vector<Particle>::iterator currentGhost;
+    std::vector<std::unique_ptr<Particle>>::iterator currentGhost;
 
     /**
      * @brief an iterator pointing to the end of the ghost particles for the currentParticle
      */
-    std::vector<Particle>::iterator currentGhostEnd;
+    std::vector<std::unique_ptr<Particle>>::iterator currentGhostEnd;
     /**
      * @brief the number of cells per dimension
      */
