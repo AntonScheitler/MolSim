@@ -5,9 +5,8 @@
 #include <particle/container/ParticleContainerLinkedCell.h>
 #include "particle/Particle.h"
 #include "particle/boundary/Boundary.h"
-#include "particle/iterator/pairParticleIterator/PairParticleIteratorLinkedCell.h"
-#include "particle/iterator/particleIterator/ParticleIteratorLinkedCell.h"
 #include <utils/ArrayUtils.h>
+#include "particle/iterator/particleIterator/ParticleIteratorDirectSum.h"
 #include "spdlogConfig.h"
 
 ParticleContainerLinkedCell::ParticleContainerLinkedCell(std::array<double, 3> domainSizeArg, double cutoffRadiusArg,
@@ -44,7 +43,8 @@ ParticleContainerLinkedCell::ParticleContainerLinkedCell(std::array<double, 3> d
 }
 
 void ParticleContainerLinkedCell::addParticle(const Particle &particle) {
-    mesh[continuousCoordsToIndex(particle.getX())].addParticle(particle);
+    particles.push_back(particle);
+    mesh[continuousCoordsToIndex(particle.getX())].addParticleIdx(particles.size() - 1);
 }
 
 std::array<double, 3> ParticleContainerLinkedCell::applyPeriodicBoundaries(std::array<double, 3> coord) {
@@ -97,9 +97,10 @@ int ParticleContainerLinkedCell::continuousCoordsToIndex(std::array<double, 3> c
     return discreteCoordsToIndex({coordX, coordY, coordZ});
 }
 
-bool ParticleContainerLinkedCell::correctParticleIndex(Particle &p) {
-    int oldCellIndex = continuousCoordsToIndex(p.getOldX());
-    int newCellIndex = continuousCoordsToIndex(p.getX());
+bool ParticleContainerLinkedCell::correctCellMembershipSingleParticle(size_t particleIdx) {
+    Particle& particle = particles[particleIdx];
+    int oldCellIndex = continuousCoordsToIndex(particle.getOldX());
+    int newCellIndex = continuousCoordsToIndex(particle.getX());
     // particle is not in its original cell anymore
     if (oldCellIndex != newCellIndex) {
 
@@ -107,9 +108,9 @@ bool ParticleContainerLinkedCell::correctParticleIndex(Particle &p) {
         // check if the cell is still within bounds
         if (newCellIndex != -1) {
             if (mesh[oldCellIndex].isBoundary) {
-                p.setX(applyPeriodicBoundaries(p.getX()));
+                particle.setX(applyPeriodicBoundaries(particle.getX()));
             }
-            addParticle(p);
+            mesh[newCellIndex].addParticleIdx(particleIdx);
             SPDLOG_DEBUG("adding particle into cell {0}", newCellIndex);
         } else
             SPDLOG_DEBUG("particle outflowing");
@@ -118,16 +119,16 @@ bool ParticleContainerLinkedCell::correctParticleIndex(Particle &p) {
     return false;
 }
 
-void ParticleContainerLinkedCell::correctAllParticleIndices() {
-    for (auto &c: mesh) {
-        std::vector<size_t> particlesToRemove = {};
-        for (Particle& p: c.getParticles()) {
-            if (correctParticleIndex(p)) {
-                particlesToRemove.push_back(p.getId());
+void ParticleContainerLinkedCell::correctCellMembershipAllParticles() {
+    for (Cell& cell: mesh) {
+        std::vector<size_t> particleIndicesToRemove = {};
+        for (size_t particleIdx: cell.getParticlesIndices()) {
+            if (correctCellMembershipSingleParticle(particleIdx)) {
+                particleIndicesToRemove.push_back(particleIdx);
             }
         }
-        for (size_t id: particlesToRemove) {
-            c.removeParticle(id);
+        for (size_t idx: particleIndicesToRemove) {
+            cell.removeParticle(idx);
         }
     }
 }
@@ -173,35 +174,35 @@ Cell &ParticleContainerLinkedCell::getCell(int idx) {
 }
 
 std::unique_ptr<ParticleIterator> ParticleContainerLinkedCell::begin() {
-    return std::make_unique<ParticleIteratorLinkedCell>(ParticleIteratorLinkedCell(mesh.begin(), mesh.end()));
+    return std::make_unique<ParticleIteratorDirectSum>(ParticleIteratorDirectSum(particles.begin()));
 }
 
 std::unique_ptr<ParticleIterator> ParticleContainerLinkedCell::end() {
-    return std::make_unique<ParticleIteratorLinkedCell>(ParticleIteratorLinkedCell(mesh.end(), mesh.end()));
+    return std::make_unique<ParticleIteratorDirectSum>(ParticleIteratorDirectSum(particles.end()));
 }
 
 std::unique_ptr<PairParticleIterator> ParticleContainerLinkedCell::beginPairParticle() {
     return std::make_unique<PairParticleIteratorLinkedCell>(
-            PairParticleIteratorLinkedCell(mesh.begin(), mesh.end(), mesh, numCells, boundaryConfig));
+            PairParticleIteratorLinkedCell(mesh.begin(), mesh.end(), mesh, numCells, boundaryConfig, particles));
 }
 
 std::unique_ptr<PairParticleIterator> ParticleContainerLinkedCell::endPairParticle() {
     return std::make_unique<PairParticleIteratorLinkedCell>(
-            PairParticleIteratorLinkedCell(mesh.end(), mesh.end(), mesh, numCells, boundaryConfig));
+            PairParticleIteratorLinkedCell(mesh.end(), mesh.end(), mesh, numCells, boundaryConfig, particles));
 }
 
 PairParticleIteratorBoundaryNHalo ParticleContainerLinkedCell::beginPairGhost() {
-    return {mesh.begin(), mesh.end(), mesh, numCells, cellSize, boundaryConfig};
+    return {mesh.begin(), mesh.end(), mesh, numCells, cellSize, boundaryConfig, particles};
 }
 
 PairParticleIteratorBoundaryNHalo ParticleContainerLinkedCell::endPairGhost() {
-    return {mesh.end(), mesh.end(), mesh, numCells, cellSize, boundaryConfig};
+    return {mesh.end(), mesh.end(), mesh, numCells, cellSize, boundaryConfig, particles};
 }
 
 int ParticleContainerLinkedCell::size() {
     int size = 0;
     for (auto &i: mesh) {
-        size += i.getParticles().size();
+        size += i.getParticlesIndices().size();
     }
     return size;
 }

@@ -6,11 +6,11 @@
 
 PairParticleIteratorBoundaryNHalo::PairParticleIteratorBoundaryNHalo(std::vector<Cell>::iterator currentCellArg,
                                                                      std::vector<Cell>::iterator currentCellEndArg,
-                                                                     std::vector<Cell> meshArg,
+                                                                     std::vector<Cell>& meshArg,
                                                                      std::array<size_t, 3> numCellsArg,
                                                                      std::array<double, 3> cellSizeArg,
-                                                                     struct boundaryConfig boundaryConfigArg) {
-    mesh = meshArg;
+                                                                     struct boundaryConfig boundaryConfigArg,
+                                                                     std::vector<Particle>& particlesArg): mesh(meshArg), particles(particlesArg) {
     currentCellIdx = {0, 0, 0};
     numCells = numCellsArg;
     cellSize = cellSizeArg;
@@ -39,7 +39,7 @@ void PairParticleIteratorBoundaryNHalo::stepToNonEmptyBoundaryCell(bool stepToNe
         }
         stepToNext = true;
         // search for a non-empty boundary cell
-        while (currentCell != currentCellEnd && (!currentCell->isBoundary || currentCell->getParticles().empty())) {
+        while (currentCell != currentCellEnd && (!currentCell->isBoundary || currentCell->getParticlesIndices().empty())) {
             ++currentCell;
             incrementCurrentCellIdx();
         }
@@ -49,7 +49,7 @@ void PairParticleIteratorBoundaryNHalo::stepToNonEmptyBoundaryCell(bool stepToNe
             return;
         }
         // if one has been found, currentParticle is updated
-        currentParticle = currentCell->getParticles().begin();
+        currentParticleIdx = currentCell->getParticlesIndices().begin();
         // the ghost particles for the boundary particle need to be computed
         ghostsVector = createGhostParticles();
         currentGhost = ghostsVector.begin();
@@ -59,72 +59,73 @@ void PairParticleIteratorBoundaryNHalo::stepToNonEmptyBoundaryCell(bool stepToNe
 }
 
 std::vector<Particle> PairParticleIteratorBoundaryNHalo::createGhostParticles() {
+    Particle& currentParticle = particles[*currentParticleIdx];
     std::vector<Particle> ghosts = std::vector<Particle>();
     // add ghost particle to the "left" of the particle
     if (currentCellIdx[0] == 0 && boundaryConfig.x[0] == reflect) {
-        double deltaX = std::abs(currentParticle->getX()[0]) * 2;
-        std::array<double, 3> ghostPos = {currentParticle->getX()[0] - deltaX, currentParticle->getX()[1],
-                                          currentParticle->getX()[2]};
-        std::array<double, 3> ghostVel = ArrayUtils::elementWisePairOp({-1., 1., 1.}, currentParticle->getV(),
+        double deltaX = std::abs(currentParticle.getX()[0]) * 2;
+        std::array<double, 3> ghostPos = {currentParticle.getX()[0] - deltaX, currentParticle.getX()[1],
+                                          currentParticle.getX()[2]};
+        std::array<double, 3> ghostVel = ArrayUtils::elementWisePairOp({-1., 1., 1.}, currentParticle.getV(),
                                                                        std::multiplies<>());
-        Particle ghost = Particle(ghostPos, ghostVel, currentParticle->getM());
+        Particle ghost = Particle(ghostPos, ghostVel, currentParticle.getM());
         ghosts.push_back(ghost);
     }
     // add ghost particle to the "right" of the particle
     if (currentCellIdx[0] == numCells[0] - 1 && boundaryConfig.x[1] == reflect) {
-        double deltaX = std::abs((numCells[0] * cellSize[0]) - currentParticle->getX()[0]) * 2;
-        std::array<double, 3> ghostPos = {currentParticle->getX()[0] + deltaX, currentParticle->getX()[1],
-                                          currentParticle->getX()[2]};
-        std::array<double, 3> ghostVel = ArrayUtils::elementWisePairOp({-1., 1., 1.}, currentParticle->getV(),
+        double deltaX = std::abs((numCells[0] * cellSize[0]) - currentParticle.getX()[0]) * 2;
+        std::array<double, 3> ghostPos = {currentParticle.getX()[0] + deltaX, currentParticle.getX()[1],
+                                          currentParticle.getX()[2]};
+        std::array<double, 3> ghostVel = ArrayUtils::elementWisePairOp({-1., 1., 1.}, currentParticle.getV(),
                                                                        std::multiplies<>());
-        Particle ghost = Particle(ghostPos, ghostVel, currentParticle->getM());
+        Particle ghost = Particle(ghostPos, ghostVel, currentParticle.getM());
         ghosts.push_back(ghost);
     }
     // add ghost particle "below" the particle
     if (currentCellIdx[1] == 0 && boundaryConfig.y[0] == reflect) {
-        double deltaY = std::abs(currentParticle->getX()[1]) * 2;
-        std::array<double, 3> ghostPos = {currentParticle->getX()[0], currentParticle->getX()[1] - deltaY,
-                                          currentParticle->getX()[2]};
-        std::array<double, 3> ghostVel = ArrayUtils::elementWisePairOp({1., -1., 1.}, currentParticle->getV(),
+        double deltaY = std::abs(currentParticle.getX()[1]) * 2;
+        std::array<double, 3> ghostPos = {currentParticle.getX()[0], currentParticle.getX()[1] - deltaY,
+                                          currentParticle.getX()[2]};
+        std::array<double, 3> ghostVel = ArrayUtils::elementWisePairOp({1., -1., 1.}, currentParticle.getV(),
                                                                        std::multiplies<>());
-        Particle ghost = Particle(ghostPos, ghostVel, currentParticle->getM());
+        Particle ghost = Particle(ghostPos, ghostVel, currentParticle.getM());
         ghosts.push_back(ghost);
     }
     // add ghost particle "above" the particle
     if (currentCellIdx[1] == numCells[1] - 1 && boundaryConfig.y[1] == reflect) {
-        double deltaY = std::abs((numCells[1] * cellSize[1]) - currentParticle->getX()[1]) * 2;
-        std::array<double, 3> ghostPos = {currentParticle->getX()[0], currentParticle->getX()[1] + deltaY,
-                                          currentParticle->getX()[2]};
-        std::array<double, 3> ghostVel = ArrayUtils::elementWisePairOp({1., -1., 1.}, currentParticle->getV(),
+        double deltaY = std::abs((numCells[1] * cellSize[1]) - currentParticle.getX()[1]) * 2;
+        std::array<double, 3> ghostPos = {currentParticle.getX()[0], currentParticle.getX()[1] + deltaY,
+                                          currentParticle.getX()[2]};
+        std::array<double, 3> ghostVel = ArrayUtils::elementWisePairOp({1., -1., 1.}, currentParticle.getV(),
                                                                        std::multiplies<>());
-        Particle ghost = Particle(ghostPos, ghostVel, currentParticle->getM());
+        Particle ghost = Particle(ghostPos, ghostVel, currentParticle.getM());
         ghosts.push_back(ghost);
     }
     // add ghost particle to the "bottom" of the particle
     if (currentCellIdx[2] == 0 && boundaryConfig.z[0] == reflect) {
-        double deltaZ = std::abs(currentParticle->getX()[2]) * 2;
-        std::array<double, 3> ghostPos = {currentParticle->getX()[0], currentParticle->getX()[1],
-                                          currentParticle->getX()[2] - deltaZ};
-        std::array<double, 3> ghostVel = ArrayUtils::elementWisePairOp({1., 1., -1.}, currentParticle->getV(),
+        double deltaZ = std::abs(currentParticle.getX()[2]) * 2;
+        std::array<double, 3> ghostPos = {currentParticle.getX()[0], currentParticle.getX()[1],
+                                          currentParticle.getX()[2] - deltaZ};
+        std::array<double, 3> ghostVel = ArrayUtils::elementWisePairOp({1., 1., -1.}, currentParticle.getV(),
                                                                        std::multiplies<>());
-        Particle ghost = Particle(ghostPos, ghostVel, currentParticle->getM());
+        Particle ghost = Particle(ghostPos, ghostVel, currentParticle.getM());
         ghosts.push_back(ghost);
     }
     // add ghost particle to the "top" of the particle
     if (currentCellIdx[2] == 0 && boundaryConfig.z[1] == reflect) {
-        double deltaZ = std::abs((numCells[2] * cellSize[2]) - currentParticle->getX()[2]) * 2;
-        std::array<double, 3> ghostPos = {currentParticle->getX()[0], currentParticle->getX()[1],
-                                          currentParticle->getX()[2] + deltaZ};
-        std::array<double, 3> ghostVel = ArrayUtils::elementWisePairOp({1., 1., -1.}, currentParticle->getV(),
+        double deltaZ = std::abs((numCells[2] * cellSize[2]) - currentParticle.getX()[2]) * 2;
+        std::array<double, 3> ghostPos = {currentParticle.getX()[0], currentParticle.getX()[1],
+                                          currentParticle.getX()[2] + deltaZ};
+        std::array<double, 3> ghostVel = ArrayUtils::elementWisePairOp({1., 1., -1.}, currentParticle.getV(),
                                                                        std::multiplies<>());
-        Particle ghost = Particle(ghostPos, ghostVel, currentParticle->getM());
+        Particle ghost = Particle(ghostPos, ghostVel, currentParticle.getM());
         ghosts.push_back(ghost);
     }
     return ghosts;
 }
 
 PairParticleIteratorBoundaryNHalo::reference PairParticleIteratorBoundaryNHalo::operator*() {
-    return {*currentParticle, *currentGhost};
+    return {particles[*currentParticleIdx], *currentGhost};
 }
 
 PairParticleIteratorBoundaryNHalo &PairParticleIteratorBoundaryNHalo::operator++() {
@@ -132,8 +133,8 @@ PairParticleIteratorBoundaryNHalo &PairParticleIteratorBoundaryNHalo::operator++
     currentGhost++;
     if (currentGhost == currentGhostEnd) {
         // move to the next particle if there are no more ghosts
-        currentParticle++;
-        if (currentParticle == currentCell->getParticles().end()) {
+        currentParticleIdx++;
+        if (currentParticleIdx == currentCell->getParticlesIndices().end()) {
             // search for the next boundary cell which needs ghosts
             stepToNonEmptyBoundaryCell(true);
             return *this;

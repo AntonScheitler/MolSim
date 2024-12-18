@@ -56,7 +56,7 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                 PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
                 auto containerLinkedCell = dynamic_cast<ParticleContainerLinkedCell *>(&(simData.getParticles()));
                 if (containerLinkedCell) {
-                    containerLinkedCell->correctAllParticleIndices();
+                    containerLinkedCell->correctCellMembershipAllParticles();
                     ForceComputations::resetForces(simData.getParticles());
                     ForceComputations::computeLennardJonesPotentialCutoff(*containerLinkedCell, simData.getEpsilon(),
                                                                     simData.getSigma(), containerLinkedCell->getCutoffRadius());

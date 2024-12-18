@@ -25,7 +25,8 @@ class PairParticleIteratorLinkedCell : public PairParticleIterator {
          * @return an instance of the Linked Cell PairParticleIterator
          */
         PairParticleIteratorLinkedCell(std::vector<Cell>::iterator it, std::vector<Cell>::iterator end,
-                std::vector<Cell> &meshArg, std::array<size_t, 3> numCellsArg, struct boundaryConfig boundarConfigArg);
+                std::vector<Cell> &meshArg, std::array<size_t, 3> numCellsArg, struct boundaryConfig boundarConfigArg,
+                std::vector<Particle>& particlesArg);
 
         /**
          * @brief Dereference this PairParticleIterator, i.e. get the current pair of Particles
@@ -50,6 +51,11 @@ class PairParticleIteratorLinkedCell : public PairParticleIterator {
          * @brief the mesh to iterate through 
          */
         std::vector<Cell>& mesh;
+
+        /**
+         * @brief the particles to iterate through 
+         */
+        std::vector<Particle>& particles;
         /**
          * @brief the configuration of the boundary
          */
@@ -69,7 +75,7 @@ class PairParticleIteratorLinkedCell : public PairParticleIterator {
         /**
          * @brief an iterator pointing to the current particle within the current cell
          */
-        std::vector<Particle>::iterator currentParticle;
+        std::vector<size_t>::iterator currentParticleIdx;
         /**
          * @brief a vector of the neighbor cells of the current cell
          */
@@ -85,7 +91,7 @@ class PairParticleIteratorLinkedCell : public PairParticleIterator {
         /**
          * @brief an iterator pointing to the current particle within the partner cell to create pairs with
          */
-        std::vector<Particle>::iterator neighborParticle;
+        std::vector<size_t>::iterator neighborParticleIdx;
         /**
          * @brief the number cells per dimension
          */
@@ -114,7 +120,7 @@ class PairParticleIteratorLinkedCell : public PairParticleIterator {
         /**
          * @brief a set containing all particles for which all pairs have been iterated through
          */
-        std::unordered_set<Particle, ParticleHash, ParticleEqual> completedParticles;
+        std::unordered_set<size_t> completedParticles;
 
         /**
          * @brief computes a vector of neighbors for the current cell

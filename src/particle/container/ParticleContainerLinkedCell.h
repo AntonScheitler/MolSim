@@ -2,7 +2,6 @@
 
 #include <particle/Particle.h>
 #include <particle/container/ParticleContainer.h>
-#include <particle/iterator/particleIterator/ParticleIteratorLinkedCell.h>
 #include <particle/iterator/pairParticleIterator/PairParticleIteratorLinkedCell.h>
 #include <particle/iterator/pairParticleIterator/PairParticleIteratorBoundaryNHalo.h>
 #include <vector>
@@ -89,7 +88,7 @@ public:
     /**
      * @brief corrects the indices of all particles in the linked cell container mesh based on their position
      */
-    void correctAllParticleIndices();
+    void correctCellMembershipAllParticles();
 
     std::vector<Cell> &getMesh();
 
@@ -106,6 +105,11 @@ private:
      * @brief mesh contains all grid cells
      */
     std::vector<Cell> mesh;;
+
+    /**
+     * @brief the particles of this container
+     */
+    std::vector<Particle> particles;
     /**
      * @brief the size of the domain for the container
      */
@@ -129,7 +133,7 @@ private:
      * @param p the particle to correct the position of
      * @returns true if the particle should be removed from its old cell
      */
-    bool correctParticleIndex(Particle &p);
+    bool correctCellMembershipSingleParticle(size_t particleIdx);
 
     /**
      * @brief determines if the given point is inside the domain
