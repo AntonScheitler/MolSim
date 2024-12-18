@@ -1,5 +1,6 @@
 #include <array>
 #include <cmath>
+#include <iterator>
 #include <utility>
 #include "../../utils/ArrayUtils.h"
 #include "particle/container/ParticleContainer.h"
@@ -68,14 +69,9 @@ void ForceComputations::computeLennardJonesPotentialCutoff(ParticleContainerLink
     for (auto it = particles.beginPairParticle(); *it != *(particles.endPairParticle()); it->operator++()) {
         std::pair<Particle &, Particle &> pair = **it;
 
-        std::array<double, 3> naiveDistanceVector = ArrayUtils::elementWisePairOp(pair.first.getX(), pair.second.getX(), std::minus<>());
-        std::array<double, 3> periodicDistanceVector = particles.getPeriodicDistanceVector(pair.first.getX(), pair.second.getX(), naiveDistanceVector);
-        double naiveDistance = ArrayUtils::L2Norm(naiveDistanceVector);
-        double periodicDistance = ArrayUtils::L2Norm(periodicDistanceVector);
-        //double distance = naiveDistance;
-        //auto distanceVector = naiveDistanceVector; 
-        double distance = std::min(naiveDistance, periodicDistance);
-        std::array<double, 3> distanceVector = naiveDistance < periodicDistance ? naiveDistanceVector : periodicDistanceVector;
+        std::array<double, 3> distanceVector = ArrayUtils::elementWisePairOp(pair.first.getX(), pair.second.getX(), std::minus<>());
+        particles.getPeriodicDistanceVector(pair.first.getX(), pair.second.getX(), distanceVector);
+        double distance = ArrayUtils::L2Norm(distanceVector);
         // don't consider particles which are further apart than the cutoff radius
         if (distance == 0 || distance > cutoff) continue;
         double dist = std::pow(sigma / distance, 2);

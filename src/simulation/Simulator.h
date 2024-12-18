@@ -7,6 +7,7 @@
  * automatically chooses the necessary computation methods based on the type of simulation desired
  */
 class Simulator {
+
 public:
     /**
      * @brief creates an instance of the simulator class
@@ -14,9 +15,10 @@ public:
      */
     Simulator(SimulationData &simDataArg);
 
-
+    /**
+     * @brief deconstructs this object and drops the associated logger
+     */
     ~Simulator();
-
 
     /**
      * @brief runs the simulation
@@ -35,6 +37,7 @@ public:
      * @brief pointer to a function to run after a simulation
      */
     std::function<void(void)> after;
+
 private:
     SimulationData &simData;
     std::shared_ptr<spdlog::logger> logger;
@@ -42,6 +45,8 @@ private:
     /**
      * @brief runs the core simulation loop. This function gets called a number of times when benchmarking and just
      * once if benchmarking is disabled
+     * @return the number of particles updated during the simulation
      */
-    void runSimulationLoop();
+    size_t runSimulationLoop();
+
 };

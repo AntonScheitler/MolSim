@@ -11,26 +11,26 @@ Cell::Cell(bool isBoundaryArg, size_t cellIdArg) {
     cellId = cellIdArg;
 }
 
-void Cell::addParticle(const Particle &particle) {
-    particles.push_back(particle);
+void Cell::addParticleIdx(const size_t idx) {
+    particleIndices.push_back(idx);
 }
 
-std::vector<Particle> &Cell::getParticles() {
-    return particles;
+std::vector<size_t> &Cell::getParticlesIndices() {
+    return particleIndices;
 }
 
-void Cell::removeParticle(size_t particleId) {
-    auto it = std::find_if(particles.begin(), particles.end(),
-                   [particleId](const Particle& particle) { return particle.getId() == particleId; });
-    if (it == particles.end()) {
+void Cell::removeParticle(size_t deleteIdx) {
+    auto it = std::find_if(particleIndices.begin(), particleIndices.end(),
+                   [deleteIdx](const size_t currIdx) { return currIdx == deleteIdx; });
+    if (it == particleIndices.end()) {
         SPDLOG_ERROR("SOMETHING VERY TERRIBLE HAS HAPPENED :(");
         exit(EXIT_FAILURE);
     }
-    particles.erase(it);
+    particleIndices.erase(it);
 }
 
 int Cell::size() {
-    return particles.size();
+    return particleIndices.size();
 }
 
 bool Cell::operator==(const Cell &other) {

@@ -66,14 +66,17 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                 PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
                 auto containerLinkedCell = dynamic_cast<ParticleContainerLinkedCell *>(&(simData.getParticles()));
                 if (containerLinkedCell) {
-                    containerLinkedCell->correctAllParticleIndices();
+                    containerLinkedCell->correctCellMembershipAllParticles();
                     ForceComputations::resetForces(simData.getParticles());
                     ForceComputations::computeLennardJonesPotentialCutoff(*containerLinkedCell, simData.getEpsilon(),
                                                                     simData.getSigma(), containerLinkedCell->getCutoffRadius());
 
+                    SPDLOG_DEBUG("computing ghost particle repulsion...");
                     ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell, simData.getEpsilon(),
                                                                      simData.getSigma());
+                    // TODO: should this be here? was excluded in profiling branch
                     ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav());
+                    SPDLOG_DEBUG("done");
                     VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
 
 
@@ -121,20 +124,22 @@ void Simulator::simulate() {
     }
 
     if (simData.getBench()) {
-        ParticleContainer &particlesBefore = simData.getParticles();
+        std::unique_ptr<ParticleContainer> particlesBefore = simData.getParticles().copy();
         for (int i = 0; i < numIterations; i++) {
             // turn off logging when benchmarking except for errors
             spdlog::set_level(spdlog::level::err);
-            simData.setParticlesCopy(particlesBefore);
+            simData.setParticles(particlesBefore->copy());
             auto start = std::chrono::high_resolution_clock::now();
 
-            runSimulationLoop();
+            size_t numUpdatedParticles = runSimulationLoop();
 
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
                     std::chrono::high_resolution_clock::now() - start);
             // turn logging back on to communicate results
             spdlog::set_level(spdlog::level::info);
+
             logger->info("Simulation no. {0} took {1} ms", i + 1, duration.count());
+            logger->info("{0} particles updated per second", (numUpdatedParticles * 1000.0) / duration.count());
             totalDuration += duration.count();
         }
         logger->info("Simulation took {0} ms on average", (totalDuration / numIterations));
@@ -145,8 +150,9 @@ void Simulator::simulate() {
 
 }
 
-void Simulator::runSimulationLoop() {
+size_t Simulator::runSimulationLoop() {
     // prepare for iteration
+    size_t numUpdatedParticles = 0;
     double currentTime = simData.getStartTime();
     int iteration = 0;
     outputWriter::VTKWriter writer(simData.getBaseName());
@@ -154,9 +160,11 @@ void Simulator::runSimulationLoop() {
     before();
     // compute position, force and velocity for all particles each iteration
     while (currentTime < simData.getEndTime()) {
-        step(iteration);
-        iteration++;
 
+        numUpdatedParticles += simData.getParticles().size();
+        step(iteration);
+
+        iteration++;
 
         if (iteration % simData.getWriteFrequency() == 0 && !simData.getBench()) {
             // write output on every 10th iteration
@@ -173,6 +181,7 @@ void Simulator::runSimulationLoop() {
         checkpointWriter.plotParticles(simData.getParticles(), 0);
     }
     SPDLOG_LOGGER_INFO(logger, "output written. Terminating...");
+    return numUpdatedParticles;
 }
 
 Simulator::~Simulator() {

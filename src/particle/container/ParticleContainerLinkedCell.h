@@ -2,7 +2,6 @@
 
 #include <particle/Particle.h>
 #include <particle/container/ParticleContainer.h>
-#include <particle/iterator/particleIterator/ParticleIteratorLinkedCell.h>
 #include <particle/iterator/pairParticleIterator/PairParticleIteratorLinkedCell.h>
 #include <particle/iterator/pairParticleIterator/PairParticleIteratorBoundaryNHalo.h>
 #include <vector>
@@ -71,14 +70,13 @@ public:
     int continuousCoordsToIndex(std::array<double, 3> coord);
 
     /**
-     * @brief determinesthe distance between two points across periodic boundaries. The distance is defined via a point and a
-     * vector. The periodic distance must be across two boundaries which are marked as periodic
-     * @param coord a point that the periodic distance passes through
-     * @param v a vector to base the periodic distance off of
-     * @return the periodic distance vector that is based off of v and passes through coord. if there is no such vector,
-     * for example if it is across non-periodic boundaries, then an array of DOUBLE_MAX_VALUE is returned
+     * @brief changes the supplied vector to a periodic one, if the supplied points are on opposite sides of a periodic boundary. If the points aren't on opposite sides, 
+     * or the boundary is non-periodic, the supplied vector remains unchanged
+     * @param point1 the first point
+     * @param point2 the second point
+     * @param v the non-periodic vector that points from point1 to point2
      */
-    std::array<double, 3> getPeriodicDistanceVector(const std::array<double, 3>& point1, const std::array<double, 3>& point2, std::array<double, 3>& v);
+    void getPeriodicDistanceVector(const std::array<double, 3>& point1, const std::array<double, 3>& point2, std::array<double, 3>& v);
 
     /**
      * @brief applies periodic boundaries to the specified array
@@ -89,7 +87,12 @@ public:
     /**
      * @brief corrects the indices of all particles in the linked cell container mesh based on their position
      */
-    void correctAllParticleIndices();
+    void correctCellMembershipAllParticles();
+
+    /**
+     * @brief computes the neighborCellsMatrix 
+     */
+    void computeNeighborCellsMatrix();
 
     std::vector<Cell> &getMesh();
 
@@ -106,6 +109,16 @@ private:
      * @brief mesh contains all grid cells
      */
     std::vector<Cell> mesh;;
+
+    /**
+     * @brief the particles of this container
+     */
+    std::vector<Particle> particles;
+
+    /**
+     * @brief a vector of vectors containing indices for the neighborCells of the cell at the given index 
+     */
+    std::vector<std::vector<size_t>> neighborCellsMatrix;
     /**
      * @brief the size of the domain for the container
      */
@@ -129,13 +142,5 @@ private:
      * @param p the particle to correct the position of
      * @returns true if the particle should be removed from its old cell
      */
-    bool correctParticleIndex(Particle &p);
-
-    /**
-     * @brief determines if the given point is inside the domain
-     * @param coord the point to check
-     * @return true if coord is in the domain, false otherwise
-     */
-    bool isPointInDomain(std::array<double, 3> coord);
+    bool correctCellMembershipSingleParticle(size_t particleIdx);
 };
-
