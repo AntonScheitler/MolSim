@@ -70,14 +70,13 @@ public:
     int continuousCoordsToIndex(std::array<double, 3> coord);
 
     /**
-     * @brief determinesthe distance between two points across periodic boundaries. The distance is defined via a point and a
-     * vector. The periodic distance must be across two boundaries which are marked as periodic
-     * @param coord a point that the periodic distance passes through
-     * @param v a vector to base the periodic distance off of
-     * @return the periodic distance vector that is based off of v and passes through coord. if there is no such vector,
-     * for example if it is across non-periodic boundaries, then an array of DOUBLE_MAX_VALUE is returned
+     * @brief changes the supplied vector to a periodic one, if the supplied points are on opposite sides of a periodic boundary. If the points aren't on opposite sides, 
+     * or the boundary is non-periodic, the supplied vector remains unchanged
+     * @param point1 the first point
+     * @param point2 the second point
+     * @param v the non-periodic vector that points from point1 to point2
      */
-    std::array<double, 3> getPeriodicDistanceVector(const std::array<double, 3>& point1, const std::array<double, 3>& point2, std::array<double, 3>& v);
+    void getPeriodicDistanceVector(const std::array<double, 3>& point1, const std::array<double, 3>& point2, std::array<double, 3>& v);
 
     /**
      * @brief applies periodic boundaries to the specified array

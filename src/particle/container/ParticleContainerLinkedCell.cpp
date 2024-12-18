@@ -134,8 +134,7 @@ void ParticleContainerLinkedCell::correctCellMembershipAllParticles() {
     }
 }
 
-std::array<double, 3> ParticleContainerLinkedCell::getPeriodicDistanceVector(const std::array<double, 3>& point1, const std::array<double, 3>& point2, std::array<double, 3>& v) {
-    std::array<double, 3> periodicDistanceVector = v;
+void ParticleContainerLinkedCell::getPeriodicDistanceVector(const std::array<double, 3>& point1, const std::array<double, 3>& point2, std::array<double, 3>& v) {
     // iterate through every axis
     for (int axis = 0; axis < 3; axis++) {
         // check if point1 is on one side of the boundary of the given axis and point2 is on the other 
@@ -145,17 +144,16 @@ std::array<double, 3> ParticleContainerLinkedCell::getPeriodicDistanceVector(con
                   (point2[axis] < 0 + cellSize[axis] && point1[axis] > (cellSize[axis] * numCells[axis]) - cellSize[axis])) {
                 // for every axis where point1 and point2 are on opposite ends of the boundary, invert the distance vector
                 // and subtract/add the distance between the boundaries to it
-                periodicDistanceVector[axis] *= -1.0;
-                periodicDistanceVector[axis] = periodicDistanceVector[axis] < 0 ? 
-                                                    (cellSize[axis] * numCells[axis]) + periodicDistanceVector[axis]
-                                                : periodicDistanceVector[axis] > 0 ?
-                                                     (cellSize[axis] * numCells[axis]) - periodicDistanceVector[axis]
-                                                :
-                                                    periodicDistanceVector[axis];
+                v[axis] *= -1.0;
+                v[axis] = v[axis] < 0 ? 
+                    (cellSize[axis] * numCells[axis]) + v[axis]
+                        : v[axis] > 0 ?
+                             (cellSize[axis] * numCells[axis]) - v[axis]
+                        :
+                            v[axis];
             }
         }
     }
-    return periodicDistanceVector;
 }
 
 void ParticleContainerLinkedCell::computeNeighborCellsMatrix() {
