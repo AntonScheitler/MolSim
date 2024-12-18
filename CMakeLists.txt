@@ -45,6 +45,13 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(json)
 
+FetchContent_Declare(
+        xerces-c
+        GIT_REPOSITORY https://github.com/apache/xerces-c.git
+        GIT_TAG        v3.3.0
+)
+FetchContent_MakeAvailable(xerces-c)
+
 # add src and test as subdirectories
 add_subdirectory(src)
 add_subdirectory(test)

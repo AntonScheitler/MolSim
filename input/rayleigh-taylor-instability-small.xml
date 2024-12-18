@@ -14,8 +14,8 @@
         <boundary>
             <xTop>reflecting</xTop>
             <xBottom>reflecting</xBottom>
-            <yLeft>reflecting</yLeft>
-            <yRight>reflecting</yRight>
+            <yLeft>periodic</yLeft>
+            <yRight>periodic</yRight>
         </boundary>
         <grav>-12.44</grav>
     </parameters>
@@ -59,7 +59,7 @@
                 <z>0.0</z>
             </velocity>
             <meshWidth>1.2</meshWidth>
-            <mass>1.0</mass>
+            <mass>2.0</mass>
             <brownianMotion>0.0</brownianMotion>
             <epsilon>1.0</epsilon>
             <sigma>0.9412</sigma>

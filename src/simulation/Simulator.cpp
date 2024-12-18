@@ -101,13 +101,15 @@ void Simulator::simulate() {
     if (simData.getBench()) {
         // overwrite logging settings
         spdlog::set_level(spdlog::level::info);
-        // no macro logging statements, they are turned off while compiling when setting SPDLOG_ACTIVE_LEVEL to
-        // SPDLOG_LEVEL_OFF in spdlogConfig.h => more performance for benchmark
+        /*
+         * no macro logging statements, they are turned off while compiling when setting SPDLOG_ACTIVE_LEVEL to
+         * SPDLOG_LEVEL_OFF in spdlogConfig.h => more performance for benchmark
+         */
         logger = spdlog::stdout_color_mt("Benchmarking");
-        SPDLOG_LOGGER_INFO(logger, "=========================BENCH=========================");
-        SPDLOG_LOGGER_INFO(logger, "Benchmarking with delta_t={0}, t_end={1}, sim_type={2}", simData.getDeltaT(),
+        logger->info("=========================BENCH=========================");
+        logger->info("Benchmarking with delta_t={0}, t_end={1}, sim_type={2}", simData.getDeltaT(),
                            simData.getEndTime(), (int) simData.getSimType());
-        SPDLOG_LOGGER_INFO(logger, "Commencing Simulation...");
+        logger->info("Commencing Simulation...");
 
         totalDuration = 0;
         numIterations = 10;
@@ -130,11 +132,11 @@ void Simulator::simulate() {
                     std::chrono::high_resolution_clock::now() - start);
             // turn logging back on to communicate results
             spdlog::set_level(spdlog::level::info);
-            SPDLOG_LOGGER_INFO(logger, "Simulation no. {0} took {1} ms", i + 1, duration.count());
+            logger->info("Simulation no. {0} took {1} ms", i + 1, duration.count());
             totalDuration += duration.count();
         }
-        SPDLOG_LOGGER_INFO(logger, "Simulation took {0} ms on average", (totalDuration / numIterations));
-        SPDLOG_LOGGER_INFO(logger, "=========================BENCH=========================");
+        logger->info("Simulation took {0} ms on average", (totalDuration / numIterations));
+        logger->info("=========================BENCH=========================");
     } else {
         runSimulationLoop();
     }
@@ -152,7 +154,6 @@ void Simulator::runSimulationLoop() {
     while (currentTime < simData.getEndTime()) {
         step(iteration);
         iteration++;
-
 
 
         if (iteration % simData.getWriteFrequency() == 0 && !simData.getBench()) {
