@@ -11,6 +11,7 @@
 #include <memory>
 #include <particle/container/ParticleContainerLinkedCell.h>
 #include <particle/container/ParticleContainerDirectSum.h>
+#include "../CheckpointReader.h"
 
 
 namespace inputReader {
@@ -44,28 +45,45 @@ namespace inputReader {
 
         try {
 
-//        std::unique_ptr<simulation> simParser = simulation_(inputFile, xml_schema::flags::dont_validate);
             std::unique_ptr<simulation> simParser = simulation_(inputFile, xml_schema::flags::dont_validate);
+
+            std::ostringstream command;
+            command << "xmllint --noout --schema ../src/io/inputReader/xml/simulation.xsd " << filename;
+            int result = std::system(command.str().c_str());
+
+            if (!(result == 0 || result == 32512)) {
+                std::cerr << "Error in xml file: scheme does not validate " << std::endl;
+                exit(-1);
+            }
 
             // use linked cell if specified
             auto parameters = simParser->parameters();
             if (parameters.present() && parameters->containerType().present() &&
                 parameters->containerType().get() == "linked") {
-                auto containerLinkedCell = std::unique_ptr<ParticleContainer>(new ParticleContainerLinkedCell(
+                auto containerLinkedCell = std::make_unique<ParticleContainerLinkedCell>(ParticleContainerLinkedCell{
                         {parameters->domainSize()->x(), parameters->domainSize()->y(), parameters->domainSize()->z()},
                         parameters->cutoff().get(), {
 
-                            {getEnum(parameters->boundary()->yLeft()), getEnum(parameters->boundary()->yRight())},
-                            {getEnum(parameters->boundary()->xBottom()), getEnum(parameters->boundary()->xTop())},
 
-                            {outflow, outflow}}));
+                                {getEnum(parameters->boundary()->yLeft()), getEnum(parameters->boundary()->yRight())},
+                                {getEnum(parameters->boundary()->xBottom()), getEnum(parameters->boundary()->xTop())},
+                                {outflow, outflow}}});
+
                 simData.setParticles(std::move(containerLinkedCell));
             } else {
                 // use direct sum as default
-                auto containerDirectSum = std::unique_ptr<ParticleContainer>(new ParticleContainerDirectSum());
+                auto containerDirectSum = std::make_unique<ParticleContainerDirectSum>(ParticleContainerDirectSum{});
                 simData.setParticles(std::move(containerDirectSum));
             }
             ParameterParser::readParams(simData, simParser);
+
+            if (simParser->parameters()->import_checkpoint().present()) {
+                CheckpointReader checkpointReader(simData);
+                type = checkpointReader.readCheckpointFile(simData,
+                                                           simParser->parameters()->import_checkpoint()->file_path().c_str());
+            }
+
+            type++;
 
             SPDLOG_LOGGER_INFO(logger, "starting parsing cuboids");
 
@@ -114,7 +132,7 @@ namespace inputReader {
 
                 type++;
             }
-            
+
             for (const auto &disc: simParser->clusters().disc()) {
                 x[0] = disc.center().x();
                 x[1] = disc.center().y();
@@ -143,10 +161,11 @@ namespace inputReader {
             exit(-1);
         }
     }
-    BoundaryType XMLFileReader::getEnum(std::string b) {
+
+    BoundaryType XMLFileReader::getEnum(const std::string& b) {
         if (b == "reflecting") {
             return reflect;
-        } else if (b == "periodic"){
+        } else if (b == "periodic") {
             return periodic;
         } else {
             return outflow;

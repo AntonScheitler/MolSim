@@ -259,10 +259,10 @@ class parameters;
 class clusters;
 class thermo;
 class boundary;
+class import_checkpoint;
 class particle;
 class disc;
 class cuboid;
-class equi;
 
 #include <memory>    // ::std::unique_ptr
 #include <limits>    // std::numeric_limits
@@ -523,6 +523,24 @@ class output: public ::xml_schema::type
   void
   baseName (::std::unique_ptr< baseName_type > p);
 
+  // create_checkpoint_file
+  //
+  typedef ::xml_schema::boolean create_checkpoint_file_type;
+  typedef ::xsd::cxx::tree::optional< create_checkpoint_file_type > create_checkpoint_file_optional;
+  typedef ::xsd::cxx::tree::traits< create_checkpoint_file_type, char > create_checkpoint_file_traits;
+
+  const create_checkpoint_file_optional&
+  create_checkpoint_file () const;
+
+  create_checkpoint_file_optional&
+  create_checkpoint_file ();
+
+  void
+  create_checkpoint_file (const create_checkpoint_file_type& x);
+
+  void
+  create_checkpoint_file (const create_checkpoint_file_optional& x);
+
   // Constructors.
   //
   output ();
@@ -555,6 +573,7 @@ class output: public ::xml_schema::type
   protected:
   writeFrequency_optional writeFrequency_;
   baseName_optional baseName_;
+  create_checkpoint_file_optional create_checkpoint_file_;
 };
 
 class parameters: public ::xml_schema::type
@@ -749,6 +768,27 @@ class parameters: public ::xml_schema::type
   void
   grav (const grav_optional& x);
 
+  // import_checkpoint
+  //
+  typedef ::import_checkpoint import_checkpoint_type;
+  typedef ::xsd::cxx::tree::optional< import_checkpoint_type > import_checkpoint_optional;
+  typedef ::xsd::cxx::tree::traits< import_checkpoint_type, char > import_checkpoint_traits;
+
+  const import_checkpoint_optional&
+  import_checkpoint () const;
+
+  import_checkpoint_optional&
+  import_checkpoint ();
+
+  void
+  import_checkpoint (const import_checkpoint_type& x);
+
+  void
+  import_checkpoint (const import_checkpoint_optional& x);
+
+  void
+  import_checkpoint (::std::unique_ptr< import_checkpoint_type > p);
+
   // Constructors.
   //
   parameters ();
@@ -789,6 +829,7 @@ class parameters: public ::xml_schema::type
   cutoff_optional cutoff_;
   boundary_optional boundary_;
   grav_optional grav_;
+  import_checkpoint_optional import_checkpoint_;
 };
 
 class clusters: public ::xml_schema::type
@@ -1094,6 +1135,59 @@ class boundary: public ::xml_schema::type
   ::xsd::cxx::tree::one< yRight_type > yRight_;
 };
 
+class import_checkpoint: public ::xml_schema::type
+{
+  public:
+  // file_path
+  //
+  typedef ::xml_schema::string file_path_type;
+  typedef ::xsd::cxx::tree::traits< file_path_type, char > file_path_traits;
+
+  const file_path_type&
+  file_path () const;
+
+  file_path_type&
+  file_path ();
+
+  void
+  file_path (const file_path_type& x);
+
+  void
+  file_path (::std::unique_ptr< file_path_type > p);
+
+  // Constructors.
+  //
+  import_checkpoint (const file_path_type&);
+
+  import_checkpoint (const ::xercesc::DOMElement& e,
+                     ::xml_schema::flags f = 0,
+                     ::xml_schema::container* c = 0);
+
+  import_checkpoint (const import_checkpoint& x,
+                     ::xml_schema::flags f = 0,
+                     ::xml_schema::container* c = 0);
+
+  virtual import_checkpoint*
+  _clone (::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0) const;
+
+  import_checkpoint&
+  operator= (const import_checkpoint& x);
+
+  virtual 
+  ~import_checkpoint ();
+
+  // Implementation.
+  //
+  protected:
+  void
+  parse (::xsd::cxx::xml::dom::parser< char >&,
+         ::xml_schema::flags);
+
+  protected:
+  ::xsd::cxx::tree::one< file_path_type > file_path_;
+};
+
 class particle: public ::xml_schema::type
 {
   public:
@@ -1181,27 +1275,6 @@ class particle: public ::xml_schema::type
   void
   sigma (const sigma_optional& x);
 
-  // equi
-  //
-  typedef ::equi equi_type;
-  typedef ::xsd::cxx::tree::optional< equi_type > equi_optional;
-  typedef ::xsd::cxx::tree::traits< equi_type, char > equi_traits;
-
-  const equi_optional&
-  equi () const;
-
-  equi_optional&
-  equi ();
-
-  void
-  equi (const equi_type& x);
-
-  void
-  equi (const equi_optional& x);
-
-  void
-  equi (::std::unique_ptr< equi_type > p);
-
   // Constructors.
   //
   particle (const coordinate_type&,
@@ -1243,7 +1316,6 @@ class particle: public ::xml_schema::type
   ::xsd::cxx::tree::one< mass_type > mass_;
   epsilon_optional epsilon_;
   sigma_optional sigma_;
-  equi_optional equi_;
 };
 
 class disc: public ::xml_schema::type
@@ -1361,27 +1433,6 @@ class disc: public ::xml_schema::type
   void
   sigma (const sigma_optional& x);
 
-  // equi
-  //
-  typedef ::equi equi_type;
-  typedef ::xsd::cxx::tree::optional< equi_type > equi_optional;
-  typedef ::xsd::cxx::tree::traits< equi_type, char > equi_traits;
-
-  const equi_optional&
-  equi () const;
-
-  equi_optional&
-  equi ();
-
-  void
-  equi (const equi_type& x);
-
-  void
-  equi (const equi_optional& x);
-
-  void
-  equi (::std::unique_ptr< equi_type > p);
-
   // Constructors.
   //
   disc (const center_type&,
@@ -1429,7 +1480,6 @@ class disc: public ::xml_schema::type
   ::xsd::cxx::tree::one< radius_type > radius_;
   epsilon_optional epsilon_;
   sigma_optional sigma_;
-  equi_optional equi_;
 };
 
 class cuboid: public ::xml_schema::type
@@ -1564,27 +1614,6 @@ class cuboid: public ::xml_schema::type
   void
   sigma (const sigma_optional& x);
 
-  // equi
-  //
-  typedef ::equi equi_type;
-  typedef ::xsd::cxx::tree::optional< equi_type > equi_optional;
-  typedef ::xsd::cxx::tree::traits< equi_type, char > equi_traits;
-
-  const equi_optional&
-  equi () const;
-
-  equi_optional&
-  equi ();
-
-  void
-  equi (const equi_type& x);
-
-  void
-  equi (const equi_optional& x);
-
-  void
-  equi (::std::unique_ptr< equi_type > p);
-
   // Constructors.
   //
   cuboid (const cornerCoordinates_type&,
@@ -1635,57 +1664,6 @@ class cuboid: public ::xml_schema::type
   ::xsd::cxx::tree::one< brownianMotion_type > brownianMotion_;
   epsilon_optional epsilon_;
   sigma_optional sigma_;
-  equi_optional equi_;
-};
-
-class equi: public ::xml_schema::type
-{
-  public:
-  // equi_end
-  //
-  typedef ::xml_schema::double_ equi_end_type;
-  typedef ::xsd::cxx::tree::traits< equi_end_type, char, ::xsd::cxx::tree::schema_type::double_ > equi_end_traits;
-
-  const equi_end_type&
-  equi_end () const;
-
-  equi_end_type&
-  equi_end ();
-
-  void
-  equi_end (const equi_end_type& x);
-
-  // Constructors.
-  //
-  equi (const equi_end_type&);
-
-  equi (const ::xercesc::DOMElement& e,
-        ::xml_schema::flags f = 0,
-        ::xml_schema::container* c = 0);
-
-  equi (const equi& x,
-        ::xml_schema::flags f = 0,
-        ::xml_schema::container* c = 0);
-
-  virtual equi*
-  _clone (::xml_schema::flags f = 0,
-          ::xml_schema::container* c = 0) const;
-
-  equi&
-  operator= (const equi& x);
-
-  virtual 
-  ~equi ();
-
-  // Implementation.
-  //
-  protected:
-  void
-  parse (::xsd::cxx::xml::dom::parser< char >&,
-         ::xml_schema::flags);
-
-  protected:
-  ::xsd::cxx::tree::one< equi_end_type > equi_end_;
 };
 
 #include <iosfwd>
@@ -1885,6 +1863,9 @@ void
 operator<< (::xercesc::DOMElement&, const boundary&);
 
 void
+operator<< (::xercesc::DOMElement&, const import_checkpoint&);
+
+void
 operator<< (::xercesc::DOMElement&, const particle&);
 
 void
@@ -1892,9 +1873,6 @@ operator<< (::xercesc::DOMElement&, const disc&);
 
 void
 operator<< (::xercesc::DOMElement&, const cuboid&);
-
-void
-operator<< (::xercesc::DOMElement&, const equi&);
 
 #include <xsd/cxx/post.hxx>
 
