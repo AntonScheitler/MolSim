@@ -253,5 +253,6 @@ double ParticleContainerLinkedCell::getCutoffRadius() {
     return cutoffRadius;
 }
 
-
-
+Particle& ParticleContainerLinkedCell::getParticleAt(int particleIndex) {
+    return particles.at(particleIndex);
+}

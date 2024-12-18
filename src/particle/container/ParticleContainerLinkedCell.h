@@ -104,6 +104,8 @@ public:
 
     double getCutoffRadius();
 
+    Particle& getParticleAt(int particleIndex);
+
 private:
     /**
      * @brief mesh contains all grid cells
