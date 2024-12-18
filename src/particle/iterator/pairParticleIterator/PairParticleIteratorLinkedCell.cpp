@@ -30,7 +30,6 @@ void PairParticleIteratorLinkedCell::incrementCurrCellIdx() {
 
 void PairParticleIteratorLinkedCell::getNeighborCells() {
     neighborCellsVector.clear();
-    std::unordered_set<int> neighborIdxs = {};
     for (int z = -1; z < 2; z++) {
         for (int y = -1; y < 2; y++) {
             for (int x = -1; x < 2; x++) {
@@ -50,12 +49,10 @@ void PairParticleIteratorLinkedCell::getNeighborCells() {
                 double newZ = (neighborCoords[2] + numCells[2]) % numCells[2];
 
                 int neighborIdx = newX + (newY * numCells[0]) + (newZ * numCells[0] * numCells[1]);
-                if (neighborIdxs.count(neighborIdx) > 0) continue;
 
                 Cell& cell = mesh[neighborIdx];
                 if (cell.getParticles().size() > 0) {
                     neighborCellsVector.push_back(&(mesh[neighborIdx]));
-                    neighborIdxs.insert(neighborIdx);
                 }
             }
         }

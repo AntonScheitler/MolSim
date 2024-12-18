@@ -97,13 +97,7 @@ class PairParticleIteratorLinkedCell : public PairParticleIterator {
          */
         struct ParticleHash {
             size_t operator()(const Particle &p) const {
-                const std::size_t prime1 = 73856093;
-                const std::size_t prime2 = 19349663;
-                const std::size_t prime3 = 83492791;
-
-                return (std::size_t(std::floor(p.getX()[0] * 1e3)) * prime1 ^
-                        std::size_t(std::floor(p.getX()[1] * 1e3)) * prime2 ^
-                        std::size_t(std::floor(p.getX()[2] * 1e3)) * prime3);
+                return p.getId();
             }
         };
 
@@ -113,7 +107,7 @@ class PairParticleIteratorLinkedCell : public PairParticleIterator {
          */
         struct ParticleEqual {
             bool operator()(const Particle &p1, const Particle &p2) const {
-                return p1.getX() == p2.getX();
+                return p1 == p2;
             }
         };
 
