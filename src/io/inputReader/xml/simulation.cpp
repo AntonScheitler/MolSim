@@ -273,6 +273,30 @@ baseName (::std::unique_ptr< baseName_type > x)
   this->baseName_.set (std::move (x));
 }
 
+const output::create_checkpoint_file_optional& output::
+create_checkpoint_file () const
+{
+  return this->create_checkpoint_file_;
+}
+
+output::create_checkpoint_file_optional& output::
+create_checkpoint_file ()
+{
+  return this->create_checkpoint_file_;
+}
+
+void output::
+create_checkpoint_file (const create_checkpoint_file_type& x)
+{
+  this->create_checkpoint_file_.set (x);
+}
+
+void output::
+create_checkpoint_file (const create_checkpoint_file_optional& x)
+{
+  this->create_checkpoint_file_ = x;
+}
+
 
 // parameters
 // 
@@ -535,6 +559,36 @@ grav (const grav_optional& x)
   this->grav_ = x;
 }
 
+const parameters::import_checkpoint_optional& parameters::
+import_checkpoint () const
+{
+  return this->import_checkpoint_;
+}
+
+parameters::import_checkpoint_optional& parameters::
+import_checkpoint ()
+{
+  return this->import_checkpoint_;
+}
+
+void parameters::
+import_checkpoint (const import_checkpoint_type& x)
+{
+  this->import_checkpoint_.set (x);
+}
+
+void parameters::
+import_checkpoint (const import_checkpoint_optional& x)
+{
+  this->import_checkpoint_ = x;
+}
+
+void parameters::
+import_checkpoint (::std::unique_ptr< import_checkpoint_type > x)
+{
+  this->import_checkpoint_.set (std::move (x));
+}
+
 
 // clusters
 // 
@@ -782,6 +836,34 @@ yRight (::std::unique_ptr< yRight_type > x)
 }
 
 
+// import_checkpoint
+// 
+
+const import_checkpoint::file_path_type& import_checkpoint::
+file_path () const
+{
+  return this->file_path_.get ();
+}
+
+import_checkpoint::file_path_type& import_checkpoint::
+file_path ()
+{
+  return this->file_path_.get ();
+}
+
+void import_checkpoint::
+file_path (const file_path_type& x)
+{
+  this->file_path_.set (x);
+}
+
+void import_checkpoint::
+file_path (::std::unique_ptr< file_path_type > x)
+{
+  this->file_path_.set (std::move (x));
+}
+
+
 // particle
 // 
 
@@ -897,36 +979,6 @@ void particle::
 sigma (const sigma_optional& x)
 {
   this->sigma_ = x;
-}
-
-const particle::equi_optional& particle::
-equi () const
-{
-  return this->equi_;
-}
-
-particle::equi_optional& particle::
-equi ()
-{
-  return this->equi_;
-}
-
-void particle::
-equi (const equi_type& x)
-{
-  this->equi_.set (x);
-}
-
-void particle::
-equi (const equi_optional& x)
-{
-  this->equi_ = x;
-}
-
-void particle::
-equi (::std::unique_ptr< equi_type > x)
-{
-  this->equi_.set (std::move (x));
 }
 
 
@@ -1081,36 +1133,6 @@ void disc::
 sigma (const sigma_optional& x)
 {
   this->sigma_ = x;
-}
-
-const disc::equi_optional& disc::
-equi () const
-{
-  return this->equi_;
-}
-
-disc::equi_optional& disc::
-equi ()
-{
-  return this->equi_;
-}
-
-void disc::
-equi (const equi_type& x)
-{
-  this->equi_.set (x);
-}
-
-void disc::
-equi (const equi_optional& x)
-{
-  this->equi_ = x;
-}
-
-void disc::
-equi (::std::unique_ptr< equi_type > x)
-{
-  this->equi_.set (std::move (x));
 }
 
 
@@ -1289,58 +1311,6 @@ void cuboid::
 sigma (const sigma_optional& x)
 {
   this->sigma_ = x;
-}
-
-const cuboid::equi_optional& cuboid::
-equi () const
-{
-  return this->equi_;
-}
-
-cuboid::equi_optional& cuboid::
-equi ()
-{
-  return this->equi_;
-}
-
-void cuboid::
-equi (const equi_type& x)
-{
-  this->equi_.set (x);
-}
-
-void cuboid::
-equi (const equi_optional& x)
-{
-  this->equi_ = x;
-}
-
-void cuboid::
-equi (::std::unique_ptr< equi_type > x)
-{
-  this->equi_.set (std::move (x));
-}
-
-
-// equi
-// 
-
-const equi::equi_end_type& equi::
-equi_end () const
-{
-  return this->equi_end_.get ();
-}
-
-equi::equi_end_type& equi::
-equi_end ()
-{
-  return this->equi_end_.get ();
-}
-
-void equi::
-equi_end (const equi_end_type& x)
-{
-  this->equi_end_.set (x);
 }
 
 
@@ -1644,7 +1614,8 @@ output::
 output ()
 : ::xml_schema::type (),
   writeFrequency_ (this),
-  baseName_ (this)
+  baseName_ (this),
+  create_checkpoint_file_ (this)
 {
 }
 
@@ -1654,7 +1625,8 @@ output (const output& x,
         ::xml_schema::container* c)
 : ::xml_schema::type (x, f, c),
   writeFrequency_ (x.writeFrequency_, f, this),
-  baseName_ (x.baseName_, f, this)
+  baseName_ (x.baseName_, f, this),
+  create_checkpoint_file_ (x.create_checkpoint_file_, f, this)
 {
 }
 
@@ -1664,7 +1636,8 @@ output (const ::xercesc::DOMElement& e,
         ::xml_schema::container* c)
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
   writeFrequency_ (this),
-  baseName_ (this)
+  baseName_ (this),
+  create_checkpoint_file_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -1708,6 +1681,17 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // create_checkpoint_file
+    //
+    if (n.name () == "create_checkpoint_file" && n.namespace_ ().empty ())
+    {
+      if (!this->create_checkpoint_file_)
+      {
+        this->create_checkpoint_file_.set (create_checkpoint_file_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     break;
   }
 }
@@ -1727,6 +1711,7 @@ operator= (const output& x)
     static_cast< ::xml_schema::type& > (*this) = x;
     this->writeFrequency_ = x.writeFrequency_;
     this->baseName_ = x.baseName_;
+    this->create_checkpoint_file_ = x.create_checkpoint_file_;
   }
 
   return *this;
@@ -1752,7 +1737,8 @@ parameters ()
   domainSize_ (this),
   cutoff_ (this),
   boundary_ (this),
-  grav_ (this)
+  grav_ (this),
+  import_checkpoint_ (this)
 {
 }
 
@@ -1770,7 +1756,8 @@ parameters (const parameters& x,
   domainSize_ (x.domainSize_, f, this),
   cutoff_ (x.cutoff_, f, this),
   boundary_ (x.boundary_, f, this),
-  grav_ (x.grav_, f, this)
+  grav_ (x.grav_, f, this),
+  import_checkpoint_ (x.import_checkpoint_, f, this)
 {
 }
 
@@ -1788,7 +1775,8 @@ parameters (const ::xercesc::DOMElement& e,
   domainSize_ (this),
   cutoff_ (this),
   boundary_ (this),
-  grav_ (this)
+  grav_ (this),
+  import_checkpoint_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -1926,6 +1914,20 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // import_checkpoint
+    //
+    if (n.name () == "import_checkpoint" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< import_checkpoint_type > r (
+        import_checkpoint_traits::create (i, f, this));
+
+      if (!this->import_checkpoint_)
+      {
+        this->import_checkpoint_.set (::std::move (r));
+        continue;
+      }
+    }
+
     break;
   }
 }
@@ -1953,6 +1955,7 @@ operator= (const parameters& x)
     this->cutoff_ = x.cutoff_;
     this->boundary_ = x.boundary_;
     this->grav_ = x.grav_;
+    this->import_checkpoint_ = x.import_checkpoint_;
   }
 
   return *this;
@@ -2387,6 +2390,98 @@ boundary::
 {
 }
 
+// import_checkpoint
+//
+
+import_checkpoint::
+import_checkpoint (const file_path_type& file_path)
+: ::xml_schema::type (),
+  file_path_ (file_path, this)
+{
+}
+
+import_checkpoint::
+import_checkpoint (const import_checkpoint& x,
+                   ::xml_schema::flags f,
+                   ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  file_path_ (x.file_path_, f, this)
+{
+}
+
+import_checkpoint::
+import_checkpoint (const ::xercesc::DOMElement& e,
+                   ::xml_schema::flags f,
+                   ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  file_path_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void import_checkpoint::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // file_path
+    //
+    if (n.name () == "file_path" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< file_path_type > r (
+        file_path_traits::create (i, f, this));
+
+      if (!file_path_.present ())
+      {
+        this->file_path_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    break;
+  }
+
+  if (!file_path_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "file_path",
+      "");
+  }
+}
+
+import_checkpoint* import_checkpoint::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class import_checkpoint (*this, f, c);
+}
+
+import_checkpoint& import_checkpoint::
+operator= (const import_checkpoint& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->file_path_ = x.file_path_;
+  }
+
+  return *this;
+}
+
+import_checkpoint::
+~import_checkpoint ()
+{
+}
+
 // particle
 //
 
@@ -2399,8 +2494,7 @@ particle (const coordinate_type& coordinate,
   velocity_ (velocity, this),
   mass_ (mass, this),
   epsilon_ (this),
-  sigma_ (this),
-  equi_ (this)
+  sigma_ (this)
 {
 }
 
@@ -2413,8 +2507,7 @@ particle (::std::unique_ptr< coordinate_type > coordinate,
   velocity_ (std::move (velocity), this),
   mass_ (mass, this),
   epsilon_ (this),
-  sigma_ (this),
-  equi_ (this)
+  sigma_ (this)
 {
 }
 
@@ -2427,8 +2520,7 @@ particle (const particle& x,
   velocity_ (x.velocity_, f, this),
   mass_ (x.mass_, f, this),
   epsilon_ (x.epsilon_, f, this),
-  sigma_ (x.sigma_, f, this),
-  equi_ (x.equi_, f, this)
+  sigma_ (x.sigma_, f, this)
 {
 }
 
@@ -2441,8 +2533,7 @@ particle (const ::xercesc::DOMElement& e,
   velocity_ (this),
   mass_ (this),
   epsilon_ (this),
-  sigma_ (this),
-  equi_ (this)
+  sigma_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -2522,20 +2613,6 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
-    // equi
-    //
-    if (n.name () == "equi" && n.namespace_ ().empty ())
-    {
-      ::std::unique_ptr< equi_type > r (
-        equi_traits::create (i, f, this));
-
-      if (!this->equi_)
-      {
-        this->equi_.set (::std::move (r));
-        continue;
-      }
-    }
-
     break;
   }
 
@@ -2579,7 +2656,6 @@ operator= (const particle& x)
     this->mass_ = x.mass_;
     this->epsilon_ = x.epsilon_;
     this->sigma_ = x.sigma_;
-    this->equi_ = x.equi_;
   }
 
   return *this;
@@ -2606,8 +2682,7 @@ disc (const center_type& center,
   meshWidth_ (meshWidth, this),
   radius_ (radius, this),
   epsilon_ (this),
-  sigma_ (this),
-  equi_ (this)
+  sigma_ (this)
 {
 }
 
@@ -2624,8 +2699,7 @@ disc (::std::unique_ptr< center_type > center,
   meshWidth_ (meshWidth, this),
   radius_ (radius, this),
   epsilon_ (this),
-  sigma_ (this),
-  equi_ (this)
+  sigma_ (this)
 {
 }
 
@@ -2640,8 +2714,7 @@ disc (const disc& x,
   meshWidth_ (x.meshWidth_, f, this),
   radius_ (x.radius_, f, this),
   epsilon_ (x.epsilon_, f, this),
-  sigma_ (x.sigma_, f, this),
-  equi_ (x.equi_, f, this)
+  sigma_ (x.sigma_, f, this)
 {
 }
 
@@ -2656,8 +2729,7 @@ disc (const ::xercesc::DOMElement& e,
   meshWidth_ (this),
   radius_ (this),
   epsilon_ (this),
-  sigma_ (this),
-  equi_ (this)
+  sigma_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -2759,20 +2831,6 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
-    // equi
-    //
-    if (n.name () == "equi" && n.namespace_ ().empty ())
-    {
-      ::std::unique_ptr< equi_type > r (
-        equi_traits::create (i, f, this));
-
-      if (!this->equi_)
-      {
-        this->equi_.set (::std::move (r));
-        continue;
-      }
-    }
-
     break;
   }
 
@@ -2832,7 +2890,6 @@ operator= (const disc& x)
     this->radius_ = x.radius_;
     this->epsilon_ = x.epsilon_;
     this->sigma_ = x.sigma_;
-    this->equi_ = x.equi_;
   }
 
   return *this;
@@ -2861,8 +2918,7 @@ cuboid (const cornerCoordinates_type& cornerCoordinates,
   mass_ (mass, this),
   brownianMotion_ (brownianMotion, this),
   epsilon_ (this),
-  sigma_ (this),
-  equi_ (this)
+  sigma_ (this)
 {
 }
 
@@ -2881,8 +2937,7 @@ cuboid (::std::unique_ptr< cornerCoordinates_type > cornerCoordinates,
   mass_ (mass, this),
   brownianMotion_ (brownianMotion, this),
   epsilon_ (this),
-  sigma_ (this),
-  equi_ (this)
+  sigma_ (this)
 {
 }
 
@@ -2898,8 +2953,7 @@ cuboid (const cuboid& x,
   mass_ (x.mass_, f, this),
   brownianMotion_ (x.brownianMotion_, f, this),
   epsilon_ (x.epsilon_, f, this),
-  sigma_ (x.sigma_, f, this),
-  equi_ (x.equi_, f, this)
+  sigma_ (x.sigma_, f, this)
 {
 }
 
@@ -2915,8 +2969,7 @@ cuboid (const ::xercesc::DOMElement& e,
   mass_ (this),
   brownianMotion_ (this),
   epsilon_ (this),
-  sigma_ (this),
-  equi_ (this)
+  sigma_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -3032,20 +3085,6 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
-    // equi
-    //
-    if (n.name () == "equi" && n.namespace_ ().empty ())
-    {
-      ::std::unique_ptr< equi_type > r (
-        equi_traits::create (i, f, this));
-
-      if (!this->equi_)
-      {
-        this->equi_.set (::std::move (r));
-        continue;
-      }
-    }
-
     break;
   }
 
@@ -3113,7 +3152,6 @@ operator= (const cuboid& x)
     this->brownianMotion_ = x.brownianMotion_;
     this->epsilon_ = x.epsilon_;
     this->sigma_ = x.sigma_;
-    this->equi_ = x.equi_;
   }
 
   return *this;
@@ -3121,95 +3159,6 @@ operator= (const cuboid& x)
 
 cuboid::
 ~cuboid ()
-{
-}
-
-// equi
-//
-
-equi::
-equi (const equi_end_type& equi_end)
-: ::xml_schema::type (),
-  equi_end_ (equi_end, this)
-{
-}
-
-equi::
-equi (const equi& x,
-      ::xml_schema::flags f,
-      ::xml_schema::container* c)
-: ::xml_schema::type (x, f, c),
-  equi_end_ (x.equi_end_, f, this)
-{
-}
-
-equi::
-equi (const ::xercesc::DOMElement& e,
-      ::xml_schema::flags f,
-      ::xml_schema::container* c)
-: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
-  equi_end_ (this)
-{
-  if ((f & ::xml_schema::flags::base) == 0)
-  {
-    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
-    this->parse (p, f);
-  }
-}
-
-void equi::
-parse (::xsd::cxx::xml::dom::parser< char >& p,
-       ::xml_schema::flags f)
-{
-  for (; p.more_content (); p.next_content (false))
-  {
-    const ::xercesc::DOMElement& i (p.cur_element ());
-    const ::xsd::cxx::xml::qualified_name< char > n (
-      ::xsd::cxx::xml::dom::name< char > (i));
-
-    // equi_end
-    //
-    if (n.name () == "equi_end" && n.namespace_ ().empty ())
-    {
-      if (!equi_end_.present ())
-      {
-        this->equi_end_.set (equi_end_traits::create (i, f, this));
-        continue;
-      }
-    }
-
-    break;
-  }
-
-  if (!equi_end_.present ())
-  {
-    throw ::xsd::cxx::tree::expected_element< char > (
-      "equi_end",
-      "");
-  }
-}
-
-equi* equi::
-_clone (::xml_schema::flags f,
-        ::xml_schema::container* c) const
-{
-  return new class equi (*this, f, c);
-}
-
-equi& equi::
-operator= (const equi& x)
-{
-  if (this != &x)
-  {
-    static_cast< ::xml_schema::type& > (*this) = x;
-    this->equi_end_ = x.equi_end_;
-  }
-
-  return *this;
-}
-
-equi::
-~equi ()
 {
 }
 
@@ -3755,6 +3704,18 @@ operator<< (::xercesc::DOMElement& e, const output& i)
 
     s << *i.baseName ();
   }
+
+  // create_checkpoint_file
+  //
+  if (i.create_checkpoint_file ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "create_checkpoint_file",
+        e));
+
+    s << *i.create_checkpoint_file ();
+  }
 }
 
 void
@@ -3880,6 +3841,18 @@ operator<< (::xercesc::DOMElement& e, const parameters& i)
         e));
 
     s << ::xml_schema::as_double(*i.grav ());
+  }
+
+  // import_checkpoint
+  //
+  if (i.import_checkpoint ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "import_checkpoint",
+        e));
+
+    s << *i.import_checkpoint ();
   }
 }
 
@@ -4034,6 +4007,23 @@ operator<< (::xercesc::DOMElement& e, const boundary& i)
 }
 
 void
+operator<< (::xercesc::DOMElement& e, const import_checkpoint& i)
+{
+  e << static_cast< const ::xml_schema::type& > (i);
+
+  // file_path
+  //
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "file_path",
+        e));
+
+    s << i.file_path ();
+  }
+}
+
+void
 operator<< (::xercesc::DOMElement& e, const particle& i)
 {
   e << static_cast< const ::xml_schema::type& > (i);
@@ -4093,18 +4083,6 @@ operator<< (::xercesc::DOMElement& e, const particle& i)
         e));
 
     s << ::xml_schema::as_double(*i.sigma ());
-  }
-
-  // equi
-  //
-  if (i.equi ())
-  {
-    ::xercesc::DOMElement& s (
-      ::xsd::cxx::xml::dom::create_element (
-        "equi",
-        e));
-
-    s << *i.equi ();
   }
 }
 
@@ -4190,18 +4168,6 @@ operator<< (::xercesc::DOMElement& e, const disc& i)
         e));
 
     s << ::xml_schema::as_double(*i.sigma ());
-  }
-
-  // equi
-  //
-  if (i.equi ())
-  {
-    ::xercesc::DOMElement& s (
-      ::xsd::cxx::xml::dom::create_element (
-        "equi",
-        e));
-
-    s << *i.equi ();
   }
 }
 
@@ -4298,35 +4264,6 @@ operator<< (::xercesc::DOMElement& e, const cuboid& i)
         e));
 
     s << ::xml_schema::as_double(*i.sigma ());
-  }
-
-  // equi
-  //
-  if (i.equi ())
-  {
-    ::xercesc::DOMElement& s (
-      ::xsd::cxx::xml::dom::create_element (
-        "equi",
-        e));
-
-    s << *i.equi ();
-  }
-}
-
-void
-operator<< (::xercesc::DOMElement& e, const equi& i)
-{
-  e << static_cast< const ::xml_schema::type& > (i);
-
-  // equi_end
-  //
-  {
-    ::xercesc::DOMElement& s (
-      ::xsd::cxx::xml::dom::create_element (
-        "equi_end",
-        e));
-
-    s << ::xml_schema::as_double(i.equi_end ());
   }
 }
 

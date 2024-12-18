@@ -159,6 +159,9 @@ public:
     double getGrav();
     void setGrav(double gravArg);
 
+    bool getCheckpoint();
+    void setCheckpoint(bool checkpoingArg);
+
 private:
     SimulationType simType;
     double startTime;
@@ -179,4 +182,5 @@ private:
     double maxDeltaTemp;
     bool thermostat;
     double grav;
+    bool checkpoint;
 };

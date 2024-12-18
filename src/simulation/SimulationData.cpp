@@ -265,3 +265,11 @@ void SimulationData::setGrav(double gravArg) {
 double SimulationData::getGrav(){
     return this->grav;
 }
+
+bool SimulationData::getCheckpoint() {
+    return this->checkpoint;
+}
+
+void SimulationData::setCheckpoint(bool checkpoingArg) {
+    this->checkpoint = checkpoingArg;
+}

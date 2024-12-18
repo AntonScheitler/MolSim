@@ -109,6 +109,10 @@ void Particle::setSigma(double sigmaArg) {
     Particle::sigma = sigmaArg;
 }
 
+void Particle::setType(int typeArg) {
+    Particle::type = typeArg;
+}
+
 void Particle::setEpsilon(double epsilonArg) {
     Particle::epsilon = epsilonArg;
 }
