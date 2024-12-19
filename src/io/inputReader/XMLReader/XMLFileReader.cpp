@@ -47,14 +47,14 @@ namespace inputReader {
 
             std::unique_ptr<simulation> simParser = simulation_(inputFile, xml_schema::flags::dont_validate);
 
-            std::ostringstream command;
-            command << "xmllint --noout --schema ../src/io/inputReader/xml/simulation.xsd " << filename;
-            int result = std::system(command.str().c_str());
+//            std::ostringstream command;
+//            command << "xmllint --noout --schema ../src/io/inputReader/xml/simulation.xsd " << filename;
+//            int result = std::system(command.str().c_str());
 
-            if (!(result == 0 || result == 32512)) {
-                std::cerr << "Error in xml file: scheme does not validate " << std::endl;
-                exit(-1);
-            }
+//            if (!(result == 0 || result == 32512)) {
+//                std::cerr << "Error in xml file: scheme does not validate " << std::endl;
+//                exit(-1);
+//            }
 
             // use linked cell if specified
             auto parameters = simParser->parameters();
