@@ -60,8 +60,15 @@ private:
      */
     int type;
 
+
+    /**
+     * @brief the epsilon value of this particle
+     */
     double epsilon;
 
+    /**
+     * @brief the sigma value of this particle
+     */
     double sigma;
 
 public:
@@ -176,14 +183,34 @@ public:
     std::string toString() const;
 
 
+    /**
+     * @brief returns the sigma value of this particle
+     * @return the sigma value
+     */
     double getSigma() const;
 
+    /**
+     * @brief sets the sigma value of this particle
+     * @param sigma the sigma value
+     */
     void setSigma(double sigma);
 
+    /**
+     * @brief returns the epsilon value of this particle
+     * @return the epsilon value
+     */
     double getEpsilon() const;
 
+    /**
+     * @brief sets the epsilon value of this particle
+     * @param epsilon the epsilon value
+     */
     void setEpsilon(double epsilon);
 
+    /**
+     * @brief sets the type of this particle (to differentiate between different objects consisting of particles)
+     * @param typeArg the type of this particle
+     */
     void setType(int typeArg);
 };
 

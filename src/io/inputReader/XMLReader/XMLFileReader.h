@@ -35,7 +35,13 @@ namespace inputReader {
          * @brief the simulationData where the read information is saved to
          */
         SimulationData &simData;
-        static BoundaryType getEnum(const std::string& b);
+
+        /**
+         * @brief get BoundaryType enum value based of name
+         * @param b name of type, either reflecting, periodic or outflowing
+         * @return the BoundaryType enum value
+         */
+        static BoundaryType getEnum(const std::string &b);
 
     };
 } // namespace inputReader

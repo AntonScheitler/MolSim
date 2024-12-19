@@ -5,7 +5,6 @@
 #include "spdlogConfig.h"
 
 
-
 namespace inputReader {
 
     CheckpointReader::CheckpointReader(SimulationData &simulationDataArg) : simData(simulationDataArg) {
@@ -79,7 +78,7 @@ namespace inputReader {
 
                 datastream >> sigma;
 
-                if(maxType < type){
+                if (maxType < type) {
                     maxType = type;
                 }
                 Particle p = Particle(x, v, m);

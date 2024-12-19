@@ -50,7 +50,7 @@ public:
     SimulationType getSimType();
 
     /**
-     * @brief set simulation type
+     * @brief set start time of the simulation
      * @param startTime new start time
      */
     void setStartTime(double startTime);
@@ -61,7 +61,7 @@ public:
     double getStartTime();
 
     /**
-     * @brief set simulation type
+     * @brief set end time of the simulation
      * @param endTime new end time
      */
     void setEndTime(double endTime);
@@ -72,7 +72,7 @@ public:
     double getEndTime();
 
     /**
-     * @brief set simulation type
+     * @brief set delta t (time step size)
      * @param deltaT new deltaT
      */
     void setDeltaT(double deltaT);
@@ -82,26 +82,25 @@ public:
      */
     double getDeltaT();
 
-
     /**
-     * @brief set simulation type
+     * @brief set epsilon
      * @param epsilon new epsilon
      */
     void setEpsilon(double epsilon);
 
     /**
-     * @brief returns the time step size of the simulation
+     * @brief returns epsilon of the simulation
      */
     double getEpsilon();
 
     /**
-     * @brief set simulation type
+     * @brief set sigma
      * @param sigma new sigma
      */
     void setSigma(double sigma);
 
     /**
-     * @brief returns the time step size of the simulation
+     * @brief returns sigma of the simulation
      */
     double getSigma();
 
@@ -114,19 +113,34 @@ public:
      * @brief sets particles to a copy of particlesArg
      * @param particlesArg the particles to copy
      */
-    //template <typename T>
-    //typename std::enable_if<std::is_base_of<ParticleContainer, T>::value, void>::type
-
     void setParticlesCopy(ParticleContainer &particlesArg);
 
+    /**
+     * @brief sets the particles of this simulation
+     * @param particles
+     */
     void setParticles(std::unique_ptr<ParticleContainer> particles);
 
+    /**
+     * @brief returns the base name of this simulationData
+     */
     std::string getBaseName();
 
+    /**
+     * @brief sets the base name of this simulationData
+     * @param baseName new base name
+     */
     void setBaseName(const std::string &baseName);
 
+    /**
+     * @brief returns the write frequency, i.e. the number of iterations after which an output file is created
+     */
     int getWriteFrequency() const;
 
+    /**
+     * @brief sets the output file write frequency
+     * @param writeFrequency the new write frequency
+     */
     void setWriteFrequency(int writeFrequency);
 
     /**
@@ -134,36 +148,98 @@ public:
      */
     bool getBench();
 
+    /**
+     * @brief sets the average velocity
+     * @param averageVelocityArg new average velocity
+     */
     void setAverageVelocity(double averageVelocityArg);
 
+    /**
+     * @brief returns the average velocity
+     */
     double getAverageVelocity();
 
     //thermo
+    /**
+     * @brief returns the frequency at which the thermostat is applied (after which number of iterations)
+     */
     size_t getThermoFrequency();
+
+    /**
+     * @brief returns the initial temperature of the system
+     */
     double getInitialTemp();
+
+    /**
+     * @brief returns the target temperature of the system
+     */
     double getTargetTemp();
+
+    /**
+     * @brief returns the maximum temperature difference in one application of the thermostat
+     */
     double getMaxDeltaTemp();
 
-
+    /**
+     * @brief sets the thermostat frequency
+     * @param thermoFrequencyArg new thermostat frequency
+     */
     void setThermoFrequency(size_t thermoFrequencyArg);
+
+    /**
+     * @brief sets the initial temperature
+     * @param initialTempArg
+     */
     void setInitialTemp(double initialTempArg);
+
+    /**
+     * @brief sets the target temperature of the system
+     * @param targetTempArg the new target temperature
+     */
     void setTargetTemp(double targetTempArg);
+
+    /**
+     * @brief sets the maximum temperature difference of this system
+     * @param maxDeltaTempArg new maximum delta t
+     */
     void setMaxDeltaTemp(double maxDeltaTempArg);
 
-
+    /**
+     * @brief activates the thermostat (i.e. thermostat gets applied in thermoFrequency to the system)
+     */
     void activateThermostat();
+
+    /**
+     * @brief deactivates the thermostat
+     */
     void deactivateThermostat();
 
+    /**
+     * @brief returns true if the thermostat as activated (with activateThermostat())
+     */
     bool isThermostat();
 
-
+    /**
+     * @brief returns the gravitational acceleration
+     */
     double getGrav();
+
+    /**
+     * @brief sets the gravitational acceleration
+     * @param gravArg new gravity
+     */
     void setGrav(double gravArg);
 
-
+    /**
+     * @brief returns true if checkpoint is activated
+     */
     bool getCheckpoint();
-    void setCheckpoint(bool checkpoingArg);
 
+    /**
+     * @brief sets whether checkpointing is activated
+     * @param checkpoingArg if checkpointing should be activated
+     */
+    void setCheckpoint(bool checkpoingArg);
 
 private:
     SimulationType simType;

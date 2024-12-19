@@ -4,11 +4,10 @@
 #include <iostream>
 
 
-
 namespace ParameterParser {
 
     void readParams(SimulationData &simData, const std::unique_ptr<simulation> &xmlParser) {
-        try{
+        try {
             if (xmlParser->parameters().present()) {
                 if (xmlParser->parameters()->delta_t().present()) {
                     simData.setDeltaT(xmlParser->parameters()->delta_t().get());
@@ -37,29 +36,32 @@ namespace ParameterParser {
                 if (xmlParser->output()->writeFrequency().present()) {
                     simData.setWriteFrequency(xmlParser->output()->writeFrequency().get());
                 }
-                if (xmlParser->output()->create_checkpoint_file().present()){
+                if (xmlParser->output()->create_checkpoint_file().present()) {
                     simData.setCheckpoint(xmlParser->output()->create_checkpoint_file().get());
-                }else{
+                } else {
                     simData.setCheckpoint(false);
                 }
             }
         } catch (const xml_schema::exception &e) {
-        std::cerr << "XML parsing error: " << e.what() << std::endl;
-        exit(-1);
+            std::cerr << "XML parsing error: " << e.what() << std::endl;
+            exit(-1);
         } catch (const std::exception &e) {
             std::cerr << "Standard exception: " << e.what() << std::endl;
             exit(-1);
         }
     }
+
     void readThermo(SimulationData &simData, const std::unique_ptr<simulation> &xmlParser) {
-        try{
-            if(xmlParser->thermo().present()){
+        try {
+            if (xmlParser->thermo().present()) {
                 simData.activateThermostat();
                 simData.setInitialTemp(xmlParser->thermo()->init_T());
                 simData.setThermoFrequency(xmlParser->thermo()->n());
-                double targetTempArg = (xmlParser->thermo()->target().present()) ? (xmlParser->thermo()->target().get()) : xmlParser->thermo()->init_T();
+                double targetTempArg = (xmlParser->thermo()->target().present()) ? (xmlParser->thermo()->target().get())
+                                                                                 : xmlParser->thermo()->init_T();
                 simData.setTargetTemp(targetTempArg);
-                double maxStep =  (xmlParser->thermo()->maxStep().present()) ? (xmlParser->thermo()->maxStep().get()) : std::numeric_limits<double>::infinity();
+                double maxStep = (xmlParser->thermo()->maxStep().present()) ? (xmlParser->thermo()->maxStep().get())
+                                                                            : std::numeric_limits<double>::infinity();
                 simData.setMaxDeltaTemp(maxStep);
             }
         } catch (const xml_schema::exception &e) {

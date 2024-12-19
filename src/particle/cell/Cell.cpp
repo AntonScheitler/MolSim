@@ -21,7 +21,7 @@ std::vector<size_t> &Cell::getParticlesIndices() {
 
 void Cell::removeParticle(size_t deleteIdx) {
     auto it = std::find_if(particleIndices.begin(), particleIndices.end(),
-                   [deleteIdx](const size_t currIdx) { return currIdx == deleteIdx; });
+                           [deleteIdx](const size_t currIdx) { return currIdx == deleteIdx; });
     if (it == particleIndices.end()) {
         SPDLOG_ERROR("SOMETHING VERY TERRIBLE HAS HAPPENED :(");
         exit(EXIT_FAILURE);

@@ -11,6 +11,7 @@ namespace outputWriter {
     public:
 
         CheckpointWriter(std::string baseName);
+
         /**
          * @brief plots particles and writes them to a vtk file
          */
@@ -28,7 +29,6 @@ namespace outputWriter {
          * @note: initializeOutput() must have been called before.
          */
         std::string plotParticle(Particle &p);
-
 
 
     };

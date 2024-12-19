@@ -162,7 +162,7 @@ namespace inputReader {
         }
     }
 
-    BoundaryType XMLFileReader::getEnum(const std::string& b) {
+    BoundaryType XMLFileReader::getEnum(const std::string &b) {
         if (b == "reflecting") {
             return reflect;
         } else if (b == "periodic") {

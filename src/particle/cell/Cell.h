@@ -35,13 +35,13 @@ public:
     std::vector<size_t> &getParticlesIndices();
 
     /**
-     * returns the number of particles that are stored in this cell
+     * @brief returns the number of particles that are stored in this cell
      * @return number number of particles
      */
     int size();
 
     /**
-     * used for comparing this cell to another cell for equality
+     * @brief used for comparing this cell to another cell for equality
      * @param other the other cell
      * @return
      */

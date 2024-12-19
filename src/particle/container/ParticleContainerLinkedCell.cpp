@@ -1,6 +1,4 @@
 #include <cmath>
-#include <cstdio>
-#include <cstdlib>
 #include <memory>
 #include <particle/container/ParticleContainerLinkedCell.h>
 #include "particle/Particle.h"

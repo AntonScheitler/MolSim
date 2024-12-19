@@ -12,6 +12,7 @@
 #include <array>
 #include <iostream>
 
+
 size_t Particle::nextId = 0;
 
 Particle::Particle(int typeArg) {
@@ -48,8 +49,8 @@ Particle::Particle(std::array<double, 3> xArg, std::array<double, 3> vArg,
     SPDLOG_DEBUG("Particle generated!");
 }
 
-Particle::~Particle() { 
-    SPDLOG_DEBUG("Particle destructed!"); 
+Particle::~Particle() {
+    SPDLOG_DEBUG("Particle destructed!");
 }
 
 const std::array<double, 3> &Particle::getX() const { return x; }

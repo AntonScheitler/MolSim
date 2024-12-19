@@ -1,6 +1,5 @@
 #include <array>
 #include <cmath>
-#include <iterator>
 #include <utility>
 #include "../../utils/ArrayUtils.h"
 #include "particle/container/ParticleContainer.h"
@@ -9,7 +8,6 @@
 
 //std::map<std::pair<double, double>, double> ForceComputations::epsilons;
 //std::map<std::pair<double, double>, double> ForceComputations::sigmas;
-
 
 
 void ForceComputations::computeGravity(ParticleContainer &particles) {
@@ -39,10 +37,10 @@ void ForceComputations::computeLennardJonesPotential(ParticleContainer &particle
     for (auto it = particles.beginPairParticle(); *it != *(particles.endPairParticle()); it->operator++()) {
         std::pair<Particle &, Particle &> pair = **it;
 
-        if(pair.first.getSigma() != pair.second.getSigma()){
-            sigma = (pair.first.getSigma() + pair.second.getSigma())/2;
+        if (pair.first.getSigma() != pair.second.getSigma()) {
+            sigma = (pair.first.getSigma() + pair.second.getSigma()) / 2;
         }
-        if(pair.first.getEpsilon() != pair.second.getEpsilon()){
+        if (pair.first.getEpsilon() != pair.second.getEpsilon()) {
             epsilon = sqrt(pair.first.getEpsilon() * pair.second.getSigma());
         }
 
@@ -64,12 +62,14 @@ void ForceComputations::computeLennardJonesPotential(ParticleContainer &particle
     }
 }
 
-void ForceComputations::computeLennardJonesPotentialCutoff(ParticleContainerLinkedCell &particles, double epsilon, double sigma, double cutoff) {
+void ForceComputations::computeLennardJonesPotentialCutoff(ParticleContainerLinkedCell &particles, double epsilon,
+                                                           double sigma, double cutoff) {
     // iterate through all pairs of particles and calculate lennard-jones potential
     for (auto it = particles.beginPairParticle(); *it != *(particles.endPairParticle()); it->operator++()) {
         std::pair<Particle &, Particle &> pair = **it;
 
-        std::array<double, 3> distanceVector = ArrayUtils::elementWisePairOp(pair.first.getX(), pair.second.getX(), std::minus<>());
+        std::array<double, 3> distanceVector = ArrayUtils::elementWisePairOp(pair.first.getX(), pair.second.getX(),
+                                                                             std::minus<>());
         particles.getPeriodicDistanceVector(pair.first.getX(), pair.second.getX(), distanceVector);
         double distance = ArrayUtils::L2Norm(distanceVector);
         // don't consider particles which are further apart than the cutoff radius

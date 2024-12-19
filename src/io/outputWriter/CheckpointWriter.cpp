@@ -14,13 +14,13 @@
 #include <iostream>
 #include <string>
 
+
 namespace outputWriter {
 
-    CheckpointWriter::CheckpointWriter(std::string baseName) : baseName(baseName){
+    CheckpointWriter::CheckpointWriter(std::string baseName) : baseName(baseName) {
         this->logger = spdlog::stdout_color_st("CheckpointWriter");
         SPDLOG_LOGGER_DEBUG(logger, "Initialized CheckpointWriter");
     }
-
 
 
     void CheckpointWriter::plotParticles(ParticleContainer &particles, int iteration) {
@@ -52,7 +52,7 @@ namespace outputWriter {
 
         particleParams << " " << p.getF()[0] << " " << p.getF()[1] << " " << p.getF()[2] << "    ";
 
-        particleParams << " " << p.getOldF()[0] << " " << p.getOldF()[1] << " " << p.getOldF()[2]<< "    ";
+        particleParams << " " << p.getOldF()[0] << " " << p.getOldF()[1] << " " << p.getOldF()[2] << "    ";
 
         particleParams << p.getM() << "    ";
 
