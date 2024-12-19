@@ -106,10 +106,12 @@ bool ParticleContainerLinkedCell::correctCellMembershipSingleParticle(size_t par
         SPDLOG_DEBUG("removing particle from cell {0}", oldCellIndex);
         // check if the cell is still within bounds
         if (newCellIndex != -1) {
-            if (mesh[oldCellIndex].isBoundary) {
+            if (mesh[oldCellIndex].isBoundary)
+            {
                 particle.setX(applyPeriodicBoundaries(particle.getX()));
             }
             mesh[newCellIndex].addParticleIdx(particleIdx);
+            particle.setOldX(particle.getX());
             SPDLOG_DEBUG("adding particle into cell {0}", newCellIndex);
         } else
             SPDLOG_DEBUG("particle outflowing");
