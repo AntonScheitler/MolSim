@@ -76,6 +76,7 @@ namespace inputReader {
                 simData.setParticles(std::move(containerDirectSum));
             }
             ParameterParser::readParams(simData, simParser);
+            ParameterParser::readThermo(simData, simParser);
 
             if (simParser->parameters()->import_checkpoint().present()) {
                 CheckpointReader checkpointReader(simData);
