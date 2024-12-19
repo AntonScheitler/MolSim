@@ -96,6 +96,27 @@ void Particle::setOldX(std::array<double, 3> oldXArg) {
     this->oldX = oldXArg;
 }
 
+
+double Particle::getEpsilon() const {
+    return epsilon;
+}
+
+double Particle::getSigma() const {
+    return sigma;
+}
+
+void Particle::setSigma(double sigmaArg) {
+    Particle::sigma = sigmaArg;
+}
+
+void Particle::setType(int typeArg) {
+    Particle::type = typeArg;
+}
+
+void Particle::setEpsilon(double epsilonArg) {
+    Particle::epsilon = epsilonArg;
+}
+
 std::ostream &operator<<(std::ostream &stream, Particle &p) {
     stream << p.toString();
     return stream;

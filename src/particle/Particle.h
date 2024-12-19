@@ -59,6 +59,11 @@ private:
      * molecules belonging to different bodies, matters, and so on)
      */
     int type;
+
+    double epsilon;
+
+    double sigma;
+
 public:
     explicit Particle(int typeArg = 0);
 
@@ -110,6 +115,7 @@ public:
      * @param newV new velocity
      */
     void setV(std::array<double, 3> newV);
+
 
     /**
      * @brief Get the force acting on this particle
@@ -168,6 +174,17 @@ public:
      * @brief converts information about this particle into a string
      */
     std::string toString() const;
+
+
+    double getSigma() const;
+
+    void setSigma(double sigma);
+
+    double getEpsilon() const;
+
+    void setEpsilon(double epsilon);
+
+    void setType(int typeArg);
 };
 
 std::ostream &operator<<(std::ostream &stream, Particle &p);

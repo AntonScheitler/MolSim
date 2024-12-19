@@ -7,7 +7,7 @@
 namespace inputReader {
     void
     ParticleGenerator::generateCuboid(ParticleContainer &particles, std::array<double, 3> x, std::array<double, 3> v,
-                                      std::array<int, 3> d, double m, double h, int type) {
+                                      std::array<int, 3> d, double m, double h, int type, double e, double s) {
         std::array<double, 3> tempx{};
         for (int j = 0; j < d[0]; ++j) {
             tempx[0] = j * h + x[0];
@@ -16,14 +16,17 @@ namespace inputReader {
                 for (int l = 0; l < d[2]; ++l) {
                     tempx[2] = l * h + x[2];
 
-                    particles.addParticle(Particle(tempx, v, m, type));
+                    Particle temp = Particle(tempx, v, m, type);
+                    temp.setSigma(s);
+                    temp.setEpsilon(e);
+                    particles.addParticle(temp);
                 }
             }
         }
     }
 
     void ParticleGenerator::generateDisc(ParticleContainer &particles, std::array<double, 3> center,
-                                         std::array<double, 3> v, double r, double m, double h, int type) {
+                                         std::array<double, 3> v, double r, double m, double h, int type, double e, double s) {
 
         SPDLOG_INFO("starting disc generator");
         for (int i = 0; i <= r; ++i) {
@@ -44,7 +47,10 @@ namespace inputReader {
                 double y = currentRadius * sin(angle);
 
                 std::array<double, 3> tempx = {center[0] + x, center[1] + y, center[2]};
-                particles.addParticle(Particle(tempx, v, m, type));
+                Particle temp = Particle(tempx, v, m, type);
+                temp.setSigma(s);
+                temp.setEpsilon(e);
+                particles.addParticle(temp);
             }
         }
         SPDLOG_INFO("ending disc generator");

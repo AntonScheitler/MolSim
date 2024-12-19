@@ -17,22 +17,22 @@ public:
     Cell(bool isBoundaryCell, size_t cellIdArg);
 
     /**
-     * @brief adds a particle to the cell
-     * @param particle the particle to add
+     * @brief makes a particle a member of this cell by adding it's index to particleIndices
+     * @param idx the index of the particle to be added
      */
-    void addParticle(const Particle &particle);
+    void addParticleIdx(const size_t idx);
 
     /**
      * @brief removes the specified particle from the cell
-     * @param particle the particle to remove
+     * @param idx the index of the particle to remove
      */
-    void removeParticle(size_t particleId);
+    void removeParticle(const size_t idx);
 
     /**
-     * @brief returns the particles that are stored in this cell
-     * @return the particles as a vector
+     * @brief returns the indices of particles that are stored in this cell
+     * @return the particle indices as a vector
      */
-    std::vector<Particle> &getParticles();
+    std::vector<size_t> &getParticlesIndices();
 
     /**
      * returns the number of particles that are stored in this cell
@@ -54,9 +54,9 @@ public:
 
 private:
     /**
-     * @brief the vector which stores all particles of this cell
+     * @brief the vector which stores the indices of the particles that are members of this cell
      */
-    std::vector<Particle> particles;
+    std::vector<size_t> particleIndices;
     /**
      * @brief the id of this cell (used for comparing cells)
      */

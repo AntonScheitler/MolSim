@@ -1,3 +1,4 @@
+#pragma once
 #include "particle/container/ParticleContainerDirectSum.h"
 
 /**

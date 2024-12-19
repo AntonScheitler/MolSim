@@ -1,49 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <simulation>
+    <output>
+        <baseName>checkpointer</baseName>
+    </output>
     <parameters>
-
+        <delta_t>0.005</delta_t>
+        <t_end>5</t_end>
+        <epsilon>5</epsilon>
+        <sigma>1.0</sigma>
+        <containerType>linked</containerType>
+        <domainSize>
+            <x>180</x>
+            <y>90</y>
+            <z>1</z>
+        </domainSize>
+        <cutoff>3.0</cutoff>
+        <boundary>
+            <xTop>outflow</xTop>
+            <xBottom>outflow</xBottom>
+            <yLeft>outflow</yLeft>
+            <yRight>outflow</yRight>
+        </boundary>
+        <import_checkpoint>
+            <file_path>../input/checkpoint_File.txt</file_path>
+        </import_checkpoint>
     </parameters>
     <clusters>
-        <cuboid>
-            <cornerCoordinates>
-                <x>0.0</x>
-                <y>0.0</y>
-                <z>0.0</z>
-            </cornerCoordinates>
-            <dimensions>
-                <x>40</x>
-                <y>8</y>
-                <z>1</z>
-            </dimensions>
+        <disc>
+            <center>
+                <x>60</x>
+                <y>70</y>
+                <z>0</z>
+            </center>
             <velocity>
-                <x>0.0</x>
-                <y>0.0</y>
-                <z>0.0</z>
+                <x>0</x>
+                <y>-10</y>
+                <z>0</z>
             </velocity>
-            <meshWidth>1.1225</meshWidth>
             <mass>1.0</mass>
-            <brownianMotion>0.1</brownianMotion>
-        </cuboid>
-        <cuboid>
-            <cornerCoordinates>
-                <x>15.0</x>
-                <y>15.0</y>
-                <z>0.0</z>
-            </cornerCoordinates>
-            <dimensions>
-                <x>8</x>
-                <y>8</y>
-                <z>1</z>
-            </dimensions>
-            <velocity>
-                <x>0.0</x>
-                <y>-10.0</y>
-                <z>0.0</z>
-            </velocity>
             <meshWidth>1.1225</meshWidth>
-            <mass>1.0</mass>
-            <brownianMotion>0.1</brownianMotion>
-        </cuboid>
+            <radius>15</radius>
+        </disc>
     </clusters>
 </simulation>
