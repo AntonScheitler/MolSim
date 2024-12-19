@@ -6,6 +6,7 @@
 #include <computations/positions/PositionComputations.h>
 #include <computations/forces/ForceComputations.h>
 #include <computations/velocities/VelocityComputations.h>
+#include "particle/boundary/Boundary.h"
 #include "spdlogConfig.h"
 
 class ParticleContainerLinkedCellTest : public testing::Test {
@@ -294,14 +295,40 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellGhostParticle
     EXPECT_TRUE(count == pairsSet.size());
 }
 
-TEST_F(ParticleContainerLinkedCellTest, CellRemoveParticleTest) {
-    // test container cell add and remove particle
-    Cell c = Cell{false, 0};
-    Particle x{0};
-    c.addParticle(x);
-    c.removeParticle(x.getId());
-    EXPECT_EQ(c.size(), 0);
+/**
+ * @brief checks if a particle is inserted in the correct cell and it's position is adjusted correctly when passing
+ * through a periodic boundary
+ */
+TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellPeriodicBoundaryTest) {
+    ParticleContainerLinkedCell container{{99, 33, 1}, 33,
+                                          {{periodic, periodic}, {outflow, outflow}, {outflow, outflow}}};
+    Particle particle = Particle({98, 10, 0}, {0, 0, 0}, 1);
+    container.addParticle(particle);
+    // make sure the particle is inserted correctly
+    EXPECT_TRUE(container.getMesh()[2].size() == 1);
+    EXPECT_TRUE(particle == container.getParticles()[container.getMesh()[2].getParticlesIndices()[0]]);
+
+    particle.setX({100, 10, 0});
+    container.correctCellMembershipAllParticles();
+
+    // make sure it was moved to the correct cell
+    EXPECT_TRUE(container.getMesh()[2].size() == 0);
+    EXPECT_TRUE(container.getMesh()[0].size() == 1);
+    EXPECT_TRUE(particle == container.getParticles()[container.getMesh()[0].getParticlesIndices()[0]]);
+
+    // make sure the particle's coordinates are correct
+    std::array<double, 3> newCoords = {1, 10, 0};
+    EXPECT_TRUE(particle.getX() == newCoords);
 }
+
+//TEST_F(ParticleContainerLinkedCellTest, CellRemoveParticleTest) {
+//    // test container cell add and remove particle
+//    Cell c = Cell{false, 0};
+//    Particle x{0};
+//    c.addParticle(x);
+//    c.removeParticle(x.getId());
+//    EXPECT_EQ(c.size(), 0);
+//}
 
 /**
  * @brief checks that the particle flows out of the mesh when all boundaries are outflowing

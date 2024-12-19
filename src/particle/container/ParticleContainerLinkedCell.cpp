@@ -198,6 +198,9 @@ std::vector<Cell> &ParticleContainerLinkedCell::getMesh() {
     return mesh;
 }
 
+std::vector<Particle>& ParticleContainerLinkedCell::getParticles() {
+    return particles;
+}
 
 Cell &ParticleContainerLinkedCell::getCell(int idx) {
     return mesh[idx];

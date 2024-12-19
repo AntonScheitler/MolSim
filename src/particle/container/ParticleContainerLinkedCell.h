@@ -95,6 +95,7 @@ public:
     void computeNeighborCellsMatrix();
 
     std::vector<Cell> &getMesh();
+    std::vector<Particle>& getParticles();
 
     Cell &getCell(int idx);
 
