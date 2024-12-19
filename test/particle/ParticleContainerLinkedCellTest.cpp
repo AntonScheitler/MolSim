@@ -351,173 +351,174 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellPeriodicBound
 }
 
 
-//TEST_F(ParticleContainerLinkedCellTest, CellRemoveParticleTest) {
-//    // test container cell add and remove particle
-//    Cell c = Cell{false, 0};
-//    Particle x{0};
-//    c.addParticle(x);
-//    c.removeParticle(x.getId());
-//    EXPECT_EQ(c.size(), 0);
-//}
+/**
+ * @brief checks if particleIndices can be added to and removed from a cell
+ */
+TEST_F(ParticleContainerLinkedCellTest, CellRemoveParticleTest) {
+    // test container cell add and remove particle
+    Cell c = Cell{false, 0};
+    c.addParticleIdx(0);
+    c.removeParticle(0);
+    EXPECT_EQ(c.size(), 0);
+}
 
 /**
  * @brief checks that the particle flows out of the mesh when all boundaries are outflowing
  */
-//TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryOutflowTest) {
-//
-//    ParticleContainerLinkedCell container{{3, 3, 1}, 1, {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}};
-//
-//    /*            outflow
-//     *           +-------+
-//     *           |       |
-//     *   outflow |       | outflow (x)
-//     *           +-------+
-//     *            outflow (y)
-//     */
-//
-//    // particle a should move out of the high x boundary (outflow) (cell 17)
-//    Particle a{{1.0, 1.0, 0}, {1.0, 0, 0}, 1, 0};
-//
-//    container.addParticle(a);
-//
-//    double deltaT = 0.002;
-//    double epsilon = 5;
-//    double sigma = 1;
-//
-//    // run simulation step
-//    int iterations = 2000;
-//    for (int i = 0; i < iterations; i++) {
-//        PositionComputations::updateOldX(container);
-//        PositionComputations::stoermerVerlet(container, deltaT);
-//        container.correctAllParticleIndices();
-//
-//        ForceComputations::resetForces(container);
-//        ForceComputations::computeLennardJonesPotential(container, epsilon,
-//                                                        sigma);
-//        ForceComputations::computeGhostParticleRepulsion(container, epsilon,
-//                                                         sigma);
-//        VelocityComputations::stoermerVerlet(container, deltaT);
-//    }
-//
-//    // check
-//    bool particlePresent = false;
-//    for(int i = 0; i < container.getMesh().size(); i++) {
-//        Cell& c = container.getCell(i);
-//        auto particles = c.getParticles();
-//        if(!particles.empty()) {
-//            particlePresent = true;
-//        }
-//    }
-//    // expect that particle a (type 0) is not in the container anymore
-//    EXPECT_FALSE(particlePresent);
-//}
-//
-///**
-// * @brief checks that the particles stays in the mesh when all boundaries are reflecting
-// */
-//TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryReflectTest) {
-//
-//    ParticleContainerLinkedCell container{{3, 3, 1}, 1, {{reflect, reflect}, {reflect, reflect}, {outflow, outflow}}};
-//
-//    /*            reflect
-//     *           +-------+
-//     *           |       |
-//     *   reflect |       | reflect (x)
-//     *           +-------+
-//     *            reflect (y)
-//     */
-//
-//    // particle b should reflect at the low y boundary (cell 12)
-//    Particle b{{1.0, 1.0, 0}, {0, 1.0, 0}, 1, 1};
-//
-//    container.addParticle(b);
-//
-//    // deltaT needs to be small enough for reflecting
-//    double deltaT = 0.0002;
-//    double epsilon = 5;
-//    double sigma = 1;
-//
-//    // run simulation step
-//    int iterations = 100;
-//    for (int i = 0; i < iterations; i++) {
-//        PositionComputations::updateOldX(container);
-//        PositionComputations::stoermerVerlet(container, deltaT);
-//        container.correctAllParticleIndices();
-//
-//        ForceComputations::resetForces(container);
-//        ForceComputations::computeLennardJonesPotential(container, epsilon,
-//                                                        sigma);
-//        ForceComputations::computeGhostParticleRepulsion(container, epsilon,
-//                                                         sigma);
-//        VelocityComputations::stoermerVerlet(container, deltaT);
-//    }
-//
-//    // check that particle is present
-//    bool particlePresent = false;
-//    for (int i = 0; i < container.getMesh().size(); i++) {
-//        Cell &c = container.getCell(i);
-//        auto particles = c.getParticles();
-//        if (!particles.empty()) {
-//            EXPECT_EQ(particles[0].getType(), 1);
-//            particlePresent = true;
-//        }
-//    }
-//    // particle b should still be in the container
-//    EXPECT_TRUE(particlePresent);
-//}
+TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryOutflowTest) {
 
-//
-///**
-// * @brief checks that the particle stays in the mesh when all boundaries are reflecting and the particle
-// * moves diagonally onto one corner
-// */
-//TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellDiagonalBoundaryTest) {
-//
-//    ParticleContainerLinkedCell container{{3, 3, 1}, 1, {{reflect, reflect}, {reflect, reflect}, {outflow, outflow}}};
-//
-//    /*            reflect
-//     *           +-------+
-//     *           |       |
-//     *   reflect |       | reflect (x)
-//     *           +-------+
-//     *            reflect (y)
-//     */
-//
-//    // particle b should reflect at the corner (high x, high y) boundary
-//    Particle b{{1.5, 1.5, 0}, {10.0, 10.0, 0}, 1, 1};
-//
-//    container.addParticle(b);
-//
-//    // deltaT needs to be small enough for reflecting
-//    double deltaT = 0.0002;
-//    double epsilon = 5;
-//    double sigma = 1;
-//
-//    // run simulation step
-//    int iterations = 2000;
-//    for (int i = 0; i < iterations; i++) {
-//        PositionComputations::updateOldX(container);
-//        PositionComputations::stoermerVerlet(container, deltaT);
-//        container.correctAllParticleIndices();
-//
-//        ForceComputations::resetForces(container);
-//        ForceComputations::computeLennardJonesPotential(container, epsilon,
-//                                                        sigma);
-//        ForceComputations::computeGhostParticleRepulsion(container, epsilon,
-//                                                         sigma);
-//        VelocityComputations::stoermerVerlet(container, deltaT);
-//    }
-//
-//    // check that particle is present
-//    bool particlePresent = false;
-//    for (int i = 0; i < container.getMesh().size(); i++) {
-//        Cell &c = container.getCell(i);
-//        auto particles = c.getParticles();
-//        if (!particles.empty()) {
-//            EXPECT_EQ(particles[0].getType(), 1);
-//            particlePresent = true;
-//        }
-//    }
-//    // particle should still be in the container
-//    EXPECT_TRUE(particlePresent);
-//}
+    ParticleContainerLinkedCell container{{3, 3, 1}, 1, {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}};
+
+    /*            outflow
+     *           +-------+
+     *           |       |
+     *   outflow |       | outflow (x)
+     *           +-------+
+     *            outflow (y)
+     */
+
+    // particle a should move out of the high x boundary (outflow) (cell 17)
+    Particle a{{1.0, 1.0, 0}, {1.0, 0, 0}, 1, 0};
+
+    container.addParticle(a);
+
+    double deltaT = 0.002;
+    double epsilon = 5;
+    double sigma = 1;
+
+    // run simulation step
+    int iterations = 2000;
+    for (int i = 0; i < iterations; i++) {
+        PositionComputations::updateOldX(container);
+        PositionComputations::stoermerVerlet(container, deltaT);
+        container.correctCellMembershipAllParticles();
+
+        ForceComputations::resetForces(container);
+        ForceComputations::computeLennardJonesPotential(container, epsilon,
+                                                        sigma);
+        ForceComputations::computeGhostParticleRepulsion(container, epsilon,
+                                                         sigma);
+        VelocityComputations::stoermerVerlet(container, deltaT);
+    }
+
+    // check
+    bool particlePresent = false;
+    for(int i = 0; i < container.getMesh().size(); i++) {
+        Cell& c = container.getCell(i);
+        auto particles = c.getParticlesIndices();
+        if(!particles.empty()) {
+            particlePresent = true;
+        }
+    }
+    // expect that particle a (type 0) is not in the container anymore
+    EXPECT_FALSE(particlePresent);
+}
+
+/**
+ * @brief checks that the particles stays in the mesh when all boundaries are reflecting
+ */
+TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryReflectTest) {
+
+    ParticleContainerLinkedCell container{{3, 3, 1}, 1, {{reflect, reflect}, {reflect, reflect}, {outflow, outflow}}};
+
+    /*            reflect
+     *           +-------+
+     *           |       |
+     *   reflect |       | reflect (x)
+     *           +-------+
+     *            reflect (y)
+     */
+
+    // particle b should reflect at the low y boundary (cell 12)
+    Particle b{{1.0, 1.0, 0}, {0, 1.0, 0}, 1, 1};
+
+    container.addParticle(b);
+
+    // deltaT needs to be small enough for reflecting
+    double deltaT = 0.0002;
+    double epsilon = 5;
+    double sigma = 1;
+
+    // run simulation step
+    int iterations = 100;
+    for (int i = 0; i < iterations; i++) {
+        PositionComputations::updateOldX(container);
+        PositionComputations::stoermerVerlet(container, deltaT);
+        container.correctCellMembershipAllParticles();
+
+        ForceComputations::resetForces(container);
+        ForceComputations::computeLennardJonesPotential(container, epsilon,
+                                                        sigma);
+        ForceComputations::computeGhostParticleRepulsion(container, epsilon,
+                                                         sigma);
+        VelocityComputations::stoermerVerlet(container, deltaT);
+    }
+
+    // check that particle is present
+    bool particlePresent = false;
+    for (int i = 0; i < container.getMesh().size(); i++) {
+        Cell &c = container.getCell(i);
+        auto particleIndices = c.getParticlesIndices();
+        if (!particleIndices.empty()) {
+            EXPECT_EQ(container.getParticles()[particleIndices[0]].getType(), 1);
+            particlePresent = true;
+        }
+    }
+    // particle b should still be in the container
+    EXPECT_TRUE(particlePresent);
+}
+
+/**
+ * @brief checks that the particle stays in the mesh when all boundaries are reflecting and the particle
+ * moves diagonally onto one corner
+ */
+TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellDiagonalBoundaryTest) {
+
+    ParticleContainerLinkedCell container{{3, 3, 1}, 1, {{reflect, reflect}, {reflect, reflect}, {outflow, outflow}}};
+
+    /*            reflect
+     *           +-------+
+     *           |       |
+     *   reflect |       | reflect (x)
+     *           +-------+
+     *            reflect (y)
+     */
+
+    // particle b should reflect at the corner (high x, high y) boundary
+    Particle b{{1.5, 1.5, 0}, {10.0, 10.0, 0}, 1, 1};
+
+    container.addParticle(b);
+
+    // deltaT needs to be small enough for reflecting
+    double deltaT = 0.0002;
+    double epsilon = 5;
+    double sigma = 1;
+
+    // run simulation step
+    int iterations = 2000;
+    for (int i = 0; i < iterations; i++) {
+        PositionComputations::updateOldX(container);
+        PositionComputations::stoermerVerlet(container, deltaT);
+        container.correctCellMembershipAllParticles();
+
+        ForceComputations::resetForces(container);
+        ForceComputations::computeLennardJonesPotential(container, epsilon,
+                                                        sigma);
+        ForceComputations::computeGhostParticleRepulsion(container, epsilon,
+                                                         sigma);
+        VelocityComputations::stoermerVerlet(container, deltaT);
+    }
+
+    // check that particle is present
+    bool particlePresent = false;
+    for (int i = 0; i < container.getMesh().size(); i++) {
+        Cell &c = container.getCell(i);
+        auto particleIndices = c.getParticlesIndices();
+        if (!particleIndices.empty()) {
+            EXPECT_EQ(container.getParticles()[particleIndices[0]].getType(), 1);
+            particlePresent = true;
+        }
+    }
+    // particle should still be in the container
+    EXPECT_TRUE(particlePresent);
+}
