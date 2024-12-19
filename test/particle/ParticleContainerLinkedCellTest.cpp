@@ -6,6 +6,7 @@
 #include <computations/positions/PositionComputations.h>
 #include <computations/forces/ForceComputations.h>
 #include <computations/velocities/VelocityComputations.h>
+#include <utils/ArrayUtils.h>
 #include "particle/boundary/Boundary.h"
 #include "spdlogConfig.h"
 
@@ -299,7 +300,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellGhostParticle
  * @brief checks if a particle is inserted in the correct cell and it's position is adjusted correctly when passing
  * through a periodic boundary
  */
-TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellPeriodicBoundaryTest) {
+TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellPeriodicBoundaryPositionTest) {
     ParticleContainerLinkedCell container{{99, 33, 1}, 33,
                                           {{periodic, periodic}, {outflow, outflow}, {outflow, outflow}}};
     Particle particle = Particle({98, 10, 0}, {0, 0, 0}, 1);
@@ -321,6 +322,34 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellPeriodicBound
     std::array<double, 3> newCoords = {1, 10, 0};
     EXPECT_TRUE(container.getParticles()[0].getX() == newCoords);
 }
+
+/**
+ * @brief checks if the force between two particles, which are separated by a periodic boundary, is computed correctly
+ */
+TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellPeriodicBoundaryForceTest) {
+    double sigma = 1;
+    double epsilon = 5;
+    ParticleContainerLinkedCell container{{99, 33, 1}, 33,
+                                          {{periodic, periodic}, {outflow, outflow}, {outflow, outflow}}};
+    container.addParticle({{0.5, 10, 0}, {0, 0, 0}, 1});
+    container.addParticle({{98.5, 10, 0}, {0, 0, 0}, 1});
+    Particle& particleLeft = container.getParticles()[0];
+    Particle& particleRight = container.getParticles()[1];
+
+    ForceComputations::computeLennardJonesPotentialCutoff(container, epsilon, sigma, 33);
+    std::array<double, 3> distanceVector = {1, 0, 0};
+    double distance = 1;
+    // don't consider particles which are further apart than the cutoff radius
+    double dist = std::pow(sigma / distance, 2);
+
+    double factor = (-24.0 * epsilon) / std::pow(distance, 2) * (std::pow(dist, 3) - 2 * std::pow(dist, 6));
+
+    std::array<double, 3> forceOnParticleLeft = ArrayUtils::elementWiseScalarOp(factor, distanceVector, std::multiplies<>());
+    EXPECT_TRUE(forceOnParticleLeft == particleLeft.getF());
+    std::array<double, 3> forceOnParticleRight = ArrayUtils::elementWiseScalarOp(-1, forceOnParticleLeft, std::multiplies<>());
+    EXPECT_TRUE(forceOnParticleRight == particleRight.getF());
+}
+
 
 //TEST_F(ParticleContainerLinkedCellTest, CellRemoveParticleTest) {
 //    // test container cell add and remove particle
