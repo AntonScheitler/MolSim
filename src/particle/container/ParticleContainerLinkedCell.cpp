@@ -258,3 +258,11 @@ double ParticleContainerLinkedCell::getCutoffRadius() {
 Particle& ParticleContainerLinkedCell::getParticleAt(int particleIndex) {
     return particles.at(particleIndex);
 }
+
+std::array<double, 3> ParticleContainerLinkedCell::getDomainSize() {
+    return domainSize;
+}
+
+struct boundaryConfig ParticleContainerLinkedCell::getBoundaryConfig() {
+    return boundaryConfig;
+}
