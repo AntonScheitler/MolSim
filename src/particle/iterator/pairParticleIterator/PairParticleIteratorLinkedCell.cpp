@@ -66,6 +66,7 @@ void PairParticleIteratorLinkedCell::currentStepToViableCell(bool stepBefore) {
         if (currentCell == end) {
             return;
         }
+        completedParticles.clear();
         currentParticleIdx = currentCell->getParticlesIndices().begin();
         neighborCellsVector = neighborCellsMatrix[currentCellIdx];
         neighborCell = neighborCellsVector.begin();

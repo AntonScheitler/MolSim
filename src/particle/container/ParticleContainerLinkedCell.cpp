@@ -144,13 +144,13 @@ void ParticleContainerLinkedCell::getPeriodicDistanceVector(const std::array<dou
                   (point2[axis] < 0 + cellSize[axis] && point1[axis] > (cellSize[axis] * numCells[axis]) - cellSize[axis])) {
                 // for every axis where point1 and point2 are on opposite ends of the boundary, invert the distance vector
                 // and subtract/add the distance between the boundaries to it
-                v[axis] *= -1.0;
-                v[axis] = v[axis] < 0 ? 
+                v[axis] = v[axis] < 0 ?
                     (cellSize[axis] * numCells[axis]) + v[axis]
                         : v[axis] > 0 ?
                              (cellSize[axis] * numCells[axis]) - v[axis]
                         :
                             v[axis];
+                v[axis] *= -1.0;
             }
         }
     }
@@ -164,9 +164,10 @@ void ParticleContainerLinkedCell::computeNeighborCellsMatrix() {
                 size_t currIdx  = x + (y * numCells[0]) + (z * numCells[0] * numCells[1]);
                 neighborCellsMatrix.push_back({});
 
-                for (int offsetZ = -1; offsetZ < 2; offsetZ++) {
-                    for (int offsetY = -1; offsetY < 2; offsetY++) {
+                for (int offsetZ = 0; offsetZ < 2; offsetZ++) {
+                    for (int offsetY = 0; offsetY < 2; offsetY++) {
                         for (int offsetX = -1; offsetX < 2; offsetX++) {
+                            if (offsetX == -1 && offsetY == 0 && offsetZ == 0) continue;
                             std::array<int, 3> neighborCoords = ArrayUtils::elementWisePairOp(
                                     currCoords, {offsetX, offsetY, offsetZ}, std::plus<>());
 
