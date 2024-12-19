@@ -2,8 +2,12 @@
 #include "particle/iterator/particleIterator/ParticleIterator.h"
 
 
-ParticleIteratorDirectSum::ParticleIteratorDirectSum(std::vector<Particle>::iterator it) {
+ParticleIteratorDirectSum::ParticleIteratorDirectSum(std::vector<Particle>::iterator it, std::vector<Particle>::iterator endArg) {
     current = it;
+    end = endArg;
+    while (current != end && !(current->getActive())) {
+        ++current;
+    }
 }
 
 ParticleIteratorDirectSum::reference ParticleIteratorDirectSum::operator*() {
@@ -11,7 +15,9 @@ ParticleIteratorDirectSum::reference ParticleIteratorDirectSum::operator*() {
 }
 
 ParticleIteratorDirectSum &ParticleIteratorDirectSum::operator++() {
-    ++current;
+    do {
+        ++current;
+    } while (current != end && !(current->getActive()));
     return *this;
 }
 

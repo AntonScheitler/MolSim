@@ -1,7 +1,9 @@
 #pragma once
 
 #include "particle/iterator/pairParticleIterator/PairParticleIterator.h"
+#include <algorithm>
 #include <cstddef>
+#include <memory>
 #include <particle/Particle.h>
 #include <vector>
 #include <particle/cell/Cell.h>
@@ -24,9 +26,10 @@ public:
      * @return an instance of a PairParticleIterator for boundary particles and their ghost particles
      */
     PairParticleIteratorBoundaryNHalo(std::vector<Cell>::iterator currentCellArg,
-                                      std::vector<Cell>::iterator currentCellEndArg, std::vector<Cell> meshArg,
+                                      std::vector<Cell>::iterator currentCellEndArg, std::vector<Cell>& meshArg,
                                       std::array<size_t, 3> numCellsArg,
-                                      std::array<double, 3> cellSizeArg, struct boundaryConfig boundaryConfigArg);
+                                      std::array<double, 3> cellSizeArg, struct boundaryConfig boundaryConfigArg,
+                                      std::vector<Particle>& particlesArg);
 
     /**
      * @brief dereferences this PairParticleIterator and gets the current particle/ghost pair.
@@ -53,13 +56,15 @@ public:
      * @brief returns the ghost particles for the currentParticle
      * @return the vector of ghosts
      */
-    std::vector<Particle> createGhostParticles();
+    void updateGhostsVector();
 
 private:
     /**
      * @brief the mesh to iterate through
      */
-    std::vector<Cell> mesh;
+    std::vector<Cell>& mesh;
+
+    std::vector<Particle>& particles;
     /**
      * @brief the mesh index of the current cell
      */
@@ -75,20 +80,20 @@ private:
     /**
      * @brief an iterator pointing to the current particle within the current cell
      */
-    std::vector<Particle>::iterator currentParticle;
+    std::vector<size_t>::iterator currentParticleIdx;
     /**
      * @brief a vector of the ghost particles of the current particle
      */
-    std::vector<Particle> ghostsVector;
+    std::vector<std::unique_ptr<Particle>> ghostsVector;
     /**
      * @brief an iterator pointing to the ghost particles for the currentParticle
      */
-    std::vector<Particle>::iterator currentGhost;
+    std::vector<std::unique_ptr<Particle>>::iterator currentGhost;
 
     /**
      * @brief an iterator pointing to the end of the ghost particles for the currentParticle
      */
-    std::vector<Particle>::iterator currentGhostEnd;
+    std::vector<std::unique_ptr<Particle>>::iterator currentGhostEnd;
     /**
      * @brief the number of cells per dimension
      */

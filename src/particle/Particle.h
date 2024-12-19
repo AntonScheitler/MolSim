@@ -59,6 +59,24 @@ private:
      * molecules belonging to different bodies, matters, and so on)
      */
     int type;
+
+
+    /**
+     * @brief the epsilon value of this particle
+     */
+    double epsilon;
+
+    /**
+     * @brief the sigma value of this particle
+     */
+    double sigma;
+
+
+    /**
+     * @brief specifies whether or not this particle is part of the simulation
+     */
+    bool active;
+
 public:
     explicit Particle(int typeArg = 0);
 
@@ -168,6 +186,48 @@ public:
      * @brief converts information about this particle into a string
      */
     std::string toString() const;
+
+
+    /**
+     * @brief returns the sigma value of this particle
+     * @return the sigma value
+     */
+    double getSigma() const;
+
+    /**
+     * @brief sets the sigma value of this particle
+     * @param sigma the sigma value
+     */
+    void setSigma(double sigma);
+
+    /**
+     * @brief returns the epsilon value of this particle
+     * @return the epsilon value
+     */
+    double getEpsilon() const;
+
+    /**
+     * @brief sets the epsilon value of this particle
+     * @param epsilon the epsilon value
+     */
+    void setEpsilon(double epsilon);
+
+    /**
+     * @brief get the active status of this particle
+     * @return the active status of this particle
+     */
+    const bool getActive() const;
+
+    /**
+     * @brief set the active status of this particle
+     */
+    void setActive(bool newActive);
+
+    /**
+     * @brief sets the type of this particle (to differentiate between different objects consisting of particles)
+     * @param typeArg the type of this particle
+     */
+    void setType(int typeArg);
 };
 
 std::ostream &operator<<(std::ostream &stream, Particle &p);

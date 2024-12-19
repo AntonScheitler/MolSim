@@ -3,7 +3,9 @@
 <simulation>
     <parameters>
         <delta_t>0.0005</delta_t>
-        <t_end>20</t_end>
+
+        <t_end>25</t_end>
+
         <epsilon>5</epsilon>
         <sigma>1.0</sigma>
         <containerType>linked</containerType>
@@ -13,12 +15,12 @@
             <z>1</z>
         </domainSize>
         <cutoff>3.0</cutoff>
-        <boundry>
+        <boundary>
             <xTop>outflow</xTop>
             <xBottom>outflow</xBottom>
             <yLeft>outflow</yLeft>
             <yRight>outflow</yRight>
-        </boundry>
+        </boundary>
     </parameters>
     <clusters>
         <cuboid>

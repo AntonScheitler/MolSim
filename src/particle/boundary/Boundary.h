@@ -6,7 +6,8 @@
 
 enum BoundaryType {
     outflow,
-    reflect
+    reflect,
+    periodic,
 };
 
 /**
