@@ -34,11 +34,11 @@ Particle &ParticleContainerDirectSum::getParticle(int index) {
 
 // single particle iterator
 std::unique_ptr<ParticleIterator> ParticleContainerDirectSum::begin() {
-    return std::make_unique<ParticleIteratorDirectSum>(ParticleIteratorDirectSum(particles.begin()));
+    return std::make_unique<ParticleIteratorDirectSum>(ParticleIteratorDirectSum(particles.begin(), particles.end()));
 }
 
 std::unique_ptr<ParticleIterator> ParticleContainerDirectSum::end() {
-    return std::make_unique<ParticleIteratorDirectSum>(ParticleIteratorDirectSum(particles.end()));
+    return std::make_unique<ParticleIteratorDirectSum>(ParticleIteratorDirectSum(particles.end(), particles.end()));
 }
 
 // pair particle iterator

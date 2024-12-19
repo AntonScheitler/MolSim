@@ -115,6 +115,7 @@ bool ParticleContainerLinkedCell::correctCellMembershipSingleParticle(size_t par
             particle.setOldX(particle.getX());
             SPDLOG_DEBUG("adding particle into cell {0}", newCellIndex);
         } else
+            particle.setActive(false);
             SPDLOG_DEBUG("particle outflowing");
         return true;
     }
@@ -208,11 +209,11 @@ Cell &ParticleContainerLinkedCell::getCell(int idx) {
 }
 
 std::unique_ptr<ParticleIterator> ParticleContainerLinkedCell::begin() {
-    return std::make_unique<ParticleIteratorDirectSum>(ParticleIteratorDirectSum(particles.begin()));
+    return std::make_unique<ParticleIteratorDirectSum>(ParticleIteratorDirectSum(particles.begin(), particles.end()));
 }
 
 std::unique_ptr<ParticleIterator> ParticleContainerLinkedCell::end() {
-    return std::make_unique<ParticleIteratorDirectSum>(ParticleIteratorDirectSum(particles.end()));
+    return std::make_unique<ParticleIteratorDirectSum>(ParticleIteratorDirectSum(particles.end(), particles.end()));
 }
 
 std::unique_ptr<PairParticleIterator> ParticleContainerLinkedCell::beginPairParticle() {
