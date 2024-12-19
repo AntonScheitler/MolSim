@@ -16,6 +16,7 @@
 size_t Particle::nextId = 0;
 
 Particle::Particle(int typeArg) {
+    active = true;
     id = nextId++;
     type = typeArg;
     f = {0., 0., 0.};
@@ -24,6 +25,7 @@ Particle::Particle(int typeArg) {
 }
 
 Particle::Particle(const Particle &other) {
+    active = other.active;
     id = other.id;
     oldX = other.oldX;
     x = other.x;
@@ -38,6 +40,7 @@ Particle::Particle(const Particle &other) {
 // Todo: maybe use initializer list instead of copy?
 Particle::Particle(std::array<double, 3> xArg, std::array<double, 3> vArg,
                    double mArg, int typeArg) {
+    active = true;
     id = nextId++;
     oldX = {0., 0., 0.};
     x = xArg;
@@ -117,6 +120,14 @@ void Particle::setType(int typeArg) {
 void Particle::setEpsilon(double epsilonArg) {
     Particle::epsilon = epsilonArg;
 }
+
+const bool Particle::getActive() const {
+    return active;
+};
+
+void Particle::setActive(bool newActive) {
+    active = newActive;
+};
 
 std::ostream &operator<<(std::ostream &stream, Particle &p) {
     stream << p.toString();

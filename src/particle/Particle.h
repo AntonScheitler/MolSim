@@ -71,6 +71,12 @@ private:
      */
     double sigma;
 
+
+    /**
+     * @brief specifies whether or not this particle is part of the simulation
+     */
+    bool active;
+
 public:
     explicit Particle(int typeArg = 0);
 
@@ -122,7 +128,6 @@ public:
      * @param newV new velocity
      */
     void setV(std::array<double, 3> newV);
-
 
     /**
      * @brief Get the force acting on this particle
@@ -206,6 +211,17 @@ public:
      * @param epsilon the epsilon value
      */
     void setEpsilon(double epsilon);
+
+    /**
+     * @brief get the active status of this particle
+     * @return the active status of this particle
+     */
+    const bool getActive() const;
+
+    /**
+     * @brief set the active status of this particle
+     */
+    void setActive(bool newActive);
 
     /**
      * @brief sets the type of this particle (to differentiate between different objects consisting of particles)
