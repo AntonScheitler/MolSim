@@ -71,12 +71,15 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                     ForceComputations::computeLennardJonesPotentialCutoff(*containerLinkedCell, simData.getEpsilon(),
                                                                     simData.getSigma(), containerLinkedCell->getCutoffRadius());
 
+
                     SPDLOG_DEBUG("computing ghost particle repulsion...");
                     ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell, simData.getEpsilon(),
                                                                      simData.getSigma());
+
                     // TODO: should this be here? was excluded in profiling branch
                     ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav());
                     SPDLOG_DEBUG("done");
+
                     VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
 
 

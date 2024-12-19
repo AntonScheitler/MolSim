@@ -64,9 +64,10 @@
             <epsilon>1.0</epsilon>
             <sigma>0.9412</sigma>
         </cuboid>
-        <thermo>
-            <init_T>40</init_T>
-            <n>1000</n>
-        </thermo>
+
     </clusters>
+    <thermo>
+        <init_T>40</init_T>
+        <n>1000</n>
+    </thermo>
 </simulation>
