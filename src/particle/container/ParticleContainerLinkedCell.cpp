@@ -93,7 +93,8 @@ int ParticleContainerLinkedCell::continuousCoordsToIndex(std::array<double, 3> c
     int coordY = floor(coord[1] / cellSize[1]);
     int coordZ = floor(coord[2] / cellSize[2]);
     // floor continuous approximation of discrete coords to achieve discrete coords
-    return discreteCoordsToIndex({coordX, coordY, coordZ});
+    int res = discreteCoordsToIndex({coordX, coordY, coordZ});
+    return res;
 }
 
 bool ParticleContainerLinkedCell::correctCellMembershipSingleParticle(size_t particleIdx) {

@@ -19,7 +19,7 @@ namespace outputWriter {
 
     private:
 
-        std::string baseName = "Checkpoint";
+        std::string baseName = "checkpoint_File";
         std::shared_ptr<spdlog::logger> logger;
 
 

@@ -25,7 +25,7 @@ namespace outputWriter {
 
     void CheckpointWriter::plotParticles(ParticleContainer &particles, int iteration) {
         std::stringstream strstr;
-        strstr << "checkpoint_File" << ".txt";
+        strstr << baseName << ".txt";
 
         std::ofstream file(strstr.str().c_str());
 

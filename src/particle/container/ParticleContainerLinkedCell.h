@@ -107,6 +107,10 @@ public:
 
     Particle& getParticleAt(int particleIndex);
 
+    std::array<double, 3> getDomainSize();
+
+    struct boundaryConfig getBoundaryConfig();
+
 private:
     /**
      * @brief mesh contains all grid cells
