@@ -8,7 +8,8 @@ class XMLFileReaderTest : public testing::Test {
 };
 
 /**
- * @brief
+ * @brief tests the xmlFileReader by reading in an xml file and checking the values of SimulationData and the
+ * particles
  */
 TEST_F(XMLFileReaderTest, XMlFileReaderCorrectInputTest) {
 
@@ -76,5 +77,3 @@ TEST_F(XMLFileReaderTest, XMlFileReaderCorrectInputTest) {
         EXPECT_DOUBLE_EQ(simData.getThermoFrequency(), 1000);
     } else EXPECT_TRUE(false);
 }
-
-
