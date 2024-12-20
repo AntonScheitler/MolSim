@@ -14,8 +14,8 @@
         <boundary>
             <xTop>reflecting</xTop>
             <xBottom>reflecting</xBottom>
-            <yLeft>reflecting</yLeft>
-            <yRight>reflecting</yRight>
+            <yLeft>periodic</yLeft>
+            <yRight>periodic</yRight>
         </boundary>
         <grav>-12.44</grav>
     </parameters>
