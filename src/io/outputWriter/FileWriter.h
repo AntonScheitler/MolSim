@@ -1,3 +1,5 @@
+#pragma once
+
 #include "particle/container/ParticleContainer.h"
 #include "spdlogConfig.h"
 

@@ -13,9 +13,10 @@ public:
     /**
      * @brief create an instance of a ParticleIterator
      * @param it the vector iterator to build the ParticleIterator upon
+     * @param end an iterator that points to the end of the particle vector
      * @return an instance of a ParticleIterator
      */
-    ParticleIteratorDirectSum(std::vector<Particle>::iterator it);
+    ParticleIteratorDirectSum(std::vector<Particle>::iterator it, std::vector<Particle>::iterator endArg);
 
     /**
      * @brief Dereference current Particle in this ParticleContainer
@@ -42,4 +43,9 @@ private:
      * @brief an iterator pointing to the current particle
      */
     std::vector<Particle>::iterator current;
+
+    /**
+     * @brief an iterator pointing to the end of the particle vector
+     */
+    std::vector<Particle>::iterator end;
 };
