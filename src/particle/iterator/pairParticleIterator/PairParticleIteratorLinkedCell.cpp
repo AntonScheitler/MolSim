@@ -4,6 +4,7 @@
 #include <particle/iterator/pairParticleIterator/PairParticleIteratorLinkedCell.h>
 #include <unordered_set>
 
+
 PairParticleIteratorLinkedCell::PairParticleIteratorLinkedCell(std::vector<Cell>::iterator it, std::vector<Cell>::iterator endArg, std::vector<Cell> &meshArg,
             std::vector<Particle>& particlesArg, std::vector<std::vector<size_t>>& neighborCellsMatrixArg): 
                 mesh(meshArg), particles(particlesArg), neighborCellsMatrix(neighborCellsMatrixArg) {

@@ -6,6 +6,7 @@
 #include <particle/iterator/pairParticleIterator/PairParticleIteratorBoundaryNHalo.h>
 #include <vector>
 
+
 /**
  * @brief manages a set of particles using the linked cell algorithm
  */
@@ -76,7 +77,8 @@ public:
      * @param point2 the second point
      * @param v the non-periodic vector that points from point1 to point2
      */
-    void getPeriodicDistanceVector(const std::array<double, 3>& point1, const std::array<double, 3>& point2, std::array<double, 3>& v);
+    void getPeriodicDistanceVector(const std::array<double, 3> &point1, const std::array<double, 3> &point2,
+                                   std::array<double, 3> &v);
 
     /**
      * @brief applies periodic boundaries to the specified array
@@ -95,7 +97,8 @@ public:
     void computeNeighborCellsMatrix();
 
     std::vector<Cell> &getMesh();
-    std::vector<Particle>& getParticles();
+
+    std::vector<Particle> &getParticles();
 
     Cell &getCell(int idx);
 
@@ -105,7 +108,7 @@ public:
 
     double getCutoffRadius();
 
-    Particle& getParticleAt(int particleIndex);
+    Particle &getParticleAt(int particleIndex);
 
     std::array<double, 3> getDomainSize();
 

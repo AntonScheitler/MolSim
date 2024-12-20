@@ -9,6 +9,7 @@
 #include <particle/cell/Cell.h>
 #include <particle/boundary/Boundary.h>
 
+
 /**
  * @brief an iterator which enables iteration over pairs of boundary particles and their ghost cells. The second particle in any
  * pair is a ghost particle. So in a pair <a, b>, a would be a real particle and b the ghost
@@ -26,10 +27,10 @@ public:
      * @return an instance of a PairParticleIterator for boundary particles and their ghost particles
      */
     PairParticleIteratorBoundaryNHalo(std::vector<Cell>::iterator currentCellArg,
-                                      std::vector<Cell>::iterator currentCellEndArg, std::vector<Cell>& meshArg,
+                                      std::vector<Cell>::iterator currentCellEndArg, std::vector<Cell> &meshArg,
                                       std::array<size_t, 3> numCellsArg,
                                       std::array<double, 3> cellSizeArg, struct boundaryConfig boundaryConfigArg,
-                                      std::vector<Particle>& particlesArg);
+                                      std::vector<Particle> &particlesArg);
 
     /**
      * @brief dereferences this PairParticleIterator and gets the current particle/ghost pair.
@@ -62,9 +63,9 @@ private:
     /**
      * @brief the mesh to iterate through
      */
-    std::vector<Cell>& mesh;
+    std::vector<Cell> &mesh;
 
-    std::vector<Particle>& particles;
+    std::vector<Particle> &particles;
     /**
      * @brief the mesh index of the current cell
      */

@@ -7,6 +7,7 @@
 #include "particle/iterator/particleIterator/ParticleIteratorDirectSum.h"
 #include "spdlogConfig.h"
 
+
 ParticleContainerLinkedCell::ParticleContainerLinkedCell(std::array<double, 3> domainSizeArg, double cutoffRadiusArg,
                                                          struct boundaryConfig boundaryConfigArg) {
     domainSize = domainSizeArg;
@@ -53,18 +54,18 @@ std::array<double, 3> ParticleContainerLinkedCell::applyPeriodicBoundaries(std::
 
     if (boundaryConfig.x[0] == periodic || boundaryConfig.x[1] == periodic) {
         coord[0] = coord[0] < 0 ? coord[0] + offsetX
-                    : coord[0] > offsetX ? coord[0] - offsetX
-                        : coord[0];
+                                : coord[0] > offsetX ? coord[0] - offsetX
+                                                     : coord[0];
     }
     if (boundaryConfig.y[0] == periodic || boundaryConfig.y[1] == periodic) {
         coord[1] = coord[1] < 0 ? coord[1] + offsetY
-                    : coord[1] > offsetY ? coord[1] - offsetY
-                        : coord[1];
+                                : coord[1] > offsetY ? coord[1] - offsetY
+                                                     : coord[1];
     }
     if (boundaryConfig.z[0] == periodic || boundaryConfig.z[1] == periodic) {
         coord[2] = coord[2] < 0 ? coord[2] + offsetZ
-                    : coord[2] > offsetZ ? coord[2] - offsetZ
-                        : coord[2];
+                                : coord[2] > offsetZ ? coord[2] - offsetZ
+                                                     : coord[2];
     }
 
     return coord;
@@ -72,13 +73,15 @@ std::array<double, 3> ParticleContainerLinkedCell::applyPeriodicBoundaries(std::
 
 int ParticleContainerLinkedCell::discreteCoordsToIndex(std::array<int, 3> coord) {
     // check if coord is out of bounds and return -1 if it is
-    if ((coord[0] < 0 && boundaryConfig.x[0] != periodic) || 
-            (coord[1] < 0 && boundaryConfig.y[0] != periodic) || 
-                (coord[2] < 0 && boundaryConfig.z[0] != periodic)) return -1;
+    if ((coord[0] < 0 && boundaryConfig.x[0] != periodic) ||
+        (coord[1] < 0 && boundaryConfig.y[0] != periodic) ||
+        (coord[2] < 0 && boundaryConfig.z[0] != periodic))
+        return -1;
 
-    if ((coord[0] >= numCells[0] && boundaryConfig.x[1] != periodic) || 
-            (coord[1] >= numCells[1] && boundaryConfig.y[1] != periodic) || 
-                (coord[2] >= numCells[2] && boundaryConfig.z[1] != periodic)) return -1;
+    if ((coord[0] >= numCells[0] && boundaryConfig.x[1] != periodic) ||
+        (coord[1] >= numCells[1] && boundaryConfig.y[1] != periodic) ||
+        (coord[2] >= numCells[2] && boundaryConfig.z[1] != periodic))
+        return -1;
 
     // if coord is not out of bounds, use periodic behavior
     double newX = (coord[0] + numCells[0]) % numCells[0];
@@ -98,7 +101,7 @@ int ParticleContainerLinkedCell::continuousCoordsToIndex(std::array<double, 3> c
 }
 
 bool ParticleContainerLinkedCell::correctCellMembershipSingleParticle(size_t particleIdx) {
-    Particle& particle = particles[particleIdx];
+    Particle &particle = particles[particleIdx];
     int oldCellIndex = continuousCoordsToIndex(particle.getOldX());
     int newCellIndex = continuousCoordsToIndex(particle.getX());
     // particle is not in its original cell anymore
@@ -107,8 +110,7 @@ bool ParticleContainerLinkedCell::correctCellMembershipSingleParticle(size_t par
         SPDLOG_DEBUG("removing particle from cell {0}", oldCellIndex);
         // check if the cell is still within bounds
         if (newCellIndex != -1) {
-            if (mesh[oldCellIndex].isBoundary)
-            {
+            if (mesh[oldCellIndex].isBoundary) {
                 particle.setX(applyPeriodicBoundaries(particle.getX()));
             }
             mesh[newCellIndex].addParticleIdx(particleIdx);
@@ -116,14 +118,14 @@ bool ParticleContainerLinkedCell::correctCellMembershipSingleParticle(size_t par
             SPDLOG_DEBUG("adding particle into cell {0}", newCellIndex);
         } else
             particle.setActive(false);
-            SPDLOG_DEBUG("particle outflowing");
+        SPDLOG_DEBUG("particle outflowing");
         return true;
     }
     return false;
 }
 
 void ParticleContainerLinkedCell::correctCellMembershipAllParticles() {
-    for (Cell& cell: mesh) {
+    for (Cell &cell: mesh) {
         std::vector<size_t> particleIndicesToRemove = {};
         for (size_t particleIdx: cell.getParticlesIndices()) {
             if (correctCellMembershipSingleParticle(particleIdx)) {
@@ -136,22 +138,26 @@ void ParticleContainerLinkedCell::correctCellMembershipAllParticles() {
     }
 }
 
-void ParticleContainerLinkedCell::getPeriodicDistanceVector(const std::array<double, 3>& point1, const std::array<double, 3>& point2, std::array<double, 3>& v) {
+void ParticleContainerLinkedCell::getPeriodicDistanceVector(const std::array<double, 3> &point1,
+                                                            const std::array<double, 3> &point2,
+                                                            std::array<double, 3> &v) {
     // iterate through every axis
     for (int axis = 0; axis < 3; axis++) {
         // check if point1 is on one side of the boundary of the given axis and point2 is on the other 
         if ((axis == 0 && boundaryConfig.x[0] == periodic) || (axis == 1 && boundaryConfig.y[0] == periodic) ||
-                (axis == 2 && boundaryConfig.z[0] == periodic)) {
-            if ((point1[axis] < 0 + cellSize[axis] && point2[axis] > (cellSize[axis] * numCells[axis]) - cellSize[axis]) ||
-                  (point2[axis] < 0 + cellSize[axis] && point1[axis] > (cellSize[axis] * numCells[axis]) - cellSize[axis])) {
+            (axis == 2 && boundaryConfig.z[0] == periodic)) {
+            if ((point1[axis] < 0 + cellSize[axis] &&
+                 point2[axis] > (cellSize[axis] * numCells[axis]) - cellSize[axis]) ||
+                (point2[axis] < 0 + cellSize[axis] &&
+                 point1[axis] > (cellSize[axis] * numCells[axis]) - cellSize[axis])) {
                 // for every axis where point1 and point2 are on opposite ends of the boundary, invert the distance vector
                 // and subtract/add the distance between the boundaries to it
                 v[axis] = v[axis] < 0 ?
-                            v[axis] + (cellSize[axis] * numCells[axis])
-                        : v[axis] > 0 ?
-                            v[axis] - (cellSize[axis] * numCells[axis])
-                        :
-                            v[axis];
+                          v[axis] + (cellSize[axis] * numCells[axis])
+                                      : v[axis] > 0 ?
+                                        v[axis] - (cellSize[axis] * numCells[axis])
+                                                    :
+                                        v[axis];
             }
         }
     }
@@ -162,7 +168,7 @@ void ParticleContainerLinkedCell::computeNeighborCellsMatrix() {
         for (int y = 0; y < numCells[1]; y++) {
             for (int x = 0; x < numCells[0]; x++) {
                 std::array<int, 3> currCoords = {x, y, z};
-                size_t currIdx  = x + (y * numCells[0]) + (z * numCells[0] * numCells[1]);
+                size_t currIdx = x + (y * numCells[0]) + (z * numCells[0] * numCells[1]);
                 neighborCellsMatrix.push_back({});
 
                 for (int offsetZ = 0; offsetZ < 2; offsetZ++) {
@@ -172,13 +178,15 @@ void ParticleContainerLinkedCell::computeNeighborCellsMatrix() {
                             std::array<int, 3> neighborCoords = ArrayUtils::elementWisePairOp(
                                     currCoords, {offsetX, offsetY, offsetZ}, std::plus<>());
 
-                            if ((neighborCoords[0] < 0 && boundaryConfig.x[0] != periodic) || 
-                                    (neighborCoords[1] < 0 && boundaryConfig.y[0] != periodic) || 
-                                        (neighborCoords[2] < 0 && boundaryConfig.z[0] != periodic)) continue;
+                            if ((neighborCoords[0] < 0 && boundaryConfig.x[0] != periodic) ||
+                                (neighborCoords[1] < 0 && boundaryConfig.y[0] != periodic) ||
+                                (neighborCoords[2] < 0 && boundaryConfig.z[0] != periodic))
+                                continue;
 
-                            if ((neighborCoords[0] >= numCells[0] && boundaryConfig.x[1] != periodic) || 
-                                    (neighborCoords[1] >= numCells[1] && boundaryConfig.y[1] != periodic) || 
-                                        (neighborCoords[2] >= numCells[2] && boundaryConfig.z[1] != periodic)) continue;
+                            if ((neighborCoords[0] >= numCells[0] && boundaryConfig.x[1] != periodic) ||
+                                (neighborCoords[1] >= numCells[1] && boundaryConfig.y[1] != periodic) ||
+                                (neighborCoords[2] >= numCells[2] && boundaryConfig.z[1] != periodic))
+                                continue;
 
                             // if coord is not out of bounds, use periodic behavior
                             double newX = (neighborCoords[0] + numCells[0]) % numCells[0];
@@ -199,7 +207,7 @@ std::vector<Cell> &ParticleContainerLinkedCell::getMesh() {
     return mesh;
 }
 
-std::vector<Particle>& ParticleContainerLinkedCell::getParticles() {
+std::vector<Particle> &ParticleContainerLinkedCell::getParticles() {
     return particles;
 }
 
@@ -258,7 +266,7 @@ double ParticleContainerLinkedCell::getCutoffRadius() {
     return cutoffRadius;
 }
 
-Particle& ParticleContainerLinkedCell::getParticleAt(int particleIndex) {
+Particle &ParticleContainerLinkedCell::getParticleAt(int particleIndex) {
     return particles.at(particleIndex);
 }
 

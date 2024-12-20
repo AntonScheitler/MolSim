@@ -76,7 +76,6 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                     ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell, simData.getEpsilon(),
                                                                      simData.getSigma());
 
-                    // TODO: should this be here? was excluded in profiling branch
                     ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav());
                     SPDLOG_DEBUG("done");
 
@@ -120,7 +119,7 @@ void Simulator::simulate() {
         logger->info("Commencing Simulation...");
 
         totalDuration = 0;
-        numIterations = 1; //TODO: change this later back to 10 or set it dynamically as program option
+        numIterations = 10;
     } else {
         SPDLOG_LOGGER_INFO(logger, "Starting Simulation with delta_t={0} and end_time={1}", simData.getDeltaT(),
                            simData.getEndTime());
