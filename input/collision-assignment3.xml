@@ -1,37 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <simulation>
     <parameters>
         <delta_t>0.0005</delta_t>
-
-        <t_end>25</t_end>
-
+        <t_end>10</t_end>
         <epsilon>5</epsilon>
         <sigma>1.0</sigma>
         <containerType>linked</containerType>
         <domainSize>
-            <x>180</x>
-            <y>90</y>
+            <x>50</x>
+            <y>50</y>
             <z>1</z>
         </domainSize>
         <cutoff>3.0</cutoff>
         <boundary>
             <xTop>outflow</xTop>
             <xBottom>outflow</xBottom>
-            <yLeft>outflow</yLeft>
-            <yRight>outflow</yRight>
+            <yLeft>periodic</yLeft>
+            <yRight>periodic</yRight>
         </boundary>
     </parameters>
     <clusters>
         <cuboid>
             <cornerCoordinates>
-                <x>20.0</x>
-                <y>20.0</y>
+                <x>0</x>
+                <y>10.0</y>
                 <z>0.0</z>
             </cornerCoordinates>
             <dimensions>
-                <x>100</x>
-                <y>20</y>
+                <x>4</x>
+                <y>30</y>
                 <z>1</z>
             </dimensions>
             <velocity>
@@ -45,18 +42,18 @@
         </cuboid>
         <cuboid>
             <cornerCoordinates>
-                <x>70.0</x>
-                <y>60.0</y>
+                <x>40.0</x>
+                <y>30.0</y>
                 <z>0.0</z>
             </cornerCoordinates>
             <dimensions>
-                <x>20</x>
-                <y>20</y>
+                <x>4</x>
+                <y>4</y>
                 <z>1</z>
             </dimensions>
             <velocity>
-                <x>0.0</x>
-                <y>-10.0</y>
+                <x>20.0</x>
+                <y>0.0</y>
                 <z>0.0</z>
             </velocity>
             <meshWidth>1.1225</meshWidth>

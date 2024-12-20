@@ -78,6 +78,9 @@ void ForceComputations::computeLennardJonesPotentialCutoff(ParticleContainerLink
 
         double factor = (-24.0 * epsilon) / std::pow(distance, 2) * (std::pow(dist, 3) - 2 * std::pow(dist, 6));
 
+        if (std::abs(factor) > 5000) {
+            int j = 0;
+        }
 
         std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(factor, distanceVector, std::multiplies<>());
         pair.first.setF(ArrayUtils::elementWisePairOp(pair.first.getF(), force, std::plus<>()));

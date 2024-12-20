@@ -147,12 +147,11 @@ void ParticleContainerLinkedCell::getPeriodicDistanceVector(const std::array<dou
                 // for every axis where point1 and point2 are on opposite ends of the boundary, invert the distance vector
                 // and subtract/add the distance between the boundaries to it
                 v[axis] = v[axis] < 0 ?
-                    (cellSize[axis] * numCells[axis]) + v[axis]
+                            v[axis] + (cellSize[axis] * numCells[axis])
                         : v[axis] > 0 ?
-                             (cellSize[axis] * numCells[axis]) - v[axis]
+                            v[axis] - (cellSize[axis] * numCells[axis])
                         :
                             v[axis];
-                v[axis] *= -1.0;
             }
         }
     }
