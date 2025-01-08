@@ -134,6 +134,14 @@ const bool Particle::getActive() const {
 
 void Particle::setActive(bool newActive) {
     active = newActive;
+}
+
+bool Particle::isFixed() {
+    return fixed;
+}
+
+void Particle::setFixed(bool fixedArg) {
+    fixed = fixedArg;
 };
 
 std::ostream &operator<<(std::ostream &stream, Particle &p) {

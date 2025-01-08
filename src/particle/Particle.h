@@ -77,6 +77,11 @@ private:
      */
     bool active;
 
+    /**
+     * @brief specifies whether this particle should not change its position
+     */
+    bool fixed;
+
 public:
     explicit Particle(int typeArg = 0);
 
@@ -228,6 +233,15 @@ public:
      * @param typeArg the type of this particle
      */
     void setType(int typeArg);
+    /**
+     * @brief returns true if this particle is fixed and therefore does not change its position
+     */
+    bool isFixed();
+    /**
+     * @brief specify whether this particle should be fixed or not
+     * @param fixedArg true : fixed, false : not fixed
+     */
+    void setFixed(bool fixedArg);
 };
 
 std::ostream &operator<<(std::ostream &stream, Particle &p);

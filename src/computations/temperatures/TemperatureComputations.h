@@ -9,9 +9,13 @@ class TemperatureComputations {
 public:
     static void updateTemp(ParticleContainer &particles, double targetTemp, double maxDeltaTemp);
 
+    static void updateTempV2(ParticleContainer &particles, double targetTemp, double maxDeltaTemp);
+
     static void initTemp(ParticleContainer &particles, double averageVelocity, double initialTemp);
 
     static double calculateCurrentSystemTemp(ParticleContainer &particles);
+
+    static double calculateCurrentSystemTempV2(ParticleContainer &particles, std::array<double, 3> avgV);
 
 private:
 };
