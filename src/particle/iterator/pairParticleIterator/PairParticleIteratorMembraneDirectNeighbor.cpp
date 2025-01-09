@@ -12,13 +12,24 @@ PairParticleIterator::reference PairParticleIteratorMembraneDirectNeighbor::oper
     return {*curr, particles[curr->getNeighborIdx(currNeighborPos)]};
 }
 
-PairParticleIteratorMembraneDirectNeighbor & PairParticleIteratorMembraneDirectNeighbor::operator++() {
-    // TODO
+PairParticleIteratorMembraneDirectNeighbor& PairParticleIteratorMembraneDirectNeighbor::operator++() {
+    if (currNeighborPos == top) {
+        ++curr;
+    }
+    currNeighborPos = currNeighborPos == right ? top : right;
+    stepToNextViableParticle();
+
+    return (*this);
 }
 
 
 void PairParticleIteratorMembraneDirectNeighbor::stepToNextViableParticle() {
-    // TODO
+    while (curr->getNeighborIdx(currNeighborPos) == -1 && curr != end) {
+        if (currNeighborPos == top) {
+            ++curr;
+        }
+        currNeighborPos = currNeighborPos == right ? top : right;
+    }
 }
 
 bool PairParticleIteratorMembraneDirectNeighbor::operator!=(const PairParticleIterator &other) {
