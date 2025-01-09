@@ -9,6 +9,8 @@
 
 #include <array>
 #include <string>
+#include <vector>
+#include <memory>
 
 /**
  * @brief Class for modeling particles, where each Particle has three-dimensional position, velocity and force that is
@@ -38,6 +40,16 @@ private:
      * @brief Force which was effective on this particle
      */
     std::array<double, 3> oldF;
+
+    /**
+     * @brief direct Neigbors of Cell
+     */
+    std::vector<size_t> directNeighborsIndices;
+
+    /**
+    * @brief diagonal Neigbors of Cell
+    */
+    std::vector<size_t> diagonalNeighborsIndices;
 
     /**
      * @brief Mass of this particle
@@ -228,6 +240,14 @@ public:
      * @param typeArg the type of this particle
      */
     void setType(int typeArg);
+
+    void addNeighborID(size_t particleIDArg);
+
+    void addDiagNeighborID(size_t particleIDArg);
+
+    size_t getNeighborID(int index);
+
+    size_t getDiagNeighborID(int index);
 };
 
 std::ostream &operator<<(std::ostream &stream, Particle &p);

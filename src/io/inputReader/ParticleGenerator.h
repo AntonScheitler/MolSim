@@ -7,6 +7,9 @@ namespace inputReader {
      * @brief class for generating specific structures consisting of particles
      */
     class ParticleGenerator {
+
+    private:
+        void addNeighbors(Particle &particle, int j, int k, int l, std::array<int, 3> d);
     public:
         /**
          * @brief generates a cuboid consisting of particles

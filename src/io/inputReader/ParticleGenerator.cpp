@@ -8,6 +8,7 @@ namespace inputReader {
     void
     ParticleGenerator::generateCuboid(ParticleContainer &particles, std::array<double, 3> x, std::array<double, 3> v,
                                       std::array<int, 3> d, double m, double h, int type, double e, double s) {
+        int currIndex = 0;
         std::array<double, 3> tempx{};
         for (int j = 0; j < d[0]; ++j) {
             tempx[0] = j * h + x[0];
@@ -19,6 +20,7 @@ namespace inputReader {
                     Particle temp = Particle(tempx, v, m, type);
                     temp.setSigma(s);
                     temp.setEpsilon(e);
+
                     particles.addParticle(temp);
                 }
             }
@@ -55,4 +57,40 @@ namespace inputReader {
         }
         SPDLOG_INFO("ending disc generator");
     }
+
+    void ParticleGenerator::addNeighbors(Particle &particle, int j, int k, int l, std::array<int, 3> d) {
+        for (int x = -1; x <= 1; ++x) {
+            for (int y = -1; y <= 1; ++y) {
+                for (int z = -1; z <= 1; ++z) {
+                    if (x == 0 && y == 0 && z == 0) {
+                        continue;
+                    }
+
+                    int neighborX = j + x;
+                    int neighborY = k + y;
+                    int neighborZ = l + z;
+
+
+                    if (neighborX >= 0 && neighborX < d[0] &&
+                        neighborY >= 0 && neighborY < d[1] &&
+                        neighborZ >= 0 && neighborZ < d[2]) {
+
+                        int neighborIndex = neighborX * d[1] * d[2] +
+                                            neighborY * d[2] +
+                                            neighborZ;
+
+
+                        int diffCount = abs(x) + abs(y) + abs(z);
+                        if (diffCount == 1) {
+                            temp.addDirectNeighbor(neighborIndex);
+                        } else {
+                            temp.addDiagonalNeighbor(neighborIndex);
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
 }

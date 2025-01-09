@@ -11,6 +11,8 @@
 #include "utils/ArrayUtils.h"
 #include <array>
 #include <iostream>
+#include <vector>
+#include <memory>
 
 
 size_t Particle::nextId = 0;
@@ -136,7 +138,25 @@ void Particle::setActive(bool newActive) {
     active = newActive;
 };
 
+size_t Particle::getNeighborID(int index) {
+    return directNeighborsIndices.at(index);
+}
+
+size_t Particle::getDiagNeighborID(int index) {
+    return diagonalNeighborsIndices.at(index);
+}
+
+void Particle::addNeighborID(size_t particleIDArg) {
+    directNeighborsIndices.push_back(particleIDArg);
+}
+
+void Particle::addDiagNeighborID(size_t particleIDArg) {
+    diagonalNeighborsIndices.push_back(particleIDArg);
+}
+
 std::ostream &operator<<(std::ostream &stream, Particle &p) {
     stream << p.toString();
     return stream;
 }
+
+
