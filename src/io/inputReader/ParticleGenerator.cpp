@@ -59,9 +59,9 @@ namespace inputReader {
     }
 
     void ParticleGenerator::addNeighbors(Particle &particle, int j, int k, int l, std::array<int, 3> d) {
-        for (int x = -1; x <= 1; ++x) {
+        for (int z = -1; z <= 1; ++z) {
             for (int y = -1; y <= 1; ++y) {
-                for (int z = -1; z <= 1; ++z) {
+                for (int x = -1; x <= 1; ++x) {
                     if (x == 0 && y == 0 && z == 0) {
                         continue;
                     }
@@ -85,6 +85,13 @@ namespace inputReader {
                             particle.addNeighborIdx(neighborIndex);
                         } else {
                             particle.addNeighborIdx(neighborIndex);
+                        }
+                    }else{
+                        int diffCount = abs(x) + abs(y) + abs(z);
+                        if (diffCount == 1) {
+                            particle.addNeighborIdx(-1);
+                        } else {
+                            particle.addNeighborIdx(-1);
                         }
                     }
                 }
