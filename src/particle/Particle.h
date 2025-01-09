@@ -10,7 +10,20 @@
 #include <array>
 #include <string>
 #include <vector>
-#include <memory>
+
+enum DirectNeighborPos {
+    left,
+    right,
+    top,
+    bottom,
+};
+
+enum DiagonalNeighborPos {
+    topLeft,
+    topRight,
+    bottomLeft,
+    bottomRight,
+};
 
 /**
  * @brief Class for modeling particles, where each Particle has three-dimensional position, velocity and force that is
@@ -241,13 +254,29 @@ public:
      */
     void setType(int typeArg);
 
-    void addNeighborID(size_t particleIDArg);
+    /**
+     * @brief adds the index of a particle as a direct neighbor to this particle 
+     * @param particleIdx the index of the particle to add as a direct neighbor
+     */
+    void addNeighborIdx(size_t particleIdx);
 
-    void addDiagNeighborID(size_t particleIDArg);
+    /**
+     * @brief adds the index of a particle as a diagonal neighbor to this particle 
+     * @param particleIdx the index of the particle to add as a diagonal neighbor
+     */
+    void addDiagNeighborIdx(size_t particleIdx);
 
-    size_t getNeighborID(int index);
+    /**
+     * @brief returns the index of a direct neighbor particle
+     * @param pos the relative position of the neighbor particle
+     */
+    size_t getNeighborIdx(DirectNeighborPos pos);
 
-    size_t getDiagNeighborID(int index);
+    /**
+     * @brief returns the index of a diagonal neighbor particle
+     * @param pos the relative position of the neighbor particle
+     */
+    size_t getDiagNeighborIdx(DiagonalNeighborPos pos);
 };
 
 std::ostream &operator<<(std::ostream &stream, Particle &p);

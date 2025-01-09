@@ -138,19 +138,37 @@ void Particle::setActive(bool newActive) {
     active = newActive;
 };
 
-size_t Particle::getNeighborID(int index) {
-    return directNeighborsIndices.at(index);
+size_t Particle::getNeighborIdx(DirectNeighborPos pos) {
+    switch (pos) {
+        case left:
+            return directNeighborsIndices[1];
+        case right:
+            return directNeighborsIndices[2];
+        case top:
+            return directNeighborsIndices[3];
+        case bottom:
+            return directNeighborsIndices[0];
+    }
 }
 
-size_t Particle::getDiagNeighborID(int index) {
-    return diagonalNeighborsIndices.at(index);
+size_t Particle::getDiagNeighborIdx(DiagonalNeighborPos pos) {
+    switch (pos) {
+        case topLeft:
+            return directNeighborsIndices[2];
+        case topRight:
+            return directNeighborsIndices[3];
+        case bottomLeft:
+            return directNeighborsIndices[0];
+        case bottomRight:
+            return directNeighborsIndices[1];
+    }
 }
 
-void Particle::addNeighborID(size_t particleIDArg) {
+void Particle::addNeighborIdx(size_t particleIDArg) {
     directNeighborsIndices.push_back(particleIDArg);
 }
 
-void Particle::addDiagNeighborID(size_t particleIDArg) {
+void Particle::addDiagNeighborIdx(size_t particleIDArg) {
     diagonalNeighborsIndices.push_back(particleIDArg);
 }
 
