@@ -9,7 +9,7 @@ namespace inputReader {
     class ParticleGenerator {
 
     private:
-        void addNeighbors(Particle &particle, int j, int k, int l, std::array<int, 3> d);
+        static void addNeighbors(Particle &particle, int j, int k, int l, std::array<int, 3> d);
     public:
         /**
          * @brief generates a cuboid consisting of particles

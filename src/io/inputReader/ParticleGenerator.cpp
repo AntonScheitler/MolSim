@@ -20,7 +20,7 @@ namespace inputReader {
                     Particle temp = Particle(tempx, v, m, type);
                     temp.setSigma(s);
                     temp.setEpsilon(e);
-
+                    addNeighbors(temp, j, k, l, d);
                     particles.addParticle(temp);
                 }
             }
@@ -82,9 +82,9 @@ namespace inputReader {
 
                         int diffCount = abs(x) + abs(y) + abs(z);
                         if (diffCount == 1) {
-                            temp.addDirectNeighbor(neighborIndex);
+                            particle.addNeighborID(neighborIndex);
                         } else {
-                            temp.addDiagonalNeighbor(neighborIndex);
+                            particle.addDiagNeighborID(neighborIndex);
                         }
                     }
                 }
