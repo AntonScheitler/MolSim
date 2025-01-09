@@ -82,9 +82,9 @@ namespace inputReader {
 
                         int diffCount = abs(x) + abs(y) + abs(z);
                         if (diffCount == 1) {
-                            particle.addNeighborID(neighborIndex);
+                            particle.addNeighborIdx(neighborIndex);
                         } else {
-                            particle.addDiagNeighborID(neighborIndex);
+                            particle.addNeighborIdx(neighborIndex);
                         }
                     }
                 }
