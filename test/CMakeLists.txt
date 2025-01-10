@@ -26,6 +26,9 @@ target_link_libraries(inputReaderTests
 file(GLOB_RECURSE PARTICLE_TESTS
     "${CMAKE_CURRENT_SOURCE_DIR}/particle/ParticleContainerLinkedCellTest.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/particle/ParticleContainerLinkedCellTest.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/particle/ParticleNeighborsTest.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/particle/ParticleNeighborsTest.h"
+
 )
 
 add_executable(particleTests ${PARTICLE_TESTS})

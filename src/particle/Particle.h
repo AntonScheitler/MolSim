@@ -57,12 +57,12 @@ private:
     /**
      * @brief direct Neigbors of Cell
      */
-    std::vector<size_t> directNeighborsIndices;
+    std::vector<int> directNeighborsIndices;
 
     /**
     * @brief diagonal Neigbors of Cell
     */
-    std::vector<size_t> diagonalNeighborsIndices;
+    std::vector<int> diagonalNeighborsIndices;
 
     /**
      * @brief Mass of this particle
@@ -258,25 +258,25 @@ public:
      * @brief adds the index of a particle as a direct neighbor to this particle 
      * @param particleIdx the index of the particle to add as a direct neighbor
      */
-    void addNeighborIdx(size_t particleIdx);
+    void addNeighborIdx(int particleIdx);
 
     /**
      * @brief adds the index of a particle as a diagonal neighbor to this particle 
      * @param particleIdx the index of the particle to add as a diagonal neighbor
      */
-    void addDiagNeighborIdx(size_t particleIdx);
+    void addDiagNeighborIdx(int particleIdx);
 
     /**
      * @brief returns the index of a direct neighbor particle
      * @param pos the relative position of the neighbor particle
      */
-    size_t getNeighborIdx(DirectNeighborPos pos);
+    int getNeighborIdx(DirectNeighborPos pos);
 
     /**
      * @brief returns the index of a diagonal neighbor particle
      * @param pos the relative position of the neighbor particle
      */
-    size_t getDiagNeighborIdx(DiagonalNeighborPos pos);
+    int getDiagNeighborIdx(DiagonalNeighborPos pos);
 };
 
 std::ostream &operator<<(std::ostream &stream, Particle &p);
