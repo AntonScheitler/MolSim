@@ -145,8 +145,6 @@ void Particle::setActive(bool newActive) {
 };
 
 int Particle::getNeighborIdx(DirectNeighborPos pos) {
-    std::cout << "NeighborIdxSize: " << directNeighborsIndices.size() << std::endl;
-
     switch (pos) {
         case left:
             return directNeighborsIndices[1];
@@ -157,6 +155,7 @@ int Particle::getNeighborIdx(DirectNeighborPos pos) {
         case bottom:
             return directNeighborsIndices[0];
     }
+    return -1;
 }
 
 int Particle::getDiagNeighborIdx(DiagonalNeighborPos pos) {
@@ -170,15 +169,14 @@ int Particle::getDiagNeighborIdx(DiagonalNeighborPos pos) {
         case bottomRight:
             return diagonalNeighborsIndices[1];
     }
+    return -1;
 }
 
 void Particle::addNeighborIdx(int particleIDArg) {
-
     directNeighborsIndices.push_back(particleIDArg);
 }
 
 void Particle::addDiagNeighborIdx(int particleIDArg) {
-
     diagonalNeighborsIndices.push_back(particleIDArg);
 }
 
