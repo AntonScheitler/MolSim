@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<simulation>
+    <output>
+        <writeFrequency>10</writeFrequency>
+    </output>
+    <parameters>
+        <delta_t>0.01</delta_t>
+        <t_end>500</t_end>
+        <containerType>linked</containerType>
+        <domainSize>
+            <x>148</x>
+            <y>148</y>
+            <z>148</z>
+        </domainSize>
+        <cutoff>4.0</cutoff>
+        <boundary>
+            <xTop>reflecting</xTop>
+            <xBottom>reflecting</xBottom>
+            <yLeft>reflecting</yLeft>
+            <yRight>reflecting</yRight>
+        </boundary>
+        <grav>-0.001</grav>
+    </parameters>
+    <clusters>
+        <cuboid>
+            <cornerCoordinates>
+                <x>15</x>
+                <y>15</y>
+                <z>1.5</z>
+            </cornerCoordinates>
+            <dimensions>
+                <x>50</x>
+                <y>50</y>
+                <z>1</z>
+            </dimensions>
+            <velocity>
+                <x>0.0</x>
+                <y>0.0</y>
+                <z>0.0</z>
+            </velocity>
+            <meshWidth>2.2</meshWidth>
+            <mass>1.0</mass>
+            <brownianMotion>0.0</brownianMotion>
+            <epsilon>1.0</epsilon>
+            <sigma>1.0</sigma>
+            <!-- TODO: stiffness k=300 -->
+            <!-- TODO: F_Z-UP=0.8 -->
+            <!-- TODO: maybe specify which particles are being pulled up by force F_Z-UP -->
+        </cuboid>
+    </clusters>
+</simulation>
