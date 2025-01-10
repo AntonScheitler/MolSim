@@ -1,5 +1,7 @@
 #pragma once
 
+#include "particle/iterator/pairParticleIterator/PairParticleIteratorMembraneDiagonalNeighbor.h"
+#include "particle/iterator/pairParticleIterator/PairParticleIteratorMembraneDirectNeighbor.h"
 #include <particle/Particle.h>
 #include <particle/container/ParticleContainer.h>
 #include <particle/iterator/pairParticleIterator/PairParticleIteratorLinkedCell.h>
@@ -39,19 +41,37 @@ public:
     std::unique_ptr<PairParticleIterator> beginPairParticle() override;
 
     std::unique_ptr<PairParticleIterator> endPairParticle() override;
-
     /**
      * @brief provides an iterator for iterating through pairs of boundary particles and their ghosts. The first
      * element in a pair is the actual particle whereas the second element is the ghost
      * @return the boundary particle and ghost pair iterator
      */
     PairParticleIteratorBoundaryNHalo beginPairGhost();
-
     /**
      * @brief provides an iterator pointing to the end of the boundary and ghost pairs
      * @return the end of the boundary and ghost pair iterator
      */
     PairParticleIteratorBoundaryNHalo endPairGhost();
+    /**
+     * @brief provides an iterator for iterating through pairs of direct neighbors in a membrane
+     * @return the start of the direct neighbor membrane iterator
+     */
+    PairParticleIteratorMembraneDirectNeighbor beginMembraneDirectNeighbor();
+    /**
+     * @brief provides an iterator pointing to the end of pairs of direct neighbors in a membrane
+     * @return the end of the direct neighbor membrane iterator
+     */
+    PairParticleIteratorMembraneDirectNeighbor endMembraneDirectNeighbor();
+    /**
+     * @brief provides an iterator for iterating through pairs of diagonal neighbors in a membrane
+     * @return the start of the diagonal neighbor membrane iterator
+     */
+    PairParticleIteratorMembraneDiagonalNeighbor beginMembraneDiagonalNeighbor();
+    /**
+     * @brief provides an iterator pointing to the end of pairs of diagonal neighbors in a membrane
+     * @return the end of the diagonal neighbor membrane iterator
+     */
+    PairParticleIteratorMembraneDiagonalNeighbor endMembraneDiagonalNeighbor();
 
     /**
      * @brief converts the discrete (index) coordinates of a cell in the mesh to

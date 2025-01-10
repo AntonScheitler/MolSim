@@ -1,6 +1,6 @@
 #include "particle/container/ParticleContainer.h"
 #include "particle/container/ParticleContainerLinkedCell.h"
-#include <map>
+#include <utility>
 
 /**
  * @brief a class wrapping force-computing functions and their utility functions
@@ -49,7 +49,30 @@ public:
      */
     static void computeGhostParticleRepulsion(ParticleContainerLinkedCell &particles, double epsilon, double sigma);
 
-/*private:
-     static std::map<std::pair<double, double> , double > epsilons;
-    static std::map<std::pair<double, double> , double > sigmas;*/
+    /**
+     * @brief computes the repulsive force between neighboring particles in a membrane
+     * @param particles the particles to get the boundary particles from
+     * @param epsilon epsilon for computation of Lennard Jones Potential
+     * @param sigma sigma for computation of Lennard Jones Potential
+     * @param k the stiffness constant for force computation
+     * @param r0 the average bond length for force computation
+     */
+    static void computeMembraneNeighborRepulsion(ParticleContainerLinkedCell &particles, double epsilon, double sigma, double k, double r0);
+
+private:
+    /**
+     * @brief a helper function for computing the lenndard jones potential between two particles and only applying it, if it is repulsive
+     * @param pair the pair of particles to compute the forces between
+     * @param epsilon epsilon constant for force computation
+     * @param sigma sigma constant for force computation
+     */
+    static void computeLennardJonesPotentialRepulsiveHelper(std::pair<Particle&, Particle&>& pair, double epsilon, double sigma);
+
+    /**
+     * @brief a helper function for computing the harmonic potential between two particles
+     * @param pair the pair of particles to compute the forces between
+     * @param k the stiffness constant for force computation
+     * @param bondLength the bond length for force computation
+     */
+    static void computeHaromicPotentialHelper(std::pair<Particle&, Particle&>& pair, double k, double bondLength);
 };

@@ -241,6 +241,22 @@ PairParticleIteratorBoundaryNHalo ParticleContainerLinkedCell::endPairGhost() {
     return {mesh.end(), mesh.end(), mesh, numCells, cellSize, boundaryConfig, particles};
 }
 
+PairParticleIteratorMembraneDirectNeighbor ParticleContainerLinkedCell::beginMembraneDirectNeighbor() {
+    return {particles.begin(), particles.end(), particles};
+}
+
+PairParticleIteratorMembraneDirectNeighbor ParticleContainerLinkedCell::endMembraneDirectNeighbor() {
+    return {particles.end(), particles.end(), particles};
+}
+
+PairParticleIteratorMembraneDiagonalNeighbor ParticleContainerLinkedCell::beginMembraneDiagonalNeighbor() {
+    return {particles.begin(), particles.end(), particles};
+}
+
+PairParticleIteratorMembraneDiagonalNeighbor ParticleContainerLinkedCell::endMembraneDiagonalNeighbor() {
+    return {particles.end(), particles.end(), particles};
+}
+
 int ParticleContainerLinkedCell::size() {
     int size = 0;
     for (auto &i: mesh) {
