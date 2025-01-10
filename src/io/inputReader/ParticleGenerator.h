@@ -19,9 +19,10 @@ namespace inputReader {
          * @param type the type of particles
          * @param e epsilon value of particles
          * @param s sigma value of particles
+         * @param fixed specify whether the position of the particles of this cuboid should be fixed
          */
         static void generateCuboid(ParticleContainer& particles, std::array<double, 3> x, std::array<double, 3> v,
-                                      std::array<int, 3> d, double m, double h, int type, double e, double s);
+                                      std::array<int, 3> d, double m, double h, int type, double e, double s, bool fixed);
         /**
          * @brief generates a disc consisting of particles
          * @param particle the container to write the particles into

@@ -25,6 +25,7 @@ SimulationData::SimulationData() {
     grav = 0;
 
     thermostat = false;
+    thermoVersion = 2; // TODO: default thermo version for testing purpose set to 2
 
 }
 
@@ -276,4 +277,12 @@ bool SimulationData::getCheckpoint() {
 
 void SimulationData::setCheckpoint(bool checkpoingArg) {
     this->checkpoint = checkpoingArg;
+}
+
+void SimulationData::setThermoVersion(int thermoVersionArg) {
+    thermoVersion = thermoVersionArg;
+}
+
+int SimulationData::getThermoVersion() {
+    return thermoVersion;
 }

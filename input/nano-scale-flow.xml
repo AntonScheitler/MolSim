@@ -67,6 +67,9 @@
             <epsilon>2.0</epsilon>
             <sigma>1.1</sigma>
             <!-- TODO: mark as fixed -->
+            <!--
+                <fixed> (does this work?)
+            -->
         </cuboid>
         <cuboid>
             <!-- cuboid 3 (fluid) -->
@@ -96,5 +99,8 @@
         <init_T>40</init_T>
         <n>10</n>
         <!-- TODO: specify which thermostat to use (v2) -->
+        <!--
+            <version>2</version>
+        -->
     </thermo>
 </simulation>

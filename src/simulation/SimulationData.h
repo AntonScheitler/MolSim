@@ -241,6 +241,9 @@ public:
      */
     void setCheckpoint(bool checkpoingArg);
 
+    void setThermoVersion(int thermoVersionArg);
+    int getThermoVersion();
+
 private:
     SimulationType simType;
     double startTime;
@@ -263,5 +266,7 @@ private:
 
     double grav;
     bool checkpoint;
+
+    int thermoVersion;
 
 };

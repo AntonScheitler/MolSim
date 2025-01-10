@@ -24,7 +24,7 @@ void ForceComputations::computeGravity(ParticleContainer &particles) {
         newForce = ArrayUtils::elementWiseScalarOp(coefficient, distanceVector, std::multiplies<>());
         pair.first.setF(ArrayUtils::elementWisePairOp(pair.first.getF(), newForce, std::plus<>()));
 
-        // the gravitational force that affects the other planet is the same that affects the first but pointed to
+        // the gravitational force that affects the other particle is the same that affects the first but pointed to
         // the opposite direction.
         // therefore it needs to be multiplied by -1
         std::array<double, 3> revNewForce = ArrayUtils::elementWiseScalarOp(-1, newForce, std::multiplies<>());
@@ -78,10 +78,13 @@ void ForceComputations::computeLennardJonesPotentialCutoff(ParticleContainerLink
 
         double factor = (-24.0 * epsilon) / std::pow(distance, 2) * (std::pow(dist, 3) - 2 * std::pow(dist, 6));
 
+        //TODO: is this correct for fixed particles?
         std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(factor, distanceVector, std::multiplies<>());
-        pair.first.setF(ArrayUtils::elementWisePairOp(pair.first.getF(), force, std::plus<>()));
+        if(!pair.first.isFixed())
+            pair.first.setF(ArrayUtils::elementWisePairOp(pair.first.getF(), force, std::plus<>()));
         std::array<double, 3> revForce = ArrayUtils::elementWiseScalarOp(-1, force, std::multiplies<>());
-        pair.second.setF(ArrayUtils::elementWisePairOp(pair.second.getF(), revForce, std::plus<>()));
+        if(!pair.second.isFixed())
+            pair.second.setF(ArrayUtils::elementWisePairOp(pair.second.getF(), revForce, std::plus<>()));
     }
 }
 
@@ -97,6 +100,7 @@ void ForceComputations::resetForces(ParticleContainer &particles) {
 void ForceComputations::addExternalForces(ParticleContainer &particles, double grav) {
     for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
         Particle &particle = **it;
+        if(particle.isFixed()) continue;  //TODO: maybe check this already in iterator
         std::array<double, 3> newForce = particle.getF();
         newForce[1] += particle.getM() * grav;
         particle.setF(newForce);

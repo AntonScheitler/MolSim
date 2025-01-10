@@ -93,6 +93,9 @@ public:
             std::array<double, 3> xArg, std::array<double, 3> vArg, double mArg,
             int typeArg = 0);
 
+    Particle(std::array<double, 3> xArg, std::array<double, 3> vArg,
+             double mArg, int typeArg, double epsilonArg, double sigmaArg, bool fixedArg);
+
     /**
      * @brief destruct the Particle
      */

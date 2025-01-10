@@ -69,7 +69,8 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                     containerLinkedCell->correctCellMembershipAllParticles();
                     ForceComputations::resetForces(simData.getParticles());
                     ForceComputations::computeLennardJonesPotentialCutoff(*containerLinkedCell, simData.getEpsilon(),
-                                                                    simData.getSigma(), containerLinkedCell->getCutoffRadius());
+                                                                          simData.getSigma(),
+                                                                          containerLinkedCell->getCutoffRadius());
 
 
                     SPDLOG_DEBUG("computing ghost particle repulsion...");
@@ -84,9 +85,14 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
 
                     if (simData.isThermostat() && iteration % simData.getThermoFrequency() == 0) {
                         // calculate current temperature of system
-                        TemperatureComputations::updateTemp(simData.getParticles(), simData.getTargetTemp(),
-                                                            simData.getMaxDeltaTemp());
-
+                        // TODO: choose correct thermostat (or use only v2 in future?)
+                        if (simData.getThermoVersion() == 2) {
+                            TemperatureComputations::updateTempV2(simData.getParticles(), simData.getTargetTemp(),
+                                                                  simData.getMaxDeltaTemp());
+                        } else {
+                            TemperatureComputations::updateTemp(simData.getParticles(), simData.getTargetTemp(),
+                                                                simData.getMaxDeltaTemp());
+                        }
                     }
 
                 } else {
@@ -115,7 +121,7 @@ void Simulator::simulate() {
         logger = spdlog::stdout_color_mt("Benchmarking");
         logger->info("=========================BENCH=========================");
         logger->info("Benchmarking with delta_t={0}, t_end={1}, sim_type={2}", simData.getDeltaT(),
-                           simData.getEndTime(), (int) simData.getSimType());
+                     simData.getEndTime(), (int) simData.getSimType());
         logger->info("Commencing Simulation...");
 
         totalDuration = 0;
@@ -178,7 +184,7 @@ size_t Simulator::runSimulationLoop() {
         currentTime += simData.getDeltaT();
     }
     after();
-    if(simData.getCheckpoint()){
+    if (simData.getCheckpoint()) {
         outputWriter::CheckpointWriter checkpointWriter("checker");
         checkpointWriter.plotParticles(simData.getParticles(), 0);
     }

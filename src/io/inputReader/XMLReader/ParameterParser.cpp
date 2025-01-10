@@ -63,6 +63,9 @@ namespace ParameterParser {
                 double maxStep = (xmlParser->thermo()->maxStep().present()) ? (xmlParser->thermo()->maxStep().get())
                                                                             : std::numeric_limits<double>::infinity();
                 simData.setMaxDeltaTemp(maxStep);
+
+                //TODO: read thermoVersion from thermo xml
+                simData.setThermoVersion(xmlParser->thermo()->version());
             }
         } catch (const xml_schema::exception &e) {
             std::cerr << "XML parsing error: " << e.what() << std::endl;

@@ -129,7 +129,10 @@ namespace inputReader {
                 double epsilon = cuboid.epsilon().present() ? cuboid.epsilon().get() : simData.getEpsilon();
                 double sigma = cuboid.sigma().present() ? cuboid.sigma().get() : simData.getSigma();
 
-                ParticleGenerator::generateCuboid(simData.getParticles(), x, v, d, m, h, type, epsilon, sigma);
+                //TODO: add 'fixed' param to cuboid in xml scheme
+                //TODO: also add 'fixed' param for each particle in checkpointing
+                bool fixed = cuboid.fixed();
+                ParticleGenerator::generateCuboid(simData.getParticles(), x, v, d, m, h, type, epsilon, sigma, fixed);
 
                 type++;
             }
