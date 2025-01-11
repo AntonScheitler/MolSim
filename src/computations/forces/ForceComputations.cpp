@@ -111,7 +111,7 @@ void ForceComputations::computeGhostParticleRepulsion(ParticleContainerLinkedCel
     }
 }
 
-void ForceComputations::computeMembraneNeighborRepulsion(ParticleContainerLinkedCell &particles, double epsilon, double sigma, double k, double r0) {
+void ForceComputations::computeMembraneNeighborForce(ParticleContainerLinkedCell &particles, double epsilon, double sigma, double k, double r0) {
     for (auto it = particles.beginMembraneDirectNeighbor(); it != particles.endMembraneDirectNeighbor(); ++it) {
         std::pair<Particle&, Particle&> pair = *it;
         computeLennardJonesPotentialRepulsiveHelper(pair, epsilon, sigma);
@@ -151,3 +151,11 @@ void ForceComputations::computeHaromicPotentialHelper(std::pair<Particle&, Parti
     std::array<double, 3> revForce = ArrayUtils::elementWiseScalarOp(-1, force, std::multiplies<>());
     pair.second.setF(ArrayUtils::elementWisePairOp(pair.second.getF(), revForce, std::plus<>()));
 }
+
+void ForceComputations::applyCustomForceVector(ParticleContainerLinkedCell& particles, std::vector<size_t> indices, std::array<double, 3> f) {
+    for (auto idx : indices) {
+        Particle& particle = particles.getParticles()[idx];
+        particle.setF(ArrayUtils::elementWisePairOp(particle.getF(), f, std::plus<>()));
+    }
+}
+

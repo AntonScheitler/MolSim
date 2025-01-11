@@ -50,14 +50,12 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
             break;
         case collisionLinkedCell:
             before = [this]() {
-
                 if (simData.isThermostat()) {
                     TemperatureComputations::initTemp(simData.getParticles(), simData.getAverageVelocity(),
                                                       simData.getInitialTemp());
                 } else {
                     VelocityComputations::applyBrownianMotion2D(simData.getParticles(),
                                                                 simData.getAverageVelocity());
-
                 }
             };
             step = [this](size_t iteration) {
@@ -97,6 +95,35 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
             after = [this]() {};
             logger = spdlog::stdout_color_mt("CollisionSimulationLinkedCell");
             SPDLOG_LOGGER_INFO(logger, "Simulating body collision with linked cell algorithm");
+            break;
+        case membrane:
+            // TODO no brownian motion?
+            before = [this]() {};
+            step = [this](size_t iteration) {
+                // save previous position and update the position of particles in the mesh based on the new one
+                PositionComputations::updateOldX(simData.getParticles());
+                PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
+                auto containerLinkedCell = dynamic_cast<ParticleContainerLinkedCell *>(&(simData.getParticles()));
+                if (containerLinkedCell) {
+                    containerLinkedCell->correctCellMembershipAllParticles();
+                    ForceComputations::resetForces(simData.getParticles());
+                    ForceComputations::computeMembraneNeighborForce(*containerLinkedCell, simData.getEpsilon(), simData.getSigma(),
+                                                                simData.getK(), simData.getR0());
+                    ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell, simData.getEpsilon(),
+                                                                     simData.getSigma());
+                    ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav());
+                    ForceComputations::applyCustomForceVector(*containerLinkedCell, simData.getMovingMembranePartIndices(), simData.getCustomForce());
+
+                    VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
+
+                } else {
+                    SPDLOG_ERROR("Membrane simulation is not using Linked Cell Container. Aborting...");
+                    exit(EXIT_FAILURE);
+                }
+            };
+            after = [this]() {};
+            logger = spdlog::stdout_color_mt("MembraneSimulationLinkedCell");
+            SPDLOG_LOGGER_INFO(logger, "Simulating membrane with linked cell algorithm");
             break;
     }
 }

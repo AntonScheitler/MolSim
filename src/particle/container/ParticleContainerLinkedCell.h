@@ -128,7 +128,7 @@ public:
 
     double getCutoffRadius();
 
-    Particle &getParticleAt(int particleIndex);
+    Particle &getParticleAt(size_t particleIndex);
 
     std::array<double, 3> getDomainSize();
 

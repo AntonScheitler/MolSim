@@ -57,7 +57,15 @@ public:
      * @param k the stiffness constant for force computation
      * @param r0 the average bond length for force computation
      */
-    static void computeMembraneNeighborRepulsion(ParticleContainerLinkedCell &particles, double epsilon, double sigma, double k, double r0);
+    static void computeMembraneNeighborForce(ParticleContainerLinkedCell &particles, double epsilon, double sigma, double k, double r0);
+
+    /**
+     * @brief applies a custom force vector to a selection of particles in the container
+     * @param particles the particle container of which a selection of particles will have the force applied to them
+     * @param indices the indices of the particles to apply the force to
+     * @param f the custom force vector to apply to the particles
+     */
+    static void applyCustomForceVector(ParticleContainerLinkedCell& particles, std::vector<size_t> indices, std::array<double, 3> f);
 
 private:
     /**

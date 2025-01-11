@@ -34,7 +34,7 @@ int SimulationData::parseOptions(int argc, char *argsv[]) {
                             "-d, --delta_t\t\tsize of each timestep. Defaults to 0.014\n"
                             "-e, --t_end\t\ttime at which to stop the simulation. Defaults to 1000\n"
                             "-l, --log\t\tlog level, default value: 'info'. valid values (high to low):\n\t\t\t\t'trace', 'debug', 'info', 'warn', 'err', 'critical', 'off'\n\t\t\t\t (using any other string will result in logging turned 'off')\n"
-                            "-s, --sim_type\t\ttype of simulation to run:\n\t\t\t\t0 - Planets\n\t\t\t\t1 - Collision\n\t\t\t\t2 - Collision with linked cell.  Defaults to 2\n"
+                            "-s, --sim_type\t\ttype of simulation to run:\n\t\t\t\t0 - Planets\n\t\t\t\t1 - Collision\n\t\t\t\t2 - Collision with linked cell\n\t\t\t3 - Membrane\n\t\t\t Defaults to 2\n"
                             "-b, --bench\t\tactivates benchmarking\n"
                             "-S, --sigma\t\tinput sigma for Lennard-Jones potential. Defaults to 1\n"
                             "-E, --epsilon\t\tinput epsilon for Lennard-Jones potential. Defaults to 5";
@@ -75,8 +75,8 @@ int SimulationData::parseOptions(int argc, char *argsv[]) {
                 break;
             case 's':
                 simTypeNum = std::stoi(optarg);
-                if (simTypeNum < 0 || simTypeNum > 2) {
-                    SPDLOG_LOGGER_ERROR(logger, "simulation type must be between 0-2!");
+                if (simTypeNum < 0 || simTypeNum > 3) {
+                    SPDLOG_LOGGER_ERROR(logger, "simulation type must be between 0-3!");
                     exit(EXIT_FAILURE);
                 }
                 simType = SimulationType(simTypeNum);
@@ -276,4 +276,36 @@ bool SimulationData::getCheckpoint() {
 
 void SimulationData::setCheckpoint(bool checkpoingArg) {
     this->checkpoint = checkpoingArg;
+}
+
+double SimulationData::getK() {
+    return k;
+}
+
+void SimulationData::setK(double newK) {
+    k = newK;
+}
+
+double SimulationData::getR0() {
+    return r0;
+}
+
+void SimulationData::setR0(double newR0) {
+    r0 = newR0;
+}
+
+std::vector<size_t> SimulationData::getMovingMembranePartIndices() {
+    return movingMembranePartIndices;
+}
+
+void SimulationData::setMovingMembranePartIndices(std::vector<size_t> newMovingMembranePartIndices) {
+    movingMembranePartIndices = newMovingMembranePartIndices;
+}
+
+std::array<double, 3> SimulationData::getCustomForce() {
+    return customForce;
+}
+
+void SimulationData::setCustomForce(std::array<double, 3> newCustomForce) {
+    customForce = newCustomForce;
 }
