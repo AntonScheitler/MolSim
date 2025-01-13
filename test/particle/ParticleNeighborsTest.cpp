@@ -41,15 +41,63 @@ TEST_F(ParticleNeighborsTest, BottomLeftCornerStoresNeighborsCorrectly) {
 
 
     Particle p = particles.getParticleAt(0);
-    std::cout << "Particle at index 0 exists." << std::endl;
 
-    std::cout << "Particle has bottom." << p.getNeighborIdx(bottom) << std::endl;
+    EXPECT_EQ(p.getNeighborIdx(left), -1);
+    EXPECT_EQ(p.getNeighborIdx(bottom), -1);
+    EXPECT_EQ(p.getNeighborIdx(right), 1);
+    EXPECT_EQ(p.getNeighborIdx(top), 3);
 
-    EXPECT_EQ(p.getNeighborIdx(left), -1) << "Left neighbor check failed.";
-    EXPECT_EQ(p.getNeighborIdx(bottom), -1) << "Bottom neighbor check failed.";
-    EXPECT_EQ(p.getNeighborIdx(right), 1) << "Right neighbor check failed.";
-    EXPECT_EQ(p.getNeighborIdx(top), 3) << "Top neighbor check failed.";
+    EXPECT_EQ(p.getDiagNeighborIdx(bottomLeft), -1);
+    EXPECT_EQ(p.getDiagNeighborIdx(bottomRight), -1);
+    EXPECT_EQ(p.getDiagNeighborIdx(topLeft), -1);
+    EXPECT_EQ(p.getDiagNeighborIdx(topRight), 4);
+
 
 
 }
 
+// Test middle
+TEST_F(ParticleNeighborsTest, MiddleStoresNeighborsCorrectly) {
+
+generateCuboidParticles();
+
+
+
+Particle p = particles.getParticleAt(4);
+
+EXPECT_EQ(p.getNeighborIdx(left), 3);
+EXPECT_EQ(p.getNeighborIdx(bottom), 1);
+EXPECT_EQ(p.getNeighborIdx(right), 5);
+EXPECT_EQ(p.getNeighborIdx(top), 7);
+
+EXPECT_EQ(p.getDiagNeighborIdx(bottomLeft), 0);
+EXPECT_EQ(p.getDiagNeighborIdx(bottomRight), 2);
+EXPECT_EQ(p.getDiagNeighborIdx(topLeft), 6);
+EXPECT_EQ(p.getDiagNeighborIdx(topRight), 8);
+
+
+
+}
+
+//Test upper middle
+TEST_F(ParticleNeighborsTest, UpperMiddleStoresNeighborsCorrectly) {
+
+generateCuboidParticles();
+
+
+
+Particle p = particles.getParticleAt(7);
+
+EXPECT_EQ(p.getNeighborIdx(left), 6);
+EXPECT_EQ(p.getNeighborIdx(bottom), 4);
+EXPECT_EQ(p.getNeighborIdx(right), 8);
+EXPECT_EQ(p.getNeighborIdx(top), -1);
+
+EXPECT_EQ(p.getDiagNeighborIdx(bottomLeft), 3);
+EXPECT_EQ(p.getDiagNeighborIdx(bottomRight), 5);
+EXPECT_EQ(p.getDiagNeighborIdx(topLeft), -1);
+EXPECT_EQ(p.getDiagNeighborIdx(topRight), -1);
+
+
+
+}

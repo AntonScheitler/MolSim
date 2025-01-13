@@ -25,7 +25,8 @@ namespace ParameterParser {
                     simData.setStartTime(xmlParser->parameters()->t_start().get());
                 }
                 if (xmlParser->parameters()->grav().present()) {
-                    simData.setGrav(xmlParser->parameters()->grav()->y());
+                    auto grav = xmlParser->parameters()->grav();
+                    simData.setGrav({grav->x(), grav->y(), grav->z()});
                 }
 
             }

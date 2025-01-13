@@ -95,11 +95,13 @@ void ForceComputations::resetForces(ParticleContainer &particles) {
 }
 
 
-void ForceComputations::addExternalForces(ParticleContainer &particles, double grav) {
+void ForceComputations::addExternalForces(ParticleContainer &particles, std::array<double, 3> grav) {
     for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
         Particle &particle = **it;
         std::array<double, 3> newForce = particle.getF();
-        newForce[1] += particle.getM() * grav;
+        newForce[0] += particle.getM() * grav[0];
+        newForce[1] += particle.getM() * grav[1];
+        newForce[2] += particle.getM() * grav[2];
         particle.setF(newForce);
     }
 }
@@ -112,11 +114,27 @@ void ForceComputations::computeGhostParticleRepulsion(ParticleContainerLinkedCel
 }
 
 void ForceComputations::computeMembraneNeighborForce(ParticleContainerLinkedCell &particles, double epsilon, double sigma, double k, double r0) {
-    for (auto it = particles.beginMembraneDirectNeighbor(); it != particles.endMembraneDirectNeighbor(); ++it) {
+    SPDLOG_DEBUG("in computeMembraneNeighborForce");
+
+    auto it_begin = particles.beginMembraneDirectNeighbor();
+    SPDLOG_DEBUG("begin iterator created");
+    auto it_end = particles.endMembraneDirectNeighbor();
+
+
+    SPDLOG_DEBUG("end iterator created");
+
+
+    for (auto it = it_begin; it != it_end; ++it) {
+        SPDLOG_DEBUG("Iterator advanced");
         std::pair<Particle&, Particle&> pair = *it;
+        SPDLOG_DEBUG("made pair");
         computeLennardJonesPotentialRepulsiveHelper(pair, epsilon, sigma);
+        SPDLOG_DEBUG("finished computeLennardJonesPotentialRepulsiveHelper");
         computeHaromicPotentialHelper(pair, k, r0);
+        SPDLOG_DEBUG("finished computeHaromicPotentialHelper");
     }
+    SPDLOG_DEBUG("finished Direct Neighbor");
+
 
     for (auto it = particles.beginMembraneDiagonalNeighbor(); it != particles.endMembraneDiagonalNeighbor(); ++it) {
         std::pair<Particle&, Particle&> pair = *it;

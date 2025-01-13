@@ -20,7 +20,11 @@
             <yLeft>reflecting</yLeft>
             <yRight>reflecting</yRight>
         </boundary>
-        <grav>-0.001</grav>
+        <grav>
+            <x>0</x>
+            <y>0</y>
+            <z>-0.001</z>
+        </grav>
     </parameters>
     <clusters>
         <cuboid>
@@ -44,9 +48,38 @@
             <brownianMotion>0.0</brownianMotion>
             <epsilon>1.0</epsilon>
             <sigma>1.0</sigma>
-            <!-- TODO: stiffness k=300 -->
-            <!-- TODO: F_Z-UP=0.8 -->
-            <!-- TODO: maybe specify which particles are being pulled up by force F_Z-UP -->
+
+            <special_coords>
+                <x>17</x>
+                <y>24</y>
+                <z>0</z>
+            </special_coords>
+            <special_coords>
+                <x>17</x>
+                <y>25</y>
+                <z>0</z>
+            </special_coords>
+            <special_coords>
+                <x>18</x>
+                <y>24</y>
+                <z>0</z>
+            </special_coords>
+            <special_coords>
+                <x>18</x>
+                <y>25</y>
+                <z>0</z>
+            </special_coords>
+
         </cuboid>
     </clusters>
+
+    <membraneArgs>
+        <r0>2.2</r0>
+        <k>300</k>
+        <customForce>
+            <x>0.0</x>
+            <y>0.0</y>
+            <z>0.8</z>
+        </customForce>
+    </membraneArgs>
 </simulation>

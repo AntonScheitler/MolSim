@@ -39,7 +39,7 @@ public:
      */
     static void resetForces(ParticleContainer &particles);
 
-    static void addExternalForces(ParticleContainer &particles, double grav);
+    static void addExternalForces(ParticleContainer &particles, std::array<double, 3> grav);
 
     /**
      * @brief computes the repulsion, the boundary particles suffer from the ghost particles

@@ -101,20 +101,27 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
             before = [this]() {};
             step = [this](size_t iteration) {
                 // save previous position and update the position of particles in the mesh based on the new one
+
                 PositionComputations::updateOldX(simData.getParticles());
                 PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
                 auto containerLinkedCell = dynamic_cast<ParticleContainerLinkedCell *>(&(simData.getParticles()));
                 if (containerLinkedCell) {
                     containerLinkedCell->correctCellMembershipAllParticles();
+
                     ForceComputations::resetForces(simData.getParticles());
+
                     ForceComputations::computeMembraneNeighborForce(*containerLinkedCell, simData.getEpsilon(), simData.getSigma(),
                                                                 simData.getK(), simData.getR0());
+
                     ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell, simData.getEpsilon(),
                                                                      simData.getSigma());
+
                     ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav());
+
                     ForceComputations::applyCustomForceVector(*containerLinkedCell, simData.getMovingMembranePartIndices(), simData.getCustomForce());
 
                     VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
+
 
                 } else {
                     SPDLOG_ERROR("Membrane simulation is not using Linked Cell Container. Aborting...");
@@ -187,12 +194,14 @@ size_t Simulator::runSimulationLoop() {
     outputWriter::VTKWriter writer(simData.getBaseName());
 
     before();
+    SPDLOG_LOGGER_DEBUG(logger, "before step finished.");
     // compute position, force and velocity for all particles each iteration
     while (currentTime < simData.getEndTime()) {
 
         numUpdatedParticles += simData.getParticles().size();
+        SPDLOG_LOGGER_DEBUG(logger, "before step instruction .");
         step(iteration);
-
+        SPDLOG_LOGGER_DEBUG(logger, "after step instruction.");
         iteration++;
 
         if (iteration % simData.getWriteFrequency() == 0 && !simData.getBench()) {

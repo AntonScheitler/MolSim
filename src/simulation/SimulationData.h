@@ -223,13 +223,13 @@ public:
     /**
      * @brief returns the gravitational acceleration
      */
-    double getGrav();
+    std::array<double, 3> getGrav();
 
     /**
      * @brief sets the gravitational acceleration
      * @param gravArg new gravity
      */
-    void setGrav(double gravArg);
+    void setGrav(std::array<double, 3> gravArg);
 
     /**
      * @brief returns true if checkpoint is activated
@@ -310,7 +310,7 @@ private:
     double maxDeltaTemp;
     bool thermostat;
 
-    double grav;
+    std::array<double, 3> grav;
     bool checkpoint;
 
     // membrane

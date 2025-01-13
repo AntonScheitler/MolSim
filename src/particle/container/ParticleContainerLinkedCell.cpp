@@ -242,10 +242,17 @@ PairParticleIteratorBoundaryNHalo ParticleContainerLinkedCell::endPairGhost() {
 }
 
 PairParticleIteratorMembraneDirectNeighbor ParticleContainerLinkedCell::beginMembraneDirectNeighbor() {
+
     return {particles.begin(), particles.end(), particles};
 }
 
 PairParticleIteratorMembraneDirectNeighbor ParticleContainerLinkedCell::endMembraneDirectNeighbor() {
+    auto test = particles.end();
+    SPDLOG_DEBUG("first end created");
+
+    test = particles.end();
+    SPDLOG_DEBUG("second iterator created");
+
     return {particles.end(), particles.end(), particles};
 }
 

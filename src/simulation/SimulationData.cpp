@@ -22,7 +22,7 @@ SimulationData::SimulationData() {
     writeFrequency = 10;
     averageVelocity = 0;
 
-    grav = 0;
+    grav = {0, 0, 0};
 
     thermostat = false;
 
@@ -262,11 +262,11 @@ void SimulationData::setThermoFrequency(size_t thermoFrequencyArg) {
     this->thermoFrequency = thermoFrequencyArg;
 }
 
-void SimulationData::setGrav(double gravArg) {
+void SimulationData::setGrav(std::array<double, 3> gravArg) {
     this->grav = gravArg;
 }
 
-double SimulationData::getGrav(){
+std::array<double, 3> SimulationData::getGrav(){
     return this->grav;
 }
 

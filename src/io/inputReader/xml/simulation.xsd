@@ -151,7 +151,7 @@
 
                             <xsd:element name="r0" type="xsd:double" />
                             <xsd:element name="k" type="xsd:double" />
-                            <xsd:element name="customForce" type="vectorType" />
+                            <xsd:element name="customForce" type="vectorType"/>
 
                         </xsd:sequence>
                     </xsd:complexType>

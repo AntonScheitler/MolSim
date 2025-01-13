@@ -1,9 +1,9 @@
-#include "particle/iterator/pairParticleIterator/PairParticleIteratorMembraneDiagonalNeighbor.h"
+#include "PairParticleIteratorMembraneDiagonalNeighbor.h"
 PairParticleIteratorMembraneDiagonalNeighbor::PairParticleIteratorMembraneDiagonalNeighbor(std::vector<Particle>::iterator it, 
         std::vector<Particle>::iterator end, std::vector<Particle>& particlesArg): particles(particlesArg) {
     curr = it;
     currNeighborPos = topLeft;
-    end = end;
+    this->end = end;
     stepToNextViableParticle();
 }
 
@@ -23,7 +23,9 @@ PairParticleIteratorMembraneDiagonalNeighbor& PairParticleIteratorMembraneDiagon
 
 
 void PairParticleIteratorMembraneDiagonalNeighbor::stepToNextViableParticle() {
+
     while (curr != end && curr->getDiagNeighborIdx(currNeighborPos) == -1) {
+
         if (currNeighborPos == topRight) {
             ++curr;
         }

@@ -129,8 +129,10 @@ namespace inputReader {
                 for(const auto &coords: cuboid.special_coords()){
                     size_t index = coords.x() + coords.y() * d[0] + coords.z() * d[1] * d[0];
                     movingMembranePartIndicesArgs.push_back(index);
-                    simData.setMovingMembranePartIndices(movingMembranePartIndicesArgs);
+
                 }
+                simData.setMovingMembranePartIndices(movingMembranePartIndicesArgs);
+
 
                 simData.setAverageVelocity(cuboid.brownianMotion());
 
