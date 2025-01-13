@@ -77,6 +77,7 @@ namespace inputReader {
             }
             ParameterParser::readParams(simData, simParser);
             ParameterParser::readThermo(simData, simParser);
+            ParameterParser::readMembrane(simData, simParser);
 
             if (simParser->parameters()->import_checkpoint().present()) {
                 CheckpointReader checkpointReader(simData);
@@ -123,6 +124,13 @@ namespace inputReader {
 
                 m = cuboid.mass();
                 h = cuboid.meshWidth();
+
+                std::vector<size_t> movingMembranePartIndicesArgs;
+                for(const auto &coords: cuboid.special_coords()){
+                    size_t index = coords.x() + coords.y() * d[0] + coords.z() * d[1] * d[0];
+                    movingMembranePartIndicesArgs.push_back(index);
+                    simData.setMovingMembranePartIndices(movingMembranePartIndicesArgs);
+                }
 
                 simData.setAverageVelocity(cuboid.brownianMotion());
 

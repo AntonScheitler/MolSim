@@ -215,6 +215,36 @@ thermo (::std::unique_ptr< thermo_type > x)
   this->thermo_.set (std::move (x));
 }
 
+const simulation::membraneArgs_optional& simulation::
+membraneArgs () const
+{
+  return this->membraneArgs_;
+}
+
+simulation::membraneArgs_optional& simulation::
+membraneArgs ()
+{
+  return this->membraneArgs_;
+}
+
+void simulation::
+membraneArgs (const membraneArgs_type& x)
+{
+  this->membraneArgs_.set (x);
+}
+
+void simulation::
+membraneArgs (const membraneArgs_optional& x)
+{
+  this->membraneArgs_ = x;
+}
+
+void simulation::
+membraneArgs (::std::unique_ptr< membraneArgs_type > x)
+{
+  this->membraneArgs_.set (std::move (x));
+}
+
 
 // output
 // 
@@ -559,6 +589,12 @@ grav (const grav_optional& x)
   this->grav_ = x;
 }
 
+void parameters::
+grav (::std::unique_ptr< grav_type > x)
+{
+  this->grav_.set (std::move (x));
+}
+
 const parameters::import_checkpoint_optional& parameters::
 import_checkpoint () const
 {
@@ -733,6 +769,70 @@ void thermo::
 maxStep (const maxStep_optional& x)
 {
   this->maxStep_ = x;
+}
+
+
+// membraneArgs
+// 
+
+const membraneArgs::r0_type& membraneArgs::
+r0 () const
+{
+  return this->r0_.get ();
+}
+
+membraneArgs::r0_type& membraneArgs::
+r0 ()
+{
+  return this->r0_.get ();
+}
+
+void membraneArgs::
+r0 (const r0_type& x)
+{
+  this->r0_.set (x);
+}
+
+const membraneArgs::k_type& membraneArgs::
+k () const
+{
+  return this->k_.get ();
+}
+
+membraneArgs::k_type& membraneArgs::
+k ()
+{
+  return this->k_.get ();
+}
+
+void membraneArgs::
+k (const k_type& x)
+{
+  this->k_.set (x);
+}
+
+const membraneArgs::customForce_type& membraneArgs::
+customForce () const
+{
+  return this->customForce_.get ();
+}
+
+membraneArgs::customForce_type& membraneArgs::
+customForce ()
+{
+  return this->customForce_.get ();
+}
+
+void membraneArgs::
+customForce (const customForce_type& x)
+{
+  this->customForce_.set (x);
+}
+
+void membraneArgs::
+customForce (::std::unique_ptr< customForce_type > x)
+{
+  this->customForce_.set (std::move (x));
 }
 
 
@@ -1313,6 +1413,24 @@ sigma (const sigma_optional& x)
   this->sigma_ = x;
 }
 
+const cuboid::special_coords_sequence& cuboid::
+special_coords () const
+{
+  return this->special_coords_;
+}
+
+cuboid::special_coords_sequence& cuboid::
+special_coords ()
+{
+  return this->special_coords_;
+}
+
+void cuboid::
+special_coords (const special_coords_sequence& s)
+{
+  this->special_coords_ = s;
+}
+
 
 #include <xsd/cxx/xml/dom/parsing-source.hxx>
 
@@ -1460,7 +1578,8 @@ simulation (const clusters_type& clusters)
   output_ (this),
   parameters_ (this),
   clusters_ (clusters, this),
-  thermo_ (this)
+  thermo_ (this),
+  membraneArgs_ (this)
 {
 }
 
@@ -1470,7 +1589,8 @@ simulation (::std::unique_ptr< clusters_type > clusters)
   output_ (this),
   parameters_ (this),
   clusters_ (std::move (clusters), this),
-  thermo_ (this)
+  thermo_ (this),
+  membraneArgs_ (this)
 {
 }
 
@@ -1482,7 +1602,8 @@ simulation (const simulation& x,
   output_ (x.output_, f, this),
   parameters_ (x.parameters_, f, this),
   clusters_ (x.clusters_, f, this),
-  thermo_ (x.thermo_, f, this)
+  thermo_ (x.thermo_, f, this),
+  membraneArgs_ (x.membraneArgs_, f, this)
 {
 }
 
@@ -1494,7 +1615,8 @@ simulation (const ::xercesc::DOMElement& e,
   output_ (this),
   parameters_ (this),
   clusters_ (this),
-  thermo_ (this)
+  thermo_ (this),
+  membraneArgs_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -1569,6 +1691,20 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // membraneArgs
+    //
+    if (n.name () == "membraneArgs" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< membraneArgs_type > r (
+        membraneArgs_traits::create (i, f, this));
+
+      if (!this->membraneArgs_)
+      {
+        this->membraneArgs_.set (::std::move (r));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -1597,6 +1733,7 @@ operator= (const simulation& x)
     this->parameters_ = x.parameters_;
     this->clusters_ = x.clusters_;
     this->thermo_ = x.thermo_;
+    this->membraneArgs_ = x.membraneArgs_;
   }
 
   return *this;
@@ -1907,9 +2044,12 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
     //
     if (n.name () == "grav" && n.namespace_ ().empty ())
     {
+      ::std::unique_ptr< grav_type > r (
+        grav_traits::create (i, f, this));
+
       if (!this->grav_)
       {
-        this->grav_.set (grav_traits::create (i, f, this));
+        this->grav_.set (::std::move (r));
         continue;
       }
     }
@@ -2217,6 +2357,155 @@ operator= (const thermo& x)
 
 thermo::
 ~thermo ()
+{
+}
+
+// membraneArgs
+//
+
+membraneArgs::
+membraneArgs (const r0_type& r0,
+              const k_type& k,
+              const customForce_type& customForce)
+: ::xml_schema::type (),
+  r0_ (r0, this),
+  k_ (k, this),
+  customForce_ (customForce, this)
+{
+}
+
+membraneArgs::
+membraneArgs (const r0_type& r0,
+              const k_type& k,
+              ::std::unique_ptr< customForce_type > customForce)
+: ::xml_schema::type (),
+  r0_ (r0, this),
+  k_ (k, this),
+  customForce_ (std::move (customForce), this)
+{
+}
+
+membraneArgs::
+membraneArgs (const membraneArgs& x,
+              ::xml_schema::flags f,
+              ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  r0_ (x.r0_, f, this),
+  k_ (x.k_, f, this),
+  customForce_ (x.customForce_, f, this)
+{
+}
+
+membraneArgs::
+membraneArgs (const ::xercesc::DOMElement& e,
+              ::xml_schema::flags f,
+              ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  r0_ (this),
+  k_ (this),
+  customForce_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void membraneArgs::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // r0
+    //
+    if (n.name () == "r0" && n.namespace_ ().empty ())
+    {
+      if (!r0_.present ())
+      {
+        this->r0_.set (r0_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // k
+    //
+    if (n.name () == "k" && n.namespace_ ().empty ())
+    {
+      if (!k_.present ())
+      {
+        this->k_.set (k_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // customForce
+    //
+    if (n.name () == "customForce" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< customForce_type > r (
+        customForce_traits::create (i, f, this));
+
+      if (!customForce_.present ())
+      {
+        this->customForce_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    break;
+  }
+
+  if (!r0_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "r0",
+      "");
+  }
+
+  if (!k_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "k",
+      "");
+  }
+
+  if (!customForce_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "customForce",
+      "");
+  }
+}
+
+membraneArgs* membraneArgs::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class membraneArgs (*this, f, c);
+}
+
+membraneArgs& membraneArgs::
+operator= (const membraneArgs& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->r0_ = x.r0_;
+    this->k_ = x.k_;
+    this->customForce_ = x.customForce_;
+  }
+
+  return *this;
+}
+
+membraneArgs::
+~membraneArgs ()
 {
 }
 
@@ -2918,7 +3207,8 @@ cuboid (const cornerCoordinates_type& cornerCoordinates,
   mass_ (mass, this),
   brownianMotion_ (brownianMotion, this),
   epsilon_ (this),
-  sigma_ (this)
+  sigma_ (this),
+  special_coords_ (this)
 {
 }
 
@@ -2937,7 +3227,8 @@ cuboid (::std::unique_ptr< cornerCoordinates_type > cornerCoordinates,
   mass_ (mass, this),
   brownianMotion_ (brownianMotion, this),
   epsilon_ (this),
-  sigma_ (this)
+  sigma_ (this),
+  special_coords_ (this)
 {
 }
 
@@ -2953,7 +3244,8 @@ cuboid (const cuboid& x,
   mass_ (x.mass_, f, this),
   brownianMotion_ (x.brownianMotion_, f, this),
   epsilon_ (x.epsilon_, f, this),
-  sigma_ (x.sigma_, f, this)
+  sigma_ (x.sigma_, f, this),
+  special_coords_ (x.special_coords_, f, this)
 {
 }
 
@@ -2969,7 +3261,8 @@ cuboid (const ::xercesc::DOMElement& e,
   mass_ (this),
   brownianMotion_ (this),
   epsilon_ (this),
-  sigma_ (this)
+  sigma_ (this),
+  special_coords_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -3085,6 +3378,17 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // special_coords
+    //
+    if (n.name () == "special_coords" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< special_coords_type > r (
+        special_coords_traits::create (i, f, this));
+
+      this->special_coords_.push_back (::std::move (r));
+      continue;
+    }
+
     break;
   }
 
@@ -3152,6 +3456,7 @@ operator= (const cuboid& x)
     this->brownianMotion_ = x.brownianMotion_;
     this->epsilon_ = x.epsilon_;
     this->sigma_ = x.sigma_;
+    this->special_coords_ = x.special_coords_;
   }
 
   return *this;
@@ -3674,6 +3979,18 @@ operator<< (::xercesc::DOMElement& e, const simulation& i)
 
     s << *i.thermo ();
   }
+
+  // membraneArgs
+  //
+  if (i.membraneArgs ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "membraneArgs",
+        e));
+
+    s << *i.membraneArgs ();
+  }
 }
 
 void
@@ -3840,7 +4157,7 @@ operator<< (::xercesc::DOMElement& e, const parameters& i)
         "grav",
         e));
 
-    s << ::xml_schema::as_double(*i.grav ());
+    s << *i.grav ();
   }
 
   // import_checkpoint
@@ -3953,6 +4270,45 @@ operator<< (::xercesc::DOMElement& e, const thermo& i)
         e));
 
     s << ::xml_schema::as_double(*i.maxStep ());
+  }
+}
+
+void
+operator<< (::xercesc::DOMElement& e, const membraneArgs& i)
+{
+  e << static_cast< const ::xml_schema::type& > (i);
+
+  // r0
+  //
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "r0",
+        e));
+
+    s << ::xml_schema::as_double(i.r0 ());
+  }
+
+  // k
+  //
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "k",
+        e));
+
+    s << ::xml_schema::as_double(i.k ());
+  }
+
+  // customForce
+  //
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "customForce",
+        e));
+
+    s << i.customForce ();
   }
 }
 
@@ -4264,6 +4620,20 @@ operator<< (::xercesc::DOMElement& e, const cuboid& i)
         e));
 
     s << ::xml_schema::as_double(*i.sigma ());
+  }
+
+  // special_coords
+  //
+  for (cuboid::special_coords_const_iterator
+       b (i.special_coords ().begin ()), n (i.special_coords ().end ());
+       b != n; ++b)
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "special_coords",
+        e));
+
+    s << *b;
   }
 }
 

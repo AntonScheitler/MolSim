@@ -31,8 +31,8 @@
 // in the accompanying FLOSSE file.
 //
 
-#ifndef VERGLEICH_MOL_SIM_SRC_IO_INPUT_READER_XML_SIMULATION_H
-#define VERGLEICH_MOL_SIM_SRC_IO_INPUT_READER_XML_SIMULATION_H
+#ifndef SRC_IO_INPUT_READER_XML_SIMULATION_H
+#define SRC_IO_INPUT_READER_XML_SIMULATION_H
 
 #ifndef XSD_CXX11
 #define XSD_CXX11
@@ -258,6 +258,7 @@ class output;
 class parameters;
 class clusters;
 class thermo;
+class membraneArgs;
 class boundary;
 class import_checkpoint;
 class particle;
@@ -443,6 +444,27 @@ class simulation: public ::xml_schema::type
   void
   thermo (::std::unique_ptr< thermo_type > p);
 
+  // membraneArgs
+  //
+  typedef ::membraneArgs membraneArgs_type;
+  typedef ::xsd::cxx::tree::optional< membraneArgs_type > membraneArgs_optional;
+  typedef ::xsd::cxx::tree::traits< membraneArgs_type, char > membraneArgs_traits;
+
+  const membraneArgs_optional&
+  membraneArgs () const;
+
+  membraneArgs_optional&
+  membraneArgs ();
+
+  void
+  membraneArgs (const membraneArgs_type& x);
+
+  void
+  membraneArgs (const membraneArgs_optional& x);
+
+  void
+  membraneArgs (::std::unique_ptr< membraneArgs_type > p);
+
   // Constructors.
   //
   simulation (const clusters_type&);
@@ -479,6 +501,7 @@ class simulation: public ::xml_schema::type
   parameters_optional parameters_;
   ::xsd::cxx::tree::one< clusters_type > clusters_;
   thermo_optional thermo_;
+  membraneArgs_optional membraneArgs_;
 };
 
 class output: public ::xml_schema::type
@@ -752,9 +775,9 @@ class parameters: public ::xml_schema::type
 
   // grav
   //
-  typedef ::xml_schema::double_ grav_type;
+  typedef ::vectorType grav_type;
   typedef ::xsd::cxx::tree::optional< grav_type > grav_optional;
-  typedef ::xsd::cxx::tree::traits< grav_type, char, ::xsd::cxx::tree::schema_type::double_ > grav_traits;
+  typedef ::xsd::cxx::tree::traits< grav_type, char > grav_traits;
 
   const grav_optional&
   grav () const;
@@ -767,6 +790,9 @@ class parameters: public ::xml_schema::type
 
   void
   grav (const grav_optional& x);
+
+  void
+  grav (::std::unique_ptr< grav_type > p);
 
   // import_checkpoint
   //
@@ -1023,6 +1049,95 @@ class thermo: public ::xml_schema::type
   ::xsd::cxx::tree::one< n_type > n_;
   target_optional target_;
   maxStep_optional maxStep_;
+};
+
+class membraneArgs: public ::xml_schema::type
+{
+  public:
+  // r0
+  //
+  typedef ::xml_schema::double_ r0_type;
+  typedef ::xsd::cxx::tree::traits< r0_type, char, ::xsd::cxx::tree::schema_type::double_ > r0_traits;
+
+  const r0_type&
+  r0 () const;
+
+  r0_type&
+  r0 ();
+
+  void
+  r0 (const r0_type& x);
+
+  // k
+  //
+  typedef ::xml_schema::double_ k_type;
+  typedef ::xsd::cxx::tree::traits< k_type, char, ::xsd::cxx::tree::schema_type::double_ > k_traits;
+
+  const k_type&
+  k () const;
+
+  k_type&
+  k ();
+
+  void
+  k (const k_type& x);
+
+  // customForce
+  //
+  typedef ::vectorType customForce_type;
+  typedef ::xsd::cxx::tree::traits< customForce_type, char > customForce_traits;
+
+  const customForce_type&
+  customForce () const;
+
+  customForce_type&
+  customForce ();
+
+  void
+  customForce (const customForce_type& x);
+
+  void
+  customForce (::std::unique_ptr< customForce_type > p);
+
+  // Constructors.
+  //
+  membraneArgs (const r0_type&,
+                const k_type&,
+                const customForce_type&);
+
+  membraneArgs (const r0_type&,
+                const k_type&,
+                ::std::unique_ptr< customForce_type >);
+
+  membraneArgs (const ::xercesc::DOMElement& e,
+                ::xml_schema::flags f = 0,
+                ::xml_schema::container* c = 0);
+
+  membraneArgs (const membraneArgs& x,
+                ::xml_schema::flags f = 0,
+                ::xml_schema::container* c = 0);
+
+  virtual membraneArgs*
+  _clone (::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0) const;
+
+  membraneArgs&
+  operator= (const membraneArgs& x);
+
+  virtual 
+  ~membraneArgs ();
+
+  // Implementation.
+  //
+  protected:
+  void
+  parse (::xsd::cxx::xml::dom::parser< char >&,
+         ::xml_schema::flags);
+
+  protected:
+  ::xsd::cxx::tree::one< r0_type > r0_;
+  ::xsd::cxx::tree::one< k_type > k_;
+  ::xsd::cxx::tree::one< customForce_type > customForce_;
 };
 
 class boundary: public ::xml_schema::type
@@ -1614,6 +1729,23 @@ class cuboid: public ::xml_schema::type
   void
   sigma (const sigma_optional& x);
 
+  // special_coords
+  //
+  typedef ::vectorType special_coords_type;
+  typedef ::xsd::cxx::tree::sequence< special_coords_type > special_coords_sequence;
+  typedef special_coords_sequence::iterator special_coords_iterator;
+  typedef special_coords_sequence::const_iterator special_coords_const_iterator;
+  typedef ::xsd::cxx::tree::traits< special_coords_type, char > special_coords_traits;
+
+  const special_coords_sequence&
+  special_coords () const;
+
+  special_coords_sequence&
+  special_coords ();
+
+  void
+  special_coords (const special_coords_sequence& s);
+
   // Constructors.
   //
   cuboid (const cornerCoordinates_type&,
@@ -1664,6 +1796,7 @@ class cuboid: public ::xml_schema::type
   ::xsd::cxx::tree::one< brownianMotion_type > brownianMotion_;
   epsilon_optional epsilon_;
   sigma_optional sigma_;
+  special_coords_sequence special_coords_;
 };
 
 #include <iosfwd>
@@ -1860,6 +1993,9 @@ void
 operator<< (::xercesc::DOMElement&, const thermo&);
 
 void
+operator<< (::xercesc::DOMElement&, const membraneArgs&);
+
+void
 operator<< (::xercesc::DOMElement&, const boundary&);
 
 void
@@ -1881,4 +2017,4 @@ operator<< (::xercesc::DOMElement&, const cuboid&);
 //
 // End epilogue.
 
-#endif // VERGLEICH_MOL_SIM_SRC_IO_INPUT_READER_XML_SIMULATION_H
+#endif // SRC_IO_INPUT_READER_XML_SIMULATION_H

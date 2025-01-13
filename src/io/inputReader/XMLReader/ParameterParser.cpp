@@ -25,7 +25,7 @@ namespace ParameterParser {
                     simData.setStartTime(xmlParser->parameters()->t_start().get());
                 }
                 if (xmlParser->parameters()->grav().present()) {
-                    simData.setGrav(xmlParser->parameters()->grav().get());
+                    simData.setGrav(xmlParser->parameters()->grav()->y());
                 }
 
             }
@@ -71,5 +71,12 @@ namespace ParameterParser {
             std::cerr << "Standard exception: " << e.what() << std::endl;
             exit(-1);
         }
+    }
+
+    void readMembrane(SimulationData &simData, const std::unique_ptr<simulation> &xmlParser){
+        simData.setK(xmlParser->membraneArgs()->k());
+        simData.setR0(xmlParser->membraneArgs()->r0());
+        auto vector = xmlParser->membraneArgs()->customForce();
+        simData.setCustomForce({vector.x(), vector.y(), vector.z()});
     }
 }

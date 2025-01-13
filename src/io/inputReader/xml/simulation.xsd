@@ -51,7 +51,7 @@
                                     </xsd:sequence>
                                 </xsd:complexType>
                             </xsd:element>
-                            <xsd:element name="grav" type="xsd:double" minOccurs="0"/>
+                            <xsd:element name="grav" type="vectorType" minOccurs="0"/>
                             <xsd:element name="import_checkpoint" minOccurs="0">
                                 <xsd:complexType>
                                     <xsd:sequence>
@@ -59,6 +59,8 @@
                                     </xsd:sequence>
                                 </xsd:complexType>
                             </xsd:element>
+
+
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>
@@ -122,6 +124,7 @@
                                         <xsd:element name="epsilon" type="xsd:double" minOccurs="0"/>
 
                                         <xsd:element name="sigma" type="xsd:double" minOccurs="0"/>
+                                        <xsd:element name="special_coords" type="vectorType" minOccurs="0"  maxOccurs="unbounded"/>
 
                                     </xsd:sequence>
                                 </xsd:complexType>
@@ -138,6 +141,18 @@
                             <xsd:element name="n" type="xsd:double" />
                             <xsd:element name="target" type="xsd:double" minOccurs="0"/>
                             <xsd:element name="maxStep" type="xsd:double" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+
+                <xsd:element name="membraneArgs" minOccurs="0">
+                    <xsd:complexType>
+                        <xsd:sequence>
+
+                            <xsd:element name="r0" type="xsd:double" />
+                            <xsd:element name="k" type="xsd:double" />
+                            <xsd:element name="customForce" type="vectorType" />
+
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>

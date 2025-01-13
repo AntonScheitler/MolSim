@@ -10,6 +10,7 @@ namespace inputReader {
     ParticleGenerator::generateCuboid(ParticleContainer &particles, std::array<double, 3> x, std::array<double, 3> v,
                                       std::array<int, 3> d, double m, double h, int type, double e, double s) {
 
+
         std::array<double, 3> tempx{};
         for (int dz = 0; dz < d[2]; ++dz) {
             tempx[2] = dz * h + x[2];
