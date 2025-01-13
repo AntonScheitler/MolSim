@@ -24,7 +24,7 @@ PairParticleIteratorMembraneDirectNeighbor& PairParticleIteratorMembraneDirectNe
 
 
 void PairParticleIteratorMembraneDirectNeighbor::stepToNextViableParticle() {
-    while (curr->getNeighborIdx(currNeighborPos) == -1 && curr != end) {
+    while (curr != end && curr->getNeighborIdx(currNeighborPos) == -1) {
         if (currNeighborPos == top) {
             ++curr;
         }

@@ -23,7 +23,7 @@ PairParticleIteratorMembraneDiagonalNeighbor& PairParticleIteratorMembraneDiagon
 
 
 void PairParticleIteratorMembraneDiagonalNeighbor::stepToNextViableParticle() {
-    while (curr->getDiagNeighborIdx(currNeighborPos) == -1 && curr != end) {
+    while (curr != end && curr->getDiagNeighborIdx(currNeighborPos) == -1) {
         if (currNeighborPos == topRight) {
             ++curr;
         }
