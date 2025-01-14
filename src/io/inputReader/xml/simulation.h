@@ -1211,12 +1211,48 @@ class boundary: public ::xml_schema::type
   void
   yRight (::std::unique_ptr< yRight_type > p);
 
+  // zFront
+  //
+  typedef ::xml_schema::string zFront_type;
+  typedef ::xsd::cxx::tree::traits< zFront_type, char > zFront_traits;
+
+  const zFront_type&
+  zFront () const;
+
+  zFront_type&
+  zFront ();
+
+  void
+  zFront (const zFront_type& x);
+
+  void
+  zFront (::std::unique_ptr< zFront_type > p);
+
+  // zBehind
+  //
+  typedef ::xml_schema::string zBehind_type;
+  typedef ::xsd::cxx::tree::traits< zBehind_type, char > zBehind_traits;
+
+  const zBehind_type&
+  zBehind () const;
+
+  zBehind_type&
+  zBehind ();
+
+  void
+  zBehind (const zBehind_type& x);
+
+  void
+  zBehind (::std::unique_ptr< zBehind_type > p);
+
   // Constructors.
   //
   boundary (const xTop_type&,
             const xBottom_type&,
             const yLeft_type&,
-            const yRight_type&);
+            const yRight_type&,
+            const zFront_type&,
+            const zBehind_type&);
 
   boundary (const ::xercesc::DOMElement& e,
             ::xml_schema::flags f = 0,
@@ -1248,6 +1284,8 @@ class boundary: public ::xml_schema::type
   ::xsd::cxx::tree::one< xBottom_type > xBottom_;
   ::xsd::cxx::tree::one< yLeft_type > yLeft_;
   ::xsd::cxx::tree::one< yRight_type > yRight_;
+  ::xsd::cxx::tree::one< zFront_type > zFront_;
+  ::xsd::cxx::tree::one< zBehind_type > zBehind_;
 };
 
 class import_checkpoint: public ::xml_schema::type

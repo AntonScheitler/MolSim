@@ -48,6 +48,8 @@
                                         <xsd:element name="xBottom" type="xsd:string" />
                                         <xsd:element name="yLeft" type="xsd:string" />
                                         <xsd:element name="yRight" type="xsd:string" />
+                                        <xsd:element name="zFront" type="xsd:string" />
+                                        <xsd:element name="zBehind" type="xsd:string" />
                                     </xsd:sequence>
                                 </xsd:complexType>
                             </xsd:element>

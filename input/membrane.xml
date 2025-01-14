@@ -19,6 +19,8 @@
             <xBottom>reflecting</xBottom>
             <yLeft>reflecting</yLeft>
             <yRight>reflecting</yRight>
+            <zFront>reflecting</zFront>
+            <zBehind>reflecting</zBehind>
         </boundary>
         <grav>
             <x>0</x>

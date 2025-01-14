@@ -935,6 +935,54 @@ yRight (::std::unique_ptr< yRight_type > x)
   this->yRight_.set (std::move (x));
 }
 
+const boundary::zFront_type& boundary::
+zFront () const
+{
+  return this->zFront_.get ();
+}
+
+boundary::zFront_type& boundary::
+zFront ()
+{
+  return this->zFront_.get ();
+}
+
+void boundary::
+zFront (const zFront_type& x)
+{
+  this->zFront_.set (x);
+}
+
+void boundary::
+zFront (::std::unique_ptr< zFront_type > x)
+{
+  this->zFront_.set (std::move (x));
+}
+
+const boundary::zBehind_type& boundary::
+zBehind () const
+{
+  return this->zBehind_.get ();
+}
+
+boundary::zBehind_type& boundary::
+zBehind ()
+{
+  return this->zBehind_.get ();
+}
+
+void boundary::
+zBehind (const zBehind_type& x)
+{
+  this->zBehind_.set (x);
+}
+
+void boundary::
+zBehind (::std::unique_ptr< zBehind_type > x)
+{
+  this->zBehind_.set (std::move (x));
+}
+
 
 // import_checkpoint
 // 
@@ -2516,12 +2564,16 @@ boundary::
 boundary (const xTop_type& xTop,
           const xBottom_type& xBottom,
           const yLeft_type& yLeft,
-          const yRight_type& yRight)
+          const yRight_type& yRight,
+          const zFront_type& zFront,
+          const zBehind_type& zBehind)
 : ::xml_schema::type (),
   xTop_ (xTop, this),
   xBottom_ (xBottom, this),
   yLeft_ (yLeft, this),
-  yRight_ (yRight, this)
+  yRight_ (yRight, this),
+  zFront_ (zFront, this),
+  zBehind_ (zBehind, this)
 {
 }
 
@@ -2533,7 +2585,9 @@ boundary (const boundary& x,
   xTop_ (x.xTop_, f, this),
   xBottom_ (x.xBottom_, f, this),
   yLeft_ (x.yLeft_, f, this),
-  yRight_ (x.yRight_, f, this)
+  yRight_ (x.yRight_, f, this),
+  zFront_ (x.zFront_, f, this),
+  zBehind_ (x.zBehind_, f, this)
 {
 }
 
@@ -2545,7 +2599,9 @@ boundary (const ::xercesc::DOMElement& e,
   xTop_ (this),
   xBottom_ (this),
   yLeft_ (this),
-  yRight_ (this)
+  yRight_ (this),
+  zFront_ (this),
+  zBehind_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -2620,6 +2676,34 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // zFront
+    //
+    if (n.name () == "zFront" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< zFront_type > r (
+        zFront_traits::create (i, f, this));
+
+      if (!zFront_.present ())
+      {
+        this->zFront_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // zBehind
+    //
+    if (n.name () == "zBehind" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< zBehind_type > r (
+        zBehind_traits::create (i, f, this));
+
+      if (!zBehind_.present ())
+      {
+        this->zBehind_.set (::std::move (r));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -2650,6 +2734,20 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "yRight",
       "");
   }
+
+  if (!zFront_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "zFront",
+      "");
+  }
+
+  if (!zBehind_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "zBehind",
+      "");
+  }
 }
 
 boundary* boundary::
@@ -2669,6 +2767,8 @@ operator= (const boundary& x)
     this->xBottom_ = x.xBottom_;
     this->yLeft_ = x.yLeft_;
     this->yRight_ = x.yRight_;
+    this->zFront_ = x.zFront_;
+    this->zBehind_ = x.zBehind_;
   }
 
   return *this;
@@ -4359,6 +4459,28 @@ operator<< (::xercesc::DOMElement& e, const boundary& i)
         e));
 
     s << i.yRight ();
+  }
+
+  // zFront
+  //
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "zFront",
+        e));
+
+    s << i.zFront ();
+  }
+
+  // zBehind
+  //
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "zBehind",
+        e));
+
+    s << i.zBehind ();
   }
 }
 

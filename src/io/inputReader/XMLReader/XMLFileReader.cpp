@@ -67,7 +67,7 @@ namespace inputReader {
 
                                 {getEnum(parameters->boundary()->yLeft()), getEnum(parameters->boundary()->yRight())},
                                 {getEnum(parameters->boundary()->xBottom()), getEnum(parameters->boundary()->xTop())},
-                                {outflow, outflow}}});
+                                {getEnum(parameters->boundary()->zFront()), getEnum(parameters->boundary()->zBehind())}}});
 
                 simData.setParticles(std::move(containerLinkedCell));
             } else {
