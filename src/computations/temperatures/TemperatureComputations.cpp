@@ -79,7 +79,6 @@ void TemperatureComputations::updateTemp(ParticleContainer& particles, double ta
 
 void TemperatureComputations::updateTempV2(ParticleContainer& particles, double targetTemp, double maxDeltaTemp) {
 
-    double currentTemp = calculateCurrentSystemTempV2(particles);
 
     // calculate average velocity ~v (excluding fix particles)
     std::array<double, 3> avgV = {0, 0, 0};
@@ -91,6 +90,7 @@ void TemperatureComputations::updateTempV2(ParticleContainer& particles, double 
     int n = particles.size();
     avgV = ArrayUtils::elementWiseScalarOp(1.0 / n, avgV, std::multiplies<>());
 
+    double currentTemp = calculateCurrentSystemTempV2(particles, avgV);
 
     double newTemp;
     if(targetTemp > currentTemp) {
