@@ -36,16 +36,23 @@ namespace inputReader {
         int type = 0;
 
 
-        std::cout << "entering XML parsing with filename" << filename << std::endl;
+        std::cout << "entering XML parsing with filename " << filename << std::endl;
 
         std::ifstream inputFile(filename);
+
+
         if (!inputFile) {
             throw std::runtime_error("Failed to open XML file.");
         }
 
+        std::cout << "opened input file " << std::endl;
+
         try {
+            std::cout << "opened simparser " << std::endl;
+
 
             std::unique_ptr<simulation> simParser = simulation_(inputFile, xml_schema::flags::dont_validate);
+            std::cout << "opened simparser " << std::endl;
 
 //            std::ostringstream command;
 //            command << "xmllint --noout --schema ../src/io/inputReader/xml/simulation.xsd " << filename;
@@ -57,7 +64,10 @@ namespace inputReader {
 //            }
 
             // use linked cell if specified
+
             auto parameters = simParser->parameters();
+            std::cout << "entering Container Type " << std::endl;
+
             if (parameters.present() && parameters->containerType().present() &&
                 parameters->containerType().get() == "linked") {
                 auto containerLinkedCell = std::make_unique<ParticleContainerLinkedCell>(ParticleContainerLinkedCell{
@@ -75,9 +85,18 @@ namespace inputReader {
                 auto containerDirectSum = std::make_unique<ParticleContainerDirectSum>(ParticleContainerDirectSum{});
                 simData.setParticles(std::move(containerDirectSum));
             }
+            std::cout << "finished reading container type " << std::endl;
+
             ParameterParser::readParams(simData, simParser);
+            std::cout << "finished reading params " << std::endl;
+
             ParameterParser::readThermo(simData, simParser);
+            std::cout << "finished reading thermo " << std::endl;
+
             ParameterParser::readMembrane(simData, simParser);
+            std::cout << "finished reading membrane " << std::endl;
+
+            std::cout << "read all params" << std::endl;
 
             if (simParser->parameters()->import_checkpoint().present()) {
                 CheckpointReader checkpointReader(simData);
@@ -85,9 +104,11 @@ namespace inputReader {
                                                            simParser->parameters()->import_checkpoint()->file_path().c_str());
             }
 
+            std::cout << "checkpointing done" << std::endl;
+
             type++;
 
-            SPDLOG_LOGGER_INFO(logger, "starting parsing cuboids");
+            SPDLOG_LOGGER_INFO(logger, "starting parsing particles");
 
             for (const auto &planet: simParser->clusters().particle()) {
 
@@ -105,6 +126,8 @@ namespace inputReader {
                 simData.getParticles().addParticle(temp);
                 SPDLOG_LOGGER_DEBUG(logger, "adding particle at coords {0}, {1}, {2}", x[0], x[1], x[2]);
             }
+            std::cout << "finished reading particles " << std::endl;
+
 
             for (const auto &cuboid: simParser->clusters().cuboid()) {
                 x[0] = cuboid.cornerCoordinates().x();
@@ -143,6 +166,8 @@ namespace inputReader {
 
                 type++;
             }
+            std::cout << "finished reading cuboids " << std::endl;
+
 
             for (const auto &disc: simParser->clusters().disc()) {
                 x[0] = disc.center().x();
@@ -163,6 +188,8 @@ namespace inputReader {
                 ParticleGenerator::generateDisc(simData.getParticles(), x, v, r, m, h, type, epsilon, sigma);
                 type++;
             }
+
+            std::cout << "finished reading discs " << std::endl;
 
         } catch (const xml_schema::exception &e) {
             std::cerr << "XML parsing error: " << e.what() << std::endl;

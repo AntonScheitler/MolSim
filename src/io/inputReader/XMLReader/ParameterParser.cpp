@@ -75,9 +75,20 @@ namespace ParameterParser {
     }
 
     void readMembrane(SimulationData &simData, const std::unique_ptr<simulation> &xmlParser){
-        simData.setK(xmlParser->membraneArgs()->k());
-        simData.setR0(xmlParser->membraneArgs()->r0());
-        auto vector = xmlParser->membraneArgs()->customForce();
-        simData.setCustomForce({vector.x(), vector.y(), vector.z()});
+
+        try {
+            if (xmlParser->membraneArgs().present()) {
+                simData.setK(xmlParser->membraneArgs()->k());
+                simData.setR0(xmlParser->membraneArgs()->r0());
+                auto vector = xmlParser->membraneArgs()->customForce();
+                simData.setCustomForce({vector.x(), vector.y(), vector.z()});
+            }
+        } catch (const xml_schema::exception &e) {
+            std::cerr << "XML parsing error: " << e.what() << std::endl;
+            exit(-1);
+        } catch (const std::exception &e) {
+            std::cerr << "Standard exception: " << e.what() << std::endl;
+            exit(-1);
+        }
     }
 }
