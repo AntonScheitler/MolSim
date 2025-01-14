@@ -2,22 +2,74 @@
 #include "ParticleGenerator.h"
 #include <cmath>
 #include "spdlogConfig.h"
+#include <iostream>
 
 
 namespace inputReader {
     void
     ParticleGenerator::generateCuboid(ParticleContainer &particles, std::array<double, 3> x, std::array<double, 3> v,
-                                      std::array<int, 3> d, double m, double h, int type, double e, double s, bool fixed) {
-        std::array<double, 3> tempx{};
-        for (int j = 0; j < d[0]; ++j) {
-            tempx[0] = j * h + x[0];
-            for (int k = 0; k < d[1]; ++k) {
-                tempx[1] = k * h + x[1];
-                for (int l = 0; l < d[2]; ++l) {
-                    tempx[2] = l * h + x[2];
+                                      std::array<int, 3> d, double m, double h, int type, double e, double s) {
 
-                    Particle temp = Particle(tempx, v, m, type, e, s, fixed);
+
+        std::array<double, 3> tempx{};
+        for (int dz = 0; dz < d[2]; ++dz) {
+            tempx[2] = dz * h + x[2];
+            for (int dy = 0; dy < d[1]; ++dy) {
+                tempx[1] = dy * h + x[1];
+                for (int dx = 0; dx < d[0]; ++dx) {
+                    tempx[0] = dx * h + x[0];
+
+                    Particle temp = Particle(tempx, v, m, type);
+                    temp.setSigma(s);
+                    temp.setEpsilon(e);
+                    addNeighbors(temp, dx, dy, dz, d);
+
                     particles.addParticle(temp);
+                }
+            }
+        }
+    }
+
+
+
+    void ParticleGenerator::addNeighbors(Particle &particle, int dx, int dy, int dz, std::array<int, 3> d) {
+        for (int z = 0; z <= 0; ++z) {
+            for (int y = -1; y <= 1; ++y) {
+                for (int x = -1; x <= 1; ++x) {
+                    if (x == 0 && y == 0 && z == 0) {
+                        continue;
+                    }
+
+                    int neighborZ = dz + z;
+                    int neighborY = dy + y;
+                    int neighborX = dx + x;
+
+
+                    if (neighborX >= 0 && neighborX < d[0] &&
+                        neighborY >= 0 && neighborY < d[1] &&
+                        neighborZ >= 0 && neighborZ < d[2]) {
+
+                        int neighborIndex = neighborX +
+                                            neighborY * d[0] +
+                                            neighborZ * d[1] * d[0];
+
+
+
+
+                        int diffCount = (x != 0) + (y != 0) + (z != 0);
+                        if (diffCount == 1) {
+                            particle.addNeighborIdx(neighborIndex);
+                        } else {
+                            particle.addDiagNeighborIdx(neighborIndex);
+                        }
+                    } else {
+                        int diffCount = (x != 0) + (y != 0) + (z != 0);
+                        if (diffCount == 1) {
+                            particle.addNeighborIdx(-1);
+                        } else {
+                            particle.addDiagNeighborIdx(-1);
+                        }
+                    }
                 }
             }
         }
@@ -48,6 +100,7 @@ namespace inputReader {
                 Particle temp = Particle(tempx, v, m, type);
                 temp.setSigma(s);
                 temp.setEpsilon(e);
+
                 particles.addParticle(temp);
             }
         }

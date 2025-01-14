@@ -16,7 +16,8 @@
             <xBottom>periodic</xBottom>
             <yLeft>outflow</yLeft>
             <yRight>outflow</yRight>
-            <!-- TODO: periodic boundary conditions in z direction -->
+            <zFront>periodic</zFront>
+            <zBehind>periodic</zBehind>
         </boundary>
     </parameters>
     <clusters>
@@ -42,7 +43,7 @@
             <brownianMotion>0.0</brownianMotion>
             <epsilon>2.0</epsilon>
             <sigma>1.1</sigma>
-            <!-- TODO: mark as fixed -->
+            <fixed>true</fixed>
         </cuboid>
         <!-- cuboid 2 (right wall) -->
         <cuboid>
@@ -66,10 +67,7 @@
             <brownianMotion>0.0</brownianMotion>
             <epsilon>2.0</epsilon>
             <sigma>1.1</sigma>
-            <!-- TODO: mark as fixed -->
-            <!--
-                <fixed> (does this work?)
-            -->
+            <fixed>true</fixed>
         </cuboid>
         <cuboid>
             <!-- cuboid 3 (fluid) -->
@@ -96,11 +94,9 @@
         </cuboid>
     </clusters>
     <thermo>
+        <version>2</version>
         <init_T>40</init_T>
         <n>10</n>
-        <!-- TODO: specify which thermostat to use (v2) -->
-        <!--
-            <version>2</version>
-        -->
+
     </thermo>
 </simulation>

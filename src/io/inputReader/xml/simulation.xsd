@@ -48,10 +48,12 @@
                                         <xsd:element name="xBottom" type="xsd:string" />
                                         <xsd:element name="yLeft" type="xsd:string" />
                                         <xsd:element name="yRight" type="xsd:string" />
+                                        <xsd:element name="zFront" type="xsd:string" />
+                                        <xsd:element name="zBehind" type="xsd:string" />
                                     </xsd:sequence>
                                 </xsd:complexType>
                             </xsd:element>
-                            <xsd:element name="grav" type="xsd:double" minOccurs="0"/>
+                            <xsd:element name="grav" type="vectorType" minOccurs="0"/>
                             <xsd:element name="import_checkpoint" minOccurs="0">
                                 <xsd:complexType>
                                     <xsd:sequence>
@@ -59,6 +61,8 @@
                                     </xsd:sequence>
                                 </xsd:complexType>
                             </xsd:element>
+
+
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>
@@ -76,7 +80,7 @@
                                         <xsd:element name="mass" type="xsd:double"/>
                                         <xsd:element name="epsilon" type="xsd:double" minOccurs="0"/>
                                         <xsd:element name="sigma" type="xsd:double" minOccurs="0"/>
-
+                                        <xsd:element name="fixed" type="xsd:boolean" minOccurs="0"/>
 
                                     </xsd:sequence>
                                 </xsd:complexType>
@@ -100,6 +104,7 @@
 
                                         <xsd:element name="sigma" type="xsd:double" minOccurs="0"/>
 
+                                        <xsd:element name="fixed" type="xsd:boolean" minOccurs="0"/>
 
                                     </xsd:sequence>
                                 </xsd:complexType>
@@ -122,6 +127,10 @@
                                         <xsd:element name="epsilon" type="xsd:double" minOccurs="0"/>
 
                                         <xsd:element name="sigma" type="xsd:double" minOccurs="0"/>
+                                        <xsd:element name="special_coords" type="vectorType" minOccurs="0"  maxOccurs="unbounded"/>
+
+                                        <xsd:element name="fixed" type="xsd:boolean" minOccurs="0"/>
+
 
                                     </xsd:sequence>
                                 </xsd:complexType>
@@ -134,10 +143,23 @@
                 <xsd:element name="thermo" minOccurs="0">
                     <xsd:complexType>
                         <xsd:sequence>
+                            <xsd:element name="version" type="xsd:int"/>
                             <xsd:element name="init_T" type="xsd:double"/>
                             <xsd:element name="n" type="xsd:double" />
                             <xsd:element name="target" type="xsd:double" minOccurs="0"/>
                             <xsd:element name="maxStep" type="xsd:double" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+
+                <xsd:element name="membraneArgs" minOccurs="0">
+                    <xsd:complexType>
+                        <xsd:sequence>
+
+                            <xsd:element name="r0" type="xsd:double" />
+                            <xsd:element name="k" type="xsd:double" />
+                            <xsd:element name="customForce" type="vectorType"/>
+
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>

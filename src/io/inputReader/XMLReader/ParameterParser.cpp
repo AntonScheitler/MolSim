@@ -25,7 +25,8 @@ namespace ParameterParser {
                     simData.setStartTime(xmlParser->parameters()->t_start().get());
                 }
                 if (xmlParser->parameters()->grav().present()) {
-                    simData.setGrav(xmlParser->parameters()->grav().get());
+                    auto grav = xmlParser->parameters()->grav();
+                    simData.setGrav({grav->x(), grav->y(), grav->z()});
                 }
 
             }
@@ -63,9 +64,6 @@ namespace ParameterParser {
                 double maxStep = (xmlParser->thermo()->maxStep().present()) ? (xmlParser->thermo()->maxStep().get())
                                                                             : std::numeric_limits<double>::infinity();
                 simData.setMaxDeltaTemp(maxStep);
-
-                //TODO: read thermoVersion from thermo xml
-                simData.setThermoVersion(xmlParser->thermo()->version());
             }
         } catch (const xml_schema::exception &e) {
             std::cerr << "XML parsing error: " << e.what() << std::endl;
@@ -74,5 +72,12 @@ namespace ParameterParser {
             std::cerr << "Standard exception: " << e.what() << std::endl;
             exit(-1);
         }
+    }
+
+    void readMembrane(SimulationData &simData, const std::unique_ptr<simulation> &xmlParser){
+        simData.setK(xmlParser->membraneArgs()->k());
+        simData.setR0(xmlParser->membraneArgs()->r0());
+        auto vector = xmlParser->membraneArgs()->customForce();
+        simData.setCustomForce({vector.x(), vector.y(), vector.z()});
     }
 }

@@ -67,7 +67,7 @@ namespace inputReader {
 
                                 {getEnum(parameters->boundary()->yLeft()), getEnum(parameters->boundary()->yRight())},
                                 {getEnum(parameters->boundary()->xBottom()), getEnum(parameters->boundary()->xTop())},
-                                {outflow, outflow}}});
+                                {getEnum(parameters->boundary()->zFront()), getEnum(parameters->boundary()->zBehind())}}});
 
                 simData.setParticles(std::move(containerLinkedCell));
             } else {
@@ -77,6 +77,7 @@ namespace inputReader {
             }
             ParameterParser::readParams(simData, simParser);
             ParameterParser::readThermo(simData, simParser);
+            ParameterParser::readMembrane(simData, simParser);
 
             if (simParser->parameters()->import_checkpoint().present()) {
                 CheckpointReader checkpointReader(simData);
@@ -124,15 +125,26 @@ namespace inputReader {
                 m = cuboid.mass();
                 h = cuboid.meshWidth();
 
+                std::vector<size_t> movingMembranePartIndicesArgs;
+                for(const auto &coords: cuboid.special_coords()){
+                    size_t index = coords.x() + coords.y() * d[0] + coords.z() * d[1] * d[0];
+                    movingMembranePartIndicesArgs.push_back(index);
+
+                }
+                simData.setMovingMembranePartIndices(movingMembranePartIndicesArgs);
+
+
                 simData.setAverageVelocity(cuboid.brownianMotion());
 
                 double epsilon = cuboid.epsilon().present() ? cuboid.epsilon().get() : simData.getEpsilon();
                 double sigma = cuboid.sigma().present() ? cuboid.sigma().get() : simData.getSigma();
 
-                //TODO: add 'fixed' param to cuboid in xml scheme
+
+
                 //TODO: also add 'fixed' param for each particle in checkpointing
                 bool fixed = cuboid.fixed();
                 ParticleGenerator::generateCuboid(simData.getParticles(), x, v, d, m, h, type, epsilon, sigma, fixed);
+
 
                 type++;
             }
