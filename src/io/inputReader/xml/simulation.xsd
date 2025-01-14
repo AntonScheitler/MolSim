@@ -129,7 +129,9 @@
                                         <xsd:element name="sigma" type="xsd:double" minOccurs="0"/>
                                         <xsd:element name="special_coords" type="vectorType" minOccurs="0"  maxOccurs="unbounded"/>
 
+
                                         <xsd:element name="fixed" type="xsd:boolean" minOccurs="0"/>
+
 
 
                                     </xsd:sequence>

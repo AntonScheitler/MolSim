@@ -1,7 +1,6 @@
 #pragma once
 
 #include "particle/iterator/pairParticleIterator/PairParticleIterator.h"
-#include <algorithm>
 #include <cstddef>
 #include <memory>
 #include <particle/Particle.h>

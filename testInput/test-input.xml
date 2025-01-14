@@ -17,7 +17,11 @@
             <yLeft>periodic</yLeft>
             <yRight>periodic</yRight>
         </boundary>
-        <grav>-15</grav>
+        <grav>
+            <x>0</x>
+            <y>-15</y>
+            <z>0</z>
+        </grav>
     </parameters>
     <clusters>
         <cuboid>

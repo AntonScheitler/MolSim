@@ -41,7 +41,7 @@ TEST_F(XMLFileReaderTest, XMlFileReaderCorrectInputTest) {
         EXPECT_EQ(boundaryConfigExpected.y, boundaryConfigActual.y);
         EXPECT_EQ(boundaryConfigExpected.z, boundaryConfigActual.z);
 
-        EXPECT_DOUBLE_EQ(simData.getGrav(), -15);
+        EXPECT_DOUBLE_EQ(simData.getGrav()[1], -15);
 
         // first cuboid
         // take first particle and check its attributes

@@ -53,7 +53,7 @@ TEST_F(TemperatureComputationsTest, HeatingTest) {
     simulator.before();
     int iterations = 100;
     for(int i = 0; i < iterations; i++) {
-        simulator.step(i);
+        simulator.step(i, i);
     }
     simulator.after();
 
@@ -73,7 +73,7 @@ TEST_F(TemperatureComputationsTest, CoolingTest) {
     simulator.before();
     int iterations = 100;
     for(int i = 0; i < iterations; i++) {
-        simulator.step(i);
+        simulator.step(i, i);
     }
     simulator.after();
 
@@ -93,7 +93,7 @@ TEST_F(TemperatureComputationsTest, HoldingTempTest) {
     simulator.before();
     int iterations = 100;
     for(int i = 0; i < iterations; i++) {
-        simulator.step(i);
+        simulator.step(i, i);
     }
     simulator.after();
 

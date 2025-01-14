@@ -9,6 +9,21 @@
 
 #include <array>
 #include <string>
+#include <vector>
+
+enum DirectNeighborPos {
+    left,
+    right,
+    top,
+    bottom,
+};
+
+enum DiagonalNeighborPos {
+    topLeft,
+    topRight,
+    bottomLeft,
+    bottomRight,
+};
 
 /**
  * @brief Class for modeling particles, where each Particle has three-dimensional position, velocity and force that is
@@ -38,6 +53,16 @@ private:
      * @brief Force which was effective on this particle
      */
     std::array<double, 3> oldF;
+
+    /**
+     * @brief direct Neigbors of Cell
+     */
+    std::vector<int> directNeighborsIndices;
+
+    /**
+    * @brief diagonal Neigbors of Cell
+    */
+    std::vector<int> diagonalNeighborsIndices;
 
     /**
      * @brief Mass of this particle
@@ -236,6 +261,7 @@ public:
      * @param typeArg the type of this particle
      */
     void setType(int typeArg);
+
     /**
      * @brief returns true if this particle is fixed and therefore does not change its position
      */
@@ -245,6 +271,31 @@ public:
      * @param fixedArg true : fixed, false : not fixed
      */
     void setFixed(bool fixedArg);
+
+
+    /**
+     * @brief adds the index of a particle as a direct neighbor to this particle 
+     * @param particleIdx the index of the particle to add as a direct neighbor
+     */
+    void addNeighborIdx(int particleIdx);
+
+    /**
+     * @brief adds the index of a particle as a diagonal neighbor to this particle 
+     * @param particleIdx the index of the particle to add as a diagonal neighbor
+     */
+    void addDiagNeighborIdx(int particleIdx);
+
+    /**
+     * @brief returns the index of a direct neighbor particle
+     * @param pos the relative position of the neighbor particle
+     */
+    int getNeighborIdx(DirectNeighborPos pos);
+
+    /**
+     * @brief returns the index of a diagonal neighbor particle
+     * @param pos the relative position of the neighbor particle
+     */
+    int getDiagNeighborIdx(DiagonalNeighborPos pos);
 };
 
 std::ostream &operator<<(std::ostream &stream, Particle &p);

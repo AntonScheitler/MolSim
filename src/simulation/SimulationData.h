@@ -10,7 +10,8 @@
 enum SimulationType : int {
     comet = 0,
     collision = 1,
-    collisionLinkedCell = 2
+    collisionLinkedCell = 2,
+    membrane = 3,
 };
 
 /**
@@ -222,13 +223,13 @@ public:
     /**
      * @brief returns the gravitational acceleration
      */
-    double getGrav();
+    std::array<double, 3> getGrav();
 
     /**
      * @brief sets the gravitational acceleration
      * @param gravArg new gravity
      */
-    void setGrav(double gravArg);
+    void setGrav(std::array<double, 3> gravArg);
 
     /**
      * @brief returns true if checkpoint is activated
@@ -241,8 +242,59 @@ public:
      */
     void setCheckpoint(bool checkpoingArg);
 
+
     void setThermoVersion(int thermoVersionArg);
+
     int getThermoVersion();
+
+    /**
+     * @brief returns the stiffness constant for membrane neighbor force computation
+     * @return the stiffness constant
+     */
+    double getK();
+
+    /**
+     * @brief sets the stiffness constant for membrane neighbor force computation
+     * @param newK the value to set the stiffness constant of the simulation to
+     */
+    void setK(double newK);
+
+    /**
+     * @brief returns the average bond length between membrane neighbors
+     * @return the bond length
+     */
+    double getR0();
+
+    /**
+     * @brief sets the average bond length between membrane neighbors
+     * @param newR0 the value to set the average bond length of the simulation to
+     */
+    void setR0(double newR0);
+
+    /**
+     * @brief returns the indices of the parts of the membrane that are pulled by some custom force
+     * @return the indices of the parts of the membrane
+     */
+    std::vector<size_t> getMovingMembranePartIndices();
+
+    /**
+     * @brief sets the indices of the parts of the membrane that are pulled by some custom force
+     * @param newMovingMembranePartIndices the indices to set movingMembranePartIndices to
+     */
+    void setMovingMembranePartIndices(std::vector<size_t> newMovingMembranePartIndices);
+
+    /**
+     * @brief returns the custom force that will be applied to a selection of particles
+     * @return the custom force
+     */
+    std::array<double, 3> getCustomForce();
+
+    /**
+     * @brief sets the custom force that will be applied to a selection of particles
+     * @param newCustomForce the force to set the custom force to
+     */
+    void setCustomForce(std::array<double, 3> newCustomForce);
+
 
 private:
     SimulationType simType;
@@ -264,9 +316,16 @@ private:
     double maxDeltaTemp;
     bool thermostat;
 
-    double grav;
+    std::array<double, 3> grav;
     bool checkpoint;
+
 
     int thermoVersion;
 
+
+    // membrane
+    double k;
+    double r0;
+    std::vector<size_t> movingMembranePartIndices;
+    std::array<double, 3> customForce;
 };

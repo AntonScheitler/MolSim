@@ -241,6 +241,29 @@ PairParticleIteratorBoundaryNHalo ParticleContainerLinkedCell::endPairGhost() {
     return {mesh.end(), mesh.end(), mesh, numCells, cellSize, boundaryConfig, particles};
 }
 
+PairParticleIteratorMembraneDirectNeighbor ParticleContainerLinkedCell::beginMembraneDirectNeighbor() {
+
+    return {particles.begin(), particles.end(), particles};
+}
+
+PairParticleIteratorMembraneDirectNeighbor ParticleContainerLinkedCell::endMembraneDirectNeighbor() {
+    auto test = particles.end();
+    SPDLOG_DEBUG("first end created");
+
+    test = particles.end();
+    SPDLOG_DEBUG("second iterator created");
+
+    return {particles.end(), particles.end(), particles};
+}
+
+PairParticleIteratorMembraneDiagonalNeighbor ParticleContainerLinkedCell::beginMembraneDiagonalNeighbor() {
+    return {particles.begin(), particles.end(), particles};
+}
+
+PairParticleIteratorMembraneDiagonalNeighbor ParticleContainerLinkedCell::endMembraneDiagonalNeighbor() {
+    return {particles.end(), particles.end(), particles};
+}
+
 int ParticleContainerLinkedCell::size() {
     int size = 0;
     for (auto &i: mesh) {
@@ -266,7 +289,7 @@ double ParticleContainerLinkedCell::getCutoffRadius() {
     return cutoffRadius;
 }
 
-Particle &ParticleContainerLinkedCell::getParticleAt(int particleIndex) {
+Particle &ParticleContainerLinkedCell::getParticleAt(size_t particleIndex) {
     return particles.at(particleIndex);
 }
 

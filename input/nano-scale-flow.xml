@@ -10,7 +10,7 @@
             <z>12</z>
         </domainSize>
         <cutoff>2.75</cutoff>
-        <grav>-0.8</grav>
+
         <boundary>
             <xTop>periodic</xTop>
             <xBottom>periodic</xBottom>
@@ -19,6 +19,11 @@
             <zFront>periodic</zFront>
             <zBehind>periodic</zBehind>
         </boundary>
+        <grav>
+            <x>0</x>
+            <y>-0.8</y>
+            <z>0</z>
+        </grav>
     </parameters>
     <clusters>
         <cuboid>
