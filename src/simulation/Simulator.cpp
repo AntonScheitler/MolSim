@@ -19,7 +19,7 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
         // use gravity for the comet simulation
         case comet:
             before = [this]() {};
-            step = [this](size_t iteration) {
+            step = [this](size_t iteration, double currentTime) {
                 PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
                 ForceComputations::resetForces(simData.getParticles());
                 ForceComputations::computeGravity(simData.getParticles());
@@ -35,7 +35,7 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
             before = [this]() {
                 VelocityComputations::applyBrownianMotion2D(simData.getParticles(), simData.getAverageVelocity());
             };
-            step = [this](size_t iteration) {
+            step = [this](size_t iteration, double currentTime) {
                 PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
                 ForceComputations::resetForces(simData.getParticles());
                 ForceComputations::computeLennardJonesPotential(simData.getParticles(), simData.getEpsilon(),
@@ -58,7 +58,7 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                                                                 simData.getAverageVelocity());
                 }
             };
-            step = [this](size_t iteration) {
+            step = [this](size_t iteration, double currentTime) {
                 // save previous position and update the position of particles in the mesh based on the new one
                 PositionComputations::updateOldX(simData.getParticles());
                 PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
@@ -99,7 +99,7 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
         case membrane:
             // TODO no brownian motion?
             before = [this]() {};
-            step = [this](size_t iteration) {
+            step = [this](size_t iteration, double currentTime) {
                 // save previous position and update the position of particles in the mesh based on the new one
 
                 PositionComputations::updateOldX(simData.getParticles());
@@ -118,7 +118,9 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
 
                     ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav());
 
-                    ForceComputations::applyCustomForceVector(*containerLinkedCell, simData.getMovingMembranePartIndices(), simData.getCustomForce());
+                    if (currentTime <= 150) {
+                        ForceComputations::applyCustomForceVector(*containerLinkedCell, simData.getMovingMembranePartIndices(), simData.getCustomForce());
+                    }
 
                     VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
 
@@ -200,7 +202,7 @@ size_t Simulator::runSimulationLoop() {
 
         numUpdatedParticles += simData.getParticles().size();
         SPDLOG_LOGGER_DEBUG(logger, "before step instruction .");
-        step(iteration);
+        step(iteration, currentTime);
         SPDLOG_LOGGER_DEBUG(logger, "after step instruction.");
         iteration++;
 
