@@ -28,9 +28,9 @@ ParticleContainerLinkedCell::ParticleContainerLinkedCell(std::array<double, 3> d
 
     // add all cells to the mesh
     size_t cellId = 0;
-    for (int z = 0; z < numCells[0]; z++) {
+    for (int z = 0; z < numCells[2]; z++) {
         for (int y = 0; y < numCells[1]; y++) {
-            for (int x = 0; x < numCells[2]; x++) {
+            for (int x = 0; x < numCells[0]; x++) {
                 bool isBoundary = x == 0 || y == 0 || z == 0 || x == numCells[0] - 1 ||
                                   y == numCells[1] - 1 || z == numCells[2] - 1;
                 Cell cell = Cell(isBoundary, cellId);
@@ -116,9 +116,10 @@ bool ParticleContainerLinkedCell::correctCellMembershipSingleParticle(size_t par
             mesh[newCellIndex].addParticleIdx(particleIdx);
             particle.setOldX(particle.getX());
             SPDLOG_DEBUG("adding particle into cell {0}", newCellIndex);
-        } else
+        } else {
             particle.setActive(false);
-        SPDLOG_DEBUG("particle outflowing");
+            SPDLOG_DEBUG("particle outflowing");
+        }
         return true;
     }
     return false;
