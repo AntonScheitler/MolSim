@@ -14,10 +14,10 @@
         <boundary>
             <xTop>reflecting</xTop>
             <xBottom>reflecting</xBottom>
-            <yLeft>reflecting</yLeft>
-            <yRight>reflecting</yRight>
-            <zFront>reflecting</zFront>
-            <zBehind>reflecting</zBehind>
+            <yLeft>periodic</yLeft>
+            <yRight>periodic</yRight>
+            <zFront>periodic</zFront>
+            <zBehind>periodic</zBehind>
         </boundary>
         <grav>
             <x>0</x>
@@ -48,7 +48,7 @@
             <epsilon>1.0</epsilon>
             <sigma>1.2</sigma>
         </cuboid>
-        <!--<cuboid>
+        <cuboid>
             <cornerCoordinates>
                 <x>0.6</x>
                 <y>14.6</y>
@@ -69,6 +69,6 @@
             <brownianMotion>0.0</brownianMotion>
             <epsilon>1.0</epsilon>
             <sigma>1.1</sigma>
-            </cuboid>-->
+            </cuboid>
     </clusters>
 </simulation>
