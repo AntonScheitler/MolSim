@@ -173,8 +173,9 @@ void ParticleContainerLinkedCell::computeNeighborCellsMatrix() {
                 neighborCellsMatrix.push_back({});
 
                 for (int offsetZ = 0; offsetZ < 2; offsetZ++) {
-                    for (int offsetY = 0; offsetY < 2; offsetY++) {
+                    for (int offsetY = -1; offsetY < 2; offsetY++) {
                         for (int offsetX = -1; offsetX < 2; offsetX++) {
+                            if (offsetY == -1 && offsetZ == 0) continue;
                             if (offsetX == -1 && offsetY == 0 && offsetZ == 0) continue;
                             std::array<int, 3> neighborCoords = ArrayUtils::elementWisePairOp(
                                     currCoords, {offsetX, offsetY, offsetZ}, std::plus<>());
@@ -190,9 +191,9 @@ void ParticleContainerLinkedCell::computeNeighborCellsMatrix() {
                                 continue;
 
                             // if coord is not out of bounds, use periodic behavior
-                            double newX = (neighborCoords[0] + numCells[0]) % numCells[0];
-                            double newY = (neighborCoords[1] + numCells[1]) % numCells[1];
-                            double newZ = (neighborCoords[2] + numCells[2]) % numCells[2];
+                            int newX = (neighborCoords[0] + numCells[0]) % numCells[0];
+                            int newY = (neighborCoords[1] + numCells[1]) % numCells[1];
+                            int newZ = (neighborCoords[2] + numCells[2]) % numCells[2];
 
                             size_t neighborIdx = newX + (newY * numCells[0]) + (newZ * numCells[0] * numCells[1]);
                             neighborCellsMatrix[currIdx].push_back(neighborIdx);
