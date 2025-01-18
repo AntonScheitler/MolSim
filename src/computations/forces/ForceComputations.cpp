@@ -68,6 +68,12 @@ void ForceComputations::computeLennardJonesPotentialCutoff(ParticleContainerLink
     // iterate through all pairs of particles and calculate lennard-jones potential
     for (auto it = particles.beginPairParticle(); *it != *(particles.endPairParticle()); it->operator++()) {
         std::pair<Particle &, Particle &> pair = **it;
+        if (pair.first.getSigma() != pair.second.getSigma()) {
+            sigma = (pair.first.getSigma() + pair.second.getSigma()) / 2;
+        }
+        if (pair.first.getEpsilon() != pair.second.getEpsilon()) {
+            epsilon = sqrt(pair.first.getEpsilon() * pair.second.getSigma());
+        }
 
         std::array<double, 3> distanceVector = ArrayUtils::elementWisePairOp(pair.first.getX(), pair.second.getX(),
                                                                              std::minus<>());
