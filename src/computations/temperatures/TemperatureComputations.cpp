@@ -4,17 +4,14 @@
 #include "spdlogConfig.h"
 
 
-void TemperatureComputations::initTemp(ParticleContainer& particles, double averageVelocity, double initialTemp) {
+void TemperatureComputations::initTemp(ParticleContainer& particles, double initialTemp, int dimensions) {
+    // TODO: maybe check for valid dimensions?
     for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
         Particle& particle = **it;
         double factor = sqrt(initialTemp / particle.getM());
-        std::array<double, 3> maxBoltzVelocity = maxwellBoltzmannDistributedVelocity(averageVelocity, 3);
-        maxBoltzVelocity[2] = 0; // TODO: update this depending on number of dimensions
-
-        std::array<double, 3> v = ArrayUtils::elementWiseScalarOp(factor, maxBoltzVelocity, std::multiplies<>());
-        particle.setV(v);
-        SPDLOG_DEBUG("init v: {0}, {1}, {2}", v[0], v[1], v[2]);
-
+        std::array<double, 3> velocity = maxwellBoltzmannDistributedVelocity(factor, dimensions);
+        particle.setV(velocity);
+        SPDLOG_DEBUG("init v: {0}, {1}, {2}", velocity[0], velocity[1], velocity[2]);
     }
 }
 

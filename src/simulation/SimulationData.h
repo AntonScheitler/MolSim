@@ -242,9 +242,15 @@ public:
      */
     void setCheckpoint(bool checkpoingArg);
 
-
+    /**
+     * @brief sets the version of the thermostat to use
+     * @param thermoVersionArg thermostat version number (TODO: valid range)
+     */
     void setThermoVersion(int thermoVersionArg);
 
+    /**
+     * @brief returns the version number of the used thermostat for this simulation
+     */
     int getThermoVersion();
 
     /**
@@ -319,9 +325,7 @@ private:
     std::array<double, 3> grav;
     bool checkpoint;
 
-
     int thermoVersion;
-
 
     // membrane
     double k;

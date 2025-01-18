@@ -25,7 +25,7 @@ SimulationData::SimulationData() {
     grav = {0, 0, 0};
 
     thermostat = false;
-    thermoVersion = 2; // TODO: default thermo version for testing purpose set to 2
+    thermoVersion = 1; // TODO: default thermo version for testing purpose set to 2
 
 }
 

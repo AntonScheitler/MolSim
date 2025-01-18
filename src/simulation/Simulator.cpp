@@ -51,8 +51,8 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
         case collisionLinkedCell:
             before = [this]() {
                 if (simData.isThermostat()) {
-                    TemperatureComputations::initTemp(simData.getParticles(), simData.getAverageVelocity(),
-                                                      simData.getInitialTemp());
+                    //TODO change dimensions number
+                    TemperatureComputations::initTemp(simData.getParticles(), simData.getInitialTemp(), 2);
                 } else {
                     VelocityComputations::applyBrownianMotion2D(simData.getParticles(),
                                                                 simData.getAverageVelocity());
