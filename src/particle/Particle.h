@@ -296,6 +296,18 @@ public:
      * @param pos the relative position of the neighbor particle
      */
     int getDiagNeighborIdx(DiagonalNeighborPos pos);
+
+    /**
+     * @brief returns a vector of indices for the direct neighbors of this particle
+     * @retrun a vector of indices for the direct neighbors of this particle
+     */
+    std::vector<int>& getAllDirectNeighborIndices();
+
+    /**
+     * @brief returns a vector of indices for the diagonal neighbors of this particle
+     * @retrun a vector of indices for the direct neighbors of this particle
+     */
+    std::vector<int>& getAllDiagonalNeighborIndices();
 };
 
 std::ostream &operator<<(std::ostream &stream, Particle &p);

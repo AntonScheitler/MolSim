@@ -213,6 +213,14 @@ void Particle::addDiagNeighborIdx(int particleIDArg) {
     diagonalNeighborsIndices.push_back(particleIDArg);
 }
 
+std::vector<int>& Particle::getAllDirectNeighborIndices() {
+    return directNeighborsIndices; 
+}
+
+std::vector<int>& Particle::getAllDiagonalNeighborIndices() {
+    return diagonalNeighborsIndices; 
+}
+
 std::ostream &operator<<(std::ostream &stream, Particle &p) {
     stream << p.toString();
     return stream;
