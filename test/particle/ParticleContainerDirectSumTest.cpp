@@ -57,8 +57,7 @@ TEST_F(ParticleContainerDirectSumTest, ParticleContainerDirectSumPairIteratorTes
     std::vector<std::pair<Particle, Particle>> otherPairs = {};
     for (double i = 0; i < 3; i++) {
         for (double j = i + 1; j < 4; j++) {
-            otherPairs.push_back(std::pair(Particle({i, i, i}, {i, i, i}, i),
-                        Particle({j, j, j}, {j, j, j}, j)));
+            otherPairs.push_back(std::make_pair(container.getParticle(i), container.getParticle(j)));
         }
     }
     size_t pairIndex = 0;
