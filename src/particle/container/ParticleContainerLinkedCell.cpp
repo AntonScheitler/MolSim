@@ -140,7 +140,7 @@ void ParticleContainerLinkedCell::correctCellMembershipAllParticles() {
 
 void ParticleContainerLinkedCell::getPeriodicDistanceVector(const std::array<double, 3> &point1,
                                                             const std::array<double, 3> &point2,
-                                                            std::array<double, 3> &v) {
+                                                            std::array<double, 3>& distanceVector) {
     // iterate through every axis
     for (int axis = 0; axis < 3; axis++) {
         // check if point1 is on one side of the boundary of the given axis and point2 is on the other 
@@ -152,12 +152,12 @@ void ParticleContainerLinkedCell::getPeriodicDistanceVector(const std::array<dou
                  point1[axis] > (cellSize[axis] * numCells[axis]) - cellSize[axis])) {
                 // for every axis where point1 and point2 are on opposite ends of the boundary, invert the distance vector
                 // and subtract/add the distance between the boundaries to it
-                v[axis] = v[axis] < 0 ?
-                          v[axis] + (cellSize[axis] * numCells[axis])
-                                      : v[axis] > 0 ?
-                                        v[axis] - (cellSize[axis] * numCells[axis])
+                distanceVector[axis] = distanceVector[axis] < 0 ?
+                          distanceVector[axis] + (cellSize[axis] * numCells[axis])
+                                      : distanceVector[axis] > 0 ?
+                                        distanceVector[axis] - (cellSize[axis] * numCells[axis])
                                                     :
-                                        v[axis];
+                                        distanceVector[axis];
             }
         }
     }
