@@ -145,7 +145,7 @@
                 <xsd:element name="thermo" minOccurs="0">
                     <xsd:complexType>
                         <xsd:sequence>
-                            <xsd:element name="version" type="xsd:int"/>
+                            <xsd:element name="version" type="xsd:int" minOccurs="0"/>
                             <xsd:element name="init_T" type="xsd:double"/>
                             <xsd:element name="n" type="xsd:double" />
                             <xsd:element name="target" type="xsd:double" minOccurs="0"/>

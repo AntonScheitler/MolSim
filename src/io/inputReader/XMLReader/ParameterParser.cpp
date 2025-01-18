@@ -55,7 +55,9 @@ namespace ParameterParser {
     void readThermo(SimulationData &simData, const std::unique_ptr<simulation> &xmlParser) {
         try {
             if (xmlParser->thermo().present()) {
-                simData.setThermoVersion(xmlParser->thermo()->version());
+                if(xmlParser->thermo()->version().present()) {
+                    simData.setThermoVersion(xmlParser->thermo()->version().get());
+                }
                 simData.activateThermostat();
                 simData.setInitialTemp(xmlParser->thermo()->init_T());
                 simData.setThermoFrequency(xmlParser->thermo()->n());

@@ -953,16 +953,20 @@ class thermo: public ::xml_schema::type
   // version
   //
   typedef ::xml_schema::int_ version_type;
+  typedef ::xsd::cxx::tree::optional< version_type > version_optional;
   typedef ::xsd::cxx::tree::traits< version_type, char > version_traits;
 
-  const version_type&
+  const version_optional&
   version () const;
 
-  version_type&
+  version_optional&
   version ();
 
   void
   version (const version_type& x);
+
+  void
+  version (const version_optional& x);
 
   // init_T
   //
@@ -1030,8 +1034,7 @@ class thermo: public ::xml_schema::type
 
   // Constructors.
   //
-  thermo (const version_type&,
-          const init_T_type&,
+  thermo (const init_T_type&,
           const n_type&);
 
   thermo (const ::xercesc::DOMElement& e,
@@ -1060,7 +1063,7 @@ class thermo: public ::xml_schema::type
          ::xml_schema::flags);
 
   protected:
-  ::xsd::cxx::tree::one< version_type > version_;
+  version_optional version_;
   ::xsd::cxx::tree::one< init_T_type > init_T_;
   ::xsd::cxx::tree::one< n_type > n_;
   target_optional target_;

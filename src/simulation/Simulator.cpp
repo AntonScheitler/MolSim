@@ -4,11 +4,14 @@
 #include "computations/velocities/VelocityComputations.h"
 #include "computations/temperatures/TemperatureComputations.h"
 #include "io/outputWriter/VTKWriter.h"
+#include "gtest/gtest.h"
+#include <algorithm>
 #include <io/outputWriter/CheckpointWriter.h>
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/spdlog.h"
 #include "particle/container/ParticleContainer.h"
 #include "particle/container/ParticleContainerLinkedCell.h"
+#include "utils/ArrayUtils.h"
 #include <chrono>
 #include <cstdlib>
 

@@ -687,22 +687,28 @@ cuboid (const cuboid_sequence& s)
 // thermo
 // 
 
-const thermo::version_type& thermo::
+const thermo::version_optional& thermo::
 version () const
 {
-  return this->version_.get ();
+  return this->version_;
 }
 
-thermo::version_type& thermo::
+thermo::version_optional& thermo::
 version ()
 {
-  return this->version_.get ();
+  return this->version_;
 }
 
 void thermo::
 version (const version_type& x)
 {
   this->version_.set (x);
+}
+
+void thermo::
+version (const version_optional& x)
+{
+  this->version_ = x;
 }
 
 const thermo::init_T_type& thermo::
@@ -2360,11 +2366,10 @@ clusters::
 //
 
 thermo::
-thermo (const version_type& version,
-        const init_T_type& init_T,
+thermo (const init_T_type& init_T,
         const n_type& n)
 : ::xml_schema::type (),
-  version_ (version, this),
+  version_ (this),
   init_T_ (init_T, this),
   n_ (n, this),
   target_ (this),
@@ -2417,7 +2422,7 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
     //
     if (n.name () == "version" && n.namespace_ ().empty ())
     {
-      if (!version_.present ())
+      if (!this->version_)
       {
         this->version_.set (version_traits::create (i, f, this));
         continue;
@@ -2469,13 +2474,6 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
     }
 
     break;
-  }
-
-  if (!version_.present ())
-  {
-    throw ::xsd::cxx::tree::expected_element< char > (
-      "version",
-      "");
   }
 
   if (!init_T_.present ())
@@ -4489,13 +4487,14 @@ operator<< (::xercesc::DOMElement& e, const thermo& i)
 
   // version
   //
+  if (i.version ())
   {
     ::xercesc::DOMElement& s (
       ::xsd::cxx::xml::dom::create_element (
         "version",
         e));
 
-    s << i.version ();
+    s << *i.version ();
   }
 
   // init_T
