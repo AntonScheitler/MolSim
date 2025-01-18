@@ -122,7 +122,7 @@ void PairParticleIteratorBoundaryNHalo::updateGhostsVector() {
         ghostsVector.push_back(std::make_unique<Particle>(Particle(ghostPos, ghostVel, currentParticle.getM())));
     }
     // add ghost particle to the "top" of the particle
-    if (currentCellIdx[2] == 0 && boundaryConfig.z[1] == reflect) {
+    if (currentCellIdx[2] == numCells[2] - 1 && boundaryConfig.z[1] == reflect) {
         double deltaZ =
                 std::abs((numCells[2] * cellSize[2]) - currentParticle.getX()[2]) * 2;
         std::array<double, 3> ghostPos = {currentParticle.getX()[0],

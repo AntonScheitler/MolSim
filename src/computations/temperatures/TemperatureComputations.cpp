@@ -77,6 +77,7 @@ void TemperatureComputations::updateTemp(ParticleContainer& particles, double ta
     }
 }
 
+
 void TemperatureComputations::updateTempV2(ParticleContainer& particles, double targetTemp, double maxDeltaTemp) {
 
 
@@ -121,3 +122,4 @@ void TemperatureComputations::updateTempV2(ParticleContainer& particles, double 
         SPDLOG_DEBUG("new v: {0}, {1}, {2}", newV[0], newV[1], newV[2]);
     }
 }
+
