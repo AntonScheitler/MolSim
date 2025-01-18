@@ -1,4 +1,3 @@
-#include <ios>
 #include <particle/container/ParticleContainerLinkedCell.h>
 #include <cstddef>
 #include <gtest/gtest.h>
@@ -6,23 +5,10 @@
 #include <utility>
 #include <computations/positions/PositionComputations.h>
 #include <utils/ArrayUtils.h>
-#include "spdlog/fmt/bundled/core.h"
 #include "spdlogConfig.h"
 
 class ParticleMembraneTest : public testing::Test {
 protected:
-    struct ParticleHash {
-        size_t operator()(const Particle &p) const {
-            return 0;
-        }
-    };
-
-    struct ParticleEqual {
-        bool operator()(const Particle &p1, const Particle &p2) const {
-            return p1 == p2;
-        }
-    };
-
     struct PairHash {
         size_t operator()(const std::pair<Particle, Particle> &pair) const {
             return 0;
@@ -34,8 +20,6 @@ protected:
             return (p1.first.getX() == p2.first.getX() && p1.second.getX() == p2.second.getX()) || (p1.first.getX() == p2.second.getX() && p1.second.getX() == p2.first.getX());
         }
     };
-
-    ParticleContainerLinkedCell empty{{99, 99, 1}, 33};
 
     void SetUp() override {
     }
