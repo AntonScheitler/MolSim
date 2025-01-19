@@ -1,6 +1,7 @@
 #include "../Particle.h"
 #include "particle/iterator/pairParticleIterator/PairParticleIterator.h"
 #include "particle/iterator/particleIterator/ParticleIterator.h"
+#include "particle/iterator/particleIterator/ParticleIteratorNonFixedParticles.h"
 #include <memory>
 
 #pragma once
@@ -33,11 +34,22 @@ public:
     virtual std::unique_ptr<ParticleContainer> copy() = 0;
 
     // returns iterators
-    virtual std::unique_ptr<ParticleIterator> begin() = 0;
+    virtual ParticleIterator begin() = 0;
 
-    virtual std::unique_ptr<ParticleIterator> end() = 0;
+    virtual ParticleIterator end() = 0;
 
     virtual std::unique_ptr<PairParticleIterator> beginPairParticle() = 0;
 
     virtual std::unique_ptr<PairParticleIterator> endPairParticle() = 0;
+
+    /**
+     * @brief provides an iterator for iterating through particles that are not fixed
+     * @return the non-fixed-particle iterator
+     */
+    virtual ParticleIteratorNonFixedParticles beginNonFixedParticles() = 0;
+    /**
+     * @brief provides an iterator pointing to the end of the particles that are not fixed
+     * @return the end of the non-fixed-particle iterator
+     */
+    virtual ParticleIteratorNonFixedParticles endNonFixedParticles() = 0;
 };

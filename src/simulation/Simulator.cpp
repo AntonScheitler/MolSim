@@ -9,7 +9,6 @@
 #include "spdlog/spdlog.h"
 #include "particle/container/ParticleContainer.h"
 #include "particle/container/ParticleContainerLinkedCell.h"
-#include "utils/ArrayUtils.h"
 #include <chrono>
 #include <cstdlib>
 

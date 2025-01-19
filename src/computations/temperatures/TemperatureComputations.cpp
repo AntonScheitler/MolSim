@@ -6,8 +6,8 @@
 
 void TemperatureComputations::initTemp(ParticleContainer& particles, double initialTemp, int dimensions) {
     // TODO: maybe check for valid dimensions?
-    for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
-        Particle& particle = **it;
+    for(auto it = particles.beginNonFixedParticles(); it != particles.endNonFixedParticles(); ++it) {
+        Particle& particle = *it;
         double factor = sqrt(initialTemp / particle.getM());
         std::array<double, 3> velocity = maxwellBoltzmannDistributedVelocity(factor, dimensions);
         particle.setV(velocity);
@@ -18,10 +18,8 @@ void TemperatureComputations::initTemp(ParticleContainer& particles, double init
 double TemperatureComputations::calculateCurrentSystemTemp(ParticleContainer &particles) {
 
     double temp = 0;
-    for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
-        Particle& particle = **it;
-        // exclude fix particles
-        if(particle.isFixed()) continue;
+    for(auto it = particles.beginNonFixedParticles(); it != particles.endNonFixedParticles(); ++it) {
+        Particle& particle = *it;
 
         std::array<double, 3> vSquared = ArrayUtils::elementWisePairOp(particle.getV(), particle.getV(), std::multiplies<>());
         double vScalarProduct = vSquared[0] + vSquared[1] + vSquared[2];
@@ -35,10 +33,8 @@ double TemperatureComputations::calculateCurrentSystemTemp(ParticleContainer &pa
 double TemperatureComputations::calculateCurrentSystemTempV2(ParticleContainer &particles, std::array<double, 3> avgV) {
 
     double temp = 0;
-    for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
-        Particle& particle = **it;
-        // exclude fix particles
-        if(particle.isFixed()) continue;
+    for(auto it = particles.beginNonFixedParticles(); it != particles.endNonFixedParticles(); ++it) {
+        Particle& particle = *it;
 
         std::array<double, 3> thermalMotion = ArrayUtils::elementWisePairOp(particle.getV(), avgV, std::minus<>());
         std::array<double, 3> vSquared = ArrayUtils::elementWisePairOp(thermalMotion, thermalMotion, std::multiplies<>());
@@ -65,8 +61,8 @@ void TemperatureComputations::updateTemp(ParticleContainer& particles, double ta
     double beta = currentTemp == 0 ? 1 : sqrt(newTemp / currentTemp);
 
     // update all velocities of all particles
-    for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
-        Particle& particle = **it;
+    for(auto it = particles.beginNonFixedParticles(); it != particles.endNonFixedParticles(); ++it) {
+        Particle& particle = *it;
 
         std::array<double, 3> newV = ArrayUtils::elementWiseScalarOp(beta, particle.getV(), std::multiplies<>());
         particle.setV(newV);
@@ -76,13 +72,9 @@ void TemperatureComputations::updateTemp(ParticleContainer& particles, double ta
 
 
 void TemperatureComputations::updateTempV2(ParticleContainer& particles, double targetTemp, double maxDeltaTemp) {
-
-
-    // calculate average velocity ~v (excluding fix particles)
     std::array<double, 3> avgV = {0, 0, 0};
-    for(auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
-        Particle& particle = **it;
-        if(particle.isFixed()) continue;
+    for(auto it = particles.beginNonFixedParticles(); it != particles.endNonFixedParticles(); ++it) {
+        Particle& particle = *it;
         avgV = ArrayUtils::elementWisePairOp(avgV, particle.getV(), std::plus<>());
     }
     int n = particles.size();
@@ -100,12 +92,8 @@ void TemperatureComputations::updateTempV2(ParticleContainer& particles, double 
     // temperature scaling fact
     double beta = currentTemp == 0 ? 1 : sqrt(newTemp / currentTemp);
 
-    // update all velocities of all particles (excluding fix particles)
-    for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
-        Particle& particle = **it;
-
-        // exclude particle if it is fixed
-        if(particle.isFixed()) continue;
+    for(auto it = particles.beginNonFixedParticles(); it != particles.endNonFixedParticles(); ++it) {
+        Particle& particle = *it;
 
         // calculate thermal motion (^v)
         std::array<double, 3> thermalMotion = ArrayUtils::elementWisePairOp(particle.getV(), avgV, std::minus<>());
@@ -119,4 +107,3 @@ void TemperatureComputations::updateTempV2(ParticleContainer& particles, double 
         SPDLOG_DEBUG("new v: {0}, {1}, {2}", newV[0], newV[1], newV[2]);
     }
 }
-

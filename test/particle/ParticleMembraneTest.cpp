@@ -61,8 +61,7 @@ TEST_F(ParticleMembraneTest, ParticleMembraneNeighborIterationTest) {
     }
 
     // insert all expected pairs
-    for (auto it = container.begin(); *it != *(container.end()); ++*it) {
-        Particle& particle = **it;
+    for (Particle& particle : container) {
         for (int directIdx : particle.getAllDirectNeighborIndices()) {
             if (directIdx != -1) {
                 pairsSet.insert(std::make_pair(particle, container.getParticleAt(directIdx)));

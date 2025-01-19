@@ -3,8 +3,8 @@
 #include "PositionComputations.h"
 
 void PositionComputations::stoermerVerlet(ParticleContainer& particles, double deltaT) {
-    for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
-        Particle& particle = **it;
+    for (auto it = particles.beginNonFixedParticles(); it != particles.endNonFixedParticles(); ++it) {
+        Particle& particle = *it;
         if(particle.isFixed()) continue; // TODO: maybe don't even return fixed particles in the iterator
         // position calculation based on the Stoermer-Verlet formula
         std::array<double, 3> posFromVel = ArrayUtils::elementWiseScalarOp( deltaT, particle.getV(), std::multiplies<>());
@@ -16,8 +16,8 @@ void PositionComputations::stoermerVerlet(ParticleContainer& particles, double d
 }
 
 void PositionComputations::updateOldX(ParticleContainer &particles) {
-    for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
-        Particle& particle = **it;
+    for (auto it = particles.beginNonFixedParticles(); it != particles.endNonFixedParticles(); ++it) {
+        Particle& particle = *it;
         particle.setOldX(particle.getX());
     }
 }

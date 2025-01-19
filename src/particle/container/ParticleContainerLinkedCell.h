@@ -2,6 +2,7 @@
 
 #include "particle/iterator/pairParticleIterator/PairParticleIteratorMembraneDiagonalNeighbor.h"
 #include "particle/iterator/pairParticleIterator/PairParticleIteratorMembraneDirectNeighbor.h"
+#include "particle/iterator/particleIterator/ParticleIteratorNonFixedParticles.h"
 #include <particle/Particle.h>
 #include <particle/container/ParticleContainer.h>
 #include <particle/iterator/pairParticleIterator/PairParticleIteratorLinkedCell.h>
@@ -34,13 +35,18 @@ public:
 
     std::unique_ptr<ParticleContainer> copy() override;
 
-    std::unique_ptr<ParticleIterator> begin() override;
+    ParticleIterator begin() override;
 
-    std::unique_ptr<ParticleIterator> end() override;
+    ParticleIterator end() override;
 
     std::unique_ptr<PairParticleIterator> beginPairParticle() override;
 
     std::unique_ptr<PairParticleIterator> endPairParticle() override;
+
+    ParticleIteratorNonFixedParticles beginNonFixedParticles() override;
+
+    ParticleIteratorNonFixedParticles endNonFixedParticles() override;
+
     /**
      * @brief provides an iterator for iterating through pairs of boundary particles and their ghosts. The first
      * element in a pair is the actual particle whereas the second element is the ghost

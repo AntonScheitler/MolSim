@@ -7,10 +7,6 @@
 #include "ForceComputations.h"
 #include "spdlogConfig.h"
 
-//std::map<std::pair<double, double>, double> ForceComputations::epsilons;
-//std::map<std::pair<double, double>, double> ForceComputations::sigmas;
-
-
 void ForceComputations::computeGravity(ParticleContainer &particles) {
     for (auto it = particles.beginPairParticle(); *it != *(particles.endPairParticle()); it->operator++()) {
         std::pair<Particle &, Particle &> pair = **it;
@@ -85,19 +81,16 @@ void ForceComputations::computeLennardJonesPotentialCutoff(ParticleContainerLink
 
         double factor = (-24.0 * epsilon) / std::pow(distance, 2) * (std::pow(dist, 3) - 2 * std::pow(dist, 6));
 
-        //TODO: is this correct for fixed particles?
         std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(factor, distanceVector, std::multiplies<>());
-        if(!pair.first.isFixed())
-            pair.first.setF(ArrayUtils::elementWisePairOp(pair.first.getF(), force, std::plus<>()));
+        pair.first.setF(ArrayUtils::elementWisePairOp(pair.first.getF(), force, std::plus<>()));
         std::array<double, 3> revForce = ArrayUtils::elementWiseScalarOp(-1, force, std::multiplies<>());
-        if(!pair.second.isFixed())
-            pair.second.setF(ArrayUtils::elementWisePairOp(pair.second.getF(), revForce, std::plus<>()));
+        pair.second.setF(ArrayUtils::elementWisePairOp(pair.second.getF(), revForce, std::plus<>()));
     }
 }
 
 void ForceComputations::resetForces(ParticleContainer &particles) {
-    for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
-        Particle &particle = **it;
+    for (auto it = particles.beginNonFixedParticles(); it != particles.endNonFixedParticles(); ++it) {
+        Particle& particle = *it;
         particle.setOldF(particle.getF());
         particle.setF({0, 0, 0});
     }
@@ -105,9 +98,8 @@ void ForceComputations::resetForces(ParticleContainer &particles) {
 
 
 void ForceComputations::addExternalForces(ParticleContainer &particles, std::array<double, 3> grav) {
-    for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
-        Particle &particle = **it;
-        if(particle.isFixed()) continue;  //TODO: maybe check this already in iterator
+    for (auto it = particles.beginNonFixedParticles(); it != particles.endNonFixedParticles(); ++it) {
+        Particle &particle = *it;
         std::array<double, 3> newForce = particle.getF();
         newForce[0] += particle.getM() * grav[0];
         newForce[1] += particle.getM() * grav[1];
@@ -124,27 +116,11 @@ void ForceComputations::computeGhostParticleRepulsion(ParticleContainerLinkedCel
 }
 
 void ForceComputations::computeMembraneNeighborForce(ParticleContainerLinkedCell &particles, double epsilon, double sigma, double k, double r0) {
-    SPDLOG_DEBUG("in computeMembraneNeighborForce");
-
-    auto it_begin = particles.beginMembraneDirectNeighbor();
-    SPDLOG_DEBUG("begin iterator created");
-    auto it_end = particles.endMembraneDirectNeighbor();
-
-
-    SPDLOG_DEBUG("end iterator created");
-
-
-    for (auto it = it_begin; it != it_end; ++it) {
-        SPDLOG_DEBUG("Iterator advanced");
+    for (auto it = particles.beginMembraneDirectNeighbor(); it != particles.endMembraneDirectNeighbor(); ++it) {
         std::pair<Particle&, Particle&> pair = *it;
-        SPDLOG_DEBUG("made pair");
         computeLennardJonesPotentialRepulsiveHelper(pair, epsilon, sigma);
-        SPDLOG_DEBUG("finished computeLennardJonesPotentialRepulsiveHelper");
         computeHaromicPotentialHelper(pair, k, r0);
-        SPDLOG_DEBUG("finished computeHaromicPotentialHelper");
     }
-    SPDLOG_DEBUG("finished Direct Neighbor");
-
 
     for (auto it = particles.beginMembraneDiagonalNeighbor(); it != particles.endMembraneDiagonalNeighbor(); ++it) {
         std::pair<Particle&, Particle&> pair = *it;

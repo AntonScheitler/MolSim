@@ -22,8 +22,7 @@ namespace outputWriter {
 
     void VTKWriter::plotParticles(ParticleContainer &particles, int iteration) {
         initializeOutput(particles.size());
-        for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
-            Particle& particle = **it;
+        for (Particle& particle : particles) {
             plotParticle(particle);
         }
         writeFile(baseName, iteration);

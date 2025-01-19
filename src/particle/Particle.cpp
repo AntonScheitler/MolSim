@@ -25,7 +25,6 @@ Particle::Particle(int typeArg) {
     oldF = {0., 0., 0.};
     epsilon = 0;
     sigma = 0;
-
     fixed = false;
 
     directNeighborsIndices = std::vector<int>();
@@ -47,7 +46,6 @@ Particle::Particle(const Particle &other) {
     type = other.type;
     epsilon = other.epsilon;
     sigma = other.sigma;
-
     fixed = other.fixed;
 
     directNeighborsIndices = other.directNeighborsIndices;
@@ -70,6 +68,7 @@ Particle::Particle(std::array<double, 3> xArg, std::array<double, 3> vArg,
     oldF = {0., 0., 0.};
     epsilon = 0;
     sigma = 0;
+    fixed = false;
     directNeighborsIndices = std::vector<int>();
     diagonalNeighborsIndices = std::vector<int>();
     SPDLOG_DEBUG("Particle generated!");
