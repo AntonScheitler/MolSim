@@ -102,6 +102,5 @@
         <version>2</version>
         <init_T>40</init_T>
         <n>10</n>
-
     </thermo>
 </simulation>

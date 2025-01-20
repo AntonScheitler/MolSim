@@ -72,6 +72,7 @@
         </cuboid>
     </clusters>
     <thermo>
+        <version>1</version>
         <init_T>40</init_T>
         <n>1000</n>
     </thermo>
