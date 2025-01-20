@@ -39,6 +39,11 @@ public:
      */
     static void resetForces(ParticleContainer &particles);
 
+    /**
+     * @brief adds an external gravity force to all given particles
+     * @param particles all particles that the force should be applied to
+     * @param grav the gravitational acceleration in x,y and z direction
+     */
     static void addExternalForces(ParticleContainer &particles, std::array<double, 3> grav);
 
     /**

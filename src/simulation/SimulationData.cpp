@@ -6,6 +6,7 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <particle/container/ParticleContainer.h>
 #include <io/inputReader/FileReader.h>
+#include <spdlogConfig.h>
 
 
 SimulationData::SimulationData() {
@@ -319,4 +320,16 @@ std::array<double, 3> SimulationData::getCustomForce() {
 void SimulationData::setCustomForce(std::array<double, 3> newCustomForce) {
     customForce = newCustomForce;
 
+}
+
+void SimulationData::setNumberDimensions(int numberDimensionsArg) {
+    if(numberDimensionsArg < 1 || numberDimensionsArg > 3) {
+        SPDLOG_ERROR("Invalid number of dimensions: {0}", numberDimensionsArg);
+        exit(-1);
+    }
+    this->numberDimensions = numberDimensionsArg;
+}
+
+int SimulationData::getNumberDimensions() {
+    return numberDimensions;
 }

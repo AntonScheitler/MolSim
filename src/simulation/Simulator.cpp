@@ -51,8 +51,8 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
         case collisionLinkedCell:
             before = [this]() {
                 if (simData.isThermostat()) {
-                    //TODO change dimensions number
-                    TemperatureComputations::initTemp(simData.getParticles(), simData.getInitialTemp(), 2);
+                    TemperatureComputations::initTemp(simData.getParticles(), simData.getInitialTemp(),
+                                                      simData.getNumberDimensions());
                 } else {
                     VelocityComputations::applyBrownianMotion2D(simData.getParticles(),
                                                                 simData.getAverageVelocity());
@@ -116,8 +116,9 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
 
                     ForceComputations::resetForces(simData.getParticles());
 
-                    ForceComputations::computeMembraneNeighborForce(*containerLinkedCell, simData.getEpsilon(), simData.getSigma(),
-                                                                simData.getK(), simData.getR0());
+                    ForceComputations::computeMembraneNeighborForce(*containerLinkedCell, simData.getEpsilon(),
+                                                                    simData.getSigma(),
+                                                                    simData.getK(), simData.getR0());
 
                     ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell, simData.getEpsilon(),
                                                                      simData.getSigma());
@@ -125,7 +126,9 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                     ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav());
 
                     if (currentTime <= 150) {
-                        ForceComputations::applyCustomForceVector(*containerLinkedCell, simData.getMovingMembranePartIndices(), simData.getCustomForce());
+                        ForceComputations::applyCustomForceVector(*containerLinkedCell,
+                                                                  simData.getMovingMembranePartIndices(),
+                                                                  simData.getCustomForce());
                     }
 
                     VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());

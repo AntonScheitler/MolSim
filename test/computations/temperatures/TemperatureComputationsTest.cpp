@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 /**
- * @brief Tests the position computations (src/computations/positions) via analytically calculated examples
+ * @brief Tests the temperature computations
  */
 class TemperatureComputationsTest : public testing::Test {
 protected:
@@ -63,7 +63,7 @@ TEST_F(TemperatureComputationsTest, HeatingTest) {
 }
 
 /**
- * @brief checks that the system heats up to the target temperature when targetTemp > initialTemp
+ * @brief checks that the system cools down to the target temperature when targetTemp < initialTemp
  */
 TEST_F(TemperatureComputationsTest, CoolingTest) {
 
@@ -83,7 +83,7 @@ TEST_F(TemperatureComputationsTest, CoolingTest) {
 }
 
 /**
- * @brief checks that the system heats up to the target temperature when targetTemp > initialTemp
+ * @brief checks that the system holds its temperature up to the target temperature when targetTemp = initialTemp
  */
 TEST_F(TemperatureComputationsTest, HoldingTempTest) {
 

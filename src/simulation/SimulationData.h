@@ -1,8 +1,7 @@
 #pragma once
 
-#include <spdlog/common.h>
-#include <spdlog/spdlog.h>
 #include <particle/container/ParticleContainer.h>
+#include <spdlogConfig.h>
 
 /**
  * @brief an enum which describes the type of simulation to run
@@ -301,6 +300,10 @@ public:
      */
     void setCustomForce(std::array<double, 3> newCustomForce);
 
+    void setNumberDimensions(int numberDimensionsArg);
+
+    int getNumberDimensions();
+
 
 private:
     SimulationType simType;
@@ -332,4 +335,6 @@ private:
     double r0;
     std::vector<size_t> movingMembranePartIndices;
     std::array<double, 3> customForce;
+
+    int numberDimensions = 2;
 };

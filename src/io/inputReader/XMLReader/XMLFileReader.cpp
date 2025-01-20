@@ -36,7 +36,7 @@ namespace inputReader {
         int type = 0;
 
 
-        std::cout << "entering XML parsing with filename " << filename << std::endl;
+        std::cout << "entering XML parsing with filename " << filename;
 
         std::ifstream inputFile(filename);
 
@@ -45,28 +45,28 @@ namespace inputReader {
             throw std::runtime_error("Failed to open XML file.");
         }
 
-        std::cout << "opened input file " << std::endl;
+        std::cout << "opened input file ";
 
         try {
-            std::cout << "opened simparser " << std::endl;
+            std::cout << "opened simparser ";
 
 
             std::unique_ptr<simulation> simParser = simulation_(inputFile, xml_schema::flags::dont_validate);
-            std::cout << "opened simparser " << std::endl;
+            std::cout << "opened simparser ";
 
 //            std::ostringstream command;
 //            command << "xmllint --noout --schema ../src/io/inputReader/xml/simulation.xsd " << filename;
 //            int result = std::system(command.str().c_str());
 
 //            if (!(result == 0 || result == 32512)) {
-//                std::cerr << "Error in xml file: scheme does not validate " << std::endl;
+//                std::cerr << "Error in xml file: scheme does not validate ";
 //                exit(-1);
 //            }
 
             // use linked cell if specified
 
             auto parameters = simParser->parameters();
-            std::cout << "entering Container Type " << std::endl;
+            std::cout << "entering Container Type ";
 
             if (parameters.present() && parameters->containerType().present() &&
                 parameters->containerType().get() == "linked") {
@@ -77,7 +77,8 @@ namespace inputReader {
 
                                 {getEnum(parameters->boundary()->yLeft()), getEnum(parameters->boundary()->yRight())},
                                 {getEnum(parameters->boundary()->xBottom()), getEnum(parameters->boundary()->xTop())},
-                                {getEnum(parameters->boundary()->zFront()), getEnum(parameters->boundary()->zBehind())}}});
+                                {getEnum(parameters->boundary()->zFront()),
+                                 getEnum(parameters->boundary()->zBehind())}}});
 
                 simData.setParticles(std::move(containerLinkedCell));
             } else {
@@ -85,18 +86,32 @@ namespace inputReader {
                 auto containerDirectSum = std::make_unique<ParticleContainerDirectSum>(ParticleContainerDirectSum{});
                 simData.setParticles(std::move(containerDirectSum));
             }
-            std::cout << "finished reading container type " << std::endl;
+            SPDLOG_LOGGER_DEBUG(logger, "finished reading container type");
+
+            // read dimension number
+            if (parameters.present() && parameters->domainSize().present()) {
+                std::array<int, 3> dim = {static_cast<int>(parameters->domainSize()->x()),
+                                          static_cast<int>(parameters->domainSize()->y()),
+                                          static_cast<int>(parameters->domainSize()->z())};
+                if (dim[0] > 1 && dim[1] > 1 && dim[2] > 1) {
+                    simData.setNumberDimensions(3);
+                } else if (dim[0] == 1 || dim[1] == 1 || dim[2] == 1) {
+                    simData.setNumberDimensions(2);
+                } else
+                    SPDLOG_LOGGER_WARN(logger, "Unable to specify number of dimensions precisely.");
+            }
+            SPDLOG_LOGGER_DEBUG(logger, "Number of dimensions set to: {0}", simData.getNumberDimensions());
 
             ParameterParser::readParams(simData, simParser);
-            std::cout << "finished reading params " << std::endl;
+            SPDLOG_LOGGER_DEBUG(logger, "finished reading params");
 
             ParameterParser::readThermo(simData, simParser);
-            std::cout << "finished reading thermo " << std::endl;
+            SPDLOG_LOGGER_DEBUG(logger, "finished reading thermo");
 
             ParameterParser::readMembrane(simData, simParser);
-            std::cout << "finished reading membrane " << std::endl;
+            SPDLOG_LOGGER_DEBUG(logger, "finished reading membrane");
 
-            std::cout << "read all params" << std::endl;
+            SPDLOG_LOGGER_DEBUG(logger, "read all params");
 
             if (simParser->parameters()->import_checkpoint().present()) {
                 CheckpointReader checkpointReader(simData);
@@ -104,7 +119,7 @@ namespace inputReader {
                                                            simParser->parameters()->import_checkpoint()->file_path().c_str());
             }
 
-            std::cout << "checkpointing done" << std::endl;
+            SPDLOG_LOGGER_DEBUG(logger, "checkpointing done");
 
             type++;
 
@@ -126,16 +141,16 @@ namespace inputReader {
                 simData.getParticles().addParticle(temp);
                 SPDLOG_LOGGER_DEBUG(logger, "adding particle at coords {0}, {1}, {2}", x[0], x[1], x[2]);
             }
-            std::cout << "finished reading particles " << std::endl;
+            SPDLOG_LOGGER_DEBUG(logger, "finished reading particles");
 
 
             for (const auto &cuboid: simParser->clusters().cuboid()) {
                 x[0] = cuboid.cornerCoordinates().x();
-                SPDLOG_LOGGER_DEBUG("pos x: ", cuboid.cornerCoordinates().x());
+                SPDLOG_LOGGER_DEBUG(logger, "pos x: ", cuboid.cornerCoordinates().x());
                 x[1] = cuboid.cornerCoordinates().y();
-                SPDLOG_LOGGER_DEBUG("pos y: ", cuboid.cornerCoordinates().y());
+                SPDLOG_LOGGER_DEBUG(logger, "pos y: ", cuboid.cornerCoordinates().y());
                 x[2] = cuboid.cornerCoordinates().z();
-                SPDLOG_LOGGER_DEBUG("pos z: ", cuboid.cornerCoordinates().x());
+                SPDLOG_LOGGER_DEBUG(logger, "pos z: ", cuboid.cornerCoordinates().x());
 
                 v[0] = cuboid.velocity().x();
                 v[1] = cuboid.velocity().y();
@@ -149,7 +164,7 @@ namespace inputReader {
                 h = cuboid.meshWidth();
 
                 std::vector<size_t> movingMembranePartIndicesArgs;
-                for(const auto &coords: cuboid.special_coords()){
+                for (const auto &coords: cuboid.special_coords()) {
                     size_t index = coords.x() + coords.y() * d[0] + coords.z() * d[1] * d[0];
                     movingMembranePartIndicesArgs.push_back(index);
 
@@ -171,7 +186,7 @@ namespace inputReader {
 
                 type++;
             }
-            std::cout << "finished reading cuboids " << std::endl;
+            SPDLOG_LOGGER_DEBUG(logger, "finished reading cuboids");
 
 
             for (const auto &disc: simParser->clusters().disc()) {
@@ -194,13 +209,13 @@ namespace inputReader {
                 type++;
             }
 
-            std::cout << "finished reading discs " << std::endl;
+            SPDLOG_LOGGER_DEBUG(logger, "finished reading discs ");
 
         } catch (const xml_schema::exception &e) {
-            std::cerr << "XML parsing error: " << e.what() << std::endl;
+            SPDLOG_LOGGER_ERROR(logger, "XML parsing error: {0}", e.what());
             exit(-1);
         } catch (const std::exception &e) {
-            std::cerr << "Standard exception: " << e.what() << std::endl;
+            std::cerr << "Standard exception: " << e.what();
             exit(-1);
         }
     }

@@ -93,7 +93,7 @@ void FileReaderTest::testCometSim(char *inputFile) {
     simulationData.setSimType(SimulationType::comet);
     inputReader::FileReader fileReader = inputReader::FileReader(simulationData);
     fileReader.readFile(inputFile);
-    ParticleContainerDirectSum* containerDirectSum = dynamic_cast<ParticleContainerDirectSum *>(&(simulationData.getParticles()));
+    auto* containerDirectSum = dynamic_cast<ParticleContainerDirectSum *>(&(simulationData.getParticles()));
     expectParticlesCometSimCorrect(*containerDirectSum);
 }
 
@@ -106,7 +106,7 @@ void FileReaderTest::testCollisionSim(char *inputFile) {
     simulationData.setSimType(SimulationType::collision);
     inputReader::FileReader fileReader = inputReader::FileReader(simulationData);
     fileReader.readFile(inputFile);
-    ParticleContainerDirectSum* containerDirectSum = dynamic_cast<ParticleContainerDirectSum *>(&(simulationData.getParticles()));
+    auto* containerDirectSum = dynamic_cast<ParticleContainerDirectSum *>(&(simulationData.getParticles()));
     expectParticlesCollisionSimCorrect(*containerDirectSum);
 }
 
