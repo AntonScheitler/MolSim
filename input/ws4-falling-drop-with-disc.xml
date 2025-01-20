@@ -30,11 +30,10 @@
             <z>0</z>
         </grav>
         <import_checkpoint>
-            <file_path>
-                ../input/checker.txt
-            </file_path>
+            <file_path>../input/checker.txt</file_path>
         </import_checkpoint>
     </parameters>
+
     <clusters>
         <disc>
             <center>

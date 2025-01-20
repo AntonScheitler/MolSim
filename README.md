@@ -54,3 +54,22 @@ To run the unit test, execute the following commands (assuming current directory
 ```
 cd test/ && ctest
 ```
+
+
+### Checkpoint File
+
+To create a checkpoint file after running a simulation, add the following element to the xml-file:
+
+```
+<output>
+      <create_checkpoint_file>true</create_checkpoint_file>
+</output>
+```
+
+To add a checkpoint file to a new simulation, please include the filepath of the file to the parameters in the xml-file, z.B.:
+
+```
+<import_checkpoint>
+      <file_path>../input/checker.txt</file_path>
+</import_checkpoint>
+```

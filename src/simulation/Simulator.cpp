@@ -223,6 +223,7 @@ size_t Simulator::runSimulationLoop() {
 
         SPDLOG_LOGGER_INFO(logger, "Iteration {0} finished.", iteration);
         currentTime += simData.getDeltaT();
+
     }
     after();
     if (simData.getCheckpoint()) {
@@ -233,6 +234,8 @@ size_t Simulator::runSimulationLoop() {
     return numUpdatedParticles;
 }
 
-Simulator::~Simulator() {
+
+Simulator::~Simulator()
+{
     spdlog::drop(logger->name());
 }

@@ -5,6 +5,8 @@
 #include "spdlogConfig.h"
 
 
+
+
 namespace inputReader {
 
     CheckpointReader::CheckpointReader(SimulationData &simulationDataArg) : simData(simulationDataArg) {
@@ -32,6 +34,11 @@ namespace inputReader {
 
         int numParticles = 0;
 
+
+
+
+
+
         std::ifstream inputFile(filename);
         std::string tmpString;
 
@@ -45,11 +52,13 @@ namespace inputReader {
                 SPDLOG_LOGGER_DEBUG(logger, "Read line: {0}", tmpString);
             }
 
+
             std::istringstream numstream(tmpString);
             numstream >> numParticles;
             SPDLOG_LOGGER_DEBUG(logger, "Reading {0}.", numParticles);
             getline(inputFile, tmpString);
             SPDLOG_LOGGER_DEBUG(logger, "Read line: {0}", tmpString);
+
 
             for (int i = 0; i < numParticles; i++) {
                 std::istringstream datastream(tmpString);
@@ -78,6 +87,7 @@ namespace inputReader {
 
                 datastream >> sigma;
 
+
                 if (maxType < type) {
                     maxType = type;
                 }
@@ -90,11 +100,17 @@ namespace inputReader {
                 p.setEpsilon(epsilon);
                 p.setSigma(sigma);
 
+
                 simData.getParticles().addParticle(p);
+
+
 
                 getline(inputFile, tmpString);
                 SPDLOG_LOGGER_DEBUG(logger, "Read line: {0}", tmpString);
+
+
             }
+
             SPDLOG_LOGGER_DEBUG(logger, "Successfully read {0} particles", simData.getParticles().size());
         } else {
             SPDLOG_LOGGER_ERROR(logger, "Error: could not open file {0}", filename);

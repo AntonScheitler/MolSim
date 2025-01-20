@@ -7,6 +7,8 @@
 #include "particle/iterator/particleIterator/ParticleIterator.h"
 #include "particle/iterator/particleIterator/ParticleIteratorNonFixedParticles.h"
 #include "spdlogConfig.h"
+#include <iostream>
+
 
 
 ParticleContainerLinkedCell::ParticleContainerLinkedCell(std::array<double, 3> domainSizeArg, double cutoffRadiusArg,
@@ -45,6 +47,7 @@ ParticleContainerLinkedCell::ParticleContainerLinkedCell(std::array<double, 3> d
 
 void ParticleContainerLinkedCell::addParticle(const Particle &particle) {
     particles.push_back(particle);
+
     mesh[continuousCoordsToIndex(particle.getX())].addParticleIdx(particles.size() - 1);
 }
 
@@ -93,10 +96,12 @@ int ParticleContainerLinkedCell::discreteCoordsToIndex(std::array<int, 3> coord)
 }
 
 int ParticleContainerLinkedCell::continuousCoordsToIndex(std::array<double, 3> coord) {
+
     int coordX = floor(coord[0] / cellSize[0]);
     int coordY = floor(coord[1] / cellSize[1]);
     int coordZ = floor(coord[2] / cellSize[2]);
     // floor continuous approximation of discrete coords to achieve discrete coords
+
     int res = discreteCoordsToIndex({coordX, coordY, coordZ});
     return res;
 }
