@@ -22,7 +22,7 @@ double TemperatureComputations::calculateCurrentSystemTemp(ParticleContainer &pa
 
         std::array<double, 3> vSquared = ArrayUtils::elementWisePairOp(particle.getV(), particle.getV(),
                                                                        std::multiplies<>());
-        double vScalarProduct = sqrt(vSquared[0] + vSquared[1] + vSquared[2]);
+        double vScalarProduct = vSquared[0] + vSquared[1] + vSquared[2];
         temp += particle.getM() * vScalarProduct;
     }
     temp /= particles.size() * dimensions;
@@ -63,7 +63,7 @@ double TemperatureComputations::calculateCurrentSystemTempV2(ParticleContainer &
         std::array<double, 3> thermalMotion = ArrayUtils::elementWisePairOp(particle.getV(), avgV, std::minus<>());
         std::array<double, 3> vSquared = ArrayUtils::elementWisePairOp(thermalMotion, thermalMotion,
                                                                        std::multiplies<>());
-        double vScalarProduct = sqrt(vSquared[0] + vSquared[1] + vSquared[2]);
+        double vScalarProduct = vSquared[0] + vSquared[1] + vSquared[2];
         currentTemp += particle.getM() * vScalarProduct;
     }
     currentTemp = currentTemp / (particles.size() * dimensions);
