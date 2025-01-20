@@ -39,7 +39,4 @@ public:
      * @return current temperature of the system
      */
     static double calculateCurrentSystemTemp(ParticleContainer &particles);
-
-    //TODO
-    static double calculateCurrentSystemTempV2(ParticleContainer &particles, std::array<double, 3> avgV);
 };

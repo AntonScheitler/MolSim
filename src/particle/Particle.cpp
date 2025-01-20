@@ -12,8 +12,6 @@
 #include <array>
 #include <iostream>
 #include <vector>
-#include <memory>
-
 
 size_t Particle::nextId = 0;
 

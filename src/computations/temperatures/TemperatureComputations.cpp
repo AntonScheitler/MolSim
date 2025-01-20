@@ -2,10 +2,10 @@
 #include "utils/ArrayUtils.h"
 #include "utils/MaxwellBoltzmannDistribution.h"
 #include "spdlogConfig.h"
+#include <functional>
 
 
 void TemperatureComputations::initTemp(ParticleContainer& particles, double initialTemp, int dimensions) {
-    // TODO: maybe check for valid dimensions?
     for(auto it = particles.beginNonFixedParticles(); it != particles.endNonFixedParticles(); ++it) {
         Particle& particle = *it;
         double factor = sqrt(initialTemp / particle.getM());
@@ -22,22 +22,6 @@ double TemperatureComputations::calculateCurrentSystemTemp(ParticleContainer &pa
         Particle& particle = *it;
 
         std::array<double, 3> vSquared = ArrayUtils::elementWisePairOp(particle.getV(), particle.getV(), std::multiplies<>());
-        double vScalarProduct = vSquared[0] + vSquared[1] + vSquared[2];
-        temp += particle.getM() * vScalarProduct;
-    }
-    temp = temp / (particles.size() * 2); //TODO: number of dimensions instead of 2
-    SPDLOG_DEBUG("current system temp: {0}", temp);
-    return temp;
-}
-
-double TemperatureComputations::calculateCurrentSystemTempV2(ParticleContainer &particles, std::array<double, 3> avgV) {
-
-    double temp = 0;
-    for(auto it = particles.beginNonFixedParticles(); it != particles.endNonFixedParticles(); ++it) {
-        Particle& particle = *it;
-
-        std::array<double, 3> thermalMotion = ArrayUtils::elementWisePairOp(particle.getV(), avgV, std::minus<>());
-        std::array<double, 3> vSquared = ArrayUtils::elementWisePairOp(thermalMotion, thermalMotion, std::multiplies<>());
         double vScalarProduct = vSquared[0] + vSquared[1] + vSquared[2];
         temp += particle.getM() * vScalarProduct;
     }
@@ -73,14 +57,25 @@ void TemperatureComputations::updateTemp(ParticleContainer& particles, double ta
 
 void TemperatureComputations::updateTempV2(ParticleContainer& particles, double targetTemp, double maxDeltaTemp) {
     std::array<double, 3> avgV = {0, 0, 0};
+    size_t nonFixedParticles = 0;
     for(auto it = particles.beginNonFixedParticles(); it != particles.endNonFixedParticles(); ++it) {
         Particle& particle = *it;
         avgV = ArrayUtils::elementWisePairOp(avgV, particle.getV(), std::plus<>());
+        nonFixedParticles++;
     }
-    int n = particles.size();
-    avgV = ArrayUtils::elementWiseScalarOp(1.0 / n, avgV, std::multiplies<>());
+    avgV = ArrayUtils::elementWiseScalarOp(1.0 / nonFixedParticles, avgV, std::multiplies<>());
 
-    double currentTemp = calculateCurrentSystemTempV2(particles, avgV);
+    double currentTemp = 0;
+    for(auto it = particles.beginNonFixedParticles(); it != particles.endNonFixedParticles(); ++it) {
+        Particle& particle = *it;
+
+        std::array<double, 3> thermalMotion = ArrayUtils::elementWisePairOp(particle.getV(), avgV, std::minus<>());
+        std::array<double, 3> vSquared = ArrayUtils::elementWisePairOp(thermalMotion, thermalMotion, std::multiplies<>());
+        double vScalarProduct = vSquared[0] + vSquared[1] + vSquared[2];
+        currentTemp += particle.getM() * vScalarProduct;
+    }
+    currentTemp = currentTemp / (particles.size() * 2); //TODO: number of dimensions instead of 2
+    SPDLOG_DEBUG("current system temp: {0}", currentTemp);
 
     double newTemp;
     if(targetTemp > currentTemp) {
@@ -102,7 +97,7 @@ void TemperatureComputations::updateTempV2(ParticleContainer& particles, double 
         std::array<double, 3> scaledV = ArrayUtils::elementWiseScalarOp(beta, thermalMotion, std::multiplies<>());
 
         // new total velocity of particle is sum of thermal motion and kinetic motion (average velocity)
-        std::array<double, 3> newV = ArrayUtils::elementWisePairOp(thermalMotion, scaledV, std::plus<>());
+        std::array<double, 3> newV = ArrayUtils::elementWisePairOp(avgV, scaledV, std::plus<>());
         particle.setV(newV);
         SPDLOG_DEBUG("new v: {0}, {1}, {2}", newV[0], newV[1], newV[2]);
     }
