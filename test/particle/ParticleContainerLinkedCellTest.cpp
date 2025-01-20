@@ -46,7 +46,7 @@ protected:
  * @brief checks if there is nothing returned when iterating through an empty ParticleContainerLinkedCell
  */
 TEST_F(ParticleContainerLinkedCellTest, EmptyParticleContainerLinkedCellIteratorTest) {
-    for (auto it = empty.begin(); *it != *(empty.end()); ++*it) {
+    for (Particle& particle : empty) {
         EXPECT_TRUE(false);
     }
 }
@@ -75,8 +75,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellIteratorTest)
     }
 
     size_t count = 0;
-    for (auto it = container.begin(); *it != *(container.end()); ++*it) {
-        Particle particle = **it;
+    for (Particle& particle : container) {
         EXPECT_TRUE(particlesSet.count(particle) == 1);
         particlesSet.erase(particle);
         count++;

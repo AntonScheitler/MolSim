@@ -17,7 +17,8 @@ TEST_F(XMLFileReaderTest, XMlFileReaderCorrectInputTest) {
     inputReader::XMLFileReader fileReader{simData};
 
     // read in dummy file
-    fileReader.readFile("../../testInput/test-input.xml");
+
+    fileReader.readFile((char*) "../../testInput/test-input.xml");
 
     // check if all correct
     EXPECT_DOUBLE_EQ(simData.getDeltaT(), 0.0005);

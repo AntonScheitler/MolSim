@@ -1,5 +1,4 @@
 #include <particle/Particle.h>
-#include <particle/iterator/particleIterator/ParticleIterator.h>
 #include <vector>
 
 #pragma once
@@ -7,28 +6,30 @@
 /**
  * @brief an iterator which enables iteration over each particle separately
  */
-class ParticleIteratorDirectSum : public ParticleIterator {
+class ParticleIteratorNonFixedParticles {
 
 public:
+    using iterator_category = std::forward_iterator_tag;
+    using reference = Particle &;
     /**
      * @brief create an instance of a ParticleIterator
      * @param it the vector iterator to build the ParticleIterator upon
      * @param end an iterator that points to the end of the particle vector
      * @return an instance of a ParticleIterator
      */
-    ParticleIteratorDirectSum(std::vector<Particle>::iterator it, std::vector<Particle>::iterator endArg);
+    ParticleIteratorNonFixedParticles(std::vector<Particle>::iterator it, std::vector<Particle>::iterator endArg);
 
     /**
      * @brief Dereference current Particle in this ParticleContainer
      * @return current Particle
      */
-    reference operator*() override;
+    reference operator*();
 
     /**
      * @brief Increment current Particle in this ParticleContainer
      * @return this ParticleContainer object
      */
-    ParticleIteratorDirectSum &operator++() override;
+    ParticleIteratorNonFixedParticles &operator++();
 
     /**
      * @brief Check whether the current Particle of this ParticleContainer is not equal to the current
@@ -36,7 +37,7 @@ public:
      * @param other Other ParticleContainer
      * @return True if the current particles are not equal
      */
-    bool operator!=(const ParticleIterator &other) override;
+    bool operator!=(const ParticleIteratorNonFixedParticles &other);
 
 private:
     /**

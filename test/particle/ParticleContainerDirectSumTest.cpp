@@ -20,7 +20,7 @@ class ParticleContainerDirectSumTest : public testing::Test {
  * ParticleContainerDirectSum
  */
 TEST_F(ParticleContainerDirectSumTest, EmptyParticleContainerDirectSumIteratorTest) {
-    for (auto it = empty.begin(); *it != *(empty.end()); ++*it) {
+    for (Particle& particle : empty) {
         EXPECT_TRUE(false);
     }
 }
@@ -31,8 +31,7 @@ TEST_F(ParticleContainerDirectSumTest, EmptyParticleContainerDirectSumIteratorTe
  */
 TEST_F(ParticleContainerDirectSumTest, ParticleContainerDirectSumIteratorTest) {
     double d = 0; // dummy value for x, v and m
-    for (auto it = empty.begin(); *it != *(empty.end()); ++*it) {
-        Particle particle = **it;
+    for (Particle& particle : container) {
         Particle otherParticle = Particle({d, d, d}, {d, d, d}, d);
         EXPECT_TRUE(particle == otherParticle);
         d++;
@@ -57,8 +56,7 @@ TEST_F(ParticleContainerDirectSumTest, ParticleContainerDirectSumPairIteratorTes
     std::vector<std::pair<Particle, Particle>> otherPairs = {};
     for (double i = 0; i < 3; i++) {
         for (double j = i + 1; j < 4; j++) {
-            otherPairs.push_back(std::pair(Particle({i, i, i}, {i, i, i}, i),
-                        Particle({j, j, j}, {j, j, j}, j)));
+            otherPairs.push_back(std::make_pair(container.getParticle(i), container.getParticle(j)));
         }
     }
     size_t pairIndex = 0;

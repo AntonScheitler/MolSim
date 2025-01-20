@@ -5,7 +5,6 @@
 #include "particle/iterator/pairParticleIterator/PairParticleIterator.h"
 #include "particle/iterator/pairParticleIterator/PairParticleIteratorDirectSum.h"
 #include "particle/iterator/particleIterator/ParticleIterator.h"
-#include "particle/iterator/particleIterator/ParticleIteratorDirectSum.h"
 
 
 ParticleContainerDirectSum::ParticleContainerDirectSum() {
@@ -33,12 +32,12 @@ Particle &ParticleContainerDirectSum::getParticle(int index) {
 }
 
 // single particle iterator
-std::unique_ptr<ParticleIterator> ParticleContainerDirectSum::begin() {
-    return std::make_unique<ParticleIteratorDirectSum>(ParticleIteratorDirectSum(particles.begin(), particles.end()));
+ParticleIterator ParticleContainerDirectSum::begin() {
+    return ParticleIterator(particles.begin(), particles.end());
 }
 
-std::unique_ptr<ParticleIterator> ParticleContainerDirectSum::end() {
-    return std::make_unique<ParticleIteratorDirectSum>(ParticleIteratorDirectSum(particles.end(), particles.end()));
+ParticleIterator ParticleContainerDirectSum::end() {
+    return ParticleIterator(particles.end(), particles.end());
 }
 
 // pair particle iterator
@@ -58,4 +57,12 @@ std::unique_ptr<PairParticleIterator> ParticleContainerDirectSum::endPairParticl
     }
     return std::make_unique<PairParticleIteratorDirectSum>(
             PairParticleIteratorDirectSum(--(particles.end()), particles.end(), particles.end()));
+}
+
+ParticleIteratorNonFixedParticles ParticleContainerDirectSum::beginNonFixedParticles() {
+    return ParticleIteratorNonFixedParticles(particles.begin(), particles.end());
+}
+
+ParticleIteratorNonFixedParticles ParticleContainerDirectSum::endNonFixedParticles() {
+    return ParticleIteratorNonFixedParticles(particles.end(), particles.end());
 }

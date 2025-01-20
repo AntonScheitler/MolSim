@@ -2,6 +2,7 @@
 #include <vector>
 #include "../Particle.h"
 #include "particle/iterator/pairParticleIterator/PairParticleIterator.h"
+#include "particle/iterator/particleIterator/ParticleIteratorNonFixedParticles.h"
 #include <particle/iterator/pairParticleIterator/PairParticleIteratorDirectSum.h>
 #include <particle/container/ParticleContainer.h>
 
@@ -34,9 +35,9 @@ public:
 
     Particle &getParticle(int index);
 
-    std::unique_ptr<ParticleIterator> begin() override;
+    ParticleIterator begin() override;
 
-    std::unique_ptr<ParticleIterator> end() override;
+    ParticleIterator end() override;
 
     /**
      * @brief provides an iterator for iterating through pairs of particles
@@ -49,6 +50,10 @@ public:
      * @return the end of the pair particle iterator
      */
     std::unique_ptr<PairParticleIterator> endPairParticle() override;
+
+    ParticleIteratorNonFixedParticles beginNonFixedParticles() override;
+
+    ParticleIteratorNonFixedParticles endNonFixedParticles() override;
 
 protected:
     /**

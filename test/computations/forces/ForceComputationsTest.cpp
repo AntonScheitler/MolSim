@@ -2,6 +2,7 @@
 #include <gtest/gtest.h>
 #include "../../../src/spdlogConfig.h"
 #include "../../../src/particle/container/ParticleContainerDirectSum.h"
+#include "particle/container/ParticleContainerLinkedCell.h"
 
 /**
  * @brief Tests the force computations (src/computations/forces) via analytically calculated examples
@@ -69,3 +70,85 @@ TEST_F(ForceComputationsTest, GravityCalcTest) {
 }
 
 
+
+TEST_F(ForceComputationsTest, HarmonicPotentialDirectNeighborTest) {
+    ParticleContainerLinkedCell container{{2, 1, 1}, 1, {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}};
+    // create first neighbor
+    Particle first = {{0.5, 0, 0}, {0, 0, 0}, 1};
+    first.addNeighborIdx(-1);
+    first.addNeighborIdx(-1);
+    first.addNeighborIdx(1);
+    first.addNeighborIdx(-1);
+
+    first.addDiagNeighborIdx(-1);
+    first.addDiagNeighborIdx(-1);
+    first.addDiagNeighborIdx(-1);
+    first.addDiagNeighborIdx(-1);
+
+    // create second neighbor
+    Particle second = {{1.5, 0, 0}, {0, 0, 0}, 1};
+    second.addNeighborIdx(-1);
+    second.addNeighborIdx(0);
+    second.addNeighborIdx(-1);
+    second.addNeighborIdx(-1);
+
+    second.addDiagNeighborIdx(-1);
+    second.addDiagNeighborIdx(-1);
+    second.addDiagNeighborIdx(-1);
+    second.addDiagNeighborIdx(-1);
+
+    // add particles to the container
+    container.addParticle(first);
+    container.addParticle(second);
+
+    ForceComputations::computeMembraneNeighborForce(container, 1, 1, 300, 2.2);
+
+    EXPECT_NEAR(container.getParticleAt(0).getF()[0], -384, 0.00000001);
+    EXPECT_NEAR(container.getParticleAt(0).getF()[1], 0, 0.00000001);
+    EXPECT_NEAR(container.getParticleAt(0).getF()[2], 0, 0.00000001);
+
+    EXPECT_NEAR(container.getParticleAt(1).getF()[0], 384, 0.00000001);
+    EXPECT_NEAR(container.getParticleAt(1).getF()[1], 0, 0.00000001);
+    EXPECT_NEAR(container.getParticleAt(1).getF()[2], 0, 0.00000001);
+}
+
+TEST_F(ForceComputationsTest, HarmonicPotentialDiagonalNeighborTest) {
+    ParticleContainerLinkedCell container{{2, 2, 1}, 1, {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}};
+    // create first neighbor
+    Particle first = {{0.5, 0.5, 0}, {0, 0, 0}, 1};
+    first.addNeighborIdx(-1);
+    first.addNeighborIdx(-1);
+    first.addNeighborIdx(-1);
+    first.addNeighborIdx(-1);
+
+    first.addDiagNeighborIdx(-1);
+    first.addDiagNeighborIdx(-1);
+    first.addDiagNeighborIdx(-1);
+    first.addDiagNeighborIdx(1);
+
+    // create second neighbor
+    Particle second = {{1.5, 1.5, 0}, {0, 0, 0}, 1};
+    second.addNeighborIdx(-1);
+    second.addNeighborIdx(-1);
+    second.addNeighborIdx(-1);
+    second.addNeighborIdx(-1);
+
+    second.addDiagNeighborIdx(0);
+    second.addDiagNeighborIdx(-1);
+    second.addDiagNeighborIdx(-1);
+    second.addDiagNeighborIdx(-1);
+
+    // add particles to the container
+    container.addParticle(first);
+    container.addParticle(second);
+
+    ForceComputations::computeMembraneNeighborForce(container, 1, 1, 300, 2.2);
+
+    EXPECT_NEAR(container.getParticleAt(0).getF()[0], -360, 0.00000001);
+    EXPECT_NEAR(container.getParticleAt(0).getF()[1], -360, 0.00000001);
+    EXPECT_NEAR(container.getParticleAt(0).getF()[2], 0, 0.00000001);
+
+    EXPECT_NEAR(container.getParticleAt(1).getF()[0], 360, 0.00000001);
+    EXPECT_NEAR(container.getParticleAt(1).getF()[1], 360, 0.00000001);
+    EXPECT_NEAR(container.getParticleAt(1).getF()[2], 0, 0.00000001);
+}

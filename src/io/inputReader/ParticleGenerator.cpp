@@ -2,8 +2,6 @@
 #include "ParticleGenerator.h"
 #include <cmath>
 #include "spdlogConfig.h"
-#include <iostream>
-
 
 namespace inputReader {
     void

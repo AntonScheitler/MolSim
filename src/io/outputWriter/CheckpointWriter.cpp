@@ -34,8 +34,8 @@ namespace outputWriter {
         }
         file << particles.size() << "\n";
 
-        for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
-            file << plotParticle(**it) << "\n";
+        for (Particle& particle : particles) {
+            file << plotParticle(particle) << "\n";
         }
 
         file.close();

@@ -4,7 +4,8 @@
 #include "particle/Particle.h"
 #include "particle/boundary/Boundary.h"
 #include <utils/ArrayUtils.h>
-#include "particle/iterator/particleIterator/ParticleIteratorDirectSum.h"
+#include "particle/iterator/particleIterator/ParticleIterator.h"
+#include "particle/iterator/particleIterator/ParticleIteratorNonFixedParticles.h"
 #include "spdlogConfig.h"
 
 
@@ -217,12 +218,12 @@ Cell &ParticleContainerLinkedCell::getCell(int idx) {
     return mesh[idx];
 }
 
-std::unique_ptr<ParticleIterator> ParticleContainerLinkedCell::begin() {
-    return std::make_unique<ParticleIteratorDirectSum>(ParticleIteratorDirectSum(particles.begin(), particles.end()));
+ParticleIterator ParticleContainerLinkedCell::begin() {
+    return ParticleIterator(particles.begin(), particles.end());
 }
 
-std::unique_ptr<ParticleIterator> ParticleContainerLinkedCell::end() {
-    return std::make_unique<ParticleIteratorDirectSum>(ParticleIteratorDirectSum(particles.end(), particles.end()));
+ParticleIterator ParticleContainerLinkedCell::end() {
+    return ParticleIterator(particles.end(), particles.end());
 }
 
 std::unique_ptr<PairParticleIterator> ParticleContainerLinkedCell::beginPairParticle() {
@@ -233,6 +234,14 @@ std::unique_ptr<PairParticleIterator> ParticleContainerLinkedCell::beginPairPart
 std::unique_ptr<PairParticleIterator> ParticleContainerLinkedCell::endPairParticle() {
     return std::make_unique<PairParticleIteratorLinkedCell>(
             PairParticleIteratorLinkedCell(mesh.end(), mesh.end(), mesh, particles, neighborCellsMatrix));
+}
+
+ParticleIteratorNonFixedParticles ParticleContainerLinkedCell::beginNonFixedParticles() {
+    return ParticleIteratorNonFixedParticles(particles.begin(), particles.end());
+}
+
+ParticleIteratorNonFixedParticles ParticleContainerLinkedCell::endNonFixedParticles() {
+    return ParticleIteratorNonFixedParticles(particles.end(), particles.end());
 }
 
 PairParticleIteratorBoundaryNHalo ParticleContainerLinkedCell::beginPairGhost() {
