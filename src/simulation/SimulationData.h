@@ -300,8 +300,15 @@ public:
      */
     void setCustomForce(std::array<double, 3> newCustomForce);
 
+    /**
+     * @brief set the number of dimensions that this simulation uses
+     * @param numberDimensionsArg number of dimensions, valid values: 2, 3
+     */
     void setNumberDimensions(int numberDimensionsArg);
 
+    /**
+     * @param returns the number of dimensions that this simulation uses (either 2 or 3)
+     */
     int getNumberDimensions();
 
 
@@ -336,5 +343,5 @@ private:
     std::vector<size_t> movingMembranePartIndices;
     std::array<double, 3> customForce;
 
-    int numberDimensions = 2;
+    int numberDimensions;
 };

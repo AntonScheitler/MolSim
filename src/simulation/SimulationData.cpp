@@ -27,6 +27,7 @@ SimulationData::SimulationData() {
 
     thermostat = false;
     thermoVersion = 1; // TODO: default thermo version for testing purpose set to 2
+    numberDimensions = 2; //default 2, will be set by XMLFileReader
 
 }
 
