@@ -61,7 +61,7 @@ namespace inputReader {
             }
         } else {
             SPDLOG_LOGGER_ERROR(logger, "Error: could not open file {0}", filename);
-            exit(-1);
+            exit(EXIT_FAILURE);
         }
     }
 

@@ -44,11 +44,11 @@ namespace ParameterParser {
                 }
             }
         } catch (const xml_schema::exception &e) {
-            std::cerr << "XML parsing error: " << e.what() << std::endl;
-            exit(-1);
+            SPDLOG_ERROR("XML parsing error: {0}", e.what());
+            exit(EXIT_FAILURE);
         } catch (const std::exception &e) {
-            std::cerr << "Standard exception: " << e.what() << std::endl;
-            exit(-1);
+            SPDLOG_ERROR("Standard exception: {0}", e.what());
+            exit(EXIT_FAILURE);
         }
     }
 
@@ -57,6 +57,7 @@ namespace ParameterParser {
             if (xmlParser->thermo().present()) {
                 if(xmlParser->thermo()->version().present()) {
                     simData.setThermoVersion(xmlParser->thermo()->version().get());
+                    SPDLOG_INFO("Using thermostat v{0}", simData.getThermoVersion());
                 }
                 simData.activateThermostat();
                 simData.setInitialTemp(xmlParser->thermo()->init_T());
@@ -69,11 +70,11 @@ namespace ParameterParser {
                 simData.setMaxDeltaTemp(maxStep);
             }
         } catch (const xml_schema::exception &e) {
-            std::cerr << "XML parsing error: " << e.what() << std::endl;
-            exit(-1);
+            SPDLOG_ERROR("XML parsing error: {0}", e.what());
+            exit(EXIT_FAILURE);
         } catch (const std::exception &e) {
-            std::cerr << "Standard exception: " << e.what() << std::endl;
-            exit(-1);
+            SPDLOG_ERROR("Standard exception: {0}", e.what());
+            exit(EXIT_FAILURE);
         }
     }
 
@@ -87,11 +88,11 @@ namespace ParameterParser {
                 simData.setCustomForce({vector.x(), vector.y(), vector.z()});
             }
         } catch (const xml_schema::exception &e) {
-            std::cerr << "XML parsing error: " << e.what() << std::endl;
-            exit(-1);
+            SPDLOG_ERROR("XML parsing error: {0}", e.what());
+            exit(EXIT_FAILURE);
         } catch (const std::exception &e) {
-            std::cerr << "Standard exception: " << e.what() << std::endl;
-            exit(-1);
+            SPDLOG_ERROR("Standard exception: {0}", e.what());
+            exit(EXIT_FAILURE);
         }
     }
 }

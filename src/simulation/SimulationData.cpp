@@ -124,7 +124,7 @@ int SimulationData::parseOptions(int argc, char *argsv[]) {
     }
     // check if an input file has been supplied
     if (argc - optind != 1) {
-        std::cerr << usageText << std::endl;
+        SPDLOG_LOGGER_ERROR(logger, usageText);
         exit(EXIT_FAILURE);
     }
 
@@ -325,7 +325,7 @@ void SimulationData::setCustomForce(std::array<double, 3> newCustomForce) {
 void SimulationData::setNumberDimensions(int numberDimensionsArg) {
     if(numberDimensionsArg < 1 || numberDimensionsArg > 3) {
         SPDLOG_ERROR("Invalid number of dimensions: {0}", numberDimensionsArg);
-        exit(-1);
+        exit(EXIT_FAILURE);
     }
     this->numberDimensions = numberDimensionsArg;
 }

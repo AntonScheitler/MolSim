@@ -71,12 +71,10 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                                                                           containerLinkedCell->getCutoffRadius());
 
 
-                    SPDLOG_DEBUG("computing ghost particle repulsion...");
                     ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell, simData.getEpsilon(),
                                                                      simData.getSigma());
 
                     ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav());
-                    SPDLOG_DEBUG("done");
 
                     VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
 
@@ -86,10 +84,10 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                         // TODO: choose correct thermostat (or use only v2 in future?)
                         if (simData.getThermoVersion() == 2) {
                             TemperatureComputations::updateTempV2(simData.getParticles(), simData.getTargetTemp(),
-                                                                  simData.getMaxDeltaTemp());
+                                                                  simData.getMaxDeltaTemp(), simData.getNumberDimensions());
                         } else {
                             TemperatureComputations::updateTemp(simData.getParticles(), simData.getTargetTemp(),
-                                                                simData.getMaxDeltaTemp());
+                                                                simData.getMaxDeltaTemp(), simData.getNumberDimensions());
                         }
                     }
 

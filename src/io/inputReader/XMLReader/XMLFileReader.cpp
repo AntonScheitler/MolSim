@@ -12,6 +12,7 @@
 #include <particle/container/ParticleContainerLinkedCell.h>
 #include <particle/container/ParticleContainerDirectSum.h>
 #include "../CheckpointReader.h"
+#include "spdlog/fmt/bundled/os.h"
 
 
 namespace inputReader {
@@ -36,7 +37,7 @@ namespace inputReader {
         int type = 0;
 
 
-        std::cout << "entering XML parsing with filename " << filename;
+        SPDLOG_LOGGER_DEBUG(logger, "entering XML parsing with filename {0}", filename);
 
         std::ifstream inputFile(filename);
 
@@ -45,40 +46,44 @@ namespace inputReader {
             throw std::runtime_error("Failed to open XML file.");
         }
 
-        std::cout << "opened input file ";
+        SPDLOG_LOGGER_DEBUG(logger, "opened input file");
 
         try {
-            std::cout << "opened simparser ";
+            SPDLOG_LOGGER_DEBUG(logger, "opened simparser");
 
 
             std::unique_ptr<simulation> simParser = simulation_(inputFile, xml_schema::flags::dont_validate);
-            std::cout << "opened simparser ";
+            SPDLOG_LOGGER_DEBUG(logger, "opened simparser");
 
-//            std::ostringstream command;
-//            command << "xmllint --noout --schema ../src/io/inputReader/xml/simulation.xsd " << filename;
-//            int result = std::system(command.str().c_str());
+            //            std::ostringstream command;
+            //            command << "xmllint --noout --schema ../src/io/inputReader/xml/simulation.xsd " << filename;
+            //            int result = std::system(command.str().c_str());
 
-//            if (!(result == 0 || result == 32512)) {
-//                std::cerr << "Error in xml file: scheme does not validate ";
-//                exit(-1);
-//            }
+            //            if (!(result == 0 || result == 32512)) {
+            //                std::cerr << "Error in xml file: scheme does not validate ";
+            //                exit(-1);
+            //            }
 
             // use linked cell if specified
 
             auto parameters = simParser->parameters();
-            std::cout << "entering Container Type ";
+            SPDLOG_LOGGER_DEBUG(logger, "entering Container Type");
 
             if (parameters.present() && parameters->containerType().present() &&
                 parameters->containerType().get() == "linked") {
                 auto containerLinkedCell = std::make_unique<ParticleContainerLinkedCell>(ParticleContainerLinkedCell{
-                        {parameters->domainSize()->x(), parameters->domainSize()->y(), parameters->domainSize()->z()},
-                        parameters->cutoff().get(), {
+                    {parameters->domainSize()->x(), parameters->domainSize()->y(), parameters->domainSize()->z()},
+                    parameters->cutoff().get(), {
 
 
-                                {getEnum(parameters->boundary()->yLeft()), getEnum(parameters->boundary()->yRight())},
-                                {getEnum(parameters->boundary()->xBottom()), getEnum(parameters->boundary()->xTop())},
-                                {getEnum(parameters->boundary()->zFront()),
-                                 getEnum(parameters->boundary()->zBehind())}}});
+                        {getEnum(parameters->boundary()->yLeft()), getEnum(parameters->boundary()->yRight())},
+                        {getEnum(parameters->boundary()->xBottom()), getEnum(parameters->boundary()->xTop())},
+                        {
+                            getEnum(parameters->boundary()->zFront()),
+                            getEnum(parameters->boundary()->zBehind())
+                        }
+                    }
+                });
 
                 simData.setParticles(std::move(containerLinkedCell));
             } else {
@@ -90,9 +95,11 @@ namespace inputReader {
 
             // read dimension number
             if (parameters.present() && parameters->domainSize().present()) {
-                std::array<int, 3> dim = {static_cast<int>(parameters->domainSize()->x()),
-                                          static_cast<int>(parameters->domainSize()->y()),
-                                          static_cast<int>(parameters->domainSize()->z())};
+                std::array<int, 3> dim = {
+                    static_cast<int>(parameters->domainSize()->x()),
+                    static_cast<int>(parameters->domainSize()->y()),
+                    static_cast<int>(parameters->domainSize()->z())
+                };
                 if (dim[0] > 1 && dim[1] > 1 && dim[2] > 1) {
                     simData.setNumberDimensions(3);
                 } else if (dim[0] == 1 || dim[1] == 1 || dim[2] == 1) {
@@ -116,7 +123,8 @@ namespace inputReader {
             if (simParser->parameters()->import_checkpoint().present()) {
                 CheckpointReader checkpointReader(simData);
                 type = checkpointReader.readCheckpointFile(simData,
-                                                           simParser->parameters()->import_checkpoint()->file_path().c_str());
+                                                           simParser->parameters()->import_checkpoint()->file_path().
+                                                           c_str());
             }
 
             SPDLOG_LOGGER_DEBUG(logger, "checkpointing done");
@@ -126,7 +134,6 @@ namespace inputReader {
             SPDLOG_LOGGER_INFO(logger, "starting parsing particles");
 
             for (const auto &planet: simParser->clusters().particle()) {
-
                 x[0] = planet.coordinate().x();
                 x[1] = planet.coordinate().y();
                 x[2] = planet.coordinate().z();
@@ -167,7 +174,6 @@ namespace inputReader {
                 for (const auto &coords: cuboid.special_coords()) {
                     size_t index = coords.x() + coords.y() * d[0] + coords.z() * d[1] * d[0];
                     movingMembranePartIndicesArgs.push_back(index);
-
                 }
                 simData.setMovingMembranePartIndices(movingMembranePartIndicesArgs);
 
@@ -176,7 +182,6 @@ namespace inputReader {
 
                 double epsilon = cuboid.epsilon().present() ? cuboid.epsilon().get() : simData.getEpsilon();
                 double sigma = cuboid.sigma().present() ? cuboid.sigma().get() : simData.getSigma();
-
 
 
                 //TODO: also add 'fixed' param for each particle in checkpointing
@@ -210,13 +215,12 @@ namespace inputReader {
             }
 
             SPDLOG_LOGGER_DEBUG(logger, "finished reading discs ");
-
         } catch (const xml_schema::exception &e) {
             SPDLOG_LOGGER_ERROR(logger, "XML parsing error: {0}", e.what());
-            exit(-1);
+            exit(EXIT_FAILURE);
         } catch (const std::exception &e) {
-            std::cerr << "Standard exception: " << e.what();
-            exit(-1);
+            SPDLOG_ERROR("Standard exception: {0}", e.what());
+            exit(EXIT_FAILURE);
         }
     }
 
