@@ -16,21 +16,16 @@ public:
     /**
      * @brief computes the lennard jones potential between each pair of molecules in the given ParticleContainer
      * @param particles the ParticleContainer containing the molecules
-     * @param epsilonArg epsilon for computation of Lennard Jones Potential
-     * @param sigmaArg sigma for computation of Lennard Jones Potential
      */
-    static void computeLennardJonesPotential(ParticleContainer &particles, double epsilonArg, double sigmaArg);
+    static void computeLennardJonesPotential(ParticleContainer &particles);
 
     /**
      * @brief computes the lennard jones potential between each pair of molecules in the given ParticleContainer
      * that are not further apart than the cutoff radius
      * @param particles the ParticleContainer containing the molecules
-     * @param epsilonArg epsilon for computation of Lennard Jones Potential
-     * @param sigmaArg sigma for computation of Lennard Jones Potential
      * @param cutoff the radius past which particles are not considered for the force computation
      */
-    static void computeLennardJonesPotentialCutoff(ParticleContainerLinkedCell &particles, double epsilon, double sigma,
-                                                   double cutoff);
+    static void computeLennardJonesPotentialCutoff(ParticleContainerLinkedCell &particles, double cutoff);
 
 
     /**
@@ -49,20 +44,16 @@ public:
     /**
      * @brief computes the repulsion, the boundary particles suffer from the ghost particles
      * @param particles the particles to get the boundary particles from
-     * @param epsilon epsilon for computation of Lennard Jones Potential
-     * @param sigma sigma for computation of Lennard Jones Potential
      */
-    static void computeGhostParticleRepulsion(ParticleContainerLinkedCell &particles, double epsilon, double sigma);
+    static void computeGhostParticleRepulsion(ParticleContainerLinkedCell &particles);
 
     /**
      * @brief computes the repulsive force between neighboring particles in a membrane
      * @param particles the particles to get the boundary particles from
-     * @param epsilon epsilon for computation of Lennard Jones Potential
-     * @param sigma sigma for computation of Lennard Jones Potential
      * @param k the stiffness constant for force computation
      * @param r0 the average bond length for force computation
      */
-    static void computeMembraneNeighborForce(ParticleContainerLinkedCell &particles, double epsilon, double sigma, double k, double r0);
+    static void computeMembraneNeighborForce(ParticleContainerLinkedCell &particles, double k, double r0);
 
     /**
      * @brief applies a custom force vector to a selection of particles in the container

@@ -330,12 +330,12 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellPeriodicBound
     double epsilon = 5;
     ParticleContainerLinkedCell container{{99, 33, 1}, 33,
                                           {{periodic, periodic}, {outflow, outflow}, {outflow, outflow}}};
-    container.addParticle({{0.5, 10, 0}, {0, 0, 0}, 1});
-    container.addParticle({{98.5, 10, 0}, {0, 0, 0}, 1});
+    container.addParticle({{0.5, 10, 0}, {0, 0, 0}, 1, 0, 5, 1, false});
+    container.addParticle({{98.5, 10, 0}, {0, 0, 0}, 1,0, 5, 1, false});
     Particle& particleLeft = container.getParticles()[0];
     Particle& particleRight = container.getParticles()[1];
 
-    ForceComputations::computeLennardJonesPotentialCutoff(container, epsilon, sigma, 33);
+    ForceComputations::computeLennardJonesPotentialCutoff(container, 33);
     std::array<double, 3> distanceVector = {1, 0, 0};
     double distance = 1;
     // don't consider particles which are further apart than the cutoff radius
@@ -377,7 +377,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryOutfl
      */
 
     // particle a should move out of the high x boundary (outflow) (cell 17)
-    Particle a{{1.0, 1.0, 0}, {1.0, 0, 0}, 1, 0};
+    Particle a{{1.0, 1.0, 0}, {1.0, 0, 0}, 1, 0, 5, 1, false};
 
     container.addParticle(a);
 
@@ -393,10 +393,8 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryOutfl
         container.correctCellMembershipAllParticles();
 
         ForceComputations::resetForces(container);
-        ForceComputations::computeLennardJonesPotential(container, epsilon,
-                                                        sigma);
-        ForceComputations::computeGhostParticleRepulsion(container, epsilon,
-                                                         sigma);
+        ForceComputations::computeLennardJonesPotential(container);
+        ForceComputations::computeGhostParticleRepulsion(container);
         VelocityComputations::stoermerVerlet(container, deltaT);
     }
 
@@ -429,7 +427,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryRefle
      */
 
     // particle b should reflect at the low y boundary (cell 12)
-    Particle b{{1.0, 1.0, 0}, {0, 1.0, 0}, 1, 1};
+    Particle b{{1.0, 1.0, 0}, {0, 1.0, 0}, 1, 1, 5, 1, false};
 
     container.addParticle(b);
 
@@ -446,10 +444,8 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryRefle
         container.correctCellMembershipAllParticles();
 
         ForceComputations::resetForces(container);
-        ForceComputations::computeLennardJonesPotential(container, epsilon,
-                                                        sigma);
-        ForceComputations::computeGhostParticleRepulsion(container, epsilon,
-                                                         sigma);
+        ForceComputations::computeLennardJonesPotential(container);
+        ForceComputations::computeGhostParticleRepulsion(container);
         VelocityComputations::stoermerVerlet(container, deltaT);
     }
 
@@ -484,7 +480,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellDiagonalBound
      */
 
     // particle b should reflect at the corner (high x, high y) boundary
-    Particle b{{1.5, 1.5, 0}, {10.0, 10.0, 0}, 1, 1};
+    Particle b{{1.5, 1.5, 0}, {10.0, 10.0, 0}, 1, 1, 5, 1, false};
 
     container.addParticle(b);
 
@@ -501,10 +497,8 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellDiagonalBound
         container.correctCellMembershipAllParticles();
 
         ForceComputations::resetForces(container);
-        ForceComputations::computeLennardJonesPotential(container, epsilon,
-                                                        sigma);
-        ForceComputations::computeGhostParticleRepulsion(container, epsilon,
-                                                         sigma);
+        ForceComputations::computeLennardJonesPotential(container);
+        ForceComputations::computeGhostParticleRepulsion(container);
         VelocityComputations::stoermerVerlet(container, deltaT);
     }
 

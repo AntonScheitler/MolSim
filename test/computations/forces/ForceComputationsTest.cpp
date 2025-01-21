@@ -26,6 +26,12 @@ protected:
         a.setM(6);
         b.setM(1);
 
+        a.setSigma(1);
+        b.setSigma(1);
+
+        a.setEpsilon(5);
+        b.setEpsilon(5);
+
         particles = ParticleContainerDirectSum({std::vector<Particle>{a, b}});
         SPDLOG_INFO("ForceComputationsTest setUp done");
     }
@@ -37,7 +43,7 @@ protected:
  * (modulo rounding/discretization errors)
  */
 TEST_F(ForceComputationsTest, LennardJonesForceCalcTest) {
-    ForceComputations::computeLennardJonesPotential(particles, 5, 1);
+    ForceComputations::computeLennardJonesPotential(particles);
 
     // the analytical solution F_ij calculates the force for j (for i is inverted)
     // particle a
@@ -74,7 +80,7 @@ TEST_F(ForceComputationsTest, GravityCalcTest) {
 TEST_F(ForceComputationsTest, HarmonicPotentialDirectNeighborTest) {
     ParticleContainerLinkedCell container{{2, 1, 1}, 1, {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}};
     // create first neighbor
-    Particle first = {{0.5, 0, 0}, {0, 0, 0}, 1};
+    Particle first = {{0.5, 0, 0}, {0, 0, 0}, 1, 1, 1, 1, false};
     first.addNeighborIdx(-1);
     first.addNeighborIdx(-1);
     first.addNeighborIdx(1);
@@ -86,7 +92,7 @@ TEST_F(ForceComputationsTest, HarmonicPotentialDirectNeighborTest) {
     first.addDiagNeighborIdx(-1);
 
     // create second neighbor
-    Particle second = {{1.5, 0, 0}, {0, 0, 0}, 1};
+    Particle second = {{1.5, 0, 0}, {0, 0, 0}, 1, 1, 1, 1, false};
     second.addNeighborIdx(-1);
     second.addNeighborIdx(0);
     second.addNeighborIdx(-1);
@@ -101,7 +107,7 @@ TEST_F(ForceComputationsTest, HarmonicPotentialDirectNeighborTest) {
     container.addParticle(first);
     container.addParticle(second);
 
-    ForceComputations::computeMembraneNeighborForce(container, 1, 1, 300, 2.2);
+    ForceComputations::computeMembraneNeighborForce(container, 300, 2.2);
 
     EXPECT_NEAR(container.getParticleAt(0).getF()[0], -384, 0.00000001);
     EXPECT_NEAR(container.getParticleAt(0).getF()[1], 0, 0.00000001);
@@ -115,7 +121,7 @@ TEST_F(ForceComputationsTest, HarmonicPotentialDirectNeighborTest) {
 TEST_F(ForceComputationsTest, HarmonicPotentialDiagonalNeighborTest) {
     ParticleContainerLinkedCell container{{2, 2, 1}, 1, {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}};
     // create first neighbor
-    Particle first = {{0.5, 0.5, 0}, {0, 0, 0}, 1};
+    Particle first = {{0.5, 0.5, 0}, {0, 0, 0}, 1, 1, 1, 1, false};
     first.addNeighborIdx(-1);
     first.addNeighborIdx(-1);
     first.addNeighborIdx(-1);
@@ -127,7 +133,7 @@ TEST_F(ForceComputationsTest, HarmonicPotentialDiagonalNeighborTest) {
     first.addDiagNeighborIdx(1);
 
     // create second neighbor
-    Particle second = {{1.5, 1.5, 0}, {0, 0, 0}, 1};
+    Particle second = {{1.5, 1.5, 0}, {0, 0, 0}, 1, 1, 1, 1, false};
     second.addNeighborIdx(-1);
     second.addNeighborIdx(-1);
     second.addNeighborIdx(-1);
@@ -142,7 +148,7 @@ TEST_F(ForceComputationsTest, HarmonicPotentialDiagonalNeighborTest) {
     container.addParticle(first);
     container.addParticle(second);
 
-    ForceComputations::computeMembraneNeighborForce(container, 1, 1, 300, 2.2);
+    ForceComputations::computeMembraneNeighborForce(container, 300, 2.2);
 
     EXPECT_NEAR(container.getParticleAt(0).getF()[0], -360, 0.00000001);
     EXPECT_NEAR(container.getParticleAt(0).getF()[1], -360, 0.00000001);
