@@ -38,8 +38,7 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
             step = [this](size_t iteration, double currentTime) {
                 PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
                 ForceComputations::resetForces(simData.getParticles());
-                ForceComputations::computeLennardJonesPotential(simData.getParticles(), simData.getEpsilon(),
-                                                                simData.getSigma());
+                ForceComputations::computeLennardJonesPotential(simData.getParticles());
                 ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav());
                 VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
 
@@ -66,13 +65,14 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                 if (containerLinkedCell) {
                     containerLinkedCell->correctCellMembershipAllParticles();
                     ForceComputations::resetForces(simData.getParticles());
-                    ForceComputations::computeLennardJonesPotentialCutoff(*containerLinkedCell, simData.getEpsilon(),
-                                                                          simData.getSigma(),
+                    ForceComputations::computeLennardJonesPotentialCutoff(*containerLinkedCell,
                                                                           containerLinkedCell->getCutoffRadius());
 
 
-                    ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell, simData.getEpsilon(),
-                                                                     simData.getSigma());
+
+                    SPDLOG_DEBUG("computing ghost particle repulsion...");
+                    ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell);
+
 
                     ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav());
 
@@ -114,12 +114,10 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
 
                     ForceComputations::resetForces(simData.getParticles());
 
-                    ForceComputations::computeMembraneNeighborForce(*containerLinkedCell, simData.getEpsilon(),
-                                                                    simData.getSigma(),
+                    ForceComputations::computeMembraneNeighborForce(*containerLinkedCell,
                                                                     simData.getK(), simData.getR0());
 
-                    ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell, simData.getEpsilon(),
-                                                                     simData.getSigma());
+                    ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell);
 
                     ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav());
 

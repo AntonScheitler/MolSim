@@ -29,17 +29,15 @@ void ForceComputations::computeGravity(ParticleContainer &particles) {
     }
 }
 
-void ForceComputations::computeLennardJonesPotential(ParticleContainer &particles, double epsilon, double sigma) {
+void ForceComputations::computeLennardJonesPotential(ParticleContainer &particles) {
+    double epsilon;
+    double sigma;
     // iterate through all pairs of particles and calculate lennard-jones potential
     for (auto it = particles.beginPairParticle(); *it != *(particles.endPairParticle()); it->operator++()) {
         std::pair<Particle &, Particle &> pair = **it;
 
-        if (pair.first.getSigma() != pair.second.getSigma()) {
-            sigma = (pair.first.getSigma() + pair.second.getSigma()) / 2;
-        }
-        if (pair.first.getEpsilon() != pair.second.getEpsilon()) {
-            epsilon = sqrt(pair.first.getEpsilon() * pair.second.getSigma());
-        }
+        sigma = (pair.first.getSigma() != pair.second.getSigma()) ? ((pair.first.getSigma() + pair.second.getSigma()) / 2) : pair.first.getSigma();
+        epsilon = (pair.first.getEpsilon() != pair.second.getEpsilon()) ? (sqrt(pair.first.getEpsilon() * pair.second.getSigma())) : pair.first.getEpsilon();
 
         std::array<double, 3> distanceVector = ArrayUtils::elementWisePairOp(pair.first.getX(), pair.second.getX(),
                                                                              std::minus<>());
@@ -59,17 +57,15 @@ void ForceComputations::computeLennardJonesPotential(ParticleContainer &particle
     }
 }
 
-void ForceComputations::computeLennardJonesPotentialCutoff(ParticleContainerLinkedCell &particles, double epsilon,
-                                                           double sigma, double cutoff) {
+void ForceComputations::computeLennardJonesPotentialCutoff(ParticleContainerLinkedCell &particles, double cutoff) {
+    double epsilon;
+    double sigma;
     // iterate through all pairs of particles and calculate lennard-jones potential
     for (auto it = particles.beginPairParticle(); *it != *(particles.endPairParticle()); it->operator++()) {
         std::pair<Particle &, Particle &> pair = **it;
-        if (pair.first.getSigma() != pair.second.getSigma()) {
-            sigma = (pair.first.getSigma() + pair.second.getSigma()) / 2;
-        }
-        if (pair.first.getEpsilon() != pair.second.getEpsilon()) {
-            epsilon = sqrt(pair.first.getEpsilon() * pair.second.getSigma());
-        }
+
+        sigma = (pair.first.getSigma() != pair.second.getSigma()) ? ((pair.first.getSigma() + pair.second.getSigma()) / 2) : pair.first.getSigma();
+        epsilon = (pair.first.getEpsilon() != pair.second.getEpsilon()) ? (sqrt(pair.first.getEpsilon() * pair.second.getSigma())) : pair.first.getEpsilon();
 
         std::array<double, 3> distanceVector = ArrayUtils::elementWisePairOp(pair.first.getX(), pair.second.getX(),
                                                                              std::minus<>());
@@ -108,22 +104,33 @@ void ForceComputations::addExternalForces(ParticleContainer &particles, std::arr
     }
 }
 
-void ForceComputations::computeGhostParticleRepulsion(ParticleContainerLinkedCell &particles, double epsilon, double sigma) {
+void ForceComputations::computeGhostParticleRepulsion(ParticleContainerLinkedCell &particles) {
+    double epsilon;
+    double sigma;
     for (auto it = particles.beginPairGhost(); it != particles.endPairGhost(); ++it) {
+
         std::pair<Particle &, Particle &> pair = *it;
+        epsilon = pair.first.getEpsilon();
+        sigma = pair.first.getSigma();
         computeLennardJonesPotentialRepulsiveHelper(pair, epsilon, sigma);
     }
 }
 
-void ForceComputations::computeMembraneNeighborForce(ParticleContainerLinkedCell &particles, double epsilon, double sigma, double k, double r0) {
+void ForceComputations::computeMembraneNeighborForce(ParticleContainerLinkedCell &particles, double k, double r0) {
+    double epsilon;
+    double sigma;
     for (auto it = particles.beginMembraneDirectNeighbor(); it != particles.endMembraneDirectNeighbor(); ++it) {
         std::pair<Particle&, Particle&> pair = *it;
+        epsilon = pair.first.getEpsilon();
+        sigma = pair.first.getSigma();
         computeLennardJonesPotentialRepulsiveHelper(pair, epsilon, sigma);
         computeHaromicPotentialHelper(pair, k, r0);
     }
 
     for (auto it = particles.beginMembraneDiagonalNeighbor(); it != particles.endMembraneDiagonalNeighbor(); ++it) {
         std::pair<Particle&, Particle&> pair = *it;
+        epsilon = pair.first.getEpsilon();
+        sigma = pair.first.getSigma();
         computeLennardJonesPotentialRepulsiveHelper(pair, epsilon, sigma);
         computeHaromicPotentialHelper(pair, k, sqrt(2.0) * r0);
     }
