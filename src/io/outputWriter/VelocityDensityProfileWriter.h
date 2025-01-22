@@ -3,7 +3,7 @@
 
 namespace outputWriter {
 
-    class VelocityDensityProfileWriter : public FileWriter {
+    class VelocityDensityProfileWriter  {
     public:
 
         VelocityDensityProfileWriter(std::string baseName);
@@ -11,7 +11,7 @@ namespace outputWriter {
         /**
          * @brief plots bin profiles and writes them to a csv file
          */
-        void profileBins( std::vector<VelocityDensityProfile::binInfo> &binInfos, int iteration);
+        void profileBins(ParticleContainerLinkedCell& particles, int iteration, int bins);
 
     private:
 

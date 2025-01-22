@@ -17,7 +17,7 @@ namespace outputWriter {
     }
 
 
-    void VelocityDensityProfileWriter::profileBins(std::vector<VelocityDensityProfile::binInfo> &binInfos, int iteration) {
+    void VelocityDensityProfileWriter::profileBins(ParticleContainerLinkedCell& particles, int iteration, int bins) {
         std::stringstream strstr;
         strstr << baseName << "_" << std::setfill('0') << std::setw(4) << iteration
                << ".csv";
@@ -27,6 +27,7 @@ namespace outputWriter {
         if (!file.is_open()) {
             throw std::runtime_error("Failed to open file");
         }
+        std::vector<VelocityDensityProfile::binInfo> binInfos = VelocityDensityProfile::determineProfile(particles, bins);
 
         for (const VelocityDensityProfile::binInfo& binInfo: binInfos) {
             file << plotBin(binInfo) << "\n";

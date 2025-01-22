@@ -5,6 +5,7 @@
 #include "computations/temperatures/TemperatureComputations.h"
 #include "io/outputWriter/VTKWriter.h"
 #include <io/outputWriter/CheckpointWriter.h>
+#include "../io/outputWriter/VelocityDensityProfileWriter.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/spdlog.h"
 #include "particle/container/ParticleContainer.h"
@@ -199,6 +200,7 @@ size_t Simulator::runSimulationLoop() {
     double currentTime = simData.getStartTime();
     int iteration = 0;
     outputWriter::VTKWriter writer(simData.getBaseName());
+    outputWriter::VelocityDensityProfileWriter profileWriter("profile");
 
     SPDLOG_LOGGER_INFO(logger, "delta_t={0}, t_end={1}, total number of iterations: {2}", simData.getDeltaT(), simData.getEndTime(),
                 simData.getEndTime() / simData.getDeltaT());
@@ -220,6 +222,15 @@ size_t Simulator::runSimulationLoop() {
             writer.plotParticles(simData.getParticles(), iteration);
         }
 
+        if (iteration % 10000 == 0 && !simData.getBench()) {
+            // write output on every 10th iteration
+            try {
+                auto& linkedCellContainer = dynamic_cast<ParticleContainerLinkedCell&>(simData.getParticles());
+                profileWriter.profileBins(linkedCellContainer, iteration, 50);
+            } catch (const std::bad_cast& e) {
+                SPDLOG_LOGGER_ERROR(logger, "ParticleContainer is not of type ParticleContainerLinkedCell: ", e.what());
+            }
+        }
 
         SPDLOG_LOGGER_INFO(logger, "Iteration {0} finished.", iteration);
         currentTime += simData.getDeltaT();

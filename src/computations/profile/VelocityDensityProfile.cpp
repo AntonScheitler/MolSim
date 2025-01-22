@@ -11,22 +11,28 @@ std::vector<VelocityDensityProfile::binInfo>  VelocityDensityProfile::determineP
         binInfo info{};
         info.sumVelocities = {0, 0, 0};
         info.numParticles = 0;
-        binInfos.push_back(info);
+
 
         for (auto it = particles.beginNonFixedParticles(); it != particles.endNonFixedParticles(); ++it) {
             Particle& particle = *it;
 
             if (particle.getX()[0] >= binLength * i && particle.getX()[0] < binLength * (i + 1)) {
-                binInfos[0].numParticles++;
-                binInfos[0].sumVelocities = ArrayUtils::elementWisePairOp(binInfos[0].sumVelocities, particle.getV(), std::plus<>());
+                info.numParticles++;
+                info.sumVelocities = ArrayUtils::elementWisePairOp(info.sumVelocities, particle.getV(), std::plus<>());
             }
         }
+        binInfos.push_back(info);
     }
 
 
     for (struct binInfo& binInfo : binInfos) {
         binInfo.avgDensity = binInfo.numParticles / binSize;
-        binInfo.avgVelocity = ArrayUtils::elementWiseScalarOp(1.0 / binInfo.numParticles, binInfo.sumVelocities, std::multiplies<>());
+        if(binInfo.numParticles == 0){
+            binInfo.avgVelocity = {0, 0, 0};
+        }else {
+            binInfo.avgVelocity = ArrayUtils::elementWiseScalarOp(1.0 / binInfo.numParticles, binInfo.sumVelocities,
+                                                                  std::multiplies<>());
+        }
     }
 
     return binInfos;
