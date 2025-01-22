@@ -950,6 +950,24 @@ class clusters: public ::xml_schema::type
 class thermo: public ::xml_schema::type
 {
   public:
+  // version
+  //
+  typedef ::xml_schema::int_ version_type;
+  typedef ::xsd::cxx::tree::optional< version_type > version_optional;
+  typedef ::xsd::cxx::tree::traits< version_type, char > version_traits;
+
+  const version_optional&
+  version () const;
+
+  version_optional&
+  version ();
+
+  void
+  version (const version_type& x);
+
+  void
+  version (const version_optional& x);
+
   // init_T
   //
   typedef ::xml_schema::double_ init_T_type;
@@ -1045,6 +1063,7 @@ class thermo: public ::xml_schema::type
          ::xml_schema::flags);
 
   protected:
+  version_optional version_;
   ::xsd::cxx::tree::one< init_T_type > init_T_;
   ::xsd::cxx::tree::one< n_type > n_;
   target_optional target_;
@@ -1428,6 +1447,24 @@ class particle: public ::xml_schema::type
   void
   sigma (const sigma_optional& x);
 
+  // fixed
+  //
+  typedef ::xml_schema::boolean fixed_type;
+  typedef ::xsd::cxx::tree::optional< fixed_type > fixed_optional;
+  typedef ::xsd::cxx::tree::traits< fixed_type, char > fixed_traits;
+
+  const fixed_optional&
+  fixed () const;
+
+  fixed_optional&
+  fixed ();
+
+  void
+  fixed (const fixed_type& x);
+
+  void
+  fixed (const fixed_optional& x);
+
   // Constructors.
   //
   particle (const coordinate_type&,
@@ -1469,6 +1506,7 @@ class particle: public ::xml_schema::type
   ::xsd::cxx::tree::one< mass_type > mass_;
   epsilon_optional epsilon_;
   sigma_optional sigma_;
+  fixed_optional fixed_;
 };
 
 class disc: public ::xml_schema::type
@@ -1586,6 +1624,24 @@ class disc: public ::xml_schema::type
   void
   sigma (const sigma_optional& x);
 
+  // fixed
+  //
+  typedef ::xml_schema::boolean fixed_type;
+  typedef ::xsd::cxx::tree::optional< fixed_type > fixed_optional;
+  typedef ::xsd::cxx::tree::traits< fixed_type, char > fixed_traits;
+
+  const fixed_optional&
+  fixed () const;
+
+  fixed_optional&
+  fixed ();
+
+  void
+  fixed (const fixed_type& x);
+
+  void
+  fixed (const fixed_optional& x);
+
   // Constructors.
   //
   disc (const center_type&,
@@ -1633,6 +1689,7 @@ class disc: public ::xml_schema::type
   ::xsd::cxx::tree::one< radius_type > radius_;
   epsilon_optional epsilon_;
   sigma_optional sigma_;
+  fixed_optional fixed_;
 };
 
 class cuboid: public ::xml_schema::type
@@ -1784,6 +1841,24 @@ class cuboid: public ::xml_schema::type
   void
   special_coords (const special_coords_sequence& s);
 
+  // fixed
+  //
+  typedef ::xml_schema::boolean fixed_type;
+  typedef ::xsd::cxx::tree::optional< fixed_type > fixed_optional;
+  typedef ::xsd::cxx::tree::traits< fixed_type, char > fixed_traits;
+
+  const fixed_optional&
+  fixed () const;
+
+  fixed_optional&
+  fixed ();
+
+  void
+  fixed (const fixed_type& x);
+
+  void
+  fixed (const fixed_optional& x);
+
   // Constructors.
   //
   cuboid (const cornerCoordinates_type&,
@@ -1835,6 +1910,7 @@ class cuboid: public ::xml_schema::type
   epsilon_optional epsilon_;
   sigma_optional sigma_;
   special_coords_sequence special_coords_;
+  fixed_optional fixed_;
 };
 
 #include <iosfwd>

@@ -29,7 +29,7 @@ protected:
         double epsilon = 1.0;
         double sigma = 1.0;
 
-        inputReader::ParticleGenerator::generateCuboid(particles, p, v, d, mass, h, type, epsilon, sigma);
+        inputReader::ParticleGenerator::generateCuboid(particles, p, v, d, mass, h, type, epsilon, sigma, false);
     }
 };
 

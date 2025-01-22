@@ -3,19 +3,21 @@
 <simulation>
     <parameters>
         <delta_t>0.0005</delta_t>
-        <t_end>50</t_end>
+        <t_end>100</t_end>
         <containerType>linked</containerType>
         <domainSize>
-            <x>300</x>
-            <y>54</y>
-            <z>1</z>
+            <x>60</x>
+            <y>60</y>
+            <z>60</z>
         </domainSize>
         <cutoff>3</cutoff>
         <boundary>
             <xTop>reflecting</xTop>
             <xBottom>reflecting</xBottom>
-            <yLeft>periodic</yLeft>
-            <yRight>periodic</yRight>
+            <yLeft>reflecting</yLeft>
+            <yRight>reflecting</yRight>
+            <zFront>reflecting</zFront>
+            <zBehind>reflecting</zBehind>
         </boundary>
         <grav>-12.44</grav>
     </parameters>
@@ -23,13 +25,13 @@
         <cuboid>
             <cornerCoordinates>
                 <x>0.6</x>
-                <y>2.0</y>
-                <z>0.0</z>
+                <y>0.6</y>
+                <z>0.6</z>
             </cornerCoordinates>
             <dimensions>
-                <x>250</x>
+                <x>50</x>
                 <y>20</y>
-                <z>1</z>
+                <z>50</z>
             </dimensions>
             <velocity>
                 <x>0.0</x>
@@ -45,13 +47,13 @@
         <cuboid>
             <cornerCoordinates>
                 <x>0.6</x>
-                <y>27</y>
-                <z>0.0</z>
+                <y>24.6</y>
+                <z>0.6</z>
             </cornerCoordinates>
             <dimensions>
-                <x>250</x>
+                <x>50</x>
                 <y>20</y>
-                <z>1</z>
+                <z>50</z>
             </dimensions>
             <velocity>
                 <x>0.0</x>

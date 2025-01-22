@@ -8,7 +8,7 @@
 namespace inputReader {
     void
     ParticleGenerator::generateCuboid(ParticleContainer &particles, std::array<double, 3> x, std::array<double, 3> v,
-                                      std::array<int, 3> d, double m, double h, int type, double e, double s) {
+                                      std::array<int, 3> d, double m, double h, int type, double e, double s, bool fixed) {
 
 
         std::array<double, 3> tempx{};
@@ -19,7 +19,7 @@ namespace inputReader {
                 for (int dx = 0; dx < d[0]; ++dx) {
                     tempx[0] = dx * h + x[0];
 
-                    Particle temp = Particle(tempx, v, m, type);
+                    Particle temp = Particle(tempx, v, m, type, e, s, fixed);
                     temp.setSigma(s);
                     temp.setEpsilon(e);
                     addNeighbors(temp, dx, dy, dz, d);

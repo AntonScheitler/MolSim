@@ -243,6 +243,17 @@ public:
     void setCheckpoint(bool checkpoingArg);
 
     /**
+     * @brief sets the version of the thermostat to use
+     * @param thermoVersionArg thermostat version number (TODO: valid range)
+     */
+    void setThermoVersion(int thermoVersionArg);
+
+    /**
+     * @brief returns the version number of the used thermostat for this simulation
+     */
+    int getThermoVersion();
+
+    /**
      * @brief returns the stiffness constant for membrane neighbor force computation
      * @return the stiffness constant
      */
@@ -290,6 +301,7 @@ public:
      */
     void setCustomForce(std::array<double, 3> newCustomForce);
 
+
 private:
     SimulationType simType;
     double startTime;
@@ -312,6 +324,8 @@ private:
 
     std::array<double, 3> grav;
     bool checkpoint;
+
+    int thermoVersion;
 
     // membrane
     double k;

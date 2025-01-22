@@ -80,7 +80,7 @@
                                         <xsd:element name="mass" type="xsd:double"/>
                                         <xsd:element name="epsilon" type="xsd:double" minOccurs="0"/>
                                         <xsd:element name="sigma" type="xsd:double" minOccurs="0"/>
-
+                                        <xsd:element name="fixed" type="xsd:boolean" minOccurs="0"/>
 
                                     </xsd:sequence>
                                 </xsd:complexType>
@@ -104,6 +104,7 @@
 
                                         <xsd:element name="sigma" type="xsd:double" minOccurs="0"/>
 
+                                        <xsd:element name="fixed" type="xsd:boolean" minOccurs="0"/>
 
                                     </xsd:sequence>
                                 </xsd:complexType>
@@ -128,6 +129,11 @@
                                         <xsd:element name="sigma" type="xsd:double" minOccurs="0"/>
                                         <xsd:element name="special_coords" type="vectorType" minOccurs="0"  maxOccurs="unbounded"/>
 
+
+                                        <xsd:element name="fixed" type="xsd:boolean" minOccurs="0"/>
+
+
+
                                     </xsd:sequence>
                                 </xsd:complexType>
                             </xsd:element>
@@ -139,6 +145,7 @@
                 <xsd:element name="thermo" minOccurs="0">
                     <xsd:complexType>
                         <xsd:sequence>
+                            <xsd:element name="version" type="xsd:int" minOccurs="0"/>
                             <xsd:element name="init_T" type="xsd:double"/>
                             <xsd:element name="n" type="xsd:double" />
                             <xsd:element name="target" type="xsd:double" minOccurs="0"/>

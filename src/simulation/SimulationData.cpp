@@ -25,6 +25,7 @@ SimulationData::SimulationData() {
     grav = {0, 0, 0};
 
     thermostat = false;
+    thermoVersion = 1; // TODO: default thermo version for testing purpose set to 2
 
 }
 
@@ -278,6 +279,15 @@ void SimulationData::setCheckpoint(bool checkpoingArg) {
     this->checkpoint = checkpoingArg;
 }
 
+
+void SimulationData::setThermoVersion(int thermoVersionArg) {
+    thermoVersion = thermoVersionArg;
+}
+
+int SimulationData::getThermoVersion() {
+    return thermoVersion;
+}
+
 double SimulationData::getK() {
     return k;
 }
@@ -308,4 +318,5 @@ std::array<double, 3> SimulationData::getCustomForce() {
 
 void SimulationData::setCustomForce(std::array<double, 3> newCustomForce) {
     customForce = newCustomForce;
+
 }

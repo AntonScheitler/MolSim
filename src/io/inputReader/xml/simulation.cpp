@@ -687,6 +687,30 @@ cuboid (const cuboid_sequence& s)
 // thermo
 // 
 
+const thermo::version_optional& thermo::
+version () const
+{
+  return this->version_;
+}
+
+thermo::version_optional& thermo::
+version ()
+{
+  return this->version_;
+}
+
+void thermo::
+version (const version_type& x)
+{
+  this->version_.set (x);
+}
+
+void thermo::
+version (const version_optional& x)
+{
+  this->version_ = x;
+}
+
 const thermo::init_T_type& thermo::
 init_T () const
 {
@@ -1129,6 +1153,30 @@ sigma (const sigma_optional& x)
   this->sigma_ = x;
 }
 
+const particle::fixed_optional& particle::
+fixed () const
+{
+  return this->fixed_;
+}
+
+particle::fixed_optional& particle::
+fixed ()
+{
+  return this->fixed_;
+}
+
+void particle::
+fixed (const fixed_type& x)
+{
+  this->fixed_.set (x);
+}
+
+void particle::
+fixed (const fixed_optional& x)
+{
+  this->fixed_ = x;
+}
+
 
 // disc
 // 
@@ -1281,6 +1329,30 @@ void disc::
 sigma (const sigma_optional& x)
 {
   this->sigma_ = x;
+}
+
+const disc::fixed_optional& disc::
+fixed () const
+{
+  return this->fixed_;
+}
+
+disc::fixed_optional& disc::
+fixed ()
+{
+  return this->fixed_;
+}
+
+void disc::
+fixed (const fixed_type& x)
+{
+  this->fixed_.set (x);
+}
+
+void disc::
+fixed (const fixed_optional& x)
+{
+  this->fixed_ = x;
 }
 
 
@@ -1477,6 +1549,30 @@ void cuboid::
 special_coords (const special_coords_sequence& s)
 {
   this->special_coords_ = s;
+}
+
+const cuboid::fixed_optional& cuboid::
+fixed () const
+{
+  return this->fixed_;
+}
+
+cuboid::fixed_optional& cuboid::
+fixed ()
+{
+  return this->fixed_;
+}
+
+void cuboid::
+fixed (const fixed_type& x)
+{
+  this->fixed_.set (x);
+}
+
+void cuboid::
+fixed (const fixed_optional& x)
+{
+  this->fixed_ = x;
 }
 
 
@@ -2273,6 +2369,7 @@ thermo::
 thermo (const init_T_type& init_T,
         const n_type& n)
 : ::xml_schema::type (),
+  version_ (this),
   init_T_ (init_T, this),
   n_ (n, this),
   target_ (this),
@@ -2285,6 +2382,7 @@ thermo (const thermo& x,
         ::xml_schema::flags f,
         ::xml_schema::container* c)
 : ::xml_schema::type (x, f, c),
+  version_ (x.version_, f, this),
   init_T_ (x.init_T_, f, this),
   n_ (x.n_, f, this),
   target_ (x.target_, f, this),
@@ -2297,6 +2395,7 @@ thermo (const ::xercesc::DOMElement& e,
         ::xml_schema::flags f,
         ::xml_schema::container* c)
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  version_ (this),
   init_T_ (this),
   n_ (this),
   target_ (this),
@@ -2318,6 +2417,17 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
     const ::xercesc::DOMElement& i (p.cur_element ());
     const ::xsd::cxx::xml::qualified_name< char > n (
       ::xsd::cxx::xml::dom::name< char > (i));
+
+    // version
+    //
+    if (n.name () == "version" && n.namespace_ ().empty ())
+    {
+      if (!this->version_)
+      {
+        this->version_.set (version_traits::create (i, f, this));
+        continue;
+      }
+    }
 
     // init_T
     //
@@ -2394,6 +2504,7 @@ operator= (const thermo& x)
   if (this != &x)
   {
     static_cast< ::xml_schema::type& > (*this) = x;
+    this->version_ = x.version_;
     this->init_T_ = x.init_T_;
     this->n_ = x.n_;
     this->target_ = x.target_;
@@ -2883,7 +2994,8 @@ particle (const coordinate_type& coordinate,
   velocity_ (velocity, this),
   mass_ (mass, this),
   epsilon_ (this),
-  sigma_ (this)
+  sigma_ (this),
+  fixed_ (this)
 {
 }
 
@@ -2896,7 +3008,8 @@ particle (::std::unique_ptr< coordinate_type > coordinate,
   velocity_ (std::move (velocity), this),
   mass_ (mass, this),
   epsilon_ (this),
-  sigma_ (this)
+  sigma_ (this),
+  fixed_ (this)
 {
 }
 
@@ -2909,7 +3022,8 @@ particle (const particle& x,
   velocity_ (x.velocity_, f, this),
   mass_ (x.mass_, f, this),
   epsilon_ (x.epsilon_, f, this),
-  sigma_ (x.sigma_, f, this)
+  sigma_ (x.sigma_, f, this),
+  fixed_ (x.fixed_, f, this)
 {
 }
 
@@ -2922,7 +3036,8 @@ particle (const ::xercesc::DOMElement& e,
   velocity_ (this),
   mass_ (this),
   epsilon_ (this),
-  sigma_ (this)
+  sigma_ (this),
+  fixed_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -3002,6 +3117,17 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // fixed
+    //
+    if (n.name () == "fixed" && n.namespace_ ().empty ())
+    {
+      if (!this->fixed_)
+      {
+        this->fixed_.set (fixed_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -3045,6 +3171,7 @@ operator= (const particle& x)
     this->mass_ = x.mass_;
     this->epsilon_ = x.epsilon_;
     this->sigma_ = x.sigma_;
+    this->fixed_ = x.fixed_;
   }
 
   return *this;
@@ -3071,7 +3198,8 @@ disc (const center_type& center,
   meshWidth_ (meshWidth, this),
   radius_ (radius, this),
   epsilon_ (this),
-  sigma_ (this)
+  sigma_ (this),
+  fixed_ (this)
 {
 }
 
@@ -3088,7 +3216,8 @@ disc (::std::unique_ptr< center_type > center,
   meshWidth_ (meshWidth, this),
   radius_ (radius, this),
   epsilon_ (this),
-  sigma_ (this)
+  sigma_ (this),
+  fixed_ (this)
 {
 }
 
@@ -3103,7 +3232,8 @@ disc (const disc& x,
   meshWidth_ (x.meshWidth_, f, this),
   radius_ (x.radius_, f, this),
   epsilon_ (x.epsilon_, f, this),
-  sigma_ (x.sigma_, f, this)
+  sigma_ (x.sigma_, f, this),
+  fixed_ (x.fixed_, f, this)
 {
 }
 
@@ -3118,7 +3248,8 @@ disc (const ::xercesc::DOMElement& e,
   meshWidth_ (this),
   radius_ (this),
   epsilon_ (this),
-  sigma_ (this)
+  sigma_ (this),
+  fixed_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -3220,6 +3351,17 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // fixed
+    //
+    if (n.name () == "fixed" && n.namespace_ ().empty ())
+    {
+      if (!this->fixed_)
+      {
+        this->fixed_.set (fixed_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -3279,6 +3421,7 @@ operator= (const disc& x)
     this->radius_ = x.radius_;
     this->epsilon_ = x.epsilon_;
     this->sigma_ = x.sigma_;
+    this->fixed_ = x.fixed_;
   }
 
   return *this;
@@ -3308,7 +3451,8 @@ cuboid (const cornerCoordinates_type& cornerCoordinates,
   brownianMotion_ (brownianMotion, this),
   epsilon_ (this),
   sigma_ (this),
-  special_coords_ (this)
+  special_coords_ (this),
+  fixed_ (this)
 {
 }
 
@@ -3328,7 +3472,8 @@ cuboid (::std::unique_ptr< cornerCoordinates_type > cornerCoordinates,
   brownianMotion_ (brownianMotion, this),
   epsilon_ (this),
   sigma_ (this),
-  special_coords_ (this)
+  special_coords_ (this),
+  fixed_ (this)
 {
 }
 
@@ -3345,7 +3490,8 @@ cuboid (const cuboid& x,
   brownianMotion_ (x.brownianMotion_, f, this),
   epsilon_ (x.epsilon_, f, this),
   sigma_ (x.sigma_, f, this),
-  special_coords_ (x.special_coords_, f, this)
+  special_coords_ (x.special_coords_, f, this),
+  fixed_ (x.fixed_, f, this)
 {
 }
 
@@ -3362,7 +3508,8 @@ cuboid (const ::xercesc::DOMElement& e,
   brownianMotion_ (this),
   epsilon_ (this),
   sigma_ (this),
-  special_coords_ (this)
+  special_coords_ (this),
+  fixed_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -3489,6 +3636,17 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       continue;
     }
 
+    // fixed
+    //
+    if (n.name () == "fixed" && n.namespace_ ().empty ())
+    {
+      if (!this->fixed_)
+      {
+        this->fixed_.set (fixed_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -3557,6 +3715,7 @@ operator= (const cuboid& x)
     this->epsilon_ = x.epsilon_;
     this->sigma_ = x.sigma_;
     this->special_coords_ = x.special_coords_;
+    this->fixed_ = x.fixed_;
   }
 
   return *this;
@@ -4326,6 +4485,18 @@ operator<< (::xercesc::DOMElement& e, const thermo& i)
 {
   e << static_cast< const ::xml_schema::type& > (i);
 
+  // version
+  //
+  if (i.version ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "version",
+        e));
+
+    s << *i.version ();
+  }
+
   // init_T
   //
   {
@@ -4562,6 +4733,18 @@ operator<< (::xercesc::DOMElement& e, const particle& i)
 
     s << ::xml_schema::as_double(*i.sigma ());
   }
+
+  // fixed
+  //
+  if (i.fixed ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "fixed",
+        e));
+
+    s << *i.fixed ();
+  }
 }
 
 void
@@ -4646,6 +4829,18 @@ operator<< (::xercesc::DOMElement& e, const disc& i)
         e));
 
     s << ::xml_schema::as_double(*i.sigma ());
+  }
+
+  // fixed
+  //
+  if (i.fixed ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "fixed",
+        e));
+
+    s << *i.fixed ();
   }
 }
 
@@ -4756,6 +4951,18 @@ operator<< (::xercesc::DOMElement& e, const cuboid& i)
         e));
 
     s << *b;
+  }
+
+  // fixed
+  //
+  if (i.fixed ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "fixed",
+        e));
+
+    s << *i.fixed ();
   }
 }
 

@@ -120,7 +120,7 @@ namespace inputReader {
                 datastream >> bm;
                 simData.setAverageVelocity(bm);
 
-                ParticleGenerator::generateCuboid(simData.getParticles(), x, v, d, m, h, type, simData.getEpsilon(), simData.getSigma());
+                ParticleGenerator::generateCuboid(simData.getParticles(), x, v, d, m, h, type, simData.getEpsilon(), simData.getSigma(), false);
 
 
                 getline(inputFile, tmpString);

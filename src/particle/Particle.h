@@ -102,6 +102,11 @@ private:
      */
     bool active;
 
+    /**
+     * @brief specifies whether this particle should not change its position
+     */
+    bool fixed;
+
 public:
     explicit Particle(int typeArg = 0);
 
@@ -112,6 +117,9 @@ public:
             // -> in case of 2d, we use only the first and the second
             std::array<double, 3> xArg, std::array<double, 3> vArg, double mArg,
             int typeArg = 0);
+
+    Particle(std::array<double, 3> xArg, std::array<double, 3> vArg,
+             double mArg, int typeArg, double epsilonArg, double sigmaArg, bool fixedArg);
 
     /**
      * @brief destruct the Particle
@@ -253,6 +261,17 @@ public:
      * @param typeArg the type of this particle
      */
     void setType(int typeArg);
+
+    /**
+     * @brief returns true if this particle is fixed and therefore does not change its position
+     */
+    bool isFixed();
+    /**
+     * @brief specify whether this particle should be fixed or not
+     * @param fixedArg true : fixed, false : not fixed
+     */
+    void setFixed(bool fixedArg);
+
 
     /**
      * @brief adds the index of a particle as a direct neighbor to this particle 

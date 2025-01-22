@@ -1,40 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <simulation>
-    <output>
-        <writeFrequency>10</writeFrequency>
-    </output>
     <parameters>
         <delta_t>0.0005</delta_t>
-        <t_end>15</t_end>
-        <epsilon>1</epsilon>
-        <sigma>1.2</sigma>
+        <t_end>20</t_end>
         <containerType>linked</containerType>
         <domainSize>
-            <x>150</x>
-            <y>180</y>
-            <z>1</z>
+            <x>40</x>
+            <y>36</y>
+            <z>30</z>
         </domainSize>
-        <cutoff>3.0</cutoff>
+        <cutoff>3</cutoff>
         <boundary>
             <xTop>reflecting</xTop>
             <xBottom>reflecting</xBottom>
             <yLeft>reflecting</yLeft>
             <yRight>reflecting</yRight>
+            <zFront>reflecting</zFront>
+            <zBehind>reflecting</zBehind>
         </boundary>
-        <grav>-12.44</grav>
+        <grav>
+            <x>0</x>
+            <y>-12.44</y>
+            <z>0</z>
+        </grav>
     </parameters>
     <clusters>
         <cuboid>
             <cornerCoordinates>
-                <x>1.5</x>
-                <y>2.0</y>
-                <z>0.0</z>
+                <x>0.6</x>
+                <y>0.6</y>
+                <z>0.6</z>
             </cornerCoordinates>
             <dimensions>
-                <x>100</x>
-                <y>30</y>
-                <z>1</z>
+                <x>6</x>
+                <y>6</y>
+                <z>6</z>
             </dimensions>
             <velocity>
                 <x>0.0</x>
@@ -44,10 +45,9 @@
             <meshWidth>1.2</meshWidth>
             <mass>1.0</mass>
             <brownianMotion>0.0</brownianMotion>
+            <epsilon>1.0</epsilon>
+            <sigma>1.2</sigma>
         </cuboid>
     </clusters>
-    <thermo>
-        <init_T>0.5</init_T>
-        <n>1000</n>
-    </thermo>
 </simulation>
+

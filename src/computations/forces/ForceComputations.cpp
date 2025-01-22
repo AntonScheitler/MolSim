@@ -25,7 +25,7 @@ void ForceComputations::computeGravity(ParticleContainer &particles) {
         newForce = ArrayUtils::elementWiseScalarOp(coefficient, distanceVector, std::multiplies<>());
         pair.first.setF(ArrayUtils::elementWisePairOp(pair.first.getF(), newForce, std::plus<>()));
 
-        // the gravitational force that affects the other planet is the same that affects the first but pointed to
+        // the gravitational force that affects the other particle is the same that affects the first but pointed to
         // the opposite direction.
         // therefore it needs to be multiplied by -1
         std::array<double, 3> revNewForce = ArrayUtils::elementWiseScalarOp(-1, newForce, std::multiplies<>());
@@ -68,6 +68,12 @@ void ForceComputations::computeLennardJonesPotentialCutoff(ParticleContainerLink
     // iterate through all pairs of particles and calculate lennard-jones potential
     for (auto it = particles.beginPairParticle(); *it != *(particles.endPairParticle()); it->operator++()) {
         std::pair<Particle &, Particle &> pair = **it;
+        if (pair.first.getSigma() != pair.second.getSigma()) {
+            sigma = (pair.first.getSigma() + pair.second.getSigma()) / 2;
+        }
+        if (pair.first.getEpsilon() != pair.second.getEpsilon()) {
+            epsilon = sqrt(pair.first.getEpsilon() * pair.second.getSigma());
+        }
 
         std::array<double, 3> distanceVector = ArrayUtils::elementWisePairOp(pair.first.getX(), pair.second.getX(),
                                                                              std::minus<>());
@@ -79,10 +85,13 @@ void ForceComputations::computeLennardJonesPotentialCutoff(ParticleContainerLink
 
         double factor = (-24.0 * epsilon) / std::pow(distance, 2) * (std::pow(dist, 3) - 2 * std::pow(dist, 6));
 
+        //TODO: is this correct for fixed particles?
         std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(factor, distanceVector, std::multiplies<>());
-        pair.first.setF(ArrayUtils::elementWisePairOp(pair.first.getF(), force, std::plus<>()));
+        if(!pair.first.isFixed())
+            pair.first.setF(ArrayUtils::elementWisePairOp(pair.first.getF(), force, std::plus<>()));
         std::array<double, 3> revForce = ArrayUtils::elementWiseScalarOp(-1, force, std::multiplies<>());
-        pair.second.setF(ArrayUtils::elementWisePairOp(pair.second.getF(), revForce, std::plus<>()));
+        if(!pair.second.isFixed())
+            pair.second.setF(ArrayUtils::elementWisePairOp(pair.second.getF(), revForce, std::plus<>()));
     }
 }
 
@@ -98,6 +107,7 @@ void ForceComputations::resetForces(ParticleContainer &particles) {
 void ForceComputations::addExternalForces(ParticleContainer &particles, std::array<double, 3> grav) {
     for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
         Particle &particle = **it;
+        if(particle.isFixed()) continue;  //TODO: maybe check this already in iterator
         std::array<double, 3> newForce = particle.getF();
         newForce[0] += particle.getM() * grav[0];
         newForce[1] += particle.getM() * grav[1];
