@@ -1,3 +1,4 @@
+#pragma once
 #include "particle/container/ParticleContainer.h"
 #include "particle/container/ParticleContainerLinkedCell.h"
 #include <utility>
@@ -26,7 +27,6 @@ public:
      * @param cutoff the radius past which particles are not considered for the force computation
      */
     static void computeLennardJonesPotentialCutoff(ParticleContainerLinkedCell &particles, double cutoff);
-
 
     /**
      * @brief updates the old force and resets the current force for all particles

@@ -11,6 +11,7 @@
 #include "particle/container/ParticleContainerLinkedCell.h"
 #include <chrono>
 #include <cstdlib>
+#include <thread>
 
 Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
 
@@ -192,6 +193,11 @@ void Simulator::simulate() {
 
 }
 
+void Simulator::writeOutputFile(outputWriter::VTKWriter writer, int iteration) {
+    // write output on every 10th iteration
+    writer.plotParticles(simData.getParticles(), iteration);
+}
+
 size_t Simulator::runSimulationLoop() {
     // prepare for iteration
     size_t numUpdatedParticles = 0;
@@ -210,12 +216,13 @@ size_t Simulator::runSimulationLoop() {
         SPDLOG_LOGGER_DEBUG(logger, "after step instruction.");
         iteration++;
 
-        //if (!simData.getBench()) {
+        // do output file write in separate thread
         if (iteration % simData.getWriteFrequency() == 0 && !simData.getBench()) {
-            // write output on every 10th iteration
-            writer.plotParticles(simData.getParticles(), iteration);
+            std::thread io_thread([writer, iteration, this]() {
+                writeOutputFile(writer, iteration);
+            });
+            io_thread.detach();
         }
-
 
         SPDLOG_LOGGER_INFO(logger, "Iteration {0} finished.", iteration);
         currentTime += simData.getDeltaT();
