@@ -8,7 +8,7 @@ class XMLFileReaderTest : public testing::Test {
 };
 
 /**
- * @brief tests the xmlFileReader by reading in an xml file and checking the values of SimulationData and the
+ * @brief tests the xmlFileReader by reading in a xml file and checking the values of SimulationData and the
  * particles
  */
 TEST_F(XMLFileReaderTest, XMlFileReaderCorrectInputTest) {

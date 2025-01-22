@@ -9,7 +9,8 @@ class ParticleContainerDirectSumTest : public testing::Test {
         void SetUp() override {
             empty = ParticleContainerDirectSum();
             container = ParticleContainerDirectSum();
-            for (double d = 0; d < 4; d++) {
+            for (int i = 0; i < 4; i++) {
+                double d = i;
                 container.addParticle(Particle({d, d, d}, {d, d, d}, d));
             }
         }

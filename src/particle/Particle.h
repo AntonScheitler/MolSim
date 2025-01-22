@@ -308,6 +308,11 @@ public:
      * @retrun a vector of indices for the direct neighbors of this particle
      */
     std::vector<int>& getAllDiagonalNeighborIndices();
+
+    /**
+     * @brief debugging function to print particle values
+     */
+    void print();
 };
 
 std::ostream &operator<<(std::ostream &stream, Particle &p);

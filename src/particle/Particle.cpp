@@ -12,6 +12,7 @@
 #include <array>
 #include <iostream>
 #include <vector>
+#include "spdlogConfig.h"
 
 size_t Particle::nextId = 0;
 
@@ -223,4 +224,6 @@ std::ostream &operator<<(std::ostream &stream, Particle &p) {
     return stream;
 }
 
-
+void Particle::print() {
+    SPDLOG_INFO("x: {0}, {1}, {2}\tv: {3}, {4}, {5}\ttype: {6}", x[0], x[1], x[2], v[0], v[1], v[2], type);
+}
