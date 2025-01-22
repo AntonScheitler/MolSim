@@ -25,7 +25,6 @@ protected:
         simData = SimulationData{};
         simData.setParticles(std::make_unique<ParticleContainerLinkedCell>(container));
 
-        simData.setAverageVelocity(0.1);
         simData.activateThermostat();
         simData.setInitialTemp(10);
         simData.setThermoFrequency(2); // every 2nd iteration the thermostat is updated
@@ -102,4 +101,21 @@ TEST_F(TemperatureComputationsTest, HoldingTempTest) {
     EXPECT_DOUBLE_EQ(currentTemp, simData.getTargetTemp());
 
     //TODO: run simulation loop with bench=true instead of copying loop
+}
+
+/**
+ * @brief checks that a system with no initial velocities gets initialized by Brownian motion to have a non-zero
+ * temperature
+ */
+TEST_F(TemperatureComputationsTest, BrownianMotionInitialVelocityTest) {
+    Simulator simulator{simData};
+
+    double initialTemp = TemperatureComputations::calculateCurrentSystemTemp(simData.getParticles(), 2);
+    EXPECT_DOUBLE_EQ(initialTemp, 0);
+
+    // this applies the brownian motion as initial velocities (by calling initTemp)
+    simulator.before();
+
+    double initializedTemp = TemperatureComputations::calculateCurrentSystemTemp(simData.getParticles(), 2);
+    EXPECT_NE(initializedTemp, 0);
 }
