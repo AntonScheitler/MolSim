@@ -9,12 +9,10 @@
  */
 class ForceComputationsTest : public testing::Test {
 protected:
-
     ParticleContainerDirectSum particles;
 
     // executed before each test
     void SetUp() override {
-
         Particle a{0};
         Particle b{0};
 
@@ -61,7 +59,6 @@ TEST_F(ForceComputationsTest, LennardJonesForceCalcTest) {
  * (modulo rounding/discretization errors)
  */
 TEST_F(ForceComputationsTest, GravityCalcTest) {
-
     ForceComputations::computeGravity(particles);
 
     // the analytical solution F_ij calculates the force for j (for i is inverted)
@@ -74,7 +71,6 @@ TEST_F(ForceComputationsTest, GravityCalcTest) {
     EXPECT_NEAR(particles.getParticle(1).getF()[1], 0.055555555, 0.00000001);
     EXPECT_NEAR(particles.getParticle(1).getF()[2], 0.111111111, 0.00000001);
 }
-
 
 
 TEST_F(ForceComputationsTest, HarmonicPotentialDirectNeighborTest) {
@@ -157,4 +153,34 @@ TEST_F(ForceComputationsTest, HarmonicPotentialDiagonalNeighborTest) {
     EXPECT_NEAR(container.getParticleAt(1).getF()[0], 360, 0.00000001);
     EXPECT_NEAR(container.getParticleAt(1).getF()[1], 360, 0.00000001);
     EXPECT_NEAR(container.getParticleAt(1).getF()[2], 0, 0.00000001);
+}
+
+/**
+ * @brief checks that the external force (gravity force) is correctly applied to two particles in
+ * direct sum ParticleContainer
+ */
+TEST_F(ForceComputationsTest, ExternalGravityTest) {
+
+    Particle a{0};
+    a.setF({1, 2, 3});
+    a.setM(6);
+
+    Particle b{0};
+    b.setF({3, 2, 1});
+    b.setM(1);
+
+    ParticleContainerDirectSum particles = ParticleContainerDirectSum{std::vector{a, b}};
+
+    ForceComputations::addExternalForces(particles, {5, 5, 5});
+
+    // particle a
+    EXPECT_DOUBLE_EQ(particles.getParticle(0).getF()[0], 31);
+    EXPECT_DOUBLE_EQ(particles.getParticle(0).getF()[1], 32);
+    EXPECT_DOUBLE_EQ(particles.getParticle(0).getF()[2], 33);
+
+    // particle b
+    EXPECT_DOUBLE_EQ(particles.getParticle(1).getF()[0], 8);
+    EXPECT_DOUBLE_EQ(particles.getParticle(1).getF()[1], 7);
+    EXPECT_DOUBLE_EQ(particles.getParticle(1).getF()[2], 6);
+
 }

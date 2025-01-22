@@ -27,7 +27,6 @@ namespace inputReader {
         int readCheckpointFile(SimulationData &simData, const char *filename);
 
     private:
-
         /**
          * @brief a specific logger for the TxtFileReader
          */

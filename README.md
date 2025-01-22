@@ -20,7 +20,7 @@ If doxygen is installed and the option is enabled, you can then build the doxyge
 ```
 make doc_doxygen
 ```
-The doxygen documentation will be generated in the directory `doxys_documentation`
+The doxygen documentation will be generated in the directory `doxys_documentation` (which is inside the project directory)
 
 
 ### Execution

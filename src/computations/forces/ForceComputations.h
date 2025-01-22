@@ -8,8 +8,8 @@
 class ForceComputations {
 public:
     /**
-     * @brief computes the gravitational forces between the planets and changes them in-place
-     * @param particles the planets, for which the gravitational forces need to be computed
+     * @brief computes the gravitational forces between the particles and changes them in-place
+     * @param particles the particles, for which the gravitational forces need to be computed
      */
     static void computeGravity(ParticleContainer &particles);
 
