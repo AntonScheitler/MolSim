@@ -114,32 +114,25 @@ void ForceComputations::computeGhostParticleRepulsion(ParticleContainerLinkedCel
 }
 
 void ForceComputations::computeMembraneNeighborForce(ParticleContainerLinkedCell &particles, double epsilon, double sigma, double k, double r0) {
-    SPDLOG_DEBUG("in computeMembraneNeighborForce");
-
     auto it_begin = particles.beginMembraneDirectNeighbor();
-    SPDLOG_DEBUG("begin iterator created");
     auto it_end = particles.endMembraneDirectNeighbor();
 
-
-    SPDLOG_DEBUG("end iterator created");
-
-
+    // compute harmonic potential for direct neighbors
     for (auto it = it_begin; it != it_end; ++it) {
-        SPDLOG_DEBUG("Iterator advanced");
         std::pair<Particle&, Particle&> pair = *it;
-        SPDLOG_DEBUG("made pair");
-        computeLennardJonesPotentialRepulsiveHelper(pair, epsilon, sigma);
-        SPDLOG_DEBUG("finished computeLennardJonesPotentialRepulsiveHelper");
         computeHaromicPotentialHelper(pair, k, r0);
-        SPDLOG_DEBUG("finished computeHaromicPotentialHelper");
     }
-    SPDLOG_DEBUG("finished Direct Neighbor");
 
-
+    // compute harmonic potential for diagonal neighbors
     for (auto it = particles.beginMembraneDiagonalNeighbor(); it != particles.endMembraneDiagonalNeighbor(); ++it) {
         std::pair<Particle&, Particle&> pair = *it;
-        computeLennardJonesPotentialRepulsiveHelper(pair, epsilon, sigma);
         computeHaromicPotentialHelper(pair, k, sqrt(2.0) * r0);
+    }
+
+    // compute repulsive force between all particles
+    for (auto it = particles.beginPairParticle(); *it != *(particles.endPairParticle()); ++*it) {
+        std::pair<Particle &, Particle &> pair = **it;
+        computeLennardJonesPotentialRepulsiveHelper(pair, epsilon, sigma);
     }
 }
 
