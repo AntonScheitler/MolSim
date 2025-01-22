@@ -13,12 +13,12 @@
 #include <cstdlib>
 
 Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
-
     // choose computation functions based on the type
     switch (simData.getSimType()) {
         // use gravity for the comet simulation
         case comet:
-            before = [this]() {};
+            before = [this]() {
+            };
             step = [this](size_t iteration, double currentTime) {
                 PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
                 ForceComputations::resetForces(simData.getParticles());
@@ -26,11 +26,12 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                 ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav());
                 VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
             };
-            after = [this]() {};
+            after = [this]() {
+            };
             logger = spdlog::stdout_color_mt("CometSimulation");
             SPDLOG_LOGGER_INFO(logger, "Simulating planets and Halley's Comet");
             break;
-            // use lennard-jones for the molecule collision
+        // use lennard-jones for the molecule collision
         case collision:
             before = [this]() {
                 VelocityComputations::applyBrownianMotion2D(simData.getParticles(), simData.getAverageVelocity());
@@ -41,9 +42,9 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                 ForceComputations::computeLennardJonesPotential(simData.getParticles());
                 ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav());
                 VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
-
             };
-            after = [this]() {};
+            after = [this]() {
+            };
             logger = spdlog::stdout_color_mt("CollisionSimulation");
             SPDLOG_LOGGER_INFO(logger, "Simulating body collision");
             break;
@@ -69,7 +70,6 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                                                                           containerLinkedCell->getCutoffRadius());
 
 
-
                     SPDLOG_DEBUG("computing ghost particle repulsion...");
                     ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell);
 
@@ -84,25 +84,28 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                         // TODO: choose correct thermostat (or use only v2 in future?)
                         if (simData.getThermoVersion() == 2) {
                             TemperatureComputations::updateTempV2(simData.getParticles(), simData.getTargetTemp(),
-                                                                  simData.getMaxDeltaTemp(), simData.getNumberDimensions());
+                                                                  simData.getMaxDeltaTemp(),
+                                                                  simData.getNumberDimensions());
                         } else {
                             TemperatureComputations::updateTemp(simData.getParticles(), simData.getTargetTemp(),
-                                                                simData.getMaxDeltaTemp(), simData.getNumberDimensions());
+                                                                simData.getMaxDeltaTemp(),
+                                                                simData.getNumberDimensions());
                         }
                     }
-
                 } else {
                     SPDLOG_ERROR("Linked Cell Simulation is not using Linked Cell Container. Aborting...");
                     exit(EXIT_FAILURE);
                 }
             };
-            after = [this]() {};
+            after = [this]() {
+            };
             logger = spdlog::stdout_color_mt("CollisionSimulationLinkedCell");
             SPDLOG_LOGGER_INFO(logger, "Simulating body collision with linked cell algorithm");
             break;
         case membrane:
             // TODO no brownian motion?
-            before = [this]() {};
+            before = [this]() {
+            };
             step = [this](size_t iteration, double currentTime) {
                 // save previous position and update the position of particles in the mesh based on the new one
 
@@ -128,14 +131,13 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                     }
 
                     VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
-
-
                 } else {
                     SPDLOG_ERROR("Membrane simulation is not using Linked Cell Container. Aborting...");
                     exit(EXIT_FAILURE);
                 }
             };
-            after = [this]() {};
+            after = [this]() {
+            };
             logger = spdlog::stdout_color_mt("MembraneSimulationLinkedCell");
             SPDLOG_LOGGER_INFO(logger, "Simulating membrane with linked cell algorithm");
             break;
@@ -145,6 +147,8 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
 void Simulator::simulate() {
     std::chrono::high_resolution_clock::rep totalDuration;
     size_t numIterations;
+
+
 
     if (simData.getBench()) {
         // overwrite logging settings
@@ -161,9 +165,6 @@ void Simulator::simulate() {
 
         totalDuration = 0;
         numIterations = 10;
-    } else {
-        SPDLOG_LOGGER_INFO(logger, "Starting Simulation with delta_t={0} and end_time={1}", simData.getDeltaT(),
-                           simData.getEndTime());
     }
 
     if (simData.getBench()) {
@@ -177,7 +178,7 @@ void Simulator::simulate() {
             size_t numUpdatedParticles = runSimulationLoop();
 
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
-                    std::chrono::high_resolution_clock::now() - start);
+                std::chrono::high_resolution_clock::now() - start);
             // turn logging back on to communicate results
             spdlog::set_level(spdlog::level::info);
 
@@ -190,7 +191,6 @@ void Simulator::simulate() {
     } else {
         runSimulationLoop();
     }
-
 }
 
 size_t Simulator::runSimulationLoop() {
@@ -200,11 +200,14 @@ size_t Simulator::runSimulationLoop() {
     int iteration = 0;
     outputWriter::VTKWriter writer(simData.getBaseName());
 
+    SPDLOG_LOGGER_INFO(logger, "delta_t={0}, t_end={1}, total number of iterations: {2}", simData.getDeltaT(), simData.getEndTime(),
+                simData.getEndTime() / simData.getDeltaT());
+    SPDLOG_LOGGER_INFO(logger, "Starting simulation...");
+
     before();
     SPDLOG_LOGGER_DEBUG(logger, "before step finished.");
     // compute position, force and velocity for all particles each iteration
     while (currentTime < simData.getEndTime()) {
-
         numUpdatedParticles += simData.getParticles().size();
         SPDLOG_LOGGER_DEBUG(logger, "before step instruction .");
         step(iteration, currentTime);
@@ -220,7 +223,6 @@ size_t Simulator::runSimulationLoop() {
 
         SPDLOG_LOGGER_INFO(logger, "Iteration {0} finished.", iteration);
         currentTime += simData.getDeltaT();
-
     }
     after();
     if (simData.getCheckpoint()) {
@@ -232,7 +234,6 @@ size_t Simulator::runSimulationLoop() {
 }
 
 
-Simulator::~Simulator()
-{
+Simulator::~Simulator() {
     spdlog::drop(logger->name());
 }

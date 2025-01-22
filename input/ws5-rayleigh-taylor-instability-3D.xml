@@ -14,12 +14,16 @@
         <boundary>
             <xTop>reflecting</xTop>
             <xBottom>reflecting</xBottom>
-            <yLeft>reflecting</yLeft>
-            <yRight>reflecting</yRight>
-            <zFront>reflecting</zFront>
-            <zBehind>reflecting</zBehind>
+            <yLeft>periodic</yLeft>
+            <yRight>periodic</yRight>
+            <zFront>periodic</zFront>
+            <zBehind>periodic</zBehind>
         </boundary>
-        <grav>-12.44</grav>
+        <grav>
+            <x>0</x>
+            <y>-12.44</y>
+            <z>0</z>
+        </grav>
     </parameters>
     <clusters>
         <cuboid>

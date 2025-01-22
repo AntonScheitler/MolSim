@@ -131,7 +131,7 @@ namespace inputReader {
 
             type++;
 
-            SPDLOG_LOGGER_INFO(logger, "starting parsing particles");
+            SPDLOG_LOGGER_DEBUG(logger, "starting parsing particles");
 
             for (const auto &planet: simParser->clusters().particle()) {
                 x[0] = planet.coordinate().x();
@@ -148,7 +148,7 @@ namespace inputReader {
                 simData.getParticles().addParticle(temp);
                 SPDLOG_LOGGER_DEBUG(logger, "adding particle at coords {0}, {1}, {2}", x[0], x[1], x[2]);
             }
-            SPDLOG_LOGGER_DEBUG(logger, "finished reading particles");
+            SPDLOG_LOGGER_INFO(logger, "finished reading particles");
 
 
             for (const auto &cuboid: simParser->clusters().cuboid()) {
@@ -191,7 +191,7 @@ namespace inputReader {
 
                 type++;
             }
-            SPDLOG_LOGGER_DEBUG(logger, "finished reading cuboids");
+            SPDLOG_LOGGER_INFO(logger, "finished reading cuboids");
 
 
             for (const auto &disc: simParser->clusters().disc()) {
@@ -214,7 +214,7 @@ namespace inputReader {
                 type++;
             }
 
-            SPDLOG_LOGGER_DEBUG(logger, "finished reading discs ");
+            SPDLOG_LOGGER_INFO(logger, "finished reading discs ");
         } catch (const xml_schema::exception &e) {
             SPDLOG_LOGGER_ERROR(logger, "XML parsing error: {0}", e.what());
             exit(EXIT_FAILURE);
