@@ -7,7 +7,7 @@
         <domainSize>
             <x>30</x>
             <y>30</y>
-            <z>12</z>
+            <z>1</z>
         </domainSize>
         <cutoff>2.75</cutoff>
 
@@ -16,8 +16,8 @@
             <xBottom>periodic</xBottom>
             <yLeft>outflow</yLeft>
             <yRight>outflow</yRight>
-            <zFront>periodic</zFront>
-            <zBehind>periodic</zBehind>
+            <zFront>outflow</zFront>
+            <zBehind>outflow</zBehind>
         </boundary>
         <grav>
             <x>0</x>

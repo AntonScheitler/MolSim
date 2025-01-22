@@ -27,7 +27,7 @@ std::unique_ptr<ParticleContainer> ParticleContainerDirectSum::copy() {
     return std::make_unique<ParticleContainerDirectSum>(*this);
 }
 
-Particle &ParticleContainerDirectSum::getParticle(int index) {
+Particle &ParticleContainerDirectSum::getParticle(size_t index) {
     return particles.at(index);
 }
 

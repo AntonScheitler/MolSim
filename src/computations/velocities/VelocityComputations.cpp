@@ -4,6 +4,7 @@
 #include "utils/MaxwellBoltzmannDistribution.h"
 #include <array>
 #include "spdlogConfig.h"
+#include <omp.h>
 
 void VelocityComputations::stoermerVerlet(ParticleContainer &particles, double deltaT) {
     for (auto it = particles.beginNonFixedParticles(); it != (particles.endNonFixedParticles()); ++it) {
