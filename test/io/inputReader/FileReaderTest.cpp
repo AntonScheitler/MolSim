@@ -1,4 +1,4 @@
-#include "../../src/io/inputReader/FileReader.h"
+#include "../../../src/io/inputReader/FileReader.h"
 #include <gtest/gtest.h>
 #include "../../../../src/particle/container/ParticleContainerDirectSum.h"
 
