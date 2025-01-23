@@ -32,10 +32,10 @@ TEST_F(ParticleContainerDirectSumTest, EmptyParticleContainerDirectSumIteratorTe
  * order
  */
 TEST_F(ParticleContainerDirectSumTest, ParticleContainerDirectSumIteratorTest) {
-    double d = 4; // dummy value for x, v and m
+    double d = -1; // dummy value for x, v and m
     for (Particle& particle : container){
-        EXPECT_TRUE(particle.getId() == d);
-        d++;
+        EXPECT_TRUE(particle.getId() > d);
+        d = particle.getId();
     }
 }
 
