@@ -6,6 +6,7 @@
 #include "particle/container/ParticleContainer.h"
 #include "ForceComputations.h"
 #include "spdlogConfig.h"
+#include <omp.h>
 
 void ForceComputations::computeGravity(ParticleContainer &particles) {
     for (auto it = particles.beginPairParticle(); *it != *(particles.endPairParticle()); it->operator++()) {
@@ -60,10 +61,15 @@ void ForceComputations::computeLennardJonesPotential(ParticleContainer &particle
 void ForceComputations::computeLennardJonesPotentialCutoff(ParticleContainerLinkedCell &particles, double cutoff) {
     double epsilon;
     double sigma;
-    // iterate through all pairs of particles and calculate lennard-jones potential
+    std::vector<std::pair<Particle&, Particle&>> particlePairs = {};
     for (auto it = particles.beginPairParticle(); *it != *(particles.endPairParticle()); it->operator++()) {
-        std::pair<Particle &, Particle &> pair = **it;
+        particlePairs.push_back(**it);
+    }
+    // iterate through all pairs of particles and calculate lennard-jones potential
 
+    #pragma omp parallel for
+    for (size_t i = 0; i < particlePairs.size(); i++) {
+        std::pair<Particle &, Particle &> pair = particlePairs[i];
         sigma = (pair.first.getSigma() != pair.second.getSigma()) ? ((pair.first.getSigma() + pair.second.getSigma()) / 2) : pair.first.getSigma();
         epsilon = (pair.first.getEpsilon() != pair.second.getEpsilon()) ? (sqrt(pair.first.getEpsilon() * pair.second.getSigma())) : pair.first.getEpsilon();
 
@@ -78,15 +84,20 @@ void ForceComputations::computeLennardJonesPotentialCutoff(ParticleContainerLink
         double factor = (-24.0 * epsilon) / std::pow(distance, 2) * (std::pow(dist, 3) - 2 * std::pow(dist, 6));
 
         std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(factor, distanceVector, std::multiplies<>());
-        pair.first.setF(ArrayUtils::elementWisePairOp(pair.first.getF(), force, std::plus<>()));
         std::array<double, 3> revForce = ArrayUtils::elementWiseScalarOp(-1, force, std::multiplies<>());
-        pair.second.setF(ArrayUtils::elementWisePairOp(pair.second.getF(), revForce, std::plus<>()));
+        #pragma omp critical
+        {
+            pair.first.setF(ArrayUtils::elementWisePairOp(pair.first.getF(), force, std::plus<>()));
+            pair.second.setF(ArrayUtils::elementWisePairOp(pair.second.getF(), revForce, std::plus<>()));
+        }
     }
 }
 
 void ForceComputations::resetForces(ParticleContainer &particles) {
-    for (auto it = particles.beginNonFixedParticles(); it != particles.endNonFixedParticles(); ++it) {
-        Particle& particle = *it;
+    #pragma omp parallel for
+    for (size_t i = 0; i < particles.size(); i++) {
+        Particle& particle = particles.getParticle(i);
+        if (particle.isFixed() || !(particle.getActive())) continue;
         particle.setOldF(particle.getF());
         particle.setF({0, 0, 0});
     }
@@ -94,8 +105,10 @@ void ForceComputations::resetForces(ParticleContainer &particles) {
 
 
 void ForceComputations::addExternalForces(ParticleContainer &particles, std::array<double, 3> grav) {
-    for (auto it = particles.beginNonFixedParticles(); it != particles.endNonFixedParticles(); ++it) {
-        Particle &particle = *it;
+    #pragma omp parallel for
+    for (size_t i = 0; i < particles.size(); i++) {
+        Particle& particle = particles.getParticle(i);
+        if (particle.isFixed() || !(particle.getActive())) continue;
         std::array<double, 3> newForce = particle.getF();
         newForce[0] += particle.getM() * grav[0];
         newForce[1] += particle.getM() * grav[1];
