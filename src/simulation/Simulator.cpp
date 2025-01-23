@@ -160,7 +160,7 @@ void Simulator::simulate() {
         logger->info("Commencing Simulation...");
 
         totalDuration = 0;
-        numIterations = 3; //TODO change back
+        numIterations = 10; //TODO change back
     } else {
         SPDLOG_LOGGER_INFO(logger, "Starting Simulation with delta_t={0} and end_time={1}", simData.getDeltaT(),
                            simData.getEndTime());
