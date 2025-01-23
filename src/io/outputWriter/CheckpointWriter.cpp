@@ -1,9 +1,3 @@
-/*
- * VTKWriter.cpp
- *
- *  Created on: 01.03.2010
- *      Author: eckhardw
- */
 
 #include "CheckpointWriter.h"
 #include "particle/container/ParticleContainer.h"

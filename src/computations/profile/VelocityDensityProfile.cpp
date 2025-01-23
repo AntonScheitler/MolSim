@@ -2,7 +2,7 @@
 #include <functional>
 #include <utils/ArrayUtils.h>
 
-void VelocityDensityProfile::determineProfile(ParticleContainerLinkedCell& particles, size_t numBins) {
+std::vector<VelocityDensityProfile::binInfo>  VelocityDensityProfile::determineProfile(ParticleContainerLinkedCell& particles, size_t numBins) {
     double binLength = particles.getDomainSize()[0] / numBins;
     double binSize = binLength * particles.getDomainSize()[1] * particles.getDomainSize()[2];
     std::vector<binInfo> binInfos = {};
@@ -23,8 +23,11 @@ void VelocityDensityProfile::determineProfile(ParticleContainerLinkedCell& parti
         }
     }
 
-    for (binInfo& binInfo : binInfos) {
-        double avgDensity = binInfo.numParticles / binSize;
-        std::array<double, 3> avgVelocity = ArrayUtils::elementWiseScalarOp(1.0 / binInfo.numParticles, binInfo.sumVelocities, std::multiplies<>());
+
+    for (struct binInfo& binInfo : binInfos) {
+        binInfo.avgDensity = binInfo.numParticles / binSize;
+        binInfo.avgVelocity = ArrayUtils::elementWiseScalarOp(1.0 / binInfo.numParticles, binInfo.sumVelocities, std::multiplies<>());
     }
+
+    return binInfos;
 }
