@@ -1,6 +1,6 @@
 #pragma once
 
-#include "particle/container/ParticleContainerDirectSum.h"
+#include "particle/container/ParticleContainer.h"
 
 /**
  * @brief a class wrapping position-computing functions and their utility functions
@@ -28,6 +28,4 @@ public:
      * @param averageVelocity the average velocity of the particles
      */
     static void applyBrownianMotion3D(ParticleContainer &particles, double averageVelocity);
-
-private:
 };
