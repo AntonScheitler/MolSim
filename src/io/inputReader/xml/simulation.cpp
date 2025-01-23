@@ -625,6 +625,36 @@ import_checkpoint (::std::unique_ptr< import_checkpoint_type > x)
   this->import_checkpoint_.set (std::move (x));
 }
 
+const parameters::bin_profiling_optional& parameters::
+bin_profiling () const
+{
+  return this->bin_profiling_;
+}
+
+parameters::bin_profiling_optional& parameters::
+bin_profiling ()
+{
+  return this->bin_profiling_;
+}
+
+void parameters::
+bin_profiling (const bin_profiling_type& x)
+{
+  this->bin_profiling_.set (x);
+}
+
+void parameters::
+bin_profiling (const bin_profiling_optional& x)
+{
+  this->bin_profiling_ = x;
+}
+
+void parameters::
+bin_profiling (::std::unique_ptr< bin_profiling_type > x)
+{
+  this->bin_profiling_.set (std::move (x));
+}
+
 
 // clusters
 // 
@@ -1033,6 +1063,52 @@ void import_checkpoint::
 file_path (::std::unique_ptr< file_path_type > x)
 {
   this->file_path_.set (std::move (x));
+}
+
+
+// bin_profiling
+// 
+
+const bin_profiling::iterations_type& bin_profiling::
+iterations () const
+{
+  return this->iterations_.get ();
+}
+
+bin_profiling::iterations_type& bin_profiling::
+iterations ()
+{
+  return this->iterations_.get ();
+}
+
+void bin_profiling::
+iterations (const iterations_type& x)
+{
+  this->iterations_.set (x);
+}
+
+const bin_profiling::bin_number_optional& bin_profiling::
+bin_number () const
+{
+  return this->bin_number_;
+}
+
+bin_profiling::bin_number_optional& bin_profiling::
+bin_number ()
+{
+  return this->bin_number_;
+}
+
+void bin_profiling::
+bin_number (const bin_number_type& x)
+{
+  this->bin_number_.set (x);
+}
+
+void bin_profiling::
+bin_number (const bin_number_optional& x)
+{
+  this->bin_number_ = x;
 }
 
 
@@ -2019,7 +2095,8 @@ parameters ()
   cutoff_ (this),
   boundary_ (this),
   grav_ (this),
-  import_checkpoint_ (this)
+  import_checkpoint_ (this),
+  bin_profiling_ (this)
 {
 }
 
@@ -2038,7 +2115,8 @@ parameters (const parameters& x,
   cutoff_ (x.cutoff_, f, this),
   boundary_ (x.boundary_, f, this),
   grav_ (x.grav_, f, this),
-  import_checkpoint_ (x.import_checkpoint_, f, this)
+  import_checkpoint_ (x.import_checkpoint_, f, this),
+  bin_profiling_ (x.bin_profiling_, f, this)
 {
 }
 
@@ -2057,7 +2135,8 @@ parameters (const ::xercesc::DOMElement& e,
   cutoff_ (this),
   boundary_ (this),
   grav_ (this),
-  import_checkpoint_ (this)
+  import_checkpoint_ (this),
+  bin_profiling_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -2212,6 +2291,20 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // bin_profiling
+    //
+    if (n.name () == "bin_profiling" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< bin_profiling_type > r (
+        bin_profiling_traits::create (i, f, this));
+
+      if (!this->bin_profiling_)
+      {
+        this->bin_profiling_.set (::std::move (r));
+        continue;
+      }
+    }
+
     break;
   }
 }
@@ -2240,6 +2333,7 @@ operator= (const parameters& x)
     this->boundary_ = x.boundary_;
     this->grav_ = x.grav_;
     this->import_checkpoint_ = x.import_checkpoint_;
+    this->bin_profiling_ = x.bin_profiling_;
   }
 
   return *this;
@@ -2979,6 +3073,110 @@ operator= (const import_checkpoint& x)
 
 import_checkpoint::
 ~import_checkpoint ()
+{
+}
+
+// bin_profiling
+//
+
+bin_profiling::
+bin_profiling (const iterations_type& iterations)
+: ::xml_schema::type (),
+  iterations_ (iterations, this),
+  bin_number_ (this)
+{
+}
+
+bin_profiling::
+bin_profiling (const bin_profiling& x,
+               ::xml_schema::flags f,
+               ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  iterations_ (x.iterations_, f, this),
+  bin_number_ (x.bin_number_, f, this)
+{
+}
+
+bin_profiling::
+bin_profiling (const ::xercesc::DOMElement& e,
+               ::xml_schema::flags f,
+               ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  iterations_ (this),
+  bin_number_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void bin_profiling::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // iterations
+    //
+    if (n.name () == "iterations" && n.namespace_ ().empty ())
+    {
+      if (!iterations_.present ())
+      {
+        this->iterations_.set (iterations_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // bin_number
+    //
+    if (n.name () == "bin_number" && n.namespace_ ().empty ())
+    {
+      if (!this->bin_number_)
+      {
+        this->bin_number_.set (bin_number_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    break;
+  }
+
+  if (!iterations_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "iterations",
+      "");
+  }
+}
+
+bin_profiling* bin_profiling::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class bin_profiling (*this, f, c);
+}
+
+bin_profiling& bin_profiling::
+operator= (const bin_profiling& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->iterations_ = x.iterations_;
+    this->bin_number_ = x.bin_number_;
+  }
+
+  return *this;
+}
+
+bin_profiling::
+~bin_profiling ()
 {
 }
 
@@ -4430,6 +4628,18 @@ operator<< (::xercesc::DOMElement& e, const parameters& i)
 
     s << *i.import_checkpoint ();
   }
+
+  // bin_profiling
+  //
+  if (i.bin_profiling ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "bin_profiling",
+        e));
+
+    s << *i.bin_profiling ();
+  }
 }
 
 void
@@ -4669,6 +4879,35 @@ operator<< (::xercesc::DOMElement& e, const import_checkpoint& i)
         e));
 
     s << i.file_path ();
+  }
+}
+
+void
+operator<< (::xercesc::DOMElement& e, const bin_profiling& i)
+{
+  e << static_cast< const ::xml_schema::type& > (i);
+
+  // iterations
+  //
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "iterations",
+        e));
+
+    s << i.iterations ();
+  }
+
+  // bin_number
+  //
+  if (i.bin_number ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "bin_number",
+        e));
+
+    s << *i.bin_number ();
   }
 }
 

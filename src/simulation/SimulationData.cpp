@@ -28,6 +28,8 @@ SimulationData::SimulationData() {
     thermostat = false;
     thermoVersion = 1; // TODO: default thermo version for testing purpose set to 2
     numberDimensions = 2; //default 2, will be set by XMLFileReader
+    numberBins = 50;
+    binProfilingIterations = -1;
 
 }
 
@@ -333,4 +335,20 @@ void SimulationData::setNumberDimensions(int numberDimensionsArg) {
 
 int SimulationData::getNumberDimensions() {
     return numberDimensions;
+}
+
+void SimulationData::setBinNumber(int numberBinArg) {
+    this->numberBins = numberBinArg;
+}
+
+int SimulationData::getBinNumber() {
+    return numberBins;
+}
+
+void SimulationData::setBinProfilingIterations(int iterationArg) {
+    this->binProfilingIterations = iterationArg;
+}
+
+int SimulationData::getBinProfilingIterations() {
+    return binProfilingIterations;
 }
