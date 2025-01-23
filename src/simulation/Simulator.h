@@ -28,13 +28,6 @@ public:
     void simulate();
 
     /**
-     * @brief writes the simulation output data to an output file
-     * @param writer the VTKWriter which is called to write the file
-     * @param iteration number of the current iteration
-     */
-    void writeOutputFile(outputWriter::VTKWriter writer, int iteration);
-
-    /**
      * @brief pointer to a function to run before a simulation
      */
     std::function<void(void)> before;

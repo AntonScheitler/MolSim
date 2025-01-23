@@ -193,10 +193,6 @@ void Simulator::simulate() {
 
 }
 
-void Simulator::writeOutputFile(outputWriter::VTKWriter writer, int iteration) {
-    // write output on every 10th iteration
-    writer.plotParticles(simData.getParticles(), iteration);
-}
 
 size_t Simulator::runSimulationLoop() {
     // prepare for iteration
@@ -218,10 +214,7 @@ size_t Simulator::runSimulationLoop() {
 
         // do output file write in separate thread
         if (iteration % simData.getWriteFrequency() == 0 && !simData.getBench()) {
-            std::thread io_thread([writer, iteration, this]() {
-                writeOutputFile(writer, iteration);
-            });
-            io_thread.detach();
+            writer.plotParticles(simData.getParticles(), iteration);
         }
 
         SPDLOG_LOGGER_INFO(logger, "Iteration {0} finished.", iteration);
