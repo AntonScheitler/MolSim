@@ -6,6 +6,8 @@
 #include <computations/positions/PositionComputations.h>
 #include <computations/forces/ForceComputations.h>
 #include <computations/velocities/VelocityComputations.h>
+#include <utils/ArrayUtils.h>
+#include "particle/boundary/Boundary.h"
 #include "spdlogConfig.h"
 
 class ParticleContainerLinkedCellTest : public testing::Test {
@@ -152,7 +154,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellPairIteratorT
 
 
     // clear the middle cell
-    pairsContainer.getMesh()[1].getParticles().clear();
+    pairsContainer.getMesh()[1].getParticlesIndices().clear();
     // update the expected pairs
     pairsSet.clear();
     pairsSet.insert(std::make_pair(particlesVector[0], particlesVector[1]));
@@ -294,12 +296,69 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellGhostParticle
     EXPECT_TRUE(count == pairsSet.size());
 }
 
+/**
+ * @brief checks if a particle is inserted in the correct cell and it's position is adjusted correctly when passing
+ * through a periodic boundary
+ */
+TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellPeriodicBoundaryPositionTest) {
+    ParticleContainerLinkedCell container{{99, 33, 1}, 33,
+                                          {{periodic, periodic}, {outflow, outflow}, {outflow, outflow}}};
+    Particle particle = Particle({98, 10, 0}, {0, 0, 0}, 1);
+    container.addParticle(particle);
+    // make sure the particle is inserted correctly
+    EXPECT_TRUE(container.getMesh()[2].size() == 1);
+    EXPECT_TRUE(particle == container.getParticles()[container.getMesh()[2].getParticlesIndices()[0]]);
+
+    container.getParticles()[0].setOldX({98, 10, 0});
+    container.getParticles()[0].setX({100, 10, 0});
+    container.correctCellMembershipAllParticles();
+
+    // make sure it was moved to the correct cell
+    EXPECT_TRUE(container.getMesh()[2].size() == 0);
+    EXPECT_TRUE(container.getMesh()[0].size() == 1);
+    EXPECT_TRUE(particle == container.getParticles()[container.getMesh()[0].getParticlesIndices()[0]]);
+
+    // make sure the particle's coordinates are correct
+    std::array<double, 3> newCoords = {1, 10, 0};
+    EXPECT_TRUE(container.getParticles()[0].getX() == newCoords);
+}
+
+/**
+ * @brief checks if the force between two particles, which are separated by a periodic boundary, is computed correctly
+ */
+TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellPeriodicBoundaryForceTest) {
+    double sigma = 1;
+    double epsilon = 5;
+    ParticleContainerLinkedCell container{{99, 33, 1}, 33,
+                                          {{periodic, periodic}, {outflow, outflow}, {outflow, outflow}}};
+    container.addParticle({{0.5, 10, 0}, {0, 0, 0}, 1});
+    container.addParticle({{98.5, 10, 0}, {0, 0, 0}, 1});
+    Particle& particleLeft = container.getParticles()[0];
+    Particle& particleRight = container.getParticles()[1];
+
+    ForceComputations::computeLennardJonesPotentialCutoff(container, epsilon, sigma, 33);
+    std::array<double, 3> distanceVector = {1, 0, 0};
+    double distance = 1;
+    // don't consider particles which are further apart than the cutoff radius
+    double dist = std::pow(sigma / distance, 2);
+
+    double factor = (-24.0 * epsilon) / std::pow(distance, 2) * (std::pow(dist, 3) - 2 * std::pow(dist, 6));
+
+    std::array<double, 3> forceOnParticleLeft = ArrayUtils::elementWiseScalarOp(factor, distanceVector, std::multiplies<>());
+    EXPECT_TRUE(forceOnParticleLeft == particleLeft.getF());
+    std::array<double, 3> forceOnParticleRight = ArrayUtils::elementWiseScalarOp(-1, forceOnParticleLeft, std::multiplies<>());
+    EXPECT_TRUE(forceOnParticleRight == particleRight.getF());
+}
+
+
+/**
+ * @brief checks if particleIndices can be added to and removed from a cell
+ */
 TEST_F(ParticleContainerLinkedCellTest, CellRemoveParticleTest) {
     // test container cell add and remove particle
     Cell c = Cell{false, 0};
-    Particle x{0};
-    c.addParticle(x);
-    c.removeParticle(x.getId());
+    c.addParticleIdx(0);
+    c.removeParticle(0);
     EXPECT_EQ(c.size(), 0);
 }
 
@@ -332,7 +391,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryOutfl
     for (int i = 0; i < iterations; i++) {
         PositionComputations::updateOldX(container);
         PositionComputations::stoermerVerlet(container, deltaT);
-        container.correctAllParticleIndices();
+        container.correctCellMembershipAllParticles();
 
         ForceComputations::resetForces(container);
         ForceComputations::computeLennardJonesPotential(container, epsilon,
@@ -346,7 +405,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryOutfl
     bool particlePresent = false;
     for(int i = 0; i < container.getMesh().size(); i++) {
         Cell& c = container.getCell(i);
-        auto particles = c.getParticles();
+        auto particles = c.getParticlesIndices();
         if(!particles.empty()) {
             particlePresent = true;
         }
@@ -385,7 +444,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryRefle
     for (int i = 0; i < iterations; i++) {
         PositionComputations::updateOldX(container);
         PositionComputations::stoermerVerlet(container, deltaT);
-        container.correctAllParticleIndices();
+        container.correctCellMembershipAllParticles();
 
         ForceComputations::resetForces(container);
         ForceComputations::computeLennardJonesPotential(container, epsilon,
@@ -399,9 +458,9 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryRefle
     bool particlePresent = false;
     for (int i = 0; i < container.getMesh().size(); i++) {
         Cell &c = container.getCell(i);
-        auto particles = c.getParticles();
-        if (!particles.empty()) {
-            EXPECT_EQ(particles[0].getType(), 1);
+        auto particleIndices = c.getParticlesIndices();
+        if (!particleIndices.empty()) {
+            EXPECT_EQ(container.getParticles()[particleIndices[0]].getType(), 1);
             particlePresent = true;
         }
     }
@@ -440,7 +499,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellDiagonalBound
     for (int i = 0; i < iterations; i++) {
         PositionComputations::updateOldX(container);
         PositionComputations::stoermerVerlet(container, deltaT);
-        container.correctAllParticleIndices();
+        container.correctCellMembershipAllParticles();
 
         ForceComputations::resetForces(container);
         ForceComputations::computeLennardJonesPotential(container, epsilon,
@@ -454,9 +513,9 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellDiagonalBound
     bool particlePresent = false;
     for (int i = 0; i < container.getMesh().size(); i++) {
         Cell &c = container.getCell(i);
-        auto particles = c.getParticles();
-        if (!particles.empty()) {
-            EXPECT_EQ(particles[0].getType(), 1);
+        auto particleIndices = c.getParticlesIndices();
+        if (!particleIndices.empty()) {
+            EXPECT_EQ(container.getParticles()[particleIndices[0]].getType(), 1);
             particlePresent = true;
         }
     }

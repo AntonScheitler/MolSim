@@ -1,4 +1,5 @@
 #include "XMLFileReader.h"
+#include "particle/boundary/Boundary.h"
 #include "simulation/SimulationData.h"
 #include <iostream>
 #include <fstream>
@@ -10,6 +11,7 @@
 #include <memory>
 #include <particle/container/ParticleContainerLinkedCell.h>
 #include <particle/container/ParticleContainerDirectSum.h>
+#include "../CheckpointReader.h"
 
 
 namespace inputReader {
@@ -40,28 +42,49 @@ namespace inputReader {
         if (!inputFile) {
             throw std::runtime_error("Failed to open XML file.");
         }
+
         try {
 
-//        std::unique_ptr<simulation> simParser = simulation_(inputFile, xml_schema::flags::dont_validate);
             std::unique_ptr<simulation> simParser = simulation_(inputFile, xml_schema::flags::dont_validate);
+
+//            std::ostringstream command;
+//            command << "xmllint --noout --schema ../src/io/inputReader/xml/simulation.xsd " << filename;
+//            int result = std::system(command.str().c_str());
+
+//            if (!(result == 0 || result == 32512)) {
+//                std::cerr << "Error in xml file: scheme does not validate " << std::endl;
+//                exit(-1);
+//            }
 
             // use linked cell if specified
             auto parameters = simParser->parameters();
             if (parameters.present() && parameters->containerType().present() &&
                 parameters->containerType().get() == "linked") {
-                auto containerLinkedCell = std::unique_ptr<ParticleContainer>(new ParticleContainerLinkedCell(
+                auto containerLinkedCell = std::make_unique<ParticleContainerLinkedCell>(ParticleContainerLinkedCell{
                         {parameters->domainSize()->x(), parameters->domainSize()->y(), parameters->domainSize()->z()},
                         parameters->cutoff().get(), {
-                            {getEnum(parameters->boundry()->xBottom().get()), getEnum(parameters->boundry()->xTop().get())},
-                            {getEnum(parameters->boundry()->yLeft().get()), getEnum(parameters->boundry()->yRight().get())},
-                            {outflow, outflow}}));
+
+
+                                {getEnum(parameters->boundary()->yLeft()), getEnum(parameters->boundary()->yRight())},
+                                {getEnum(parameters->boundary()->xBottom()), getEnum(parameters->boundary()->xTop())},
+                                {outflow, outflow}}});
+
                 simData.setParticles(std::move(containerLinkedCell));
             } else {
                 // use direct sum as default
-                auto containerDirectSum = std::unique_ptr<ParticleContainer>(new ParticleContainerDirectSum());
+                auto containerDirectSum = std::make_unique<ParticleContainerDirectSum>(ParticleContainerDirectSum{});
                 simData.setParticles(std::move(containerDirectSum));
             }
             ParameterParser::readParams(simData, simParser);
+            ParameterParser::readThermo(simData, simParser);
+
+            if (simParser->parameters()->import_checkpoint().present()) {
+                CheckpointReader checkpointReader(simData);
+                type = checkpointReader.readCheckpointFile(simData,
+                                                           simParser->parameters()->import_checkpoint()->file_path().c_str());
+            }
+
+            type++;
 
             SPDLOG_LOGGER_INFO(logger, "starting parsing cuboids");
 
@@ -75,8 +98,10 @@ namespace inputReader {
                 v[1] = planet.velocity().y();
                 v[2] = planet.velocity().z();
                 m = planet.mass();
-
-                simData.getParticles().addParticle(Particle(x, v, m));
+                Particle temp = Particle(x, v, m);
+                temp.setSigma(planet.sigma().present() ? planet.sigma().get() : simData.getSigma());
+                temp.setEpsilon(planet.epsilon().present() ? planet.epsilon().get() : simData.getEpsilon());
+                simData.getParticles().addParticle(temp);
                 SPDLOG_LOGGER_DEBUG(logger, "adding particle at coords {0}, {1}, {2}", x[0], x[1], x[2]);
             }
 
@@ -101,11 +126,13 @@ namespace inputReader {
 
                 simData.setAverageVelocity(cuboid.brownianMotion());
 
-                ParticleGenerator::generateCuboid(simData.getParticles(), x, v, d, m, h, type);
+                double epsilon = cuboid.epsilon().present() ? cuboid.epsilon().get() : simData.getEpsilon();
+                double sigma = cuboid.sigma().present() ? cuboid.sigma().get() : simData.getSigma();
+
+                ParticleGenerator::generateCuboid(simData.getParticles(), x, v, d, m, h, type, epsilon, sigma);
 
                 type++;
             }
-
 
             for (const auto &disc: simParser->clusters().disc()) {
                 x[0] = disc.center().x();
@@ -120,8 +147,10 @@ namespace inputReader {
                 h = disc.meshWidth();
                 r = disc.radius();
 
-                //Todo implement generateDisc
-                ParticleGenerator::generateDisc(simData.getParticles(), x, v, r, m, h, type);
+                double epsilon = disc.epsilon().present() ? disc.epsilon().get() : simData.getEpsilon();
+                double sigma = disc.sigma().present() ? disc.sigma().get() : simData.getSigma();
+
+                ParticleGenerator::generateDisc(simData.getParticles(), x, v, r, m, h, type, epsilon, sigma);
                 type++;
             }
 
@@ -133,10 +162,13 @@ namespace inputReader {
             exit(-1);
         }
     }
-    BoundaryType XMLFileReader::getEnum(std::string b) {
+
+    BoundaryType XMLFileReader::getEnum(const std::string &b) {
         if (b == "reflecting") {
             return reflect;
-        } else{
+        } else if (b == "periodic") {
+            return periodic;
+        } else {
             return outflow;
         }
     }

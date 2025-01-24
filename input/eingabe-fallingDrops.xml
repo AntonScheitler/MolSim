@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <simulation>
+    <output>
+        <writeFrequency>10</writeFrequency>
+    </output>
     <parameters>
-        <delta_t>0.00005</delta_t>
+        <delta_t>0.002</delta_t>
         <t_end>10</t_end>
         <epsilon>5</epsilon>
         <sigma>1.0</sigma>
@@ -13,12 +16,15 @@
             <z>1</z>
         </domainSize>
         <cutoff>3.0</cutoff>
-        <boundry>
-            <xTop>reflect</xTop>
-            <xBottom>reflect</xBottom>
-            <yLeft>reflect</yLeft>
-            <yRight>reflect</yRight>
-        </boundry>
+        <boundary>
+            <xTop>reflecting</xTop>
+            <xBottom>reflecting</xBottom>
+            <yLeft>reflecting</yLeft>
+            <yRight>reflecting</yRight>
+        </boundary>
+
+        <grav>-12.44</grav>
+
     </parameters>
     <clusters>
         <disc>
@@ -29,7 +35,7 @@
             </center>
             <velocity>
                 <x>0</x>
-                <y>-10</y>
+                <y>0</y>
                 <z>0</z>
             </velocity>
             <mass>1.0</mass>

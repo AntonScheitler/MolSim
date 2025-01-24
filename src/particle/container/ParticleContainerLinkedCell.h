@@ -2,10 +2,10 @@
 
 #include <particle/Particle.h>
 #include <particle/container/ParticleContainer.h>
-#include <particle/iterator/particleIterator/ParticleIteratorLinkedCell.h>
 #include <particle/iterator/pairParticleIterator/PairParticleIteratorLinkedCell.h>
 #include <particle/iterator/pairParticleIterator/PairParticleIteratorBoundaryNHalo.h>
 #include <vector>
+
 
 /**
  * @brief manages a set of particles using the linked cell algorithm
@@ -71,11 +71,35 @@ public:
     int continuousCoordsToIndex(std::array<double, 3> coord);
 
     /**
+     * @brief changes the supplied vector to a periodic one, if the supplied points are on opposite sides of a periodic boundary. If the points aren't on opposite sides, 
+     * or the boundary is non-periodic, the supplied vector remains unchanged
+     * @param point1 the first point
+     * @param point2 the second point
+     * @param distanceVector the non-periodic vector that points from point1 to point2
+     */
+    void getPeriodicDistanceVector(const std::array<double, 3> &point1, const std::array<double, 3> &point2,
+                                   std::array<double, 3> &distanceVector);
+
+    /**
+     * @brief applies periodic boundaries to the specified coordinate array, so that if the coordinate goes out of
+     * bounds on a periodic boundary, it is reinserted at the periodic boundary on the opposite side
+     * @param coord the coordinate array to apply the periodic boundaries to 
+     */
+    std::array<double, 3> applyPeriodicBoundaries(std::array<double, 3> coord);
+
+    /**
      * @brief corrects the indices of all particles in the linked cell container mesh based on their position
      */
-    void correctAllParticleIndices();
+    void correctCellMembershipAllParticles();
+
+    /**
+     * @brief computes the neighborCellsMatrix 
+     */
+    void computeNeighborCellsMatrix();
 
     std::vector<Cell> &getMesh();
+
+    std::vector<Particle> &getParticles();
 
     Cell &getCell(int idx);
 
@@ -85,11 +109,27 @@ public:
 
     double getCutoffRadius();
 
+    Particle &getParticleAt(int particleIndex);
+
+    std::array<double, 3> getDomainSize();
+
+    struct boundaryConfig getBoundaryConfig();
+
 private:
     /**
      * @brief mesh contains all grid cells
      */
     std::vector<Cell> mesh;;
+
+    /**
+     * @brief the particles of this container
+     */
+    std::vector<Particle> particles;
+
+    /**
+     * @brief a vector of vectors containing indices for the neighborCells of the cell at the given index 
+     */
+    std::vector<std::vector<size_t>> neighborCellsMatrix;
     /**
      * @brief the size of the domain for the container
      */
@@ -113,6 +153,5 @@ private:
      * @param p the particle to correct the position of
      * @returns true if the particle should be removed from its old cell
      */
-    bool correctParticleIndex(Particle &p);
+    bool correctCellMembershipSingleParticle(size_t particleIdx);
 };
-

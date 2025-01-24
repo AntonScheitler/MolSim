@@ -20,6 +20,12 @@ SimulationData::SimulationData() {
     bench = false;
     baseName = "MD_vtk";
     writeFrequency = 10;
+    averageVelocity = 0;
+
+    grav = 0;
+
+    thermostat = false;
+
 }
 
 int SimulationData::parseOptions(int argc, char *argsv[]) {
@@ -215,4 +221,59 @@ void SimulationData::setAverageVelocity(double averageVelocityArg) {
 
 double SimulationData::getAverageVelocity() {
     return averageVelocity;
+}
+
+double SimulationData::getInitialTemp() {
+    return this->initialTemp;
+}
+double SimulationData::getMaxDeltaTemp() {
+    return this->maxDeltaTemp;
+}
+double SimulationData::getTargetTemp() {
+    return this->targetTemp;
+}
+size_t SimulationData::getThermoFrequency() {
+    return this->thermoFrequency;
+}
+
+void SimulationData::activateThermostat() {
+    this->thermostat = true;
+}
+void SimulationData::deactivateThermostat() {
+    this->thermostat = false;
+}
+bool SimulationData::isThermostat() {
+    return this->thermostat;
+}
+
+void SimulationData::setInitialTemp(double initialTempArg){
+    this->initialTemp = initialTempArg;
+}
+
+void SimulationData::setMaxDeltaTemp(double maxDeltaTempArg) {
+    this->maxDeltaTemp = maxDeltaTempArg;
+}
+
+void SimulationData::setTargetTemp(double targetTempArg) {
+    this->targetTemp = targetTempArg;
+}
+
+void SimulationData::setThermoFrequency(size_t thermoFrequencyArg) {
+    this->thermoFrequency = thermoFrequencyArg;
+}
+
+void SimulationData::setGrav(double gravArg) {
+    this->grav = gravArg;
+}
+
+double SimulationData::getGrav(){
+    return this->grav;
+}
+
+bool SimulationData::getCheckpoint() {
+    return this->checkpoint;
+}
+
+void SimulationData::setCheckpoint(bool checkpoingArg) {
+    this->checkpoint = checkpoingArg;
 }

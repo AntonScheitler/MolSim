@@ -3,6 +3,8 @@
 
 namespace ParameterParser {
     void readParams(SimulationData &simData, const std::unique_ptr<simulation> &xmlParser);
+
+    void readThermo(SimulationData &simData, const std::unique_ptr<simulation> &xmlParser);
 };
 
 

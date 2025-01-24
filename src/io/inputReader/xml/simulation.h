@@ -31,8 +31,8 @@
 // in the accompanying FLOSSE file.
 //
 
-#ifndef MOL_SIM_SRC_IO_INPUT_READER_XML_SIMULATION_H
-#define MOL_SIM_SRC_IO_INPUT_READER_XML_SIMULATION_H
+#ifndef VERGLEICH_MOL_SIM_SRC_IO_INPUT_READER_XML_SIMULATION_H
+#define VERGLEICH_MOL_SIM_SRC_IO_INPUT_READER_XML_SIMULATION_H
 
 #ifndef XSD_CXX11
 #define XSD_CXX11
@@ -257,7 +257,9 @@ class simulation;
 class output;
 class parameters;
 class clusters;
-class boundry;
+class thermo;
+class boundary;
+class import_checkpoint;
 class particle;
 class disc;
 class cuboid;
@@ -420,6 +422,27 @@ class simulation: public ::xml_schema::type
   void
   clusters (::std::unique_ptr< clusters_type > p);
 
+  // thermo
+  //
+  typedef ::thermo thermo_type;
+  typedef ::xsd::cxx::tree::optional< thermo_type > thermo_optional;
+  typedef ::xsd::cxx::tree::traits< thermo_type, char > thermo_traits;
+
+  const thermo_optional&
+  thermo () const;
+
+  thermo_optional&
+  thermo ();
+
+  void
+  thermo (const thermo_type& x);
+
+  void
+  thermo (const thermo_optional& x);
+
+  void
+  thermo (::std::unique_ptr< thermo_type > p);
+
   // Constructors.
   //
   simulation (const clusters_type&);
@@ -455,6 +478,7 @@ class simulation: public ::xml_schema::type
   output_optional output_;
   parameters_optional parameters_;
   ::xsd::cxx::tree::one< clusters_type > clusters_;
+  thermo_optional thermo_;
 };
 
 class output: public ::xml_schema::type
@@ -499,6 +523,24 @@ class output: public ::xml_schema::type
   void
   baseName (::std::unique_ptr< baseName_type > p);
 
+  // create_checkpoint_file
+  //
+  typedef ::xml_schema::boolean create_checkpoint_file_type;
+  typedef ::xsd::cxx::tree::optional< create_checkpoint_file_type > create_checkpoint_file_optional;
+  typedef ::xsd::cxx::tree::traits< create_checkpoint_file_type, char > create_checkpoint_file_traits;
+
+  const create_checkpoint_file_optional&
+  create_checkpoint_file () const;
+
+  create_checkpoint_file_optional&
+  create_checkpoint_file ();
+
+  void
+  create_checkpoint_file (const create_checkpoint_file_type& x);
+
+  void
+  create_checkpoint_file (const create_checkpoint_file_optional& x);
+
   // Constructors.
   //
   output ();
@@ -531,6 +573,7 @@ class output: public ::xml_schema::type
   protected:
   writeFrequency_optional writeFrequency_;
   baseName_optional baseName_;
+  create_checkpoint_file_optional create_checkpoint_file_;
 };
 
 class parameters: public ::xml_schema::type
@@ -686,26 +729,65 @@ class parameters: public ::xml_schema::type
   void
   cutoff (const cutoff_optional& x);
 
-  // boundry
+  // boundary
   //
-  typedef ::boundry boundry_type;
-  typedef ::xsd::cxx::tree::optional< boundry_type > boundry_optional;
-  typedef ::xsd::cxx::tree::traits< boundry_type, char > boundry_traits;
+  typedef ::boundary boundary_type;
+  typedef ::xsd::cxx::tree::optional< boundary_type > boundary_optional;
+  typedef ::xsd::cxx::tree::traits< boundary_type, char > boundary_traits;
 
-  const boundry_optional&
-  boundry () const;
+  const boundary_optional&
+  boundary () const;
 
-  boundry_optional&
-  boundry ();
-
-  void
-  boundry (const boundry_type& x);
+  boundary_optional&
+  boundary ();
 
   void
-  boundry (const boundry_optional& x);
+  boundary (const boundary_type& x);
 
   void
-  boundry (::std::unique_ptr< boundry_type > p);
+  boundary (const boundary_optional& x);
+
+  void
+  boundary (::std::unique_ptr< boundary_type > p);
+
+  // grav
+  //
+  typedef ::xml_schema::double_ grav_type;
+  typedef ::xsd::cxx::tree::optional< grav_type > grav_optional;
+  typedef ::xsd::cxx::tree::traits< grav_type, char, ::xsd::cxx::tree::schema_type::double_ > grav_traits;
+
+  const grav_optional&
+  grav () const;
+
+  grav_optional&
+  grav ();
+
+  void
+  grav (const grav_type& x);
+
+  void
+  grav (const grav_optional& x);
+
+  // import_checkpoint
+  //
+  typedef ::import_checkpoint import_checkpoint_type;
+  typedef ::xsd::cxx::tree::optional< import_checkpoint_type > import_checkpoint_optional;
+  typedef ::xsd::cxx::tree::traits< import_checkpoint_type, char > import_checkpoint_traits;
+
+  const import_checkpoint_optional&
+  import_checkpoint () const;
+
+  import_checkpoint_optional&
+  import_checkpoint ();
+
+  void
+  import_checkpoint (const import_checkpoint_type& x);
+
+  void
+  import_checkpoint (const import_checkpoint_optional& x);
+
+  void
+  import_checkpoint (::std::unique_ptr< import_checkpoint_type > p);
 
   // Constructors.
   //
@@ -745,7 +827,9 @@ class parameters: public ::xml_schema::type
   containerType_optional containerType_;
   domainSize_optional domainSize_;
   cutoff_optional cutoff_;
-  boundry_optional boundry_;
+  boundary_optional boundary_;
+  grav_optional grav_;
+  import_checkpoint_optional import_checkpoint_;
 };
 
 class clusters: public ::xml_schema::type
@@ -837,114 +921,95 @@ class clusters: public ::xml_schema::type
   cuboid_sequence cuboid_;
 };
 
-class boundry: public ::xml_schema::type
+class thermo: public ::xml_schema::type
 {
   public:
-  // xTop
+  // init_T
   //
-  typedef ::xml_schema::string xTop_type;
-  typedef ::xsd::cxx::tree::optional< xTop_type > xTop_optional;
-  typedef ::xsd::cxx::tree::traits< xTop_type, char > xTop_traits;
+  typedef ::xml_schema::double_ init_T_type;
+  typedef ::xsd::cxx::tree::traits< init_T_type, char, ::xsd::cxx::tree::schema_type::double_ > init_T_traits;
 
-  const xTop_optional&
-  xTop () const;
+  const init_T_type&
+  init_T () const;
 
-  xTop_optional&
-  xTop ();
-
-  void
-  xTop (const xTop_type& x);
+  init_T_type&
+  init_T ();
 
   void
-  xTop (const xTop_optional& x);
+  init_T (const init_T_type& x);
 
-  void
-  xTop (::std::unique_ptr< xTop_type > p);
-
-  // xBottom
+  // n
   //
-  typedef ::xml_schema::string xBottom_type;
-  typedef ::xsd::cxx::tree::optional< xBottom_type > xBottom_optional;
-  typedef ::xsd::cxx::tree::traits< xBottom_type, char > xBottom_traits;
+  typedef ::xml_schema::double_ n_type;
+  typedef ::xsd::cxx::tree::traits< n_type, char, ::xsd::cxx::tree::schema_type::double_ > n_traits;
 
-  const xBottom_optional&
-  xBottom () const;
+  const n_type&
+  n () const;
 
-  xBottom_optional&
-  xBottom ();
-
-  void
-  xBottom (const xBottom_type& x);
+  n_type&
+  n ();
 
   void
-  xBottom (const xBottom_optional& x);
+  n (const n_type& x);
 
-  void
-  xBottom (::std::unique_ptr< xBottom_type > p);
-
-  // yLeft
+  // target
   //
-  typedef ::xml_schema::string yLeft_type;
-  typedef ::xsd::cxx::tree::optional< yLeft_type > yLeft_optional;
-  typedef ::xsd::cxx::tree::traits< yLeft_type, char > yLeft_traits;
+  typedef ::xml_schema::double_ target_type;
+  typedef ::xsd::cxx::tree::optional< target_type > target_optional;
+  typedef ::xsd::cxx::tree::traits< target_type, char, ::xsd::cxx::tree::schema_type::double_ > target_traits;
 
-  const yLeft_optional&
-  yLeft () const;
+  const target_optional&
+  target () const;
 
-  yLeft_optional&
-  yLeft ();
-
-  void
-  yLeft (const yLeft_type& x);
+  target_optional&
+  target ();
 
   void
-  yLeft (const yLeft_optional& x);
+  target (const target_type& x);
 
   void
-  yLeft (::std::unique_ptr< yLeft_type > p);
+  target (const target_optional& x);
 
-  // yRight
+  // maxStep
   //
-  typedef ::xml_schema::string yRight_type;
-  typedef ::xsd::cxx::tree::optional< yRight_type > yRight_optional;
-  typedef ::xsd::cxx::tree::traits< yRight_type, char > yRight_traits;
+  typedef ::xml_schema::double_ maxStep_type;
+  typedef ::xsd::cxx::tree::optional< maxStep_type > maxStep_optional;
+  typedef ::xsd::cxx::tree::traits< maxStep_type, char, ::xsd::cxx::tree::schema_type::double_ > maxStep_traits;
 
-  const yRight_optional&
-  yRight () const;
+  const maxStep_optional&
+  maxStep () const;
 
-  yRight_optional&
-  yRight ();
-
-  void
-  yRight (const yRight_type& x);
+  maxStep_optional&
+  maxStep ();
 
   void
-  yRight (const yRight_optional& x);
+  maxStep (const maxStep_type& x);
 
   void
-  yRight (::std::unique_ptr< yRight_type > p);
+  maxStep (const maxStep_optional& x);
 
   // Constructors.
   //
-  boundry ();
+  thermo (const init_T_type&,
+          const n_type&);
 
-  boundry (const ::xercesc::DOMElement& e,
-           ::xml_schema::flags f = 0,
-           ::xml_schema::container* c = 0);
+  thermo (const ::xercesc::DOMElement& e,
+          ::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0);
 
-  boundry (const boundry& x,
-           ::xml_schema::flags f = 0,
-           ::xml_schema::container* c = 0);
+  thermo (const thermo& x,
+          ::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0);
 
-  virtual boundry*
+  virtual thermo*
   _clone (::xml_schema::flags f = 0,
           ::xml_schema::container* c = 0) const;
 
-  boundry&
-  operator= (const boundry& x);
+  thermo&
+  operator= (const thermo& x);
 
   virtual 
-  ~boundry ();
+  ~thermo ();
 
   // Implementation.
   //
@@ -954,10 +1019,173 @@ class boundry: public ::xml_schema::type
          ::xml_schema::flags);
 
   protected:
-  xTop_optional xTop_;
-  xBottom_optional xBottom_;
-  yLeft_optional yLeft_;
-  yRight_optional yRight_;
+  ::xsd::cxx::tree::one< init_T_type > init_T_;
+  ::xsd::cxx::tree::one< n_type > n_;
+  target_optional target_;
+  maxStep_optional maxStep_;
+};
+
+class boundary: public ::xml_schema::type
+{
+  public:
+  // xTop
+  //
+  typedef ::xml_schema::string xTop_type;
+  typedef ::xsd::cxx::tree::traits< xTop_type, char > xTop_traits;
+
+  const xTop_type&
+  xTop () const;
+
+  xTop_type&
+  xTop ();
+
+  void
+  xTop (const xTop_type& x);
+
+  void
+  xTop (::std::unique_ptr< xTop_type > p);
+
+  // xBottom
+  //
+  typedef ::xml_schema::string xBottom_type;
+  typedef ::xsd::cxx::tree::traits< xBottom_type, char > xBottom_traits;
+
+  const xBottom_type&
+  xBottom () const;
+
+  xBottom_type&
+  xBottom ();
+
+  void
+  xBottom (const xBottom_type& x);
+
+  void
+  xBottom (::std::unique_ptr< xBottom_type > p);
+
+  // yLeft
+  //
+  typedef ::xml_schema::string yLeft_type;
+  typedef ::xsd::cxx::tree::traits< yLeft_type, char > yLeft_traits;
+
+  const yLeft_type&
+  yLeft () const;
+
+  yLeft_type&
+  yLeft ();
+
+  void
+  yLeft (const yLeft_type& x);
+
+  void
+  yLeft (::std::unique_ptr< yLeft_type > p);
+
+  // yRight
+  //
+  typedef ::xml_schema::string yRight_type;
+  typedef ::xsd::cxx::tree::traits< yRight_type, char > yRight_traits;
+
+  const yRight_type&
+  yRight () const;
+
+  yRight_type&
+  yRight ();
+
+  void
+  yRight (const yRight_type& x);
+
+  void
+  yRight (::std::unique_ptr< yRight_type > p);
+
+  // Constructors.
+  //
+  boundary (const xTop_type&,
+            const xBottom_type&,
+            const yLeft_type&,
+            const yRight_type&);
+
+  boundary (const ::xercesc::DOMElement& e,
+            ::xml_schema::flags f = 0,
+            ::xml_schema::container* c = 0);
+
+  boundary (const boundary& x,
+            ::xml_schema::flags f = 0,
+            ::xml_schema::container* c = 0);
+
+  virtual boundary*
+  _clone (::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0) const;
+
+  boundary&
+  operator= (const boundary& x);
+
+  virtual 
+  ~boundary ();
+
+  // Implementation.
+  //
+  protected:
+  void
+  parse (::xsd::cxx::xml::dom::parser< char >&,
+         ::xml_schema::flags);
+
+  protected:
+  ::xsd::cxx::tree::one< xTop_type > xTop_;
+  ::xsd::cxx::tree::one< xBottom_type > xBottom_;
+  ::xsd::cxx::tree::one< yLeft_type > yLeft_;
+  ::xsd::cxx::tree::one< yRight_type > yRight_;
+};
+
+class import_checkpoint: public ::xml_schema::type
+{
+  public:
+  // file_path
+  //
+  typedef ::xml_schema::string file_path_type;
+  typedef ::xsd::cxx::tree::traits< file_path_type, char > file_path_traits;
+
+  const file_path_type&
+  file_path () const;
+
+  file_path_type&
+  file_path ();
+
+  void
+  file_path (const file_path_type& x);
+
+  void
+  file_path (::std::unique_ptr< file_path_type > p);
+
+  // Constructors.
+  //
+  import_checkpoint (const file_path_type&);
+
+  import_checkpoint (const ::xercesc::DOMElement& e,
+                     ::xml_schema::flags f = 0,
+                     ::xml_schema::container* c = 0);
+
+  import_checkpoint (const import_checkpoint& x,
+                     ::xml_schema::flags f = 0,
+                     ::xml_schema::container* c = 0);
+
+  virtual import_checkpoint*
+  _clone (::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0) const;
+
+  import_checkpoint&
+  operator= (const import_checkpoint& x);
+
+  virtual 
+  ~import_checkpoint ();
+
+  // Implementation.
+  //
+  protected:
+  void
+  parse (::xsd::cxx::xml::dom::parser< char >&,
+         ::xml_schema::flags);
+
+  protected:
+  ::xsd::cxx::tree::one< file_path_type > file_path_;
 };
 
 class particle: public ::xml_schema::type
@@ -1011,6 +1239,42 @@ class particle: public ::xml_schema::type
   void
   mass (const mass_type& x);
 
+  // epsilon
+  //
+  typedef ::xml_schema::double_ epsilon_type;
+  typedef ::xsd::cxx::tree::optional< epsilon_type > epsilon_optional;
+  typedef ::xsd::cxx::tree::traits< epsilon_type, char, ::xsd::cxx::tree::schema_type::double_ > epsilon_traits;
+
+  const epsilon_optional&
+  epsilon () const;
+
+  epsilon_optional&
+  epsilon ();
+
+  void
+  epsilon (const epsilon_type& x);
+
+  void
+  epsilon (const epsilon_optional& x);
+
+  // sigma
+  //
+  typedef ::xml_schema::double_ sigma_type;
+  typedef ::xsd::cxx::tree::optional< sigma_type > sigma_optional;
+  typedef ::xsd::cxx::tree::traits< sigma_type, char, ::xsd::cxx::tree::schema_type::double_ > sigma_traits;
+
+  const sigma_optional&
+  sigma () const;
+
+  sigma_optional&
+  sigma ();
+
+  void
+  sigma (const sigma_type& x);
+
+  void
+  sigma (const sigma_optional& x);
+
   // Constructors.
   //
   particle (const coordinate_type&,
@@ -1050,6 +1314,8 @@ class particle: public ::xml_schema::type
   ::xsd::cxx::tree::one< coordinate_type > coordinate_;
   ::xsd::cxx::tree::one< velocity_type > velocity_;
   ::xsd::cxx::tree::one< mass_type > mass_;
+  epsilon_optional epsilon_;
+  sigma_optional sigma_;
 };
 
 class disc: public ::xml_schema::type
@@ -1131,6 +1397,42 @@ class disc: public ::xml_schema::type
   void
   radius (const radius_type& x);
 
+  // epsilon
+  //
+  typedef ::xml_schema::double_ epsilon_type;
+  typedef ::xsd::cxx::tree::optional< epsilon_type > epsilon_optional;
+  typedef ::xsd::cxx::tree::traits< epsilon_type, char, ::xsd::cxx::tree::schema_type::double_ > epsilon_traits;
+
+  const epsilon_optional&
+  epsilon () const;
+
+  epsilon_optional&
+  epsilon ();
+
+  void
+  epsilon (const epsilon_type& x);
+
+  void
+  epsilon (const epsilon_optional& x);
+
+  // sigma
+  //
+  typedef ::xml_schema::double_ sigma_type;
+  typedef ::xsd::cxx::tree::optional< sigma_type > sigma_optional;
+  typedef ::xsd::cxx::tree::traits< sigma_type, char, ::xsd::cxx::tree::schema_type::double_ > sigma_traits;
+
+  const sigma_optional&
+  sigma () const;
+
+  sigma_optional&
+  sigma ();
+
+  void
+  sigma (const sigma_type& x);
+
+  void
+  sigma (const sigma_optional& x);
+
   // Constructors.
   //
   disc (const center_type&,
@@ -1176,6 +1478,8 @@ class disc: public ::xml_schema::type
   ::xsd::cxx::tree::one< mass_type > mass_;
   ::xsd::cxx::tree::one< meshWidth_type > meshWidth_;
   ::xsd::cxx::tree::one< radius_type > radius_;
+  epsilon_optional epsilon_;
+  sigma_optional sigma_;
 };
 
 class cuboid: public ::xml_schema::type
@@ -1274,6 +1578,42 @@ class cuboid: public ::xml_schema::type
   void
   brownianMotion (const brownianMotion_type& x);
 
+  // epsilon
+  //
+  typedef ::xml_schema::double_ epsilon_type;
+  typedef ::xsd::cxx::tree::optional< epsilon_type > epsilon_optional;
+  typedef ::xsd::cxx::tree::traits< epsilon_type, char, ::xsd::cxx::tree::schema_type::double_ > epsilon_traits;
+
+  const epsilon_optional&
+  epsilon () const;
+
+  epsilon_optional&
+  epsilon ();
+
+  void
+  epsilon (const epsilon_type& x);
+
+  void
+  epsilon (const epsilon_optional& x);
+
+  // sigma
+  //
+  typedef ::xml_schema::double_ sigma_type;
+  typedef ::xsd::cxx::tree::optional< sigma_type > sigma_optional;
+  typedef ::xsd::cxx::tree::traits< sigma_type, char, ::xsd::cxx::tree::schema_type::double_ > sigma_traits;
+
+  const sigma_optional&
+  sigma () const;
+
+  sigma_optional&
+  sigma ();
+
+  void
+  sigma (const sigma_type& x);
+
+  void
+  sigma (const sigma_optional& x);
+
   // Constructors.
   //
   cuboid (const cornerCoordinates_type&,
@@ -1322,6 +1662,8 @@ class cuboid: public ::xml_schema::type
   ::xsd::cxx::tree::one< meshWidth_type > meshWidth_;
   ::xsd::cxx::tree::one< mass_type > mass_;
   ::xsd::cxx::tree::one< brownianMotion_type > brownianMotion_;
+  epsilon_optional epsilon_;
+  sigma_optional sigma_;
 };
 
 #include <iosfwd>
@@ -1515,7 +1857,13 @@ void
 operator<< (::xercesc::DOMElement&, const clusters&);
 
 void
-operator<< (::xercesc::DOMElement&, const boundry&);
+operator<< (::xercesc::DOMElement&, const thermo&);
+
+void
+operator<< (::xercesc::DOMElement&, const boundary&);
+
+void
+operator<< (::xercesc::DOMElement&, const import_checkpoint&);
 
 void
 operator<< (::xercesc::DOMElement&, const particle&);
@@ -1533,4 +1881,4 @@ operator<< (::xercesc::DOMElement&, const cuboid&);
 //
 // End epilogue.
 
-#endif // MOL_SIM_SRC_IO_INPUT_READER_XML_SIMULATION_H
+#endif // VERGLEICH_MOL_SIM_SRC_IO_INPUT_READER_XML_SIMULATION_H

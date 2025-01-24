@@ -137,3 +137,5 @@ TEST_F(FileReaderTest, JsonFileReaderCollisionSimInputTest) {
 TEST_F(FileReaderTest, TxtFileReaderCollisionSimInputTest) {
     testCollisionSim((char *) "../../testInput/test-input-cuboids.txt");
 }
+
+
