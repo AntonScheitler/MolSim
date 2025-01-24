@@ -96,6 +96,7 @@ void ForceComputations::computeLennardJonesPotentialCutoff(ParticleContainerLink
 
 void ForceComputations::computeLennardJonesPotentialCutoffCellIter(ParticleContainerLinkedCell &particles, double cutoff) {
     // iterate through every cell
+    #pragma omp parallel for
     for (size_t cellIdx = 0; cellIdx < particles.getMesh().size(); cellIdx++) {
         std::vector<size_t>& currParticeIndices = particles.getMesh()[cellIdx].getParticlesIndices();
         std::vector<size_t>& neighborCellsIndices = particles.getNeighborCellsMatrix()[cellIdx];
