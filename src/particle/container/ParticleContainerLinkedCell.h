@@ -140,6 +140,8 @@ public:
 
     struct boundaryConfig getBoundaryConfig();
 
+    std::vector<std::vector<size_t>>& getNeighborCellsMatrix();
+
 private:
     /**
      * @brief mesh contains all grid cells

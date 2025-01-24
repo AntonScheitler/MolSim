@@ -11,7 +11,6 @@
 #include "particle/container/ParticleContainerLinkedCell.h"
 #include <chrono>
 #include <cstdlib>
-#include <thread>
 
 Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
 
@@ -66,7 +65,7 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                 if (containerLinkedCell) {
                     containerLinkedCell->correctCellMembershipAllParticles();
                     ForceComputations::resetForces(simData.getParticles());
-                    ForceComputations::computeLennardJonesPotentialCutoff(*containerLinkedCell,
+                    ForceComputations::computeLennardJonesPotentialCutoffCellIter(*containerLinkedCell,
                                                                           containerLinkedCell->getCutoffRadius());
 
 

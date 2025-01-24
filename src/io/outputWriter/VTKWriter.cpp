@@ -25,10 +25,10 @@ namespace outputWriter {
             plotParticle(particle);
         }
         // write to file in separate thread
-        std::thread io_thread([iteration, this]() {
-            writeFile(baseName, iteration);
-        });
-        io_thread.detach();
+        //std::thread io_thread([iteration, this]() {
+        writeFile(baseName, iteration);
+        //});
+        //io_thread.detach();
     }
 
     void VTKWriter::initializeOutput(int numParticles) {

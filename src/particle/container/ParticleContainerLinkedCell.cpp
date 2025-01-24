@@ -316,3 +316,7 @@ std::array<double, 3> ParticleContainerLinkedCell::getDomainSize() {
 struct boundaryConfig ParticleContainerLinkedCell::getBoundaryConfig() {
     return boundaryConfig;
 }
+
+std::vector<std::vector<size_t>>& ParticleContainerLinkedCell::getNeighborCellsMatrix() {
+    return neighborCellsMatrix;
+}
