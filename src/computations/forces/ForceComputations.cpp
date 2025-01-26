@@ -70,26 +70,7 @@ void ForceComputations::computeLennardJonesPotentialCutoff(ParticleContainerLink
     #pragma omp parallel for
     for (size_t i = 0; i < particlePairs.size(); i++) {
         std::pair<Particle &, Particle &> pair = particlePairs[i];
-        sigma = (pair.first.getSigma() != pair.second.getSigma()) ? ((pair.first.getSigma() + pair.second.getSigma()) / 2) : pair.first.getSigma();
-        epsilon = (pair.first.getEpsilon() != pair.second.getEpsilon()) ? (sqrt(pair.first.getEpsilon() * pair.second.getSigma())) : pair.first.getEpsilon();
-
-        std::array<double, 3> distanceVector = ArrayUtils::elementWisePairOp(pair.first.getX(), pair.second.getX(),
-                                                                             std::minus<>());
-        particles.getPeriodicDistanceVector(pair.first.getX(), pair.second.getX(), distanceVector);
-        double distance = ArrayUtils::L2Norm(distanceVector);
-        // don't consider particles which are further apart than the cutoff radius
-        if (distance == 0 || distance > cutoff) continue;
-        double dist = std::pow(sigma / distance, 2);
-
-        double factor = (-24.0 * epsilon) / std::pow(distance, 2) * (std::pow(dist, 3) - 2 * std::pow(dist, 6));
-
-        std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(factor, distanceVector, std::multiplies<>());
-        std::array<double, 3> revForce = ArrayUtils::elementWiseScalarOp(-1, force, std::multiplies<>());
-        #pragma omp critical
-        {
-            pair.first.setF(ArrayUtils::elementWisePairOp(pair.first.getF(), force, std::plus<>()));
-            pair.second.setF(ArrayUtils::elementWisePairOp(pair.second.getF(), revForce, std::plus<>()));
-        }
+        computeLennardJonesPotentialCutoffHelper(particles, pair, cutoff);
     }
 }
 
@@ -106,7 +87,7 @@ void ForceComputations::computeLennardJonesPotentialCutoffCellIter(ParticleConta
             for (size_t neighborParticleIdx : currParticeIndices) {
                 if (neighborParticleIdx <= currParticleIdx) continue;
                 std::pair<Particle&, Particle&> pair = {particles.getParticle(currParticleIdx), particles.getParticle(neighborParticleIdx)};
-                computeLennardJonesPotentialHelper(particles, pair, cutoff);
+                computeLennardJonesPotentialCutoffHelper(particles, pair, cutoff);
             }
             // then iterate through all of the other neighbor cells
             for (size_t neighborCellIdx : neighborCellsIndices) {
@@ -114,7 +95,7 @@ void ForceComputations::computeLennardJonesPotentialCutoffCellIter(ParticleConta
                 // and all of the particles in those neighbor cells
                 for (size_t neighborParticleIdx : particles.getMesh()[neighborCellIdx].getParticlesIndices()) {
                     std::pair<Particle&, Particle&> pair = {particles.getParticle(currParticleIdx), particles.getParticle(neighborParticleIdx)};
-                    computeLennardJonesPotentialHelper(particles, pair, cutoff);
+                    computeLennardJonesPotentialCutoffHelper(particles, pair, cutoff);
                 }
             }
         }
@@ -150,7 +131,6 @@ void ForceComputations::computeGhostParticleRepulsion(ParticleContainerLinkedCel
     double epsilon;
     double sigma;
     for (auto it = particles.beginPairGhost(); it != particles.endPairGhost(); ++it) {
-
         std::pair<Particle &, Particle &> pair = *it;
         epsilon = pair.first.getEpsilon();
         sigma = pair.first.getSigma();
@@ -178,7 +158,7 @@ void ForceComputations::computeMembraneNeighborForce(ParticleContainerLinkedCell
     }
 }
 
-void ForceComputations::computeLennardJonesPotentialHelper(ParticleContainerLinkedCell& particles, std::pair<Particle&, Particle&>& pair, double cutoff) {
+void ForceComputations::computeLennardJonesPotentialCutoffHelper(ParticleContainerLinkedCell& particles, std::pair<Particle&, Particle&>& pair, double cutoff) {
         double sigma = (pair.first.getSigma() != pair.second.getSigma()) ? ((pair.first.getSigma() + pair.second.getSigma()) / 2) : pair.first.getSigma();
         double epsilon = (pair.first.getEpsilon() != pair.second.getEpsilon()) ? (sqrt(pair.first.getEpsilon() * pair.second.getSigma())) : pair.first.getEpsilon();
 

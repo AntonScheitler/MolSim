@@ -85,7 +85,7 @@ private:
      * @param pair the pair of particles to compute the forces between
      * @param cutoff the cutoff radius past which no forces are computed
      */
-    static void computeLennardJonesPotentialHelper(ParticleContainerLinkedCell& particles, std::pair<Particle&, Particle&>& pair, double cutoff);
+    static void computeLennardJonesPotentialCutoffHelper(ParticleContainerLinkedCell& particles, std::pair<Particle&, Particle&>& pair, double cutoff);
 
     /**
      * @brief a helper function for computing the harmonic potential between two particles
