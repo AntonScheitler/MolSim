@@ -65,7 +65,7 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                 if (containerLinkedCell) {
                     containerLinkedCell->correctCellMembershipAllParticles();
                     ForceComputations::resetForces(simData.getParticles());
-                    ForceComputations::computeLennardJonesPotentialCutoff(*containerLinkedCell,
+                    ForceComputations::computeLennardJonesPotentialCutoffCellIter(*containerLinkedCell,
                                                                           containerLinkedCell->getCutoffRadius());
 
 

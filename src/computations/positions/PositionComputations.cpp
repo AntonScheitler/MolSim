@@ -21,7 +21,7 @@ void PositionComputations::updateOldX(ParticleContainer &particles) {
     #pragma omp parallel for
     for (size_t i = 0; i < particles.size(); i++) {
         Particle& particle = particles.getParticle(i);
-        if (particle.isFixed() || !(particle.getActive())) continue;
+        if (!(particle.getActive())) continue;
         particle.setOldX(particle.getX());
     }
 }
