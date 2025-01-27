@@ -350,6 +350,6 @@ void SimulationData::setProfileIterationNumber(int iterationArg) {
     this->profileIterationNumber = iterationArg;
 }
 
-void SimulationData::getProfileIterationNumber() {
+int SimulationData::getProfileIterationNumber() {
     return profileIterationNumber;
 }
