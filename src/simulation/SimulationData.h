@@ -311,6 +311,28 @@ public:
      */
     int getNumberDimensions();
 
+    /**
+    * @brief set the number of bins used for profiling
+    * @param binNumberArg number of bins
+    */
+    void setProfileBinNumber(int binNumberArg);
+
+    /**
+    * @param returns the number of bins used for profiling
+    */
+    int getProfileBinNumber();
+
+    /**
+    * @brief set the number of iterations after which the state is profiled
+    * @param iterationArg number of iterations
+    */
+    void setProfileIterationNumber(int iterationArg);
+
+    /**
+    * @param returns the number of iterations after which the state is profiled
+    */
+    int getProfileIterationNumber();
+
 
 private:
     SimulationType simType;
@@ -344,4 +366,7 @@ private:
     std::array<double, 3> customForce;
 
     int numberDimensions;
+
+    int profileIterationNumber;
+    int binNumber;
 };

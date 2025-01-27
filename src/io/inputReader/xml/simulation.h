@@ -261,6 +261,7 @@ class thermo;
 class membraneArgs;
 class boundary;
 class import_checkpoint;
+class bin_profile;
 class particle;
 class disc;
 class cuboid;
@@ -815,6 +816,27 @@ class parameters: public ::xml_schema::type
   void
   import_checkpoint (::std::unique_ptr< import_checkpoint_type > p);
 
+  // bin_profile
+  //
+  typedef ::bin_profile bin_profile_type;
+  typedef ::xsd::cxx::tree::optional< bin_profile_type > bin_profile_optional;
+  typedef ::xsd::cxx::tree::traits< bin_profile_type, char > bin_profile_traits;
+
+  const bin_profile_optional&
+  bin_profile () const;
+
+  bin_profile_optional&
+  bin_profile ();
+
+  void
+  bin_profile (const bin_profile_type& x);
+
+  void
+  bin_profile (const bin_profile_optional& x);
+
+  void
+  bin_profile (::std::unique_ptr< bin_profile_type > p);
+
   // Constructors.
   //
   parameters ();
@@ -856,6 +878,7 @@ class parameters: public ::xml_schema::type
   boundary_optional boundary_;
   grav_optional grav_;
   import_checkpoint_optional import_checkpoint_;
+  bin_profile_optional bin_profile_;
 };
 
 class clusters: public ::xml_schema::type
@@ -1358,6 +1381,75 @@ class import_checkpoint: public ::xml_schema::type
 
   protected:
   ::xsd::cxx::tree::one< file_path_type > file_path_;
+};
+
+class bin_profile: public ::xml_schema::type
+{
+  public:
+  // iteration
+  //
+  typedef ::xml_schema::int_ iteration_type;
+  typedef ::xsd::cxx::tree::traits< iteration_type, char > iteration_traits;
+
+  const iteration_type&
+  iteration () const;
+
+  iteration_type&
+  iteration ();
+
+  void
+  iteration (const iteration_type& x);
+
+  // bin_number
+  //
+  typedef ::xml_schema::int_ bin_number_type;
+  typedef ::xsd::cxx::tree::optional< bin_number_type > bin_number_optional;
+  typedef ::xsd::cxx::tree::traits< bin_number_type, char > bin_number_traits;
+
+  const bin_number_optional&
+  bin_number () const;
+
+  bin_number_optional&
+  bin_number ();
+
+  void
+  bin_number (const bin_number_type& x);
+
+  void
+  bin_number (const bin_number_optional& x);
+
+  // Constructors.
+  //
+  bin_profile (const iteration_type&);
+
+  bin_profile (const ::xercesc::DOMElement& e,
+               ::xml_schema::flags f = 0,
+               ::xml_schema::container* c = 0);
+
+  bin_profile (const bin_profile& x,
+               ::xml_schema::flags f = 0,
+               ::xml_schema::container* c = 0);
+
+  virtual bin_profile*
+  _clone (::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0) const;
+
+  bin_profile&
+  operator= (const bin_profile& x);
+
+  virtual 
+  ~bin_profile ();
+
+  // Implementation.
+  //
+  protected:
+  void
+  parse (::xsd::cxx::xml::dom::parser< char >&,
+         ::xml_schema::flags);
+
+  protected:
+  ::xsd::cxx::tree::one< iteration_type > iteration_;
+  bin_number_optional bin_number_;
 };
 
 class particle: public ::xml_schema::type
@@ -2114,6 +2206,9 @@ operator<< (::xercesc::DOMElement&, const boundary&);
 
 void
 operator<< (::xercesc::DOMElement&, const import_checkpoint&);
+
+void
+operator<< (::xercesc::DOMElement&, const bin_profile&);
 
 void
 operator<< (::xercesc::DOMElement&, const particle&);

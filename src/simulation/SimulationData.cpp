@@ -29,6 +29,9 @@ SimulationData::SimulationData() {
     thermoVersion = 1; // TODO: default thermo version for testing purpose set to 2
     numberDimensions = 2; //default 2, will be set by XMLFileReader
 
+    binNumber = 50;
+    profileIterationNumber = -1;
+
 }
 
 int SimulationData::parseOptions(int argc, char *argsv[]) {
@@ -333,4 +336,20 @@ void SimulationData::setNumberDimensions(int numberDimensionsArg) {
 
 int SimulationData::getNumberDimensions() {
     return numberDimensions;
+}
+
+void SimulationData::setProfileBinNumber(int binNumberArg) {
+    this->binNumber = binNumberArg;
+}
+
+int SimulationData::getProfileBinNumber() {
+    return binNumber;
+}
+
+void SimulationData::setProfileIterationNumber(int iterationArg) {
+    this->profileIterationNumber = iterationArg;
+}
+
+void SimulationData::getProfileIterationNumber() {
+    return profileIterationNumber;
 }

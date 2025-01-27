@@ -61,7 +61,14 @@
                                     </xsd:sequence>
                                 </xsd:complexType>
                             </xsd:element>
-
+                            <xsd:element name="bin_profile" minOccurs="0">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="iteration" type="xsd:int" />
+                                        <xsd:element name="bin_number" type="xsd:int" minOccurs="0"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
 
                         </xsd:sequence>
                     </xsd:complexType>

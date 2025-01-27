@@ -73,3 +73,15 @@ To add a checkpoint file to a new simulation, please include the filepath of the
       <file_path>../input/checker.txt</file_path>
 </import_checkpoint>
 ```
+
+### Velocity-density profile
+To output a velocity - density profile, please include the following elements to the parameters of the xml-input-file
+
+```
+<bin_profile>
+      <iteration>integer value</iteration>
+      <bin_number>integer value</bin_number>
+</bin_profile>
+```
+While the the number of iteration after which a profile should be created must be given, the number of bins is optional and is defaulted at 50.
+
