@@ -13,6 +13,7 @@
 #include "particle/container/ParticleContainerLinkedCell.h"
 #include <chrono>
 #include <cstdlib>
+#include <omp.h>
 #include <string>
 
 Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
@@ -72,8 +73,11 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                     // schlechter:
                     //ForceComputations::computeLennardJonesPotentialCutoff(*containerLinkedCell, containerLinkedCell->getCutoffRadius());
                     // besser:
-                    ForceComputations::computeLennardJonesPotentialCutoffCellIter(*containerLinkedCell,
-                                                                          containerLinkedCell->getCutoffRadius());
+                    //ForceComputations::computeLennardJonesPotentialCutoffCellIter(*containerLinkedCell,
+                    //                                                      containerLinkedCell->getCutoffRadius());
+                    // noch besser?:
+                    ForceComputations::computeLennardJonesPotentialCutoffMeshPart(*containerLinkedCell,
+                                                                          containerLinkedCell->getCutoffRadius(), omp_get_max_threads());
 
 
                     SPDLOG_DEBUG("computing ghost particle repulsion...");

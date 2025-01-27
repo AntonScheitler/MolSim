@@ -36,6 +36,14 @@ public:
     static void computeLennardJonesPotentialCutoffCellIter(ParticleContainerLinkedCell& particles, double cutoff);
 
     /**
+     * @brief an alternative to computeLennardJonesPotentialCutoff with an iteration optimized for parallelism and a
+     * partitioning mechanism to avoid race conditions
+     * @param particles the ParticleContainer containing the molecules
+     * @param cutoff the radius past which particles are not considered for the force computation
+     */
+    static void computeLennardJonesPotentialCutoffMeshPart(ParticleContainerLinkedCell& particles, double cutoff, size_t numThreads);
+
+    /**
      * @brief updates the old force and resets the current force for all particles
      * @param particles the particles to reset the forces of
      */
@@ -86,6 +94,15 @@ private:
      * @param cutoff the cutoff radius past which no forces are computed
      */
     static void computeLennardJonesPotentialCutoffHelper(ParticleContainerLinkedCell& particles, std::pair<Particle&, Particle&>& pair, double cutoff);
+
+    /**
+     * @brief a helper function for computing the lenndard jones potential between two particles. Updating the particles
+     * is marked as an omp critical section in order to avoid race conditions
+     * @param particles the container for the particles that the pair is a part of
+     * @param pair the pair of particles to compute the forces between
+     * @param cutoff the cutoff radius past which no forces are computed
+     */
+    static void computeLennardJonesPotentialCutoffHelperCritical(ParticleContainerLinkedCell& particles, std::pair<Particle&, Particle&>& pair, double cutoff);
 
     /**
      * @brief a helper function for computing the harmonic potential between two particles

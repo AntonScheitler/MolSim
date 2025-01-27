@@ -129,7 +129,7 @@ public:
      * @return a pair consisting of two matricies. The first matrix contains the partitions themselves. The second
      * matrix contains the cells on the border between partitions
      */
-    std::pair<std::vector<std::vector<size_t>>, std::vector<std::vector<size_t>>> computeMeshPartitions(size_t numThreads);
+    std::pair<std::vector<std::vector<size_t>>, std::vector<size_t>> computeMeshPartitions(size_t numThreads);
 
     std::vector<Cell> &getMesh();
 

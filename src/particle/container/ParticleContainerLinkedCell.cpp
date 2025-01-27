@@ -209,13 +209,12 @@ void ParticleContainerLinkedCell::computeNeighborCellsMatrix() {
     }
 }
 
-std::pair<std::vector<std::vector<size_t>>, std::vector<std::vector<size_t>>> ParticleContainerLinkedCell::computeMeshPartitions(size_t numThreads) {
+std::pair<std::vector<std::vector<size_t>>, std::vector<size_t>> ParticleContainerLinkedCell::computeMeshPartitions(size_t numThreads) {
     size_t partitionLength = ceil((1.0 * numCells[0]) / numThreads);
-    std::pair<std::vector<std::vector<size_t>>, std::vector<std::vector<size_t>>> partitions = {{}, {}};
+    std::pair<std::vector<std::vector<size_t>>, std::vector<size_t>> partitions = {{}, {}};
     // create partition for each thread
     for (size_t p = 0; p < numThreads; p++) {
         partitions.first.push_back({});
-        partitions.second.push_back({});
         // subtracting 2 from the end point excludes the border from the partition
         for (int z = 0; z < numCells[2]; z++) {
             for (int y = 0; y < numCells[1]; y++) {
@@ -226,10 +225,10 @@ std::pair<std::vector<std::vector<size_t>>, std::vector<std::vector<size_t>>> Pa
                 }
                 // add the border cells to the partition border
                 size_t leftBorderCellIdx = p * partitionLength + (y * numCells[0]) + (z * numCells[0] * numCells[1]);
-                size_t rightBorderCellIdx = std::min(((p + 1) * partitionLength), numCells[0] - 1) + 
+                size_t rightBorderCellIdx = std::min(((p + 1) * partitionLength - 1), numCells[0] - 1) + 
                     (y * numCells[0]) + (z * numCells[0] * numCells[1]);
-                partitions.second[p].push_back(leftBorderCellIdx);
-                partitions.second[p].push_back(rightBorderCellIdx);
+                partitions.second.push_back(leftBorderCellIdx);
+                partitions.second.push_back(rightBorderCellIdx);
             }
         }
     }

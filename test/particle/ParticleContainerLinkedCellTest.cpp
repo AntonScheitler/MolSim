@@ -216,7 +216,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellGhostParticle
     std::unordered_set<std::pair<Particle, Particle>, PairHash, PairEqual> pairsSet;
 
     for (double y = 0; y < 3; y++) {
-        for (double x = 0; x < 3; x++) {
+for (double x = 0; x < 3; x++) {
             std::array<double, 3> pos1 = {x * container.getCellSize()[0] + 7, y * container.getCellSize()[1] + 7, 0.5};
             // all particles move to the top-right 
             Particle p1 = {pos1, {1, 1, 0}, 1};
@@ -516,6 +516,14 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellDiagonalBound
     EXPECT_TRUE(particlePresent);
 }
 
-TEST_F(ParticleContainerLinkedCellTest, ParticleContaine)  {
-
+TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellMeshPartitionTest)  {
+    ParticleContainerLinkedCell container{{6, 3, 1}, 1, {{reflect, reflect}, {reflect, reflect}, {outflow, outflow}}};
+    auto matrixPair = container.computeMeshPartitions(2);
+    std::vector<size_t> p1 = {1, 7, 13};
+    std::vector<size_t> p2 = {4, 10, 16};
+    std::vector<size_t> b = {0, 2, 6, 8, 12, 14, 3, 5, 9, 11, 15, 17};
+    EXPECT_TRUE(matrixPair.first.size() == 2);
+    EXPECT_TRUE(matrixPair.first[0] == p1);
+    EXPECT_TRUE(matrixPair.first[1] == p2);
+    EXPECT_TRUE(matrixPair.second == b);
 }
