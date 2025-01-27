@@ -7,7 +7,7 @@
 #include "particle/iterator/particleIterator/ParticleIterator.h"
 #include "particle/iterator/particleIterator/ParticleIteratorNonFixedParticles.h"
 #include "spdlogConfig.h"
-
+#include <omp.h>
 
 ParticleContainerLinkedCell::ParticleContainerLinkedCell(std::array<double, 3> domainSizeArg, double cutoffRadiusArg,
                                                          struct boundaryConfig boundaryConfigArg) {
@@ -207,6 +207,33 @@ void ParticleContainerLinkedCell::computeNeighborCellsMatrix() {
             }
         }
     }
+}
+
+std::pair<std::vector<std::vector<size_t>>, std::vector<std::vector<size_t>>> ParticleContainerLinkedCell::computeMeshPartitions(size_t numThreads) {
+    size_t partitionLength = ceil((1.0 * numCells[0]) / numThreads);
+    std::pair<std::vector<std::vector<size_t>>, std::vector<std::vector<size_t>>> partitions = {{}, {}};
+    // create partition for each thread
+    for (size_t p = 0; p < numThreads; p++) {
+        partitions.first.push_back({});
+        partitions.second.push_back({});
+        // subtracting 2 from the end point excludes the border from the partition
+        for (int z = 0; z < numCells[2]; z++) {
+            for (int y = 0; y < numCells[1]; y++) {
+                // add all the cells to the partition
+                for (int x = p * partitionLength + 1; x < std::min((p + 1) * partitionLength - 1, numCells[0] - 1); x++) {
+                    size_t cellIdx = x + (y * numCells[0]) + (z * numCells[0] * numCells[1]);
+                    partitions.first[p].push_back(cellIdx);
+                }
+                // add the border cells to the partition border
+                size_t leftBorderCellIdx = p * partitionLength + (y * numCells[0]) + (z * numCells[0] * numCells[1]);
+                size_t rightBorderCellIdx = std::min(((p + 1) * partitionLength), numCells[0] - 1) + 
+                    (y * numCells[0]) + (z * numCells[0] * numCells[1]);
+                partitions.second[p].push_back(leftBorderCellIdx);
+                partitions.second[p].push_back(rightBorderCellIdx);
+            }
+        }
+    }
+    return partitions;
 }
 
 std::vector<Cell> &ParticleContainerLinkedCell::getMesh() {

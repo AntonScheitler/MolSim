@@ -6,6 +6,7 @@
 #include "io/outputWriter/VTKWriter.h"
 #include <io/outputWriter/CheckpointWriter.h>
 #include "../io/outputWriter/VelocityDensityProfileWriter.h"
+#include "io/outputWriter/vtk-unstructured.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/spdlog.h"
 #include "particle/container/ParticleContainer.h"
@@ -68,6 +69,9 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                 if (containerLinkedCell) {
                     containerLinkedCell->correctCellMembershipAllParticles();
                     ForceComputations::resetForces(simData.getParticles());
+                    // schlechter:
+                    //ForceComputations::computeLennardJonesPotentialCutoff(*containerLinkedCell, containerLinkedCell->getCutoffRadius());
+                    // besser:
                     ForceComputations::computeLennardJonesPotentialCutoffCellIter(*containerLinkedCell,
                                                                           containerLinkedCell->getCutoffRadius());
 

@@ -122,6 +122,15 @@ public:
      */
     void computeNeighborCellsMatrix();
 
+    /**
+     * @brief computes the partitions of the mesh, so that each each thread can be assigned a partition and work on it
+     * without interfering with other threads.
+     * @param numThreads the number of threads available for the simulation
+     * @return a pair consisting of two matricies. The first matrix contains the partitions themselves. The second
+     * matrix contains the cells on the border between partitions
+     */
+    std::pair<std::vector<std::vector<size_t>>, std::vector<std::vector<size_t>>> computeMeshPartitions(size_t numThreads);
+
     std::vector<Cell> &getMesh();
 
     std::vector<Particle> &getParticles();
@@ -141,6 +150,7 @@ public:
     struct boundaryConfig getBoundaryConfig();
 
     std::vector<std::vector<size_t>>& getNeighborCellsMatrix();
+
 
 private:
     /**

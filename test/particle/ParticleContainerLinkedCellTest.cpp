@@ -515,3 +515,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellDiagonalBound
     // particle should still be in the container
     EXPECT_TRUE(particlePresent);
 }
+
+TEST_F(ParticleContainerLinkedCellTest, ParticleContaine)  {
+
+}
