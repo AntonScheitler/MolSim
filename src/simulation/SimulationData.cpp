@@ -26,10 +26,11 @@ SimulationData::SimulationData() {
     grav = {0, 0, 0};
 
     thermostat = false;
-    thermoVersion = 1; // TODO: default thermo version for testing purpose set to 2
+    thermoVersion = 1;
     numberDimensions = 2; //default 2, will be set by XMLFileReader
     numberBins = 50;
     binProfilingIterations = -1;
+    movingMembranePartIndices = std::vector<size_t>(); // default empty vector
 
 }
 
