@@ -12,7 +12,6 @@
 #include <particle/container/ParticleContainerLinkedCell.h>
 #include <particle/container/ParticleContainerDirectSum.h>
 #include "../CheckpointReader.h"
-#include "spdlog/fmt/bundled/os.h"
 
 
 namespace inputReader {
