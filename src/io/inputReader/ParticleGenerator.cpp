@@ -74,7 +74,7 @@ namespace inputReader {
     }
 
     void ParticleGenerator::generateDisc(ParticleContainer &particles, std::array<double, 3> center,
-                                         std::array<double, 3> v, double r, double m, double h, int type, double e, double s) {
+                                         std::array<double, 3> v, double r, double m, double h, int type, double e, double s, bool fixed) {
 
         SPDLOG_INFO("starting disc generator");
         for (int i = 0; i <= r; ++i) {
@@ -99,6 +99,7 @@ namespace inputReader {
                 temp.setSigma(s);
                 temp.setEpsilon(e);
 
+                temp.setFixed(fixed);
                 particles.addParticle(temp);
             }
         }
