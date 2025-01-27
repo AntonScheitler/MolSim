@@ -12,6 +12,7 @@
 #include "particle/container/ParticleContainerLinkedCell.h"
 #include <chrono>
 #include <cstdlib>
+#include <string>
 
 Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
     // choose computation functions based on the type
@@ -183,11 +184,17 @@ void Simulator::simulate() {
             // turn logging back on to communicate results
             spdlog::set_level(spdlog::level::info);
 
-            logger->info("Simulation no. {0} took {1} ms", i + 1, duration.count());
-            logger->info("{0} particles updated per second", (numUpdatedParticles * 1000.0) / duration.count());
+            double ms = duration.count();
+
+            logger->info("Simulation no. {0} took {1} (total: {2} ms)", i + 1, formatTime(duration), ms);
+            logger->info("{0} particles updated per second", (numUpdatedParticles * 1000.0) / ms);
             totalDuration += duration.count();
         }
-        logger->info("Simulation took {0} ms on average", (totalDuration / numIterations));
+        long avg = totalDuration / numIterations;
+        auto avgTime = std::chrono::duration<long, std::ratio<1, 1000> >(avg);
+
+
+        logger->info("Simulation took on average: {0} (total average: {1} ms)", formatTime(avgTime), avg);
         logger->info("=========================BENCH=========================");
     } else {
         runSimulationLoop();
@@ -247,4 +254,17 @@ size_t Simulator::runSimulationLoop() {
 
 Simulator::~Simulator() {
     spdlog::drop(logger->name());
+}
+
+std::string Simulator::formatTime(std::chrono::duration<long, std::ratio<1, 1000> > duration) {
+    auto h = std::chrono::duration_cast<std::chrono::hours>(duration);
+    duration -= h;
+    auto min = std::chrono::duration_cast<std::chrono::minutes>(duration);
+    duration -= min;
+    auto sec = std::chrono::duration_cast<std::chrono::seconds>(duration);
+    duration -= sec;
+    auto msLeft = std::chrono::duration_cast<std::chrono::milliseconds>(duration);
+
+    return std::to_string(h.count()) + "h " + std::to_string(min.count()) + "min " + std::to_string(sec.count()) +
+           "sec " + std::to_string(msLeft.count()) + "ms";
 }

@@ -121,18 +121,21 @@ void ForceComputations::computeMembraneNeighborForce(ParticleContainerLinkedCell
     double sigma;
     for (auto it = particles.beginMembraneDirectNeighbor(); it != particles.endMembraneDirectNeighbor(); ++it) {
         std::pair<Particle&, Particle&> pair = *it;
-        epsilon = pair.first.getEpsilon();
-        sigma = pair.first.getSigma();
-        computeLennardJonesPotentialRepulsiveHelper(pair, epsilon, sigma);
         computeHaromicPotentialHelper(pair, k, r0);
     }
 
+    // compute harmonic potential for diagonal neighbors
     for (auto it = particles.beginMembraneDiagonalNeighbor(); it != particles.endMembraneDiagonalNeighbor(); ++it) {
         std::pair<Particle&, Particle&> pair = *it;
+        computeHaromicPotentialHelper(pair, k, sqrt(2.0) * r0);
+    }
+
+    // compute repulsive force between all particles
+    for (auto it = particles.beginPairParticle(); *it != *(particles.endPairParticle()); ++*it) {
+        std::pair<Particle &, Particle &> pair = **it;
         epsilon = pair.first.getEpsilon();
         sigma = pair.first.getSigma();
         computeLennardJonesPotentialRepulsiveHelper(pair, epsilon, sigma);
-        computeHaromicPotentialHelper(pair, k, sqrt(2.0) * r0);
     }
 }
 
