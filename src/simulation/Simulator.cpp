@@ -216,14 +216,13 @@ size_t Simulator::runSimulationLoop() {
         SPDLOG_LOGGER_DEBUG(logger, "after step instruction.");
         iteration++;
 
-        //if (!simData.getBench()) {
         if (iteration % simData.getWriteFrequency() == 0 && !simData.getBench()) {
             // write output on every 10th iteration
             writer.plotParticles(simData.getParticles(), iteration);
         }
 
         if (simData.getProfileIterationNumber() != -1 && iteration % simData.getProfileIterationNumber() == 0 && !simData.getBench()) {
-            // write output on every 10th iteration
+            // write velocity density profile each given number of iterations (e.g. 10k)
             try {
                 auto& linkedCellContainer = dynamic_cast<ParticleContainerLinkedCell&>(simData.getParticles());
                 profileWriter.profileBins(linkedCellContainer, iteration, simData.getProfileBinNumber());

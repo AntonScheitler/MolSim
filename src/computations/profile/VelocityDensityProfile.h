@@ -9,6 +9,7 @@ class VelocityDensityProfile {
             size_t numParticles;
             double avgDensity;
             std::array<double, 3> avgVelocity;
+            double avgVelocityNorm;
         };
 
         /**

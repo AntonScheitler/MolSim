@@ -1,11 +1,8 @@
 #include "VelocityDensityProfileWriter.h"
 
-#include "particle/container/ParticleContainer.h"
 #include "spdlogConfig.h"
-
 #include <fstream>
 #include <iomanip>
-#include <iostream>
 #include <string>
 
 
@@ -33,12 +30,14 @@ namespace outputWriter {
             file << plotBin(binInfo) << "\n";
         }
         file.close();
+        SPDLOG_LOGGER_INFO(logger, "Saved velocity-density-profile");
     }
 
     std::string VelocityDensityProfileWriter::plotBin(const VelocityDensityProfile::binInfo &binInfo) {
         std::ostringstream binParams;
 
-        binParams << binInfo.numParticles << ", " << binInfo.avgDensity << ", "  << binInfo.avgVelocity[0] << ", "  << binInfo.avgVelocity[1] << ", "  << binInfo.avgVelocity[2];
+        binParams << binInfo.numParticles << ", " << binInfo.avgDensity << ", "  << binInfo.avgVelocity[0] << ", "
+        << binInfo.avgVelocity[1] << ", "  << binInfo.avgVelocity[2] << ", " << binInfo.avgVelocityNorm;
 
         return binParams.str();
     }

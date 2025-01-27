@@ -32,6 +32,8 @@ std::vector<VelocityDensityProfile::binInfo>  VelocityDensityProfile::determineP
         }else {
             binInfo.avgVelocity = ArrayUtils::elementWiseScalarOp(1.0 / binInfo.numParticles, binInfo.sumVelocities,
                                                                   std::multiplies<>());
+            std::array<double, 3> squared =ArrayUtils::elementWisePairOp(binInfo.avgVelocity, binInfo.avgVelocity, std::multiplies<>());
+            binInfo.avgVelocityNorm = sqrt(squared[0] + squared[1] + squared[2]);
         }
     }
 
