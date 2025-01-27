@@ -33,7 +33,7 @@ public:
 
     std::unique_ptr<ParticleContainer> copy() override;
 
-    Particle &getParticle(int index);
+    Particle &getParticle(size_t index) override;
 
     ParticleIterator begin() override;
 

@@ -134,11 +134,13 @@ public:
 
     double getCutoffRadius();
 
-    Particle &getParticleAt(size_t particleIndex);
+    Particle &getParticle(size_t particleIndex) override;
 
     std::array<double, 3> getDomainSize();
 
     struct boundaryConfig getBoundaryConfig();
+
+    std::vector<std::vector<size_t>>& getNeighborCellsMatrix();
 
 private:
     /**

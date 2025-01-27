@@ -1,3 +1,4 @@
+#pragma once
 #include "particle/container/ParticleContainer.h"
 #include "particle/container/ParticleContainerLinkedCell.h"
 #include <utility>
@@ -27,6 +28,12 @@ public:
      */
     static void computeLennardJonesPotentialCutoff(ParticleContainerLinkedCell &particles, double cutoff);
 
+    /**
+     * @brief an alternative to computeLennardJonesPotentialCutoff with an iteration optimized for parallelism 
+     * @param particles the ParticleContainer containing the molecules
+     * @param cutoff the radius past which particles are not considered for the force computation
+     */
+    static void computeLennardJonesPotentialCutoffCellIter(ParticleContainerLinkedCell& particles, double cutoff);
 
     /**
      * @brief updates the old force and resets the current force for all particles
@@ -71,6 +78,14 @@ private:
      * @param sigma sigma constant for force computation
      */
     static void computeLennardJonesPotentialRepulsiveHelper(std::pair<Particle&, Particle&>& pair, double epsilon, double sigma);
+
+    /**
+     * @brief a helper function for computing the lenndard jones potential between two particles
+     * @param particles the container for the particles that the pair is a part of
+     * @param pair the pair of particles to compute the forces between
+     * @param cutoff the cutoff radius past which no forces are computed
+     */
+    static void computeLennardJonesPotentialCutoffHelper(ParticleContainerLinkedCell& particles, std::pair<Particle&, Particle&>& pair, double cutoff);
 
     /**
      * @brief a helper function for computing the harmonic potential between two particles

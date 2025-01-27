@@ -68,7 +68,7 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                 if (containerLinkedCell) {
                     containerLinkedCell->correctCellMembershipAllParticles();
                     ForceComputations::resetForces(simData.getParticles());
-                    ForceComputations::computeLennardJonesPotentialCutoff(*containerLinkedCell,
+                    ForceComputations::computeLennardJonesPotentialCutoffCellIter(*containerLinkedCell,
                                                                           containerLinkedCell->getCutoffRadius());
 
 
@@ -201,6 +201,7 @@ void Simulator::simulate() {
     }
 }
 
+
 size_t Simulator::runSimulationLoop() {
     // prepare for iteration
     size_t numUpdatedParticles = 0;
@@ -223,9 +224,8 @@ size_t Simulator::runSimulationLoop() {
         SPDLOG_LOGGER_DEBUG(logger, "after step instruction.");
         iteration++;
 
-        //if (!simData.getBench()) {
+        // do output file write in separate thread
         if (iteration % simData.getWriteFrequency() == 0 && !simData.getBench()) {
-            // write output on every 10th iteration
             writer.plotParticles(simData.getParticles(), iteration);
         }
 
@@ -238,7 +238,6 @@ size_t Simulator::runSimulationLoop() {
                 SPDLOG_LOGGER_ERROR(logger, "ParticleContainer is not of type ParticleContainerLinkedCell: ", e.what());
             }
         }
-
         SPDLOG_LOGGER_INFO(logger, "Iteration {0} finished.", iteration);
         currentTime += simData.getDeltaT();
     }

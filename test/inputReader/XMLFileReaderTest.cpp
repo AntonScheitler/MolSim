@@ -48,7 +48,7 @@ TEST_F(XMLFileReaderTest, XMlFileReaderCorrectInputTest) {
         // take first particle and check its attributes
         int index = containerLinkedCell->continuousCoordsToIndex({1, 2, 3});
         Cell& cell = containerLinkedCell->getMesh()[index];
-        Particle &p = containerLinkedCell->getParticleAt(cell.getParticlesIndices()[0]);
+        Particle &p = containerLinkedCell->getParticle(cell.getParticlesIndices()[0]);
 
         EXPECT_DOUBLE_EQ(p.getM(), 1.0);
         EXPECT_DOUBLE_EQ(p.getEpsilon(), 1.0);
@@ -62,7 +62,7 @@ TEST_F(XMLFileReaderTest, XMlFileReaderCorrectInputTest) {
         // second cuboid
         index = containerLinkedCell->continuousCoordsToIndex({20, 21, 22});
         cell = containerLinkedCell->getMesh()[index];
-        p = containerLinkedCell->getParticleAt(cell.getParticlesIndices()[0]);
+        p = containerLinkedCell->getParticle(cell.getParticlesIndices()[0]);
 
         EXPECT_DOUBLE_EQ(p.getM(), 2.0);
         EXPECT_DOUBLE_EQ(p.getEpsilon(), 2.0);

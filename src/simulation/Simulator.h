@@ -1,6 +1,8 @@
 #include "spdlogConfig.h"
 #include <simulation/SimulationData.h>
 
+#include "io/outputWriter/VTKWriter.h"
+
 
 /**
  * @brief a wrapper for running all simulations.
