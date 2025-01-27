@@ -38,6 +38,6 @@ namespace inputReader {
          * @param s sigma value of particles
          */
         static void generateDisc(ParticleContainer& particles, std::array<double, 3> center,
-                                            std::array<double, 3> v, double r, double m, double h, int type, double e, double s);
+                                            std::array<double, 3> v, double r, double m, double h, int type, double e, double s, bool fixed);
     };
 }

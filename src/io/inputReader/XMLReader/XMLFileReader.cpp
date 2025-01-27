@@ -184,7 +184,10 @@ namespace inputReader {
 
 
                 //TODO: also add 'fixed' param for each particle in checkpointing
-                bool fixed = cuboid.fixed();
+                bool fixed = false;
+                if(cuboid.fixed().present()) {
+                    fixed = cuboid.fixed().get();
+                }
                 ParticleGenerator::generateCuboid(simData.getParticles(), x, v, d, m, h, type, epsilon, sigma, fixed);
 
 
@@ -209,7 +212,11 @@ namespace inputReader {
                 double epsilon = disc.epsilon().present() ? disc.epsilon().get() : simData.getEpsilon();
                 double sigma = disc.sigma().present() ? disc.sigma().get() : simData.getSigma();
 
-                ParticleGenerator::generateDisc(simData.getParticles(), x, v, r, m, h, type, epsilon, sigma);
+                bool fixed = false;
+                if(disc.fixed().present()) {
+                    fixed = disc.fixed().get();
+                }
+                ParticleGenerator::generateDisc(simData.getParticles(), x, v, r, m, h, type, epsilon, sigma, fixed);
                 type++;
             }
 
