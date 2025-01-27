@@ -36,7 +36,6 @@ namespace inputReader {
         double r;
         int type = 0;
 
-
         SPDLOG_LOGGER_DEBUG(logger, "entering XML parsing with filename {0}", filename);
 
         std::ifstream inputFile(filename);

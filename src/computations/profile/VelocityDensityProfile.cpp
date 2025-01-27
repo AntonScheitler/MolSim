@@ -25,7 +25,7 @@ std::vector<VelocityDensityProfile::binInfo>  VelocityDensityProfile::determineP
     }
 
 
-    for (struct binInfo& binInfo : binInfos) {
+    for (binInfo& binInfo : binInfos) {
         binInfo.avgDensity = binInfo.numParticles / binSize;
         if(binInfo.numParticles == 0){
             binInfo.avgVelocity = {0, 0, 0};
