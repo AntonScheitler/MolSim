@@ -73,11 +73,11 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                     // schlechter:
                     //ForceComputations::computeLennardJonesPotentialCutoff(*containerLinkedCell, containerLinkedCell->getCutoffRadius());
                     // besser:
-                    //ForceComputations::computeLennardJonesPotentialCutoffCellIter(*containerLinkedCell,
-                    //                                                      containerLinkedCell->getCutoffRadius());
+                    ForceComputations::computeLennardJonesPotentialCutoffCellIter(*containerLinkedCell,
+                                                                          containerLinkedCell->getCutoffRadius());
                     // noch besser?:
-                    ForceComputations::computeLennardJonesPotentialCutoffMeshPart(*containerLinkedCell,
-                                                                          containerLinkedCell->getCutoffRadius(), omp_get_max_threads());
+                    //ForceComputations::computeLennardJonesPotentialCutoffMeshPart(*containerLinkedCell,
+                    //                                                      containerLinkedCell->getCutoffRadius(), 4);
 
 
                     SPDLOG_DEBUG("computing ghost particle repulsion...");
