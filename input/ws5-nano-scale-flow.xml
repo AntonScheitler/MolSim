@@ -26,6 +26,7 @@
         </grav>
         <bin_profile>
             <iteration>5000</iteration>
+            <base_name>profile_var0</base_name>
         </bin_profile>
     </parameters>
     <clusters>
