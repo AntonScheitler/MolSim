@@ -88,9 +88,7 @@ namespace inputReader {
                 p.setEpsilon(epsilon);
                 p.setSigma(sigma);
 
-
                 simData.getParticles().addParticle(p);
-
 
                 getline(inputFile, tmpString);
                 SPDLOG_LOGGER_DEBUG(logger, "Read line: {0}", tmpString);
@@ -101,7 +99,6 @@ namespace inputReader {
             SPDLOG_LOGGER_ERROR(logger, "Error: could not open file {0}", filename);
             exit(-1);
         }
-
 
         return maxType;
     }

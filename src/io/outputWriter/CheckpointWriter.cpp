@@ -1,19 +1,17 @@
 
 #include "CheckpointWriter.h"
 #include "particle/container/ParticleContainer.h"
-#include "spdlog/spdlog.h"
 #include "spdlogConfig.h"
-
 #include <fstream>
-#include <iostream>
-#include <sstream>
+#include <iomanip>
 #include <string>
 
 
 namespace outputWriter {
 
     CheckpointWriter::CheckpointWriter(std::string baseName) : baseName(baseName) {
-        SPDLOG_DEBUG("Initialized CheckpointWriter");
+        this->logger = spdlog::stdout_color_st("CheckpointWriter");
+        SPDLOG_LOGGER_DEBUG(logger, "Initialized CheckpointWriter");
     }
 
 

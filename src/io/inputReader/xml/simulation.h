@@ -261,7 +261,7 @@ class thermo;
 class membraneArgs;
 class boundary;
 class import_checkpoint;
-class bin_profiling;
+class bin_profile;
 class particle;
 class disc;
 class cuboid;
@@ -346,7 +346,7 @@ class vectorType: public ::xml_schema::type
   vectorType&
   operator= (const vectorType& x);
 
-  virtual 
+  virtual
   ~vectorType ();
 
   // Implementation.
@@ -487,7 +487,7 @@ class simulation: public ::xml_schema::type
   simulation&
   operator= (const simulation& x);
 
-  virtual 
+  virtual
   ~simulation ();
 
   // Implementation.
@@ -584,7 +584,7 @@ class output: public ::xml_schema::type
   output&
   operator= (const output& x);
 
-  virtual 
+  virtual
   ~output ();
 
   // Implementation.
@@ -816,26 +816,26 @@ class parameters: public ::xml_schema::type
   void
   import_checkpoint (::std::unique_ptr< import_checkpoint_type > p);
 
-  // bin_profiling
+  // bin_profile
   //
-  typedef ::bin_profiling bin_profiling_type;
-  typedef ::xsd::cxx::tree::optional< bin_profiling_type > bin_profiling_optional;
-  typedef ::xsd::cxx::tree::traits< bin_profiling_type, char > bin_profiling_traits;
+  typedef ::bin_profile bin_profile_type;
+  typedef ::xsd::cxx::tree::optional< bin_profile_type > bin_profile_optional;
+  typedef ::xsd::cxx::tree::traits< bin_profile_type, char > bin_profile_traits;
 
-  const bin_profiling_optional&
-  bin_profiling () const;
+  const bin_profile_optional&
+  bin_profile () const;
 
-  bin_profiling_optional&
-  bin_profiling ();
-
-  void
-  bin_profiling (const bin_profiling_type& x);
+  bin_profile_optional&
+  bin_profile ();
 
   void
-  bin_profiling (const bin_profiling_optional& x);
+  bin_profile (const bin_profile_type& x);
 
   void
-  bin_profiling (::std::unique_ptr< bin_profiling_type > p);
+  bin_profile (const bin_profile_optional& x);
+
+  void
+  bin_profile (::std::unique_ptr< bin_profile_type > p);
 
   // Constructors.
   //
@@ -856,7 +856,7 @@ class parameters: public ::xml_schema::type
   parameters&
   operator= (const parameters& x);
 
-  virtual 
+  virtual
   ~parameters ();
 
   // Implementation.
@@ -878,7 +878,7 @@ class parameters: public ::xml_schema::type
   boundary_optional boundary_;
   grav_optional grav_;
   import_checkpoint_optional import_checkpoint_;
-  bin_profiling_optional bin_profiling_;
+  bin_profile_optional bin_profile_;
 };
 
 class clusters: public ::xml_schema::type
@@ -954,7 +954,7 @@ class clusters: public ::xml_schema::type
   clusters&
   operator= (const clusters& x);
 
-  virtual 
+  virtual
   ~clusters ();
 
   // Implementation.
@@ -1075,7 +1075,7 @@ class thermo: public ::xml_schema::type
   thermo&
   operator= (const thermo& x);
 
-  virtual 
+  virtual
   ~thermo ();
 
   // Implementation.
@@ -1166,7 +1166,7 @@ class membraneArgs: public ::xml_schema::type
   membraneArgs&
   operator= (const membraneArgs& x);
 
-  virtual 
+  virtual
   ~membraneArgs ();
 
   // Implementation.
@@ -1311,7 +1311,7 @@ class boundary: public ::xml_schema::type
   boundary&
   operator= (const boundary& x);
 
-  virtual 
+  virtual
   ~boundary ();
 
   // Implementation.
@@ -1369,7 +1369,7 @@ class import_checkpoint: public ::xml_schema::type
   import_checkpoint&
   operator= (const import_checkpoint& x);
 
-  virtual 
+  virtual
   ~import_checkpoint ();
 
   // Implementation.
@@ -1383,22 +1383,22 @@ class import_checkpoint: public ::xml_schema::type
   ::xsd::cxx::tree::one< file_path_type > file_path_;
 };
 
-class bin_profiling: public ::xml_schema::type
+class bin_profile: public ::xml_schema::type
 {
   public:
-  // iterations
+  // iteration
   //
-  typedef ::xml_schema::int_ iterations_type;
-  typedef ::xsd::cxx::tree::traits< iterations_type, char > iterations_traits;
+  typedef ::xml_schema::int_ iteration_type;
+  typedef ::xsd::cxx::tree::traits< iteration_type, char > iteration_traits;
 
-  const iterations_type&
-  iterations () const;
+  const iteration_type&
+  iteration () const;
 
-  iterations_type&
-  iterations ();
+  iteration_type&
+  iteration ();
 
   void
-  iterations (const iterations_type& x);
+  iteration (const iteration_type& x);
 
   // bin_number
   //
@@ -1420,25 +1420,25 @@ class bin_profiling: public ::xml_schema::type
 
   // Constructors.
   //
-  bin_profiling (const iterations_type&);
+  bin_profile (const iteration_type&);
 
-  bin_profiling (const ::xercesc::DOMElement& e,
-                 ::xml_schema::flags f = 0,
-                 ::xml_schema::container* c = 0);
+  bin_profile (const ::xercesc::DOMElement& e,
+               ::xml_schema::flags f = 0,
+               ::xml_schema::container* c = 0);
 
-  bin_profiling (const bin_profiling& x,
-                 ::xml_schema::flags f = 0,
-                 ::xml_schema::container* c = 0);
+  bin_profile (const bin_profile& x,
+               ::xml_schema::flags f = 0,
+               ::xml_schema::container* c = 0);
 
-  virtual bin_profiling*
+  virtual bin_profile*
   _clone (::xml_schema::flags f = 0,
           ::xml_schema::container* c = 0) const;
 
-  bin_profiling&
-  operator= (const bin_profiling& x);
+  bin_profile&
+  operator= (const bin_profile& x);
 
   virtual
-  ~bin_profiling ();
+  ~bin_profile ();
 
   // Implementation.
   //
@@ -1448,7 +1448,7 @@ class bin_profiling: public ::xml_schema::type
          ::xml_schema::flags);
 
   protected:
-  ::xsd::cxx::tree::one< iterations_type > iterations_;
+  ::xsd::cxx::tree::one< iteration_type > iteration_;
   bin_number_optional bin_number_;
 };
 
@@ -1582,7 +1582,7 @@ class particle: public ::xml_schema::type
   particle&
   operator= (const particle& x);
 
-  virtual 
+  virtual
   ~particle ();
 
   // Implementation.
@@ -1763,7 +1763,7 @@ class disc: public ::xml_schema::type
   disc&
   operator= (const disc& x);
 
-  virtual 
+  virtual
   ~disc ();
 
   // Implementation.
@@ -1982,7 +1982,7 @@ class cuboid: public ::xml_schema::type
   cuboid&
   operator= (const cuboid& x);
 
-  virtual 
+  virtual
   ~cuboid ();
 
   // Implementation.
@@ -2120,14 +2120,14 @@ operator<< (::xercesc::DOMElement&, const vectorType&);
 
 void
 simulation_ (::std::ostream& os,
-             const ::simulation& x, 
+             const ::simulation& x,
              const ::xml_schema::namespace_infomap& m = ::xml_schema::namespace_infomap (),
              const ::std::string& e = "UTF-8",
              ::xml_schema::flags f = 0);
 
 void
 simulation_ (::std::ostream& os,
-             const ::simulation& x, 
+             const ::simulation& x,
              ::xml_schema::error_handler& eh,
              const ::xml_schema::namespace_infomap& m = ::xml_schema::namespace_infomap (),
              const ::std::string& e = "UTF-8",
@@ -2135,7 +2135,7 @@ simulation_ (::std::ostream& os,
 
 void
 simulation_ (::std::ostream& os,
-             const ::simulation& x, 
+             const ::simulation& x,
              ::xercesc::DOMErrorHandler& eh,
              const ::xml_schema::namespace_infomap& m = ::xml_schema::namespace_infomap (),
              const ::std::string& e = "UTF-8",
@@ -2146,14 +2146,14 @@ simulation_ (::std::ostream& os,
 
 void
 simulation_ (::xercesc::XMLFormatTarget& ft,
-             const ::simulation& x, 
+             const ::simulation& x,
              const ::xml_schema::namespace_infomap& m = ::xml_schema::namespace_infomap (),
              const ::std::string& e = "UTF-8",
              ::xml_schema::flags f = 0);
 
 void
 simulation_ (::xercesc::XMLFormatTarget& ft,
-             const ::simulation& x, 
+             const ::simulation& x,
              ::xml_schema::error_handler& eh,
              const ::xml_schema::namespace_infomap& m = ::xml_schema::namespace_infomap (),
              const ::std::string& e = "UTF-8",
@@ -2161,7 +2161,7 @@ simulation_ (::xercesc::XMLFormatTarget& ft,
 
 void
 simulation_ (::xercesc::XMLFormatTarget& ft,
-             const ::simulation& x, 
+             const ::simulation& x,
              ::xercesc::DOMErrorHandler& eh,
              const ::xml_schema::namespace_infomap& m = ::xml_schema::namespace_infomap (),
              const ::std::string& e = "UTF-8",
@@ -2179,7 +2179,7 @@ simulation_ (::xercesc::DOMDocument& d,
 //
 
 ::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument >
-simulation_ (const ::simulation& x, 
+simulation_ (const ::simulation& x,
              const ::xml_schema::namespace_infomap& m = ::xml_schema::namespace_infomap (),
              ::xml_schema::flags f = 0);
 
@@ -2208,7 +2208,7 @@ void
 operator<< (::xercesc::DOMElement&, const import_checkpoint&);
 
 void
-operator<< (::xercesc::DOMElement&, const bin_profiling&);
+operator<< (::xercesc::DOMElement&, const bin_profile&);
 
 void
 operator<< (::xercesc::DOMElement&, const particle&);
