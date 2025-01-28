@@ -222,12 +222,6 @@ namespace inputReader {
             }
 
             SPDLOG_LOGGER_INFO(logger, "finished reading discs ");
-
-            // mark special particles (if present) as different type
-            for (auto index : simData.getMovingMembranePartIndices()) {
-                simData.getParticles().getParticle(index).setType(type);
-            }
-
         } catch (const xml_schema::exception &e) {
             SPDLOG_LOGGER_ERROR(logger, "XML parsing error: {0}", e.what());
             exit(EXIT_FAILURE);

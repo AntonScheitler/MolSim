@@ -6,7 +6,6 @@
 #include "particle/container/ParticleContainer.h"
 #include "ForceComputations.h"
 #include "spdlogConfig.h"
-#include <omp.h>
 
 void ForceComputations::computeGravity(ParticleContainer &particles) {
     for (auto it = particles.beginPairParticle(); *it != *(particles.endPairParticle()); it->operator++()) {
@@ -61,114 +60,33 @@ void ForceComputations::computeLennardJonesPotential(ParticleContainer &particle
 void ForceComputations::computeLennardJonesPotentialCutoff(ParticleContainerLinkedCell &particles, double cutoff) {
     double epsilon;
     double sigma;
-    std::vector<std::pair<Particle&, Particle&>> particlePairs = {};
-    for (auto it = particles.beginPairParticle(); *it != *(particles.endPairParticle()); it->operator++()) {
-        particlePairs.push_back(**it);
-    }
     // iterate through all pairs of particles and calculate lennard-jones potential
+    for (auto it = particles.beginPairParticle(); *it != *(particles.endPairParticle()); it->operator++()) {
+        std::pair<Particle &, Particle &> pair = **it;
 
-    #pragma omp parallel for
-    for (size_t i = 0; i < particlePairs.size(); i++) {
-        std::pair<Particle &, Particle &> pair = particlePairs[i];
-        computeLennardJonesPotentialCutoffHelperCritical(particles, pair, cutoff);
+        sigma = (pair.first.getSigma() != pair.second.getSigma()) ? ((pair.first.getSigma() + pair.second.getSigma()) / 2) : pair.first.getSigma();
+        epsilon = (pair.first.getEpsilon() != pair.second.getEpsilon()) ? (sqrt(pair.first.getEpsilon() * pair.second.getSigma())) : pair.first.getEpsilon();
+
+        std::array<double, 3> distanceVector = ArrayUtils::elementWisePairOp(pair.first.getX(), pair.second.getX(),
+                                                                             std::minus<>());
+        particles.getPeriodicDistanceVector(pair.first.getX(), pair.second.getX(), distanceVector);
+        double distance = ArrayUtils::L2Norm(distanceVector);
+        // don't consider particles which are further apart than the cutoff radius
+        if (distance == 0 || distance > cutoff) continue;
+        double dist = std::pow(sigma / distance, 2);
+
+        double factor = (-24.0 * epsilon) / std::pow(distance, 2) * (std::pow(dist, 3) - 2 * std::pow(dist, 6));
+
+        std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(factor, distanceVector, std::multiplies<>());
+        pair.first.setF(ArrayUtils::elementWisePairOp(pair.first.getF(), force, std::plus<>()));
+        std::array<double, 3> revForce = ArrayUtils::elementWiseScalarOp(-1, force, std::multiplies<>());
+        pair.second.setF(ArrayUtils::elementWisePairOp(pair.second.getF(), revForce, std::plus<>()));
     }
 }
-
-
-void ForceComputations::computeLennardJonesPotentialCutoffCellIter(ParticleContainerLinkedCell &particles, double cutoff) {
-    // iterate through every cell
-    #pragma omp parallel for
-    for (size_t cellIdx = 0; cellIdx < particles.getMesh().size(); cellIdx++) {
-        std::vector<size_t>& currParticleIndices = particles.getMesh()[cellIdx].getParticlesIndices();
-        std::vector<size_t>& neighborCellsIndices = particles.getNeighborCellsMatrix()[cellIdx];
-        // iterate through every particle in this cell
-        for (size_t currParticleIdx : currParticleIndices) {
-            // first iterate through all the other particles in the same cell
-            for (size_t neighborParticleIdx : currParticleIndices) {
-                if (neighborParticleIdx <= currParticleIdx) continue;
-                std::pair<Particle&, Particle&> pair = {particles.getParticle(currParticleIdx), particles.getParticle(neighborParticleIdx)};
-                computeLennardJonesPotentialCutoffHelperCritical(particles, pair, cutoff);
-            }
-            // then iterate through all of the other neighbor cells
-            for (size_t neighborCellIdx : neighborCellsIndices) {
-                if (neighborCellIdx == cellIdx) continue;
-                // and all of the particles in those neighbor cells
-                for (size_t neighborParticleIdx : particles.getMesh()[neighborCellIdx].getParticlesIndices()) {
-                    std::pair<Particle&, Particle&> pair = {particles.getParticle(currParticleIdx), particles.getParticle(neighborParticleIdx)};
-                    computeLennardJonesPotentialCutoffHelperCritical(particles, pair, cutoff);
-                }
-            }
-        }
-    }
-}
-
-void ForceComputations::computeLennardJonesPotentialCutoffMeshPart(ParticleContainerLinkedCell& particles, double cutoff, size_t numThreads) {
-    auto partitionPair = particles.getMeshPartition();
-    auto partitions = partitionPair.first;
-    auto borderPartitions = partitionPair.second;
-
-    // iterate through all of the partitions
-    #pragma omp parallel num_threads(numThreads)
-    {
-        auto partition = partitions[omp_get_thread_num()];
-        for (size_t cellIdx : partition) {
-            std::vector<size_t>& currParticleIndices = particles.getMesh()[cellIdx].getParticlesIndices();
-            std::vector<size_t>& neighborCellsIndices = particles.getNeighborCellsMatrix()[cellIdx];
-            // iterate through every particle in this cell
-            for (size_t currParticleIdx : currParticleIndices) {
-                // first iterate through all the other particles in the same cell
-                for (size_t neighborParticleIdx : currParticleIndices) {
-                    if (neighborParticleIdx <= currParticleIdx) continue;
-                    std::pair<Particle&, Particle&> pair = {particles.getParticle(currParticleIdx), particles.getParticle(neighborParticleIdx)};
-                    computeLennardJonesPotentialCutoffHelper(particles, pair, cutoff);
-                }
-                // then iterate through all of the other neighbor cells
-                for (size_t neighborCellIdx : neighborCellsIndices) {
-                    if (neighborCellIdx == cellIdx) continue;
-                    // and all of the particles in those neighbor cells
-                    for (size_t neighborParticleIdx : particles.getMesh()[neighborCellIdx].getParticlesIndices()) {
-                        std::pair<Particle&, Particle&> pair = {particles.getParticle(currParticleIdx), particles.getParticle(neighborParticleIdx)};
-                        computeLennardJonesPotentialCutoffHelper(particles, pair, cutoff);
-                    }
-                }
-            }
-        }
-    }
-    // perform computations for the border cells as well
-    #pragma omp parallel num_threads(numThreads)
-    {
-        auto borderPartition = borderPartitions[omp_get_thread_num()];
-        for (size_t cellIdx : borderPartition) {
-            std::vector<size_t>& currParticleIndices = particles.getMesh()[cellIdx].getParticlesIndices();
-            std::vector<size_t>& neighborCellsIndices = particles.getNeighborCellsMatrix()[cellIdx];
-            // iterate through every particle in this cell
-            for (size_t currParticleIdx : currParticleIndices) {
-                // first iterate through all the other particles in the same cell
-                for (size_t neighborParticleIdx : currParticleIndices) {
-                    if (neighborParticleIdx <= currParticleIdx) continue;
-                    std::pair<Particle&, Particle&> pair = {particles.getParticle(currParticleIdx), particles.getParticle(neighborParticleIdx)};
-                    computeLennardJonesPotentialCutoffHelper(particles, pair, cutoff);
-                }
-                // then iterate through all of the other neighbor cells
-                for (size_t neighborCellIdx : neighborCellsIndices) {
-                    if (neighborCellIdx == cellIdx) continue;
-                    // and all of the particles in those neighbor cells
-                    for (size_t neighborParticleIdx : particles.getMesh()[neighborCellIdx].getParticlesIndices()) {
-                        std::pair<Particle&, Particle&> pair = {particles.getParticle(currParticleIdx), particles.getParticle(neighborParticleIdx)};
-                        computeLennardJonesPotentialCutoffHelper(particles, pair, cutoff);
-                    }
-                }
-            }
-        }
-    }
-}
-
 
 void ForceComputations::resetForces(ParticleContainer &particles) {
-    #pragma omp parallel for
-    for (size_t i = 0; i < particles.size(); i++) {
-        Particle& particle = particles.getParticle(i);
-        if (particle.isFixed() || !(particle.getActive())) continue;
+    for (auto it = particles.beginNonFixedParticles(); it != particles.endNonFixedParticles(); ++it) {
+        Particle& particle = *it;
         particle.setOldF(particle.getF());
         particle.setF({0, 0, 0});
     }
@@ -176,10 +94,8 @@ void ForceComputations::resetForces(ParticleContainer &particles) {
 
 
 void ForceComputations::addExternalForces(ParticleContainer &particles, std::array<double, 3> grav) {
-    #pragma omp parallel for
-    for (size_t i = 0; i < particles.size(); i++) {
-        Particle& particle = particles.getParticle(i);
-        if (particle.isFixed() || !(particle.getActive())) continue;
+    for (auto it = particles.beginNonFixedParticles(); it != particles.endNonFixedParticles(); ++it) {
+        Particle &particle = *it;
         std::array<double, 3> newForce = particle.getF();
         newForce[0] += particle.getM() * grav[0];
         newForce[1] += particle.getM() * grav[1];
@@ -192,6 +108,7 @@ void ForceComputations::computeGhostParticleRepulsion(ParticleContainerLinkedCel
     double epsilon;
     double sigma;
     for (auto it = particles.beginPairGhost(); it != particles.endPairGhost(); ++it) {
+
         std::pair<Particle &, Particle &> pair = *it;
         epsilon = pair.first.getEpsilon();
         sigma = pair.first.getSigma();
@@ -200,71 +117,24 @@ void ForceComputations::computeGhostParticleRepulsion(ParticleContainerLinkedCel
 }
 
 void ForceComputations::computeMembraneNeighborForce(ParticleContainerLinkedCell &particles, double k, double r0) {
-    for (auto it = particles.beginMembraneDirectNeighbor(); it != particles.endMembraneDirectNeighbor(); ++it) {
-        std::pair<Particle&, Particle&> pair = *it;
-        computeHaromicPotentialHelper(pair, k, r0);
-    }
-
-    // compute harmonic potential for diagonal neighbors
-    for (auto it = particles.beginMembraneDiagonalNeighbor(); it != particles.endMembraneDiagonalNeighbor(); ++it) {
-        std::pair<Particle&, Particle&> pair = *it;
-        computeHaromicPotentialHelper(pair, k, sqrt(2.0) * r0);
-    }
-
-    // compute repulsive force between all particles
     double epsilon;
     double sigma;
-    for (auto it = particles.beginPairParticle(); *it != *(particles.endPairParticle()); ++*it) {
-        std::pair<Particle &, Particle &> pair = **it;
+    for (auto it = particles.beginMembraneDirectNeighbor(); it != particles.endMembraneDirectNeighbor(); ++it) {
+        std::pair<Particle&, Particle&> pair = *it;
         epsilon = pair.first.getEpsilon();
         sigma = pair.first.getSigma();
         computeLennardJonesPotentialRepulsiveHelper(pair, epsilon, sigma);
+        computeHaromicPotentialHelper(pair, k, r0);
+    }
+
+    for (auto it = particles.beginMembraneDiagonalNeighbor(); it != particles.endMembraneDiagonalNeighbor(); ++it) {
+        std::pair<Particle&, Particle&> pair = *it;
+        epsilon = pair.first.getEpsilon();
+        sigma = pair.first.getSigma();
+        computeLennardJonesPotentialRepulsiveHelper(pair, epsilon, sigma);
+        computeHaromicPotentialHelper(pair, k, sqrt(2.0) * r0);
     }
 }
-
-void ForceComputations::computeLennardJonesPotentialCutoffHelper(ParticleContainerLinkedCell& particles, std::pair<Particle&, Particle&>& pair, double cutoff) {
-        double sigma = (pair.first.getSigma() != pair.second.getSigma()) ? ((pair.first.getSigma() + pair.second.getSigma()) / 2) : pair.first.getSigma();
-        double epsilon = (pair.first.getEpsilon() != pair.second.getEpsilon()) ? (sqrt(pair.first.getEpsilon() * pair.second.getSigma())) : pair.first.getEpsilon();
-
-        std::array<double, 3> distanceVector = ArrayUtils::elementWisePairOp(pair.first.getX(), pair.second.getX(),
-                                                                             std::minus<>());
-        particles.getPeriodicDistanceVector(pair.first.getX(), pair.second.getX(), distanceVector);
-        double distance = ArrayUtils::L2Norm(distanceVector);
-        // don't consider particles which are further apart than the cutoff radius
-        if (distance == 0 || distance > cutoff) return;
-        double dist = std::pow(sigma / distance, 2);
-
-        double factor = (-24.0 * epsilon) / std::pow(distance, 2) * (std::pow(dist, 3) - 2 * std::pow(dist, 6));
-
-        std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(factor, distanceVector, std::multiplies<>());
-        std::array<double, 3> revForce = ArrayUtils::elementWiseScalarOp(-1, force, std::multiplies<>());
-        pair.first.setF(ArrayUtils::elementWisePairOp(pair.first.getF(), force, std::plus<>()));
-        pair.second.setF(ArrayUtils::elementWisePairOp(pair.second.getF(), revForce, std::plus<>()));
-}
-
-void ForceComputations::computeLennardJonesPotentialCutoffHelperCritical(ParticleContainerLinkedCell& particles, std::pair<Particle&, Particle&>& pair, double cutoff) {
-        double sigma = (pair.first.getSigma() != pair.second.getSigma()) ? ((pair.first.getSigma() + pair.second.getSigma()) / 2) : pair.first.getSigma();
-        double epsilon = (pair.first.getEpsilon() != pair.second.getEpsilon()) ? (sqrt(pair.first.getEpsilon() * pair.second.getSigma())) : pair.first.getEpsilon();
-
-        std::array<double, 3> distanceVector = ArrayUtils::elementWisePairOp(pair.first.getX(), pair.second.getX(),
-                                                                             std::minus<>());
-        particles.getPeriodicDistanceVector(pair.first.getX(), pair.second.getX(), distanceVector);
-        double distance = ArrayUtils::L2Norm(distanceVector);
-        // don't consider particles which are further apart than the cutoff radius
-        if (distance == 0 || distance > cutoff) return;
-        double dist = std::pow(sigma / distance, 2);
-
-        double factor = (-24.0 * epsilon) / std::pow(distance, 2) * (std::pow(dist, 3) - 2 * std::pow(dist, 6));
-
-        std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(factor, distanceVector, std::multiplies<>());
-        std::array<double, 3> revForce = ArrayUtils::elementWiseScalarOp(-1, force, std::multiplies<>());
-        #pragma omp critical
-        {
-            pair.first.setF(ArrayUtils::elementWisePairOp(pair.first.getF(), force, std::plus<>()));
-            pair.second.setF(ArrayUtils::elementWisePairOp(pair.second.getF(), revForce, std::plus<>()));
-        }
-}
-
 
 
 void ForceComputations::computeLennardJonesPotentialRepulsiveHelper(std::pair<Particle&, Particle&>& pair, double epsilon, double sigma) {

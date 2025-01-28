@@ -105,13 +105,13 @@ TEST_F(ForceComputationsTest, HarmonicPotentialDirectNeighborTest) {
 
     ForceComputations::computeMembraneNeighborForce(container, 300, 2.2);
 
-    EXPECT_NEAR(container.getParticle(0).getF()[0], -384, 0.00000001);
-    EXPECT_NEAR(container.getParticle(0).getF()[1], 0, 0.00000001);
-    EXPECT_NEAR(container.getParticle(0).getF()[2], 0, 0.00000001);
+    EXPECT_NEAR(container.getParticleAt(0).getF()[0], -384, 0.00000001);
+    EXPECT_NEAR(container.getParticleAt(0).getF()[1], 0, 0.00000001);
+    EXPECT_NEAR(container.getParticleAt(0).getF()[2], 0, 0.00000001);
 
-    EXPECT_NEAR(container.getParticle(1).getF()[0], 384, 0.00000001);
-    EXPECT_NEAR(container.getParticle(1).getF()[1], 0, 0.00000001);
-    EXPECT_NEAR(container.getParticle(1).getF()[2], 0, 0.00000001);
+    EXPECT_NEAR(container.getParticleAt(1).getF()[0], 384, 0.00000001);
+    EXPECT_NEAR(container.getParticleAt(1).getF()[1], 0, 0.00000001);
+    EXPECT_NEAR(container.getParticleAt(1).getF()[2], 0, 0.00000001);
 }
 
 TEST_F(ForceComputationsTest, HarmonicPotentialDiagonalNeighborTest) {
@@ -146,13 +146,13 @@ TEST_F(ForceComputationsTest, HarmonicPotentialDiagonalNeighborTest) {
 
     ForceComputations::computeMembraneNeighborForce(container, 300, 2.2);
 
-    EXPECT_NEAR(container.getParticle(0).getF()[0], -360, 0.00000001);
-    EXPECT_NEAR(container.getParticle(0).getF()[1], -360, 0.00000001);
-    EXPECT_NEAR(container.getParticle(0).getF()[2], 0, 0.00000001);
+    EXPECT_NEAR(container.getParticleAt(0).getF()[0], -360, 0.00000001);
+    EXPECT_NEAR(container.getParticleAt(0).getF()[1], -360, 0.00000001);
+    EXPECT_NEAR(container.getParticleAt(0).getF()[2], 0, 0.00000001);
 
-    EXPECT_NEAR(container.getParticle(1).getF()[0], 360, 0.00000001);
-    EXPECT_NEAR(container.getParticle(1).getF()[1], 360, 0.00000001);
-    EXPECT_NEAR(container.getParticle(1).getF()[2], 0, 0.00000001);
+    EXPECT_NEAR(container.getParticleAt(1).getF()[0], 360, 0.00000001);
+    EXPECT_NEAR(container.getParticleAt(1).getF()[1], 360, 0.00000001);
+    EXPECT_NEAR(container.getParticleAt(1).getF()[2], 0, 0.00000001);
 }
 
 /**

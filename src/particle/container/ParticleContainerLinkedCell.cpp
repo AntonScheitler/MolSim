@@ -7,15 +7,15 @@
 #include "particle/iterator/particleIterator/ParticleIterator.h"
 #include "particle/iterator/particleIterator/ParticleIteratorNonFixedParticles.h"
 #include "spdlogConfig.h"
-#include <omp.h>
+
 
 ParticleContainerLinkedCell::ParticleContainerLinkedCell(std::array<double, 3> domainSizeArg, double cutoffRadiusArg,
-                                                         struct boundaryConfig boundaryConfigArg, size_t numThreads) {
+                                                         struct boundaryConfig boundaryConfigArg) {
     domainSize = domainSizeArg;
     cutoffRadius = cutoffRadiusArg;
     boundaryConfig = boundaryConfigArg;
     // initialize size for cells
-    cellSize = {cutoffRadius, cutoffRadius, cutoffRadius};
+    cellSize = {cutoffRadius, cutoffRadius, 1};
 
     // adjust cell size depending on the domain size
     for (int i = 0; i < 3; i++) {
@@ -41,7 +41,6 @@ ParticleContainerLinkedCell::ParticleContainerLinkedCell(std::array<double, 3> d
         }
     }
     computeNeighborCellsMatrix();
-    computeMeshPartition(numThreads);
 }
 
 void ParticleContainerLinkedCell::addParticle(const Particle &particle) {
@@ -210,44 +209,6 @@ void ParticleContainerLinkedCell::computeNeighborCellsMatrix() {
     }
 }
 
-void ParticleContainerLinkedCell::computeMeshPartition(size_t numThreads) {
-    size_t partitionLength = ceil((1.0 * numCells[0]) / numThreads);
-    meshPartition = {{}, {}};
-
-    // allocate partition for every thread
-    for (size_t p = 0; p < numThreads; p++) {
-        meshPartition.first.push_back({});
-        meshPartition.second.push_back({});
-    }
-
-    // don't create partitions if there are too many threads on too small of a domain
-    if (partitionLength < 3) {
-        for (Cell& cell : mesh) {
-            meshPartition.second[0].push_back(cell.getId());
-        }
-        return;
-    }
-
-    // create partition for each threanumd
-    for (size_t p = 0; p < numThreads; p++) {
-        for (int z = 0; z < numCells[2]; z++) {
-            for (int y = 0; y < numCells[1]; y++) {
-                // add all the cells to the partition
-                // adding/subtractin 1 from the start/end point excludes the border from the partition
-                for (int x = p * partitionLength + 1; x < std::min((p + 1) * partitionLength - 1, numCells[0] - 1); x++) {
-                    size_t cellIdx = x + (y * numCells[0]) + (z * numCells[0] * numCells[1]);
-                    meshPartition.first[p].push_back(cellIdx);
-                }
-                // add the border cells to a separate partition 
-                size_t leftBorderCellIdx = p * partitionLength + (y * numCells[0]) + (z * numCells[0] * numCells[1]);
-                size_t rightBorderCellIdx = std::min(((p + 1) * partitionLength - 1), numCells[0] - 1) + (y * numCells[0]) + (z * numCells[0] * numCells[1]);
-                meshPartition.second[p].push_back(leftBorderCellIdx);
-                meshPartition.second[(p + 1) % numThreads].push_back(rightBorderCellIdx);
-            }
-        }
-    }
-}
-
 std::vector<Cell> &ParticleContainerLinkedCell::getMesh() {
     return mesh;
 }
@@ -342,8 +303,8 @@ double ParticleContainerLinkedCell::getCutoffRadius() {
     return cutoffRadius;
 }
 
-Particle &ParticleContainerLinkedCell::getParticle(size_t particleIndex) {
-    return particles[particleIndex];
+Particle &ParticleContainerLinkedCell::getParticleAt(size_t particleIndex) {
+    return particles.at(particleIndex);
 }
 
 std::array<double, 3> ParticleContainerLinkedCell::getDomainSize() {
@@ -352,12 +313,4 @@ std::array<double, 3> ParticleContainerLinkedCell::getDomainSize() {
 
 struct boundaryConfig ParticleContainerLinkedCell::getBoundaryConfig() {
     return boundaryConfig;
-}
-
-std::vector<std::vector<size_t>>& ParticleContainerLinkedCell::getNeighborCellsMatrix() {
-    return neighborCellsMatrix;
-}
-
-std::pair<std::vector<std::vector<size_t>>, std::vector<std::vector<size_t>>>& ParticleContainerLinkedCell::getMeshPartition() {
-    return meshPartition;
 }

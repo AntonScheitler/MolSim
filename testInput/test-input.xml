@@ -6,9 +6,9 @@
         <t_end>50</t_end>
         <containerType>linked</containerType>
         <domainSize>
-            <x>50</x>
-            <y>50</y>
-            <z>50</z>
+            <x>40</x>
+            <y>40</y>
+            <z>40</z>
         </domainSize>
         <cutoff>3</cutoff>
         <boundary>
@@ -34,8 +34,8 @@
             </cornerCoordinates>
             <dimensions>
                 <x>10</x>
-                <y>10</y>
-                <z>10</z>
+                <y>11</y>
+                <z>12</z>
             </dimensions>
             <velocity>
                 <x>3</x>
@@ -56,8 +56,8 @@
             </cornerCoordinates>
             <dimensions>
                 <x>10</x>
-                <y>10</y>
-                <z>10</z>
+                <y>11</y>
+                <z>12</z>
             </dimensions>
             <velocity>
                 <x>7.7</x>

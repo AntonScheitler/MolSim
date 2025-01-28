@@ -28,11 +28,11 @@ namespace ParameterParser {
                     auto grav = xmlParser->parameters()->grav();
                     simData.setGrav({grav->x(), grav->y(), grav->z()});
                 }
-                if (xmlParser->parameters()->bin_profiling().present()) {
-                    if(xmlParser->parameters()->bin_profiling()->bin_number().present()) {
-                        simData.setBinNumber(xmlParser->parameters()->bin_profiling()->bin_number().get());
+                if (xmlParser->parameters()->bin_profile().present()){
+                    simData.setProfileIterationNumber(xmlParser->parameters()->bin_profile()->iteration());
+                    if(xmlParser->parameters()->bin_profile()->bin_number().present()){
+                        simData.setProfileBinNumber(xmlParser->parameters()->bin_profile()->bin_number().get());
                     }
-                    simData.setBinNumber(xmlParser->parameters()->bin_profiling()->iterations());
                 }
 
             }
@@ -64,7 +64,7 @@ namespace ParameterParser {
                 if(xmlParser->thermo()->version().present()) {
                     simData.setThermoVersion(xmlParser->thermo()->version().get());
                     SPDLOG_INFO("Using thermostat v{0}", simData.getThermoVersion());
-                }
+                } else SPDLOG_INFO("thermostat is disabled");
                 simData.activateThermostat();
                 simData.setInitialTemp(xmlParser->thermo()->init_T());
                 simData.setThermoFrequency(xmlParser->thermo()->n());

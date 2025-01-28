@@ -1,8 +1,6 @@
 #include "spdlogConfig.h"
 #include <simulation/SimulationData.h>
 
-#include "io/outputWriter/VTKWriter.h"
-
 
 /**
  * @brief a wrapper for running all simulations.
@@ -39,13 +37,6 @@ public:
      * @brief pointer to a function to run after a simulation
      */
     std::function<void(void)> after;
-
-    /**
-     * @brief formats the given chrono duration in to hours, minutes, seconds and milliseconds
-     * @param duration the duration to convert
-     * @return human-readable time string
-     */
-    std::string formatTime(std::chrono::duration<long, std::ratio<1, 1000>> duration);
 
 private:
     SimulationData &simData;

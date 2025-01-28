@@ -1,7 +1,6 @@
 #include "../src/particle/container/ParticleContainerDirectSum.h"
 #include <gtest/gtest.h>
 
-
 class ParticleContainerDirectSumTest : public testing::Test {
     protected:
         ParticleContainerDirectSum empty;
@@ -32,10 +31,11 @@ TEST_F(ParticleContainerDirectSumTest, EmptyParticleContainerDirectSumIteratorTe
  * order
  */
 TEST_F(ParticleContainerDirectSumTest, ParticleContainerDirectSumIteratorTest) {
-    double d = -1; // dummy value for x, v and m
-    for (Particle& particle : container){
-        EXPECT_TRUE(particle.getId() > d);
-        d = particle.getId();
+    double d = 0; // dummy value for x, v and m
+    for (Particle& particle : container) {
+        Particle otherParticle = Particle({d, d, d}, {d, d, d}, d);
+        EXPECT_TRUE(particle == otherParticle);
+        d++;
     }
 }
 

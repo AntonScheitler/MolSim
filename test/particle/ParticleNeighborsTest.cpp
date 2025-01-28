@@ -32,7 +32,7 @@ class ParticleNeighborsTest : public testing::Test {
 TEST_F(ParticleNeighborsTest, BottomLeftCornerStoresNeighborsCorrectly) {
 
     generateCuboidParticles();
-    Particle p = particles.getParticle(0);
+    Particle p = particles.getParticleAt(0);
 
     EXPECT_EQ(p.getNeighborIdx(left), -1);
     EXPECT_EQ(p.getNeighborIdx(bottom), -1);
@@ -49,7 +49,7 @@ TEST_F(ParticleNeighborsTest, BottomLeftCornerStoresNeighborsCorrectly) {
 TEST_F(ParticleNeighborsTest, MiddleStoresNeighborsCorrectly) {
 
     generateCuboidParticles();
-    Particle p = particles.getParticle(4);
+    Particle p = particles.getParticleAt(4);
 
     EXPECT_EQ(p.getNeighborIdx(left), 3);
     EXPECT_EQ(p.getNeighborIdx(bottom), 1);
@@ -65,7 +65,7 @@ TEST_F(ParticleNeighborsTest, MiddleStoresNeighborsCorrectly) {
 //Test upper middle
 TEST_F(ParticleNeighborsTest, UpperMiddleStoresNeighborsCorrectly) {
     generateCuboidParticles();
-    Particle p = particles.getParticle(7);
+    Particle p = particles.getParticleAt(7);
 
     EXPECT_EQ(p.getNeighborIdx(left), 6);
     EXPECT_EQ(p.getNeighborIdx(bottom), 4);

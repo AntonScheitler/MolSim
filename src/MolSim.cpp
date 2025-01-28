@@ -1,7 +1,6 @@
 #include "io/inputReader/TxtFileReader.h"
 #include "simulation/Simulator.h"
 #include "spdlogConfig.h"
-#include <omp.h>
 
 int main(int argc, char *argsv[]) {
     // default logging level

@@ -6,14 +6,12 @@
 #include "io/outputWriter/VTKWriter.h"
 #include <io/outputWriter/CheckpointWriter.h>
 #include "../io/outputWriter/VelocityDensityProfileWriter.h"
-#include "io/outputWriter/vtk-unstructured.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/spdlog.h"
 #include "particle/container/ParticleContainer.h"
 #include "particle/container/ParticleContainerLinkedCell.h"
 #include <chrono>
 #include <cstdlib>
-#include <string>
 
 Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
     // initialize thermostat update function
@@ -85,14 +83,8 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                 if (containerLinkedCell) {
                     containerLinkedCell->correctCellMembershipAllParticles();
                     ForceComputations::resetForces(simData.getParticles());
-                    // schlechter:
-                    //ForceComputations::computeLennardJonesPotentialCutoff(*containerLinkedCell, containerLinkedCell->getCutoffRadius());
-                    // besser:
-                    // ForceComputations::computeLennardJonesPotentialCutoffCellIter(*containerLinkedCell,
-                    //                                                       containerLinkedCell->getCutoffRadius());
-                    // noch besser?:
-                    ForceComputations::computeLennardJonesPotentialCutoffMeshPart(*containerLinkedCell,
-                                                                          containerLinkedCell->getCutoffRadius(), 4);
+                    ForceComputations::computeLennardJonesPotentialCutoff(*containerLinkedCell,
+                                                                          containerLinkedCell->getCutoffRadius());
 
 
                     SPDLOG_DEBUG("computing ghost particle repulsion...");
@@ -166,7 +158,6 @@ void Simulator::simulate() {
     size_t numIterations;
 
 
-
     if (simData.getBench()) {
         // overwrite logging settings
         spdlog::set_level(spdlog::level::info);
@@ -199,17 +190,11 @@ void Simulator::simulate() {
             // turn logging back on to communicate results
             spdlog::set_level(spdlog::level::info);
 
-            double ms = duration.count();
-
-            logger->info("Simulation no. {0} took {1} (total: {2} ms)", i + 1, formatTime(duration), ms);
-            logger->info("{0} particles updated per second", (numUpdatedParticles * 1000.0) / ms);
+            logger->info("Simulation no. {0} took {1} ms", i + 1, duration.count());
+            logger->info("{0} particles updated per second", (numUpdatedParticles * 1000.0) / duration.count());
             totalDuration += duration.count();
         }
-        long avg = totalDuration / numIterations;
-        auto avgTime = std::chrono::duration<long, std::ratio<1, 1000> >(avg);
-
-
-        logger->info("Simulation took on average: {0} (total average: {1} ms)", formatTime(avgTime), avg);
+        logger->info("Simulation took {0} ms on average", (totalDuration / numIterations));
         logger->info("=========================BENCH=========================");
     } else {
         runSimulationLoop();
@@ -239,18 +224,18 @@ size_t Simulator::runSimulationLoop() {
         SPDLOG_LOGGER_DEBUG(logger, "after step instruction.");
         iteration++;
 
-        //if (!simData.getBench()) {
         if (iteration % simData.getWriteFrequency() == 0 && !simData.getBench()) {
             // write output on every 10th iteration
             writer.plotParticles(simData.getParticles(), iteration);
         }
 
-        if (simData.getBinProfilingIterations() != -1 && iteration % simData.getBinProfilingIterations() == 0 && !simData.getBench()) {
-            // write output on every 10th iteration
+        if (simData.getProfileIterationNumber() != -1 && iteration % simData.getProfileIterationNumber() == 0 && !
+            simData.getBench()) {
+            // write velocity density profile each given number of iterations (e.g. 10k)
             try {
-                auto& linkedCellContainer = dynamic_cast<ParticleContainerLinkedCell&>(simData.getParticles());
-                profileWriter.profileBins(linkedCellContainer, iteration, simData.getBinNumber());
-            } catch (const std::bad_cast& e) {
+                auto &linkedCellContainer = dynamic_cast<ParticleContainerLinkedCell &>(simData.getParticles());
+                profileWriter.profileBins(linkedCellContainer, iteration, simData.getProfileBinNumber());
+            } catch (const std::bad_cast &e) {
                 SPDLOG_LOGGER_ERROR(logger, "ParticleContainer is not of type ParticleContainerLinkedCell: ", e.what());
             }
         }
@@ -270,17 +255,4 @@ size_t Simulator::runSimulationLoop() {
 
 Simulator::~Simulator() {
     spdlog::drop(logger->name());
-}
-
-std::string Simulator::formatTime(std::chrono::duration<long, std::ratio<1, 1000> > duration) {
-    auto h = std::chrono::duration_cast<std::chrono::hours>(duration);
-    duration -= h;
-    auto min = std::chrono::duration_cast<std::chrono::minutes>(duration);
-    duration -= min;
-    auto sec = std::chrono::duration_cast<std::chrono::seconds>(duration);
-    duration -= sec;
-    auto msLeft = std::chrono::duration_cast<std::chrono::milliseconds>(duration);
-
-    return std::to_string(h.count()) + "h " + std::to_string(min.count()) + "min " + std::to_string(sec.count()) +
-           "sec " + std::to_string(msLeft.count()) + "ms";
 }

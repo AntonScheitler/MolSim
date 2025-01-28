@@ -5,7 +5,10 @@
 #include "spdlogConfig.h"
 
 
+
+
 namespace inputReader {
+
     CheckpointReader::CheckpointReader(SimulationData &simulationDataArg) : simData(simulationDataArg) {
         this->logger = spdlog::stdout_color_st("CheckpointReader");
         SPDLOG_LOGGER_DEBUG(logger, "Initialized CheckpointReader");
@@ -14,6 +17,7 @@ namespace inputReader {
     CheckpointReader::~CheckpointReader() {
         spdlog::drop("CheckpointReader");
     }
+
 
     int CheckpointReader::readCheckpointFile(SimulationData &simData, const char *filename) {
         int maxType = 0;
@@ -30,16 +34,24 @@ namespace inputReader {
 
         int numParticles = 0;
 
+
+
+
+
+
         std::ifstream inputFile(filename);
         std::string tmpString;
 
+
         if (inputFile.is_open()) {
+
             getline(inputFile, tmpString);
             SPDLOG_LOGGER_DEBUG(logger, "Read line: {0}", tmpString);
             while (tmpString.empty() or tmpString[0] == '#') {
                 getline(inputFile, tmpString);
                 SPDLOG_LOGGER_DEBUG(logger, "Read line: {0}", tmpString);
             }
+
 
             std::istringstream numstream(tmpString);
             numstream >> numParticles;
@@ -92,8 +104,11 @@ namespace inputReader {
                 simData.getParticles().addParticle(p);
 
 
+
                 getline(inputFile, tmpString);
                 SPDLOG_LOGGER_DEBUG(logger, "Read line: {0}", tmpString);
+
+
             }
 
             SPDLOG_LOGGER_DEBUG(logger, "Successfully read {0} particles", simData.getParticles().size());
