@@ -6,6 +6,10 @@ file(GLOB_RECURSE SRCFILES
 )
 list(REMOVE_ITEM SRCFILES "${CMAKE_CURRENT_SOURCE_DIR}/MolSim.cpp")
 
+# add openmp
+find_package(OpenMP REQUIRED)
+
+
 # create library for all src files
 add_library(src ${SRCFILES})
 target_include_directories(src
@@ -18,6 +22,7 @@ target_link_libraries(src
     xerces-c
     spdlog::spdlog
     nlohmann_json::nlohmann_json
+    OpenMP::OpenMP_CXX
 )
 
 # create molsim executable

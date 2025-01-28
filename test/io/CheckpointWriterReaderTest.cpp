@@ -59,9 +59,9 @@ TEST_F(CheckpointWriterReaderTest, ParticleContainerIsTheSameAfterCheckpointing)
 
     int i = 0;
     for (Particle& particle : simulationData.getParticles()) {
-        EXPECT_TRUE(particle.getM() == particles.getParticleAt(i).getM());
-        EXPECT_TRUE(particle.getX() == particles.getParticleAt(i).getX());
-        EXPECT_TRUE(particle.getV() == particles.getParticleAt(i).getV());
+        EXPECT_TRUE(particle.getM() == particles.getParticle(i).getM());
+        EXPECT_TRUE(particle.getX() == particles.getParticle(i).getX());
+        EXPECT_TRUE(particle.getV() == particles.getParticle(i).getV());
         i++;
     }
 
