@@ -1,6 +1,7 @@
 #include "Cell.h"
 #include <algorithm>
 #include <bits/stdc++.h>
+#include <cmath>
 #include <cstdlib>
 #include "spdlog/spdlog.h"
 #include "spdlogConfig.h"
@@ -41,4 +42,8 @@ int Cell::size() {
 
 bool Cell::operator==(const Cell &other) {
     return cellId == other.cellId;
+}
+
+size_t Cell::getId() {
+    return cellId;
 }

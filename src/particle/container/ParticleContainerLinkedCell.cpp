@@ -15,7 +15,7 @@ ParticleContainerLinkedCell::ParticleContainerLinkedCell(std::array<double, 3> d
     cutoffRadius = cutoffRadiusArg;
     boundaryConfig = boundaryConfigArg;
     // initialize size for cells
-    cellSize = {cutoffRadius, cutoffRadius, 1};
+    cellSize = {cutoffRadius, cutoffRadius, cutoffRadius};
 
     // adjust cell size depending on the domain size
     for (int i = 0; i < 3; i++) {
@@ -212,21 +212,33 @@ void ParticleContainerLinkedCell::computeNeighborCellsMatrix() {
 std::pair<std::vector<std::vector<size_t>>, std::vector<size_t>> ParticleContainerLinkedCell::computeMeshPartitions(size_t numThreads) {
     size_t partitionLength = ceil((1.0 * numCells[0]) / numThreads);
     std::pair<std::vector<std::vector<size_t>>, std::vector<size_t>> partitions = {{}, {}};
-    // create partition for each thread
+
+    // allocate partition for every thread
     for (size_t p = 0; p < numThreads; p++) {
         partitions.first.push_back({});
-        // subtracting 2 from the end point excludes the border from the partition
+    }
+
+    // don't create partitions if the domain is too small  
+    if (partitionLength < 2) {
+        for (Cell& cell : mesh) {
+            partitions.second.push_back(cell.getId());
+        }
+        return partitions;
+    }
+
+    // create partition for each threanumd
+    for (size_t p = 0; p < numThreads; p++) {
         for (int z = 0; z < numCells[2]; z++) {
             for (int y = 0; y < numCells[1]; y++) {
                 // add all the cells to the partition
+                // adding/subtractin 1 from the start/end point excludes the border from the partition
                 for (int x = p * partitionLength + 1; x < std::min((p + 1) * partitionLength - 1, numCells[0] - 1); x++) {
                     size_t cellIdx = x + (y * numCells[0]) + (z * numCells[0] * numCells[1]);
                     partitions.first[p].push_back(cellIdx);
                 }
-                // add the border cells to the partition border
+                // add the border cells to a separate partition 
                 size_t leftBorderCellIdx = p * partitionLength + (y * numCells[0]) + (z * numCells[0] * numCells[1]);
-                size_t rightBorderCellIdx = std::min(((p + 1) * partitionLength - 1), numCells[0] - 1) + 
-                    (y * numCells[0]) + (z * numCells[0] * numCells[1]);
+                size_t rightBorderCellIdx = std::min(((p + 1) * partitionLength - 1), numCells[0] - 1) + (y * numCells[0]) + (z * numCells[0] * numCells[1]);
                 partitions.second.push_back(leftBorderCellIdx);
                 partitions.second.push_back(rightBorderCellIdx);
             }

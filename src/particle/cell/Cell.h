@@ -48,9 +48,16 @@ public:
     bool operator==(const Cell &other);
 
     /**
+     * @brief returns the id of this cell
+     * @return the id of this cell
+     */
+    size_t getId();
+
+    /**
      * @brief the flag which specifies whether this cell is a boundary cell
      */
     bool isBoundary;
+
 
 private:
     /**
