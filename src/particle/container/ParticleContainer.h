@@ -52,4 +52,10 @@ public:
      * @return the end of the non-fixed-particle iterator
      */
     virtual ParticleIteratorNonFixedParticles endNonFixedParticles() = 0;
+
+    /**
+     * @brief returns the particle at the specified index
+     * @param index the index of the particle to return
+     */
+    virtual Particle& getParticle(size_t index) = 0;
 };

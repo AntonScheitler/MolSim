@@ -1,11 +1,13 @@
 #include "../../utils/ArrayUtils.h"
 #include "particle/Particle.h"
 #include "PositionComputations.h"
+#include <omp.h>
 
 void PositionComputations::stoermerVerlet(ParticleContainer& particles, double deltaT) {
-    for (auto it = particles.beginNonFixedParticles(); it != particles.endNonFixedParticles(); ++it) {
-        Particle& particle = *it;
-        if(particle.isFixed()) continue; // TODO: maybe don't even return fixed particles in the iterator
+    #pragma omp parallel for
+    for (size_t i = 0; i < particles.size(); i++) {
+        Particle& particle = particles.getParticle(i);
+        if(particle.isFixed() || (!particle.getActive())) continue;
         // position calculation based on the Stoermer-Verlet formula
         std::array<double, 3> posFromVel = ArrayUtils::elementWiseScalarOp( deltaT, particle.getV(), std::multiplies<>());
         std::array<double, 3> acc = ArrayUtils::elementWiseScalarOp( (1.0 / (2 * particle.getM())), particle.getF(), std::multiplies<>());
@@ -16,8 +18,10 @@ void PositionComputations::stoermerVerlet(ParticleContainer& particles, double d
 }
 
 void PositionComputations::updateOldX(ParticleContainer &particles) {
-    for (auto it = particles.beginNonFixedParticles(); it != particles.endNonFixedParticles(); ++it) {
-        Particle& particle = *it;
+    #pragma omp parallel for
+    for (size_t i = 0; i < particles.size(); i++) {
+        Particle& particle = particles.getParticle(i);
+        if (!(particle.getActive())) continue;
         particle.setOldX(particle.getX());
     }
 }

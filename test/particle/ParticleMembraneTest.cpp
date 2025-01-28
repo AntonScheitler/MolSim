@@ -64,13 +64,13 @@ TEST_F(ParticleMembraneTest, ParticleMembraneNeighborIterationTest) {
     for (Particle& particle : container) {
         for (int directIdx : particle.getAllDirectNeighborIndices()) {
             if (directIdx != -1) {
-                pairsSet.insert(std::make_pair(particle, container.getParticleAt(directIdx)));
+                pairsSet.insert(std::make_pair(particle, container.getParticle(directIdx)));
             }
         }
 
         for (int diagIdx : particle.getAllDiagonalNeighborIndices()) {
             if (diagIdx != -1) {
-                pairsSet.insert(std::make_pair(particle, container.getParticleAt(diagIdx)));
+                pairsSet.insert(std::make_pair(particle, container.getParticle(diagIdx)));
             }
         }
     }

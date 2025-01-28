@@ -28,9 +28,9 @@ SimulationData::SimulationData() {
     thermostat = false;
     thermoVersion = 1; // TODO: default thermo version for testing purpose set to 2
     numberDimensions = 2; //default 2, will be set by XMLFileReader
-
-    binNumber = 50;
-    profileIterationNumber = -1;
+    numberBins = 50;
+    binProfilingIterations = -1;
+    movingMembranePartIndices = std::vector<size_t>(); // default empty vector
 
 }
 
@@ -338,18 +338,18 @@ int SimulationData::getNumberDimensions() {
     return numberDimensions;
 }
 
-void SimulationData::setProfileBinNumber(int binNumberArg) {
-    this->binNumber = binNumberArg;
+void SimulationData::setBinNumber(int numberBinArg) {
+    this->numberBins = numberBinArg;
 }
 
-int SimulationData::getProfileBinNumber() {
-    return binNumber;
+int SimulationData::getBinNumber() {
+    return numberBins;
 }
 
-void SimulationData::setProfileIterationNumber(int iterationArg) {
-    this->profileIterationNumber = iterationArg;
+void SimulationData::setBinProfilingIterations(int iterationArg) {
+    this->binProfilingIterations = iterationArg;
 }
 
-int SimulationData::getProfileIterationNumber() {
-    return profileIterationNumber;
+int SimulationData::getBinProfilingIterations() {
+    return binProfilingIterations;
 }
