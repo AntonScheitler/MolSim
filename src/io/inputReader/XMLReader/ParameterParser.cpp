@@ -33,6 +33,9 @@ namespace ParameterParser {
                     if(xmlParser->parameters()->bin_profile()->bin_number().present()){
                         simData.setProfileBinNumber(xmlParser->parameters()->bin_profile()->bin_number().get());
                     }
+                    if(xmlParser->parameters()->bin_profile()->base_name().present()){
+                        simData.setProfilingBaseName(xmlParser->parameters()->bin_profile()->base_name().get());
+                    }
                 }
 
             }

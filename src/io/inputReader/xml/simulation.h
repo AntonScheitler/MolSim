@@ -1418,26 +1418,26 @@ class bin_profile: public ::xml_schema::type
   void
   bin_number (const bin_number_optional& x);
 
-  // baseName
+  // base_name
   //
-  typedef ::xml_schema::string baseName_type;
-  typedef ::xsd::cxx::tree::optional< baseName_type > baseName_optional;
-  typedef ::xsd::cxx::tree::traits< baseName_type, char > baseName_traits;
+  typedef ::xml_schema::string base_name_type;
+  typedef ::xsd::cxx::tree::optional< base_name_type > base_name_optional;
+  typedef ::xsd::cxx::tree::traits< base_name_type, char > base_name_traits;
 
-  const baseName_optional&
-  baseName () const;
+  const base_name_optional&
+  base_name () const;
 
-  baseName_optional&
-  baseName ();
-
-  void
-  baseName (const baseName_type& x);
+  base_name_optional&
+  base_name ();
 
   void
-  baseName (const baseName_optional& x);
+  base_name (const base_name_type& x);
 
   void
-  baseName (::std::unique_ptr< baseName_type > p);
+  base_name (const base_name_optional& x);
+
+  void
+  base_name (::std::unique_ptr< base_name_type > p);
 
   // Constructors.
   //
@@ -1471,7 +1471,7 @@ class bin_profile: public ::xml_schema::type
   protected:
   ::xsd::cxx::tree::one< iteration_type > iteration_;
   bin_number_optional bin_number_;
-  baseName_optional baseName_;
+  base_name_optional base_name_;
 };
 
 class particle: public ::xml_schema::type
