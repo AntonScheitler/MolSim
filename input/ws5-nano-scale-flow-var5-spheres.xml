@@ -100,12 +100,13 @@
             <epsilon>1.0</epsilon>
             <sigma>1.0</sigma>
         </cuboid>
+
         <disc>
-<!--            collision sphere in the middle of the nano tube-->
+            <!-- collision sphere in the middle of the nano tube-->
             <center>
                 <x>15</x>
                 <y>15</y>
-                <z>0</z>
+                <z>1</z>
             </center>
             <velocity>
                 <x>0</x>
@@ -114,9 +115,46 @@
             </velocity>
             <mass>1.0</mass>
             <meshWidth>1.2</meshWidth>
-            <radius>2</radius>
+            <radius>4</radius>
             <fixed>true</fixed>
         </disc>
+
+        <disc>
+            <!-- collision sphere in the middle of the nano tube-->
+            <center>
+                <x>15</x>
+                <y>15</y>
+                <z>2</z>
+            </center>
+            <velocity>
+                <x>0</x>
+                <y>0</y>
+                <z>0</z>
+            </velocity>
+            <mass>1.0</mass>
+            <meshWidth>1.2</meshWidth>
+            <radius>4</radius>
+            <fixed>true</fixed>
+        </disc>
+
+        <disc>
+            <!-- collision sphere in the middle of the nano tube-->
+            <center>
+                <x>15</x>
+                <y>15</y>
+                <z>3</z>
+            </center>
+            <velocity>
+                <x>0</x>
+                <y>0</y>
+                <z>0</z>
+            </velocity>
+            <mass>1.0</mass>
+            <meshWidth>1.2</meshWidth>
+            <radius>4</radius>
+            <fixed>true</fixed>
+        </disc>
+
     </clusters>
     <thermo>
         <version>2</version>

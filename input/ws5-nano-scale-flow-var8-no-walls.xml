@@ -23,6 +23,9 @@
             <y>-0.8</y>
             <z>0</z>
         </grav>
+        <bin_profile>
+            <iteration>5000</iteration>
+        </bin_profile>
     </parameters>
     <clusters>
         <cuboid>
