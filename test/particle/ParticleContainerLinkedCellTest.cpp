@@ -517,13 +517,15 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellDiagonalBound
 }
 
 TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellMeshPartitionTest)  {
-    ParticleContainerLinkedCell container{{6, 3, 1}, 1, {{reflect, reflect}, {reflect, reflect}, {outflow, outflow}}};
-    auto matrixPair = container.computeMeshPartitions(2);
+    ParticleContainerLinkedCell container{{6, 3, 1}, 1, {{reflect, reflect}, {reflect, reflect}, {outflow, outflow}}, 2};
+    auto matrixPair = container.getMeshPartition();
     std::vector<size_t> p1 = {1, 7, 13};
     std::vector<size_t> p2 = {4, 10, 16};
-    std::vector<size_t> b = {0, 2, 6, 8, 12, 14, 3, 5, 9, 11, 15, 17};
+    std::vector<size_t> b1 = {0, 6, 12, 5, 11, 17};
+    std::vector<size_t> b2 = {2, 8, 14, 3, 9, 15};
     EXPECT_TRUE(matrixPair.first.size() == 2);
     EXPECT_TRUE(matrixPair.first[0] == p1);
     EXPECT_TRUE(matrixPair.first[1] == p2);
-    EXPECT_TRUE(matrixPair.second == b);
+    EXPECT_TRUE(matrixPair.second[0] == b1);
+    EXPECT_TRUE(matrixPair.second[1] == b2);
 }
