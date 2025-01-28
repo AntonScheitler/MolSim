@@ -346,7 +346,7 @@ class vectorType: public ::xml_schema::type
   vectorType&
   operator= (const vectorType& x);
 
-  virtual
+  virtual 
   ~vectorType ();
 
   // Implementation.
@@ -487,7 +487,7 @@ class simulation: public ::xml_schema::type
   simulation&
   operator= (const simulation& x);
 
-  virtual
+  virtual 
   ~simulation ();
 
   // Implementation.
@@ -584,7 +584,7 @@ class output: public ::xml_schema::type
   output&
   operator= (const output& x);
 
-  virtual
+  virtual 
   ~output ();
 
   // Implementation.
@@ -856,7 +856,7 @@ class parameters: public ::xml_schema::type
   parameters&
   operator= (const parameters& x);
 
-  virtual
+  virtual 
   ~parameters ();
 
   // Implementation.
@@ -954,7 +954,7 @@ class clusters: public ::xml_schema::type
   clusters&
   operator= (const clusters& x);
 
-  virtual
+  virtual 
   ~clusters ();
 
   // Implementation.
@@ -1075,7 +1075,7 @@ class thermo: public ::xml_schema::type
   thermo&
   operator= (const thermo& x);
 
-  virtual
+  virtual 
   ~thermo ();
 
   // Implementation.
@@ -1166,7 +1166,7 @@ class membraneArgs: public ::xml_schema::type
   membraneArgs&
   operator= (const membraneArgs& x);
 
-  virtual
+  virtual 
   ~membraneArgs ();
 
   // Implementation.
@@ -1311,7 +1311,7 @@ class boundary: public ::xml_schema::type
   boundary&
   operator= (const boundary& x);
 
-  virtual
+  virtual 
   ~boundary ();
 
   // Implementation.
@@ -1369,7 +1369,7 @@ class import_checkpoint: public ::xml_schema::type
   import_checkpoint&
   operator= (const import_checkpoint& x);
 
-  virtual
+  virtual 
   ~import_checkpoint ();
 
   // Implementation.
@@ -1418,6 +1418,27 @@ class bin_profile: public ::xml_schema::type
   void
   bin_number (const bin_number_optional& x);
 
+  // baseName
+  //
+  typedef ::xml_schema::string baseName_type;
+  typedef ::xsd::cxx::tree::optional< baseName_type > baseName_optional;
+  typedef ::xsd::cxx::tree::traits< baseName_type, char > baseName_traits;
+
+  const baseName_optional&
+  baseName () const;
+
+  baseName_optional&
+  baseName ();
+
+  void
+  baseName (const baseName_type& x);
+
+  void
+  baseName (const baseName_optional& x);
+
+  void
+  baseName (::std::unique_ptr< baseName_type > p);
+
   // Constructors.
   //
   bin_profile (const iteration_type&);
@@ -1437,7 +1458,7 @@ class bin_profile: public ::xml_schema::type
   bin_profile&
   operator= (const bin_profile& x);
 
-  virtual
+  virtual 
   ~bin_profile ();
 
   // Implementation.
@@ -1450,6 +1471,7 @@ class bin_profile: public ::xml_schema::type
   protected:
   ::xsd::cxx::tree::one< iteration_type > iteration_;
   bin_number_optional bin_number_;
+  baseName_optional baseName_;
 };
 
 class particle: public ::xml_schema::type
@@ -1582,7 +1604,7 @@ class particle: public ::xml_schema::type
   particle&
   operator= (const particle& x);
 
-  virtual
+  virtual 
   ~particle ();
 
   // Implementation.
@@ -1763,7 +1785,7 @@ class disc: public ::xml_schema::type
   disc&
   operator= (const disc& x);
 
-  virtual
+  virtual 
   ~disc ();
 
   // Implementation.
@@ -1982,7 +2004,7 @@ class cuboid: public ::xml_schema::type
   cuboid&
   operator= (const cuboid& x);
 
-  virtual
+  virtual 
   ~cuboid ();
 
   // Implementation.
@@ -2120,14 +2142,14 @@ operator<< (::xercesc::DOMElement&, const vectorType&);
 
 void
 simulation_ (::std::ostream& os,
-             const ::simulation& x,
+             const ::simulation& x, 
              const ::xml_schema::namespace_infomap& m = ::xml_schema::namespace_infomap (),
              const ::std::string& e = "UTF-8",
              ::xml_schema::flags f = 0);
 
 void
 simulation_ (::std::ostream& os,
-             const ::simulation& x,
+             const ::simulation& x, 
              ::xml_schema::error_handler& eh,
              const ::xml_schema::namespace_infomap& m = ::xml_schema::namespace_infomap (),
              const ::std::string& e = "UTF-8",
@@ -2135,7 +2157,7 @@ simulation_ (::std::ostream& os,
 
 void
 simulation_ (::std::ostream& os,
-             const ::simulation& x,
+             const ::simulation& x, 
              ::xercesc::DOMErrorHandler& eh,
              const ::xml_schema::namespace_infomap& m = ::xml_schema::namespace_infomap (),
              const ::std::string& e = "UTF-8",
@@ -2146,14 +2168,14 @@ simulation_ (::std::ostream& os,
 
 void
 simulation_ (::xercesc::XMLFormatTarget& ft,
-             const ::simulation& x,
+             const ::simulation& x, 
              const ::xml_schema::namespace_infomap& m = ::xml_schema::namespace_infomap (),
              const ::std::string& e = "UTF-8",
              ::xml_schema::flags f = 0);
 
 void
 simulation_ (::xercesc::XMLFormatTarget& ft,
-             const ::simulation& x,
+             const ::simulation& x, 
              ::xml_schema::error_handler& eh,
              const ::xml_schema::namespace_infomap& m = ::xml_schema::namespace_infomap (),
              const ::std::string& e = "UTF-8",
@@ -2161,7 +2183,7 @@ simulation_ (::xercesc::XMLFormatTarget& ft,
 
 void
 simulation_ (::xercesc::XMLFormatTarget& ft,
-             const ::simulation& x,
+             const ::simulation& x, 
              ::xercesc::DOMErrorHandler& eh,
              const ::xml_schema::namespace_infomap& m = ::xml_schema::namespace_infomap (),
              const ::std::string& e = "UTF-8",
@@ -2179,7 +2201,7 @@ simulation_ (::xercesc::DOMDocument& d,
 //
 
 ::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument >
-simulation_ (const ::simulation& x,
+simulation_ (const ::simulation& x, 
              const ::xml_schema::namespace_infomap& m = ::xml_schema::namespace_infomap (),
              ::xml_schema::flags f = 0);
 

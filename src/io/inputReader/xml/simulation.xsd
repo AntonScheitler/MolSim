@@ -66,6 +66,7 @@
                                     <xsd:sequence>
                                         <xsd:element name="iteration" type="xsd:int" />
                                         <xsd:element name="bin_number" type="xsd:int" minOccurs="0"/>
+                                        <xsd:element name="baseName" type="xsd:string" minOccurs="0"/>
                                     </xsd:sequence>
                                 </xsd:complexType>
                             </xsd:element>

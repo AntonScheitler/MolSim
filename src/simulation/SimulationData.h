@@ -333,6 +333,16 @@ public:
     */
     int getProfileIterationNumber();
 
+    /**
+    * @brief set the baseName for the profiling csv-file
+    * @param baseNameArg file-name
+    */
+    void setProfilingBaseName(std::string baseNameArg);
+
+    /**
+    * @param returns the baseName for the profiling csv-file
+    */
+    std::string getProfilingBaseName();
 private:
     SimulationType simType;
     double startTime;
@@ -368,4 +378,6 @@ private:
 
     int profileIterationNumber;
     int binNumber;
+
+    std::string profilingBaseName;
 };
