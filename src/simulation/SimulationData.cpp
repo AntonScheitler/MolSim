@@ -32,6 +32,8 @@ SimulationData::SimulationData() {
     binProfilingIterations = -1;
     movingMembranePartIndices = std::vector<size_t>(); // default empty vector
 
+    threadVersion = -1; // no parallelization
+    numberThreads = 4;
 }
 
 int SimulationData::parseOptions(int argc, char *argsv[]) {
@@ -352,4 +354,20 @@ void SimulationData::setBinProfilingIterations(int iterationArg) {
 
 int SimulationData::getBinProfilingIterations() {
     return binProfilingIterations;
+}
+
+int SimulationData::getNumberThreads() {
+    return numberThreads;
+}
+
+void SimulationData::setNumberThreads(int numThreadsArg) {
+    this->numberThreads = numThreadsArg;
+}
+
+void SimulationData::setThreadVersion(int threadVersionArg) {
+    this->threadVersion = threadVersionArg;
+}
+
+int SimulationData::getThreadVersion() {
+    return threadVersion;
 }

@@ -31,8 +31,8 @@
 // in the accompanying FLOSSE file.
 //
 
-#ifndef SRC_IO_INPUT_READER_XML_SIMULATION_H
-#define SRC_IO_INPUT_READER_XML_SIMULATION_H
+#ifndef SRC_IO_INPUT_READER_XMLREADER_XML_SIMULATION_H
+#define SRC_IO_INPUT_READER_XMLREADER_XML_SIMULATION_H
 
 #ifndef XSD_CXX11
 #define XSD_CXX11
@@ -259,6 +259,7 @@ class parameters;
 class clusters;
 class thermo;
 class membraneArgs;
+class parallelization;
 class boundary;
 class import_checkpoint;
 class bin_profiling;
@@ -466,6 +467,27 @@ class simulation: public ::xml_schema::type
   void
   membraneArgs (::std::unique_ptr< membraneArgs_type > p);
 
+  // parallelization
+  //
+  typedef ::parallelization parallelization_type;
+  typedef ::xsd::cxx::tree::optional< parallelization_type > parallelization_optional;
+  typedef ::xsd::cxx::tree::traits< parallelization_type, char > parallelization_traits;
+
+  const parallelization_optional&
+  parallelization () const;
+
+  parallelization_optional&
+  parallelization ();
+
+  void
+  parallelization (const parallelization_type& x);
+
+  void
+  parallelization (const parallelization_optional& x);
+
+  void
+  parallelization (::std::unique_ptr< parallelization_type > p);
+
   // Constructors.
   //
   simulation (const clusters_type&);
@@ -503,6 +525,7 @@ class simulation: public ::xml_schema::type
   ::xsd::cxx::tree::one< clusters_type > clusters_;
   thermo_optional thermo_;
   membraneArgs_optional membraneArgs_;
+  parallelization_optional parallelization_;
 };
 
 class output: public ::xml_schema::type
@@ -1180,6 +1203,75 @@ class membraneArgs: public ::xml_schema::type
   ::xsd::cxx::tree::one< r0_type > r0_;
   ::xsd::cxx::tree::one< k_type > k_;
   ::xsd::cxx::tree::one< customForce_type > customForce_;
+};
+
+class parallelization: public ::xml_schema::type
+{
+  public:
+  // strategy
+  //
+  typedef ::xml_schema::int_ strategy_type;
+  typedef ::xsd::cxx::tree::traits< strategy_type, char > strategy_traits;
+
+  const strategy_type&
+  strategy () const;
+
+  strategy_type&
+  strategy ();
+
+  void
+  strategy (const strategy_type& x);
+
+  // threadNumber
+  //
+  typedef ::xml_schema::int_ threadNumber_type;
+  typedef ::xsd::cxx::tree::optional< threadNumber_type > threadNumber_optional;
+  typedef ::xsd::cxx::tree::traits< threadNumber_type, char > threadNumber_traits;
+
+  const threadNumber_optional&
+  threadNumber () const;
+
+  threadNumber_optional&
+  threadNumber ();
+
+  void
+  threadNumber (const threadNumber_type& x);
+
+  void
+  threadNumber (const threadNumber_optional& x);
+
+  // Constructors.
+  //
+  parallelization (const strategy_type&);
+
+  parallelization (const ::xercesc::DOMElement& e,
+                   ::xml_schema::flags f = 0,
+                   ::xml_schema::container* c = 0);
+
+  parallelization (const parallelization& x,
+                   ::xml_schema::flags f = 0,
+                   ::xml_schema::container* c = 0);
+
+  virtual parallelization*
+  _clone (::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0) const;
+
+  parallelization&
+  operator= (const parallelization& x);
+
+  virtual 
+  ~parallelization ();
+
+  // Implementation.
+  //
+  protected:
+  void
+  parse (::xsd::cxx::xml::dom::parser< char >&,
+         ::xml_schema::flags);
+
+  protected:
+  ::xsd::cxx::tree::one< strategy_type > strategy_;
+  threadNumber_optional threadNumber_;
 };
 
 class boundary: public ::xml_schema::type
@@ -2202,6 +2294,9 @@ void
 operator<< (::xercesc::DOMElement&, const membraneArgs&);
 
 void
+operator<< (::xercesc::DOMElement&, const parallelization&);
+
+void
 operator<< (::xercesc::DOMElement&, const boundary&);
 
 void
@@ -2226,4 +2321,4 @@ operator<< (::xercesc::DOMElement&, const cuboid&);
 //
 // End epilogue.
 
-#endif // SRC_IO_INPUT_READER_XML_SIMULATION_H
+#endif // SRC_IO_INPUT_READER_XMLREADER_XML_SIMULATION_H

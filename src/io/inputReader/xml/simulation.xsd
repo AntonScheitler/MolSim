@@ -173,6 +173,17 @@
                     </xsd:complexType>
                 </xsd:element>
 
+                <xsd:element name="parallelization" minOccurs="0">
+                    <xsd:complexType>
+                        <xsd:sequence>
+
+                            <xsd:element name="strategy" type="xsd:int" />
+                            <xsd:element name="threadNumber" type="xsd:int" minOccurs="0"/>
+
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>

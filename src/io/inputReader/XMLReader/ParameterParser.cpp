@@ -1,7 +1,7 @@
 #include "ParameterParser.h"
-#include "io/inputReader/xml/simulation.h"
 #include "simulation/SimulationData.h"
 #include <iostream>
+#include "io/inputReader/xml/simulation.h"
 
 
 namespace ParameterParser {
@@ -100,5 +100,24 @@ namespace ParameterParser {
             SPDLOG_ERROR("Standard exception: {0}", e.what());
             exit(EXIT_FAILURE);
         }
+    }
+
+    void readParallelization(SimulationData &simData, const std::unique_ptr<simulation> &xmlParser) {
+
+        try {
+            if (xmlParser->parallelization().present()) {
+                simData.setThreadVersion(xmlParser->parallelization()->strategy());
+                if (xmlParser->parallelization()->threadNumber().present()) {
+                    simData.setNumberThreads(xmlParser->parallelization()->threadNumber().get());
+                }
+            }
+        } catch (const xml_schema::exception &e) {
+            SPDLOG_ERROR("XML parsing error: {0}", e.what());
+            exit(EXIT_FAILURE);
+        } catch (const std::exception &e) {
+            SPDLOG_ERROR("Standard exception: {0}", e.what());
+            exit(EXIT_FAILURE);
+        }
+
     }
 }

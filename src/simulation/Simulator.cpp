@@ -70,11 +70,23 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                 if (containerLinkedCell) {
                     containerLinkedCell->correctCellMembershipAllParticles();
                     ForceComputations::resetForces(simData.getParticles());
+
+
+                    switch(simData.getThreadVersion()) {
+                        case 0:
+                            ForceComputations::computeLennardJonesPotentialCutoffMeshPart(*containerLinkedCell,containerLinkedCell->getCutoffRadius(), simData.getNumberThreads());
+                            break;
+                        case 1:
+                            ForceComputations::computeLennardJonesPotentialCutoffCellIter(*containerLinkedCell,
+                                                                                          containerLinkedCell->getCutoffRadius());
+                            break;
+                        default:
+                            ForceComputations::computeLennardJonesPotentialCutoff(*containerLinkedCell, containerLinkedCell->getCutoffRadius());
+                    }
                     // schlechter:
                     //ForceComputations::computeLennardJonesPotentialCutoff(*containerLinkedCell, containerLinkedCell->getCutoffRadius());
                     // besser:
-                    ForceComputations::computeLennardJonesPotentialCutoffCellIter(*containerLinkedCell,
-                                                                          containerLinkedCell->getCutoffRadius());
+                    //ForceComputations::computeLennardJonesPotentialCutoffCellIter(*containerLinkedCell,containerLinkedCell->getCutoffRadius());
                     // noch besser?:
                     //ForceComputations::computeLennardJonesPotentialCutoffMeshPart(*containerLinkedCell,
                     //                                                      containerLinkedCell->getCutoffRadius(), 4);
