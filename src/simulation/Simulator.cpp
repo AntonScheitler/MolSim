@@ -79,22 +79,30 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
 
                     VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
 
-
+                    // apply thermostat
                     if (simData.isThermostat() && iteration % simData.getThermoFrequency() == 0) {
-                        // calculate current temperature of system
-                        // TODO: choose correct thermostat (or use only v2 in future?)
-                        if (simData.getThermoVersion() == 2) {
-                            TemperatureComputations::updateTempV2(simData.getParticles(), simData.getTargetTemp(),
-                                                                  simData.getMaxDeltaTemp(),
-                                                                  simData.getNumberDimensions());
-                        } else {
-                            TemperatureComputations::updateTemp(simData.getParticles(), simData.getTargetTemp(),
-                                                                simData.getMaxDeltaTemp(),
-                                                                simData.getNumberDimensions());
+                        switch (simData.getThermoVersion()) {
+                            case 1: TemperatureComputations::updateTemp(simData.getParticles(), simData.getTargetTemp(),
+                                                                        simData.getMaxDeltaTemp(),
+                                                                        simData.getNumberDimensions());
+                                break;
+                            case 2: TemperatureComputations::updateTempV2(
+                                    simData.getParticles(), simData.getTargetTemp(),
+                                    simData.getMaxDeltaTemp(),
+                                    simData.getNumberDimensions());
+                                break;
+                            case 3: TemperatureComputations::updateTempV3(
+                                    simData.getParticles(), simData.getTargetTemp(),
+                                    simData.getMaxDeltaTemp(),
+                                    simData.getNumberDimensions());
+                                break;
+                            default: SPDLOG_LOGGER_ERROR(logger, "Unknown thermostat version {0}",
+                                                         simData.getThermoVersion());
+                                exit(EXIT_FAILURE);
                         }
                     }
                 } else {
-                    SPDLOG_ERROR("Linked Cell Simulation is not using Linked Cell Container. Aborting...");
+                    SPDLOG_LOGGER_ERROR(logger, "Linked Cell Simulation is not using Linked Cell Container. Aborting...");
                     exit(EXIT_FAILURE);
                 }
             };
@@ -133,7 +141,7 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
 
                     VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
                 } else {
-                    SPDLOG_ERROR("Membrane simulation is not using Linked Cell Container. Aborting...");
+                    SPDLOG_LOGGER_ERROR(logger, "Membrane simulation is not using Linked Cell Container. Aborting...");
                     exit(EXIT_FAILURE);
                 }
             };
@@ -148,7 +156,6 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
 void Simulator::simulate() {
     std::chrono::high_resolution_clock::rep totalDuration;
     size_t numIterations;
-
 
 
     if (simData.getBench()) {
@@ -202,8 +209,9 @@ size_t Simulator::runSimulationLoop() {
     outputWriter::VTKWriter writer(simData.getBaseName());
     outputWriter::VelocityDensityProfileWriter profileWriter("profile");
 
-    SPDLOG_LOGGER_INFO(logger, "delta_t={0}, t_end={1}, total number of iterations: {2}", simData.getDeltaT(), simData.getEndTime(),
-                simData.getEndTime() / simData.getDeltaT());
+    SPDLOG_LOGGER_INFO(logger, "delta_t={0}, t_end={1}, total number of iterations: {2}", simData.getDeltaT(),
+                       simData.getEndTime(),
+                       simData.getEndTime() / simData.getDeltaT());
     SPDLOG_LOGGER_INFO(logger, "Starting simulation...");
 
     before();
@@ -221,12 +229,13 @@ size_t Simulator::runSimulationLoop() {
             writer.plotParticles(simData.getParticles(), iteration);
         }
 
-        if (simData.getProfileIterationNumber() != -1 && iteration % simData.getProfileIterationNumber() == 0 && !simData.getBench()) {
+        if (simData.getProfileIterationNumber() != -1 && iteration % simData.getProfileIterationNumber() == 0 && !
+            simData.getBench()) {
             // write velocity density profile each given number of iterations (e.g. 10k)
             try {
-                auto& linkedCellContainer = dynamic_cast<ParticleContainerLinkedCell&>(simData.getParticles());
+                auto &linkedCellContainer = dynamic_cast<ParticleContainerLinkedCell &>(simData.getParticles());
                 profileWriter.profileBins(linkedCellContainer, iteration, simData.getProfileBinNumber());
-            } catch (const std::bad_cast& e) {
+            } catch (const std::bad_cast &e) {
                 SPDLOG_LOGGER_ERROR(logger, "ParticleContainer is not of type ParticleContainerLinkedCell: ", e.what());
             }
         }

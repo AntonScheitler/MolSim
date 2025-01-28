@@ -15,6 +15,19 @@ void TemperatureComputations::initTemp(ParticleContainer &particles, double init
     }
 }
 
+double TemperatureComputations::calculateVelocityScalingVector(double currentTemp, double targetTemp,
+                                                               double maxDeltaTemp) {
+    double newTemp;
+    if (targetTemp > currentTemp) {
+        newTemp = std::min(currentTemp + maxDeltaTemp, targetTemp);
+    } else {
+        newTemp = std::max(currentTemp - maxDeltaTemp, targetTemp);
+    }
+
+    // temperature scaling factor
+    return currentTemp == 0 ? 1 : sqrt(newTemp / currentTemp);
+}
+
 double TemperatureComputations::calculateCurrentSystemTemp(ParticleContainer &particles, int dimensions) {
     double temp = 0;
     for (auto it = particles.beginNonFixedParticles(); it != particles.endNonFixedParticles(); ++it) {
@@ -30,19 +43,14 @@ double TemperatureComputations::calculateCurrentSystemTemp(ParticleContainer &pa
     return temp;
 }
 
+
 void TemperatureComputations::updateTemp(ParticleContainer &particles, double targetTemp, double maxDeltaTemp,
                                          int dimensions) {
     double currentTemp = calculateCurrentSystemTemp(particles, dimensions);
 
-    double newTemp;
-    if (targetTemp > currentTemp) {
-        newTemp = std::min(currentTemp + maxDeltaTemp, targetTemp);
-    } else {
-        newTemp = std::max(currentTemp - maxDeltaTemp, targetTemp);
-    }
 
-    // temperature scaling fact
-    double beta = currentTemp == 0 ? 1 : sqrt(newTemp / currentTemp);
+    // temperature scaling factor
+    double beta = calculateVelocityScalingVector(currentTemp, targetTemp, maxDeltaTemp);
 
     // update all velocities of all particles
     for (auto it = particles.beginNonFixedParticles(); it != particles.endNonFixedParticles(); ++it) {
@@ -85,15 +93,7 @@ void TemperatureComputations::updateTempV2(ParticleContainer &particles, double 
 
     double currentTemp = calculateCurrentSystemTempV2(particles, avgV, dimensions);
 
-    double newTemp;
-    if (targetTemp > currentTemp) {
-        newTemp = std::min(currentTemp + maxDeltaTemp, targetTemp);
-    } else {
-        newTemp = std::max(currentTemp - maxDeltaTemp, targetTemp);
-    }
-
-    // temperature scaling factor
-    double beta = currentTemp == 0 ? 1 : sqrt(newTemp / currentTemp);
+    double beta = calculateVelocityScalingVector(currentTemp, targetTemp, maxDeltaTemp);
 
     for (auto it = particles.beginNonFixedParticles(); it != particles.endNonFixedParticles(); ++it) {
         Particle &particle = *it;
@@ -106,6 +106,56 @@ void TemperatureComputations::updateTempV2(ParticleContainer &particles, double 
 
         // new total velocity of particle is sum of thermal motion and kinetic motion (average velocity)
         std::array<double, 3> newV = ArrayUtils::elementWisePairOp(avgV, scaledV, std::plus<>());
+        particle.setV(newV);
+        SPDLOG_DEBUG("new v: {0}, {1}, {2}", newV[0], newV[1], newV[2]);
+    }
+}
+
+
+double TemperatureComputations::calculateCurrentSystemTempV3(ParticleContainer &particles, std::array<double, 3> avgV,
+                                                             int dimensions) {
+    double currentTemp = 0;
+    // subtract the mean-velocity of all molecules in y-direction from the y-component of the molecules velocity
+    // => speed of flow does not contribute to the temperature
+    avgV[0] = 0;
+    avgV[2] = 0;
+    for (auto it = particles.beginNonFixedParticles(); it != particles.endNonFixedParticles(); ++it) {
+        Particle &particle = *it;
+
+        std::array<double, 3> velMinusMeanVelY = ArrayUtils::elementWisePairOp(particle.getV(), avgV, std::minus<>());
+        std::array<double, 3> vSquared = ArrayUtils::elementWisePairOp(velMinusMeanVelY, velMinusMeanVelY,
+                                                                       std::multiplies<>());
+        double vScalarProduct = vSquared[0] + vSquared[1] + vSquared[2];
+        currentTemp += particle.getM() * vScalarProduct;
+    }
+    currentTemp = currentTemp / (particles.size() * dimensions);
+    SPDLOG_DEBUG("current system temp: {0}", currentTemp);
+    return currentTemp;
+}
+
+
+void TemperatureComputations::updateTempV3(ParticleContainer &particles, double targetTemp, double maxDeltaTemp,
+                                           int dimensions) {
+    std::array<double, 3> avgV = {0, 0, 0};
+    size_t nonFixedParticles = 0;
+    for (auto it = particles.beginNonFixedParticles(); it != particles.endNonFixedParticles(); ++it) {
+        Particle &particle = *it;
+        avgV = ArrayUtils::elementWisePairOp(avgV, particle.getV(), std::plus<>());
+        nonFixedParticles++;
+    }
+
+    avgV = ArrayUtils::elementWiseScalarOp(1.0 / nonFixedParticles, avgV, std::multiplies<>());
+    double currentTemp = calculateCurrentSystemTempV3(particles, avgV, dimensions);
+
+    double beta = calculateVelocityScalingVector(currentTemp, targetTemp, maxDeltaTemp);
+    // velocity scaling is only applied to x and z part of velocity
+    std::array<double, 3> betaXZ = {beta, 1, beta};
+
+    // velocity scaling of non-fixed molecules
+    for (auto it = particles.beginNonFixedParticles(); it != particles.endNonFixedParticles(); ++it) {
+        Particle &particle = *it;
+
+        std::array<double, 3> newV = ArrayUtils::elementWisePairOp(betaXZ, particle.getV(), std::multiplies<>());
         particle.setV(newV);
         SPDLOG_DEBUG("new v: {0}, {1}, {2}", newV[0], newV[1], newV[2]);
     }

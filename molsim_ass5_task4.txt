@@ -20,3 +20,24 @@ var4: higher sigma
 - sigma=3 (before sigma=1)
 (sigma: distance at wich potential between 2 particles is zero)
 expected result: more (bigger) forces are acting on particles (effect: ?)
+
+var5: fixed sphere in the tube
+- expected result: turbulences
+
+var6: higher density of the fluid (smaller meshwidth h)
+- expected result: higher density
+
+var7: smaller distance to the walls (tube narrower)
+- expected result: ?
+
+var8: no walls, but reflecting boundary conditions
+- expected result: ?
+
+var9: thermostat v1
+- expected result: ?
+
+var10: no thermostat
+- expected result: ?
+
+var11: thermostat v3
+- expected result: ?
