@@ -657,7 +657,7 @@ bin_profile (::std::unique_ptr< bin_profile_type > x)
 
 
 // clusters
-//
+// 
 
 const clusters::particle_sequence& clusters::
 particle () const
@@ -715,7 +715,7 @@ cuboid (const cuboid_sequence& s)
 
 
 // thermo
-//
+// 
 
 const thermo::version_optional& thermo::
 version () const
@@ -827,7 +827,7 @@ maxStep (const maxStep_optional& x)
 
 
 // membraneArgs
-//
+// 
 
 const membraneArgs::r0_type& membraneArgs::
 r0 () const
@@ -891,7 +891,7 @@ customForce (::std::unique_ptr< customForce_type > x)
 
 
 // boundary
-//
+// 
 
 const boundary::xTop_type& boundary::
 xTop () const
@@ -1039,7 +1039,7 @@ zBehind (::std::unique_ptr< zBehind_type > x)
 
 
 // import_checkpoint
-//
+// 
 
 const import_checkpoint::file_path_type& import_checkpoint::
 file_path () const
@@ -1067,7 +1067,7 @@ file_path (::std::unique_ptr< file_path_type > x)
 
 
 // bin_profile
-//
+// 
 
 const bin_profile::iteration_type& bin_profile::
 iteration () const
@@ -1111,9 +1111,39 @@ bin_number (const bin_number_optional& x)
   this->bin_number_ = x;
 }
 
+const bin_profile::base_name_optional& bin_profile::
+base_name () const
+{
+  return this->base_name_;
+}
+
+bin_profile::base_name_optional& bin_profile::
+base_name ()
+{
+  return this->base_name_;
+}
+
+void bin_profile::
+base_name (const base_name_type& x)
+{
+  this->base_name_.set (x);
+}
+
+void bin_profile::
+base_name (const base_name_optional& x)
+{
+  this->base_name_ = x;
+}
+
+void bin_profile::
+base_name (::std::unique_ptr< base_name_type > x)
+{
+  this->base_name_.set (std::move (x));
+}
+
 
 // particle
-//
+// 
 
 const particle::coordinate_type& particle::
 coordinate () const
@@ -1255,7 +1285,7 @@ fixed (const fixed_optional& x)
 
 
 // disc
-//
+// 
 
 const disc::center_type& disc::
 center () const
@@ -1433,7 +1463,7 @@ fixed (const fixed_optional& x)
 
 
 // cuboid
-//
+// 
 
 const cuboid::cornerCoordinates_type& cuboid::
 cornerCoordinates () const
@@ -3083,7 +3113,8 @@ bin_profile::
 bin_profile (const iteration_type& iteration)
 : ::xml_schema::type (),
   iteration_ (iteration, this),
-  bin_number_ (this)
+  bin_number_ (this),
+  base_name_ (this)
 {
 }
 
@@ -3093,7 +3124,8 @@ bin_profile (const bin_profile& x,
              ::xml_schema::container* c)
 : ::xml_schema::type (x, f, c),
   iteration_ (x.iteration_, f, this),
-  bin_number_ (x.bin_number_, f, this)
+  bin_number_ (x.bin_number_, f, this),
+  base_name_ (x.base_name_, f, this)
 {
 }
 
@@ -3103,7 +3135,8 @@ bin_profile (const ::xercesc::DOMElement& e,
              ::xml_schema::container* c)
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
   iteration_ (this),
-  bin_number_ (this)
+  bin_number_ (this),
+  base_name_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -3144,6 +3177,20 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // base_name
+    //
+    if (n.name () == "base_name" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< base_name_type > r (
+        base_name_traits::create (i, f, this));
+
+      if (!this->base_name_)
+      {
+        this->base_name_.set (::std::move (r));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -3170,6 +3217,7 @@ operator= (const bin_profile& x)
     static_cast< ::xml_schema::type& > (*this) = x;
     this->iteration_ = x.iteration_;
     this->bin_number_ = x.bin_number_;
+    this->base_name_ = x.base_name_;
   }
 
   return *this;
@@ -4909,6 +4957,18 @@ operator<< (::xercesc::DOMElement& e, const bin_profile& i)
 
     s << *i.bin_number ();
   }
+
+  // base_name
+  //
+  if (i.base_name ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "base_name",
+        e));
+
+    s << *i.base_name ();
+  }
 }
 
 void
@@ -5211,3 +5271,4 @@ operator<< (::xercesc::DOMElement& e, const cuboid& i)
 //
 //
 // End epilogue.
+

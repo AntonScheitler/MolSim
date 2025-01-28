@@ -81,7 +81,8 @@ To output a velocity - density profile, please include the following elements to
 <bin_profile>
       <iteration>integer value</iteration>
       <bin_number>integer value</bin_number>
+      <base_name>string</base_name>
 </bin_profile>
 ```
-While the the number of iteration after which a profile should be created must be given, the number of bins is optional and is defaulted at 50.
+While the the number of iteration after which a profile should be created must be given, the base name and the number of bins(defaul: 50) are optional.
 

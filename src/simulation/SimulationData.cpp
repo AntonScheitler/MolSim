@@ -33,6 +33,8 @@ SimulationData::SimulationData() {
     profileIterationNumber = -1;
     movingMembranePartIndices = std::vector<size_t>(); // default empty vector
 
+    profilingBaseName = "profile";
+
 }
 
 int SimulationData::parseOptions(int argc, char *argsv[]) {
@@ -353,4 +355,12 @@ void SimulationData::setProfileIterationNumber(int iterationArg) {
 
 int SimulationData::getProfileIterationNumber() {
     return profileIterationNumber;
+}
+
+std::string SimulationData::getProfilingBaseName() {
+    return profilingBaseName;
+}
+
+void SimulationData::setProfilingBaseName(std::string baseNameArg) {
+    this->profilingBaseName = baseNameArg;
 }

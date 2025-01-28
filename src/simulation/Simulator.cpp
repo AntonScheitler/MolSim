@@ -222,7 +222,7 @@ size_t Simulator::runSimulationLoop() {
     double currentTime = simData.getStartTime();
     int iteration = 0;
     outputWriter::VTKWriter writer(simData.getBaseName());
-    outputWriter::VelocityDensityProfileWriter profileWriter("profile");
+    outputWriter::VelocityDensityProfileWriter profileWriter(simData.getProfilingBaseName());
 
     SPDLOG_LOGGER_INFO(logger, "delta_t={0}, t_end={1}, total number of iterations: {2}", simData.getDeltaT(),
                        simData.getEndTime(),
