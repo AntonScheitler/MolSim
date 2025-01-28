@@ -23,6 +23,7 @@ namespace inputReader {
                     addNeighbors(temp, dx, dy, dz, d);
 
                     particles.addParticle(temp);
+                    SPDLOG_DEBUG("adding particle at {0}, {1}, {2}", tempx[0], tempx[1], tempx[2]);
                 }
             }
         }

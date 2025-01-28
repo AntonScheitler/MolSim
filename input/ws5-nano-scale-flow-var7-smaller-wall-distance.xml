@@ -25,7 +25,8 @@
             <z>0</z>
         </grav>
         <bin_profile>
-            <iteration>5000</iteration>
+            <iteration>10000</iteration>
+            <bin_number>25</bin_number>
             <base_name>profile_var7</base_name>
         </bin_profile>
     </parameters>
@@ -57,7 +58,7 @@
         <!-- cuboid 2 (right wall) -->
         <cuboid>
             <cornerCoordinates>
-                <x>17.2</x>
+                <x>15</x>
                 <y>0.5</y>
                 <z>0.5</z>
             </cornerCoordinates>

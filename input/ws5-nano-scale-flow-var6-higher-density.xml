@@ -25,7 +25,7 @@
             <z>0</z>
         </grav>
         <bin_profile>
-            <iteration>5000</iteration>
+            <iteration>10000</iteration>
             <base_name>profile_var6</base_name>
         </bin_profile>
     </parameters>
@@ -86,16 +86,17 @@
                 <z>0.6</z>
             </cornerCoordinates>
             <dimensions>
-                <x>20</x>
-                <y>25</y>
-                <z>10</z>
+                <x>24</x>
+                <y>30</y>
+                <z>12</z>
             </dimensions>
             <velocity>
                 <x>0.0</x>
                 <y>0.0</y>
                 <z>0.0</z>
             </velocity>
-            <meshWidth>0.6</meshWidth>
+            <!-- meshWidth changed from 1.2 to 1-->
+            <meshWidth>1</meshWidth>
             <mass>1.0</mass>
             <brownianMotion>0.0</brownianMotion>
             <epsilon>1.0</epsilon>

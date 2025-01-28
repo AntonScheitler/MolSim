@@ -20,13 +20,13 @@
             <zBehind>periodic</zBehind>
         </boundary>
         <grav>
+            <!-- the gravity (y) factor is changed from -0.8 to -8-->
             <x>0</x>
             <y>-8</y>
-<!--            the gravity factor is changed from -0.8 to -8-->
             <z>0</z>
         </grav>
         <bin_profile>
-            <iteration>5000</iteration>
+            <iteration>10000</iteration>
             <base_name>profile_var1</base_name>
         </bin_profile>
     </parameters>

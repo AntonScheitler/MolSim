@@ -25,7 +25,7 @@ var5: fixed sphere in the tube
 - expected result: turbulences
 
 var6: higher density of the fluid (smaller meshwidth h)
-- h = 0.6 (before h=1.2)
+- h = 1 (before h=1.2)
 - expected result: higher density
 
 var7: smaller distance to the walls (tube narrower)

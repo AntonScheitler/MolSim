@@ -26,7 +26,7 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                 break;
             case 3: thermoUpdate = TemperatureComputations::updateTempV3;
                 break;
-            default: SPDLOG_LOGGER_ERROR(logger, "Unknown thermostat version {0}",
+            default: SPDLOG_LOGGER_ERROR(logger, "Unknown thermostat version: {0}",
                                          simData.getThermoVersion());
                 exit(EXIT_FAILURE);
         }

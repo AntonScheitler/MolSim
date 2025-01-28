@@ -5,9 +5,12 @@
         <t_end>500</t_end>
         <containerType>linked</containerType>
         <domainSize>
-            <x>20.6</x>
-            <y>30</y>
-            <z>12</z>
+            <x>26</x>
+            <y>32</y>
+            <z>14</z>
+<!--            <x>25.2</x>-->
+<!--            <y>31.2</y>-->
+<!--            <z>13.2</z>-->
         </domainSize>
         <cutoff>2.75</cutoff>
         <boundary>
@@ -24,7 +27,7 @@
             <z>0</z>
         </grav>
         <bin_profile>
-            <iteration>5000</iteration>
+            <iteration>10000</iteration>
             <base_name>profile_var8</base_name>
         </bin_profile>
     </parameters>
