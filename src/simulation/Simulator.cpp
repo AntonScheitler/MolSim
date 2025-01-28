@@ -14,6 +14,22 @@
 #include <cstdlib>
 
 Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
+    // initialize thermostat update function
+    std::function<void(ParticleContainer &, double, double, int)> thermoUpdate;
+    if (simData.isThermostat()) {
+        switch (simData.getThermoVersion()) {
+            case 1: thermoUpdate = TemperatureComputations::updateTemp;
+                break;
+            case 2: thermoUpdate = TemperatureComputations::updateTempV2;
+                break;
+            case 3: thermoUpdate = TemperatureComputations::updateTempV3;
+                break;
+            default: SPDLOG_LOGGER_ERROR(logger, "Unknown thermostat version {0}",
+                                         simData.getThermoVersion());
+                exit(EXIT_FAILURE);
+        }
+    }
+
     // choose computation functions based on the type
     switch (simData.getSimType()) {
         // use gravity for the comet simulation
@@ -59,7 +75,7 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                                                                 simData.getAverageVelocity());
                 }
             };
-            step = [this](size_t iteration, double currentTime) {
+            step = [this, thermoUpdate](size_t iteration, double currentTime) {
                 // save previous position and update the position of particles in the mesh based on the new one
                 PositionComputations::updateOldX(simData.getParticles());
                 PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
@@ -81,28 +97,12 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
 
                     // apply thermostat
                     if (simData.isThermostat() && iteration % simData.getThermoFrequency() == 0) {
-                        switch (simData.getThermoVersion()) {
-                            case 1: TemperatureComputations::updateTemp(simData.getParticles(), simData.getTargetTemp(),
-                                                                        simData.getMaxDeltaTemp(),
-                                                                        simData.getNumberDimensions());
-                                break;
-                            case 2: TemperatureComputations::updateTempV2(
-                                    simData.getParticles(), simData.getTargetTemp(),
-                                    simData.getMaxDeltaTemp(),
-                                    simData.getNumberDimensions());
-                                break;
-                            case 3: TemperatureComputations::updateTempV3(
-                                    simData.getParticles(), simData.getTargetTemp(),
-                                    simData.getMaxDeltaTemp(),
-                                    simData.getNumberDimensions());
-                                break;
-                            default: SPDLOG_LOGGER_ERROR(logger, "Unknown thermostat version {0}",
-                                                         simData.getThermoVersion());
-                                exit(EXIT_FAILURE);
-                        }
+                        thermoUpdate(simData.getParticles(), simData.getTargetTemp(), simData.getMaxDeltaTemp(),
+                                     simData.getNumberDimensions());
                     }
                 } else {
-                    SPDLOG_LOGGER_ERROR(logger, "Linked Cell Simulation is not using Linked Cell Container. Aborting...");
+                    SPDLOG_LOGGER_ERROR(
+                        logger, "Linked Cell Simulation is not using Linked Cell Container. Aborting...");
                     exit(EXIT_FAILURE);
                 }
             };

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simulation>
+    <parameters>
+        <delta_t>0.0005</delta_t>
+        <t_end>500</t_end>
+        <containerType>linked</containerType>
+        <domainSize>
+            <x>20.6</x>
+            <y>30</y>
+            <z>12</z>
+        </domainSize>
+        <cutoff>2.75</cutoff>
+        <boundary>
+            <xTop>periodic</xTop>
+            <xBottom>periodic</xBottom>
+            <yLeft>reflect</yLeft>
+            <yRight>reflect</yRight>
+            <zFront>periodic</zFront>
+            <zBehind>periodic</zBehind>
+        </boundary>
+        <grav>
+            <x>0</x>
+            <y>-0.8</y>
+            <z>0</z>
+        </grav>
+    </parameters>
+    <clusters>
+        <cuboid>
+            <!-- cuboid 3 (fluid) -->
+            <cornerCoordinates>
+                <x>0.6</x>
+                <y>0.6</y>
+                <z>0.6</z>
+            </cornerCoordinates>
+            <dimensions>
+                <x>20</x>
+                <y>25</y>
+                <z>10</z>
+            </dimensions>
+            <velocity>
+                <x>0.0</x>
+                <y>0.0</y>
+                <z>0.0</z>
+            </velocity>
+            <meshWidth>1.2</meshWidth>
+            <mass>1.0</mass>
+            <brownianMotion>0.0</brownianMotion>
+            <epsilon>1.0</epsilon>
+            <sigma>1.0</sigma>
+        </cuboid>
+    </clusters>
+    <thermo>
+        <version>2</version>
+        <init_T>40</init_T>
+        <n>10</n>
+    </thermo>
+</simulation>

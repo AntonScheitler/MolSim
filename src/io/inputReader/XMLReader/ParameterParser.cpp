@@ -64,7 +64,7 @@ namespace ParameterParser {
                 if(xmlParser->thermo()->version().present()) {
                     simData.setThermoVersion(xmlParser->thermo()->version().get());
                     SPDLOG_INFO("Using thermostat v{0}", simData.getThermoVersion());
-                }
+                } else SPDLOG_INFO("thermostat is disabled");
                 simData.activateThermostat();
                 simData.setInitialTemp(xmlParser->thermo()->init_T());
                 simData.setThermoFrequency(xmlParser->thermo()->n());

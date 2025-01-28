@@ -25,6 +25,7 @@ var5: fixed sphere in the tube
 - expected result: turbulences
 
 var6: higher density of the fluid (smaller meshwidth h)
+- h = 0.6 (before h=1.2)
 - expected result: higher density
 
 var7: smaller distance to the walls (tube narrower)
@@ -33,10 +34,10 @@ var7: smaller distance to the walls (tube narrower)
 var8: no walls, but reflecting boundary conditions
 - expected result: ?
 
-var9: thermostat v1
+var9: no thermostat
 - expected result: ?
 
-var10: no thermostat
+var10: thermostat v1
 - expected result: ?
 
 var11: thermostat v3

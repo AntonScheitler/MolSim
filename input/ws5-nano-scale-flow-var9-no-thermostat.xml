@@ -21,13 +21,9 @@
         </boundary>
         <grav>
             <x>0</x>
-            <y>-8</y>
-<!--            the gravity factor is changed from -0.8 to -8-->
+            <y>-0.8</y>
             <z>0</z>
         </grav>
-        <bin_profile>
-            <iteration>5000</iteration>
-        </bin_profile>
     </parameters>
     <clusters>
         <cuboid>
@@ -102,9 +98,4 @@
             <sigma>1.0</sigma>
         </cuboid>
     </clusters>
-    <thermo>
-        <version>2</version>
-        <init_T>40</init_T>
-        <n>10</n>
-    </thermo>
 </simulation>

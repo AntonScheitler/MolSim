@@ -107,7 +107,7 @@ namespace inputReader {
                 } else
                     SPDLOG_LOGGER_WARN(logger, "Unable to specify number of dimensions precisely.");
             }
-            SPDLOG_LOGGER_INFO(logger, "Number of dimensions set to: {0}", simData.getNumberDimensions());
+            SPDLOG_LOGGER_INFO(logger, "Number of dimensions set to {0}", simData.getNumberDimensions());
 
             ParameterParser::readParams(simData, simParser);
             SPDLOG_LOGGER_DEBUG(logger, "finished reading params");
