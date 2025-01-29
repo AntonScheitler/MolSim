@@ -394,7 +394,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryOutfl
 
         ForceComputations::resetForces(container, 1);
         ForceComputations::computeLennardJonesPotential(container);
-        ForceComputations::computeGhostParticleRepulsion(container);
+        ForceComputations::computeGhostParticleRepulsion(container, 1);
         VelocityComputations::stoermerVerlet(container, deltaT, 1);
     }
 
@@ -445,7 +445,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryRefle
 
         ForceComputations::resetForces(container, 1);
         ForceComputations::computeLennardJonesPotential(container);
-        ForceComputations::computeGhostParticleRepulsion(container);
+        ForceComputations::computeGhostParticleRepulsion(container, 1);
         VelocityComputations::stoermerVerlet(container, deltaT, 1);
     }
 
@@ -498,7 +498,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellDiagonalBound
 
         ForceComputations::resetForces(container, 1);
         ForceComputations::computeLennardJonesPotential(container);
-        ForceComputations::computeGhostParticleRepulsion(container);
+        ForceComputations::computeGhostParticleRepulsion(container, 1);
         VelocityComputations::stoermerVerlet(container, deltaT, 1);
     }
 

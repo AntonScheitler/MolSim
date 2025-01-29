@@ -119,7 +119,7 @@ void ForceComputations::resetForces(ParticleContainer &particles, size_t numThre
 
 
 void ForceComputations::addExternalForces(ParticleContainer &particles, std::array<double, 3> grav, size_t numThreads) {
-    #pragma omp parallel for
+    #pragma omp parallel for num_threads(numThreads)
     for (size_t i = 0; i < particles.size(); i++) {
         Particle& particle = particles.getParticle(i);
         if (particle.isFixed() || !(particle.getActive())) continue;
@@ -131,18 +131,24 @@ void ForceComputations::addExternalForces(ParticleContainer &particles, std::arr
     }
 }
 
-void ForceComputations::computeGhostParticleRepulsion(ParticleContainerLinkedCell &particles) {
+void ForceComputations::computeGhostParticleRepulsion(ParticleContainerLinkedCell &particles, size_t numThreads) {
     double epsilon;
     double sigma;
+    std::vector<std::pair<Particle&, Particle&>> pairs = {};
     for (auto it = particles.beginPairGhost(); it != particles.endPairGhost(); ++it) {
-        std::pair<Particle &, Particle &> pair = *it;
+        pairs.push_back(*it);
+    }
+
+    #pragma omp parallel for num_threads(numThreads)
+    for (size_t i = 0; i < pairs.size(); i++) {
+        std::pair<Particle &, Particle &> pair = pairs[i];
         epsilon = pair.first.getEpsilon();
         sigma = pair.first.getSigma();
-        computeLennardJonesPotentialRepulsiveHelper(pair, epsilon, sigma);
+        computeLennardJonesPotentialRepulsiveHelper(pair, epsilon, sigma, true);
     }
 }
 
-void ForceComputations::computeMembraneNeighborForce(ParticleContainerLinkedCell &particles, double k, double r0) {
+void ForceComputations::computeMembraneNeighborForce(ParticleContainerLinkedCell &particles, double k, double r0, size_t numThreads) {
     for (auto it = particles.beginMembraneDirectNeighbor(); it != particles.endMembraneDirectNeighbor(); ++it) {
         std::pair<Particle&, Particle&> pair = *it;
         computeHaromicPotentialHelper(pair, k, r0);
@@ -155,13 +161,19 @@ void ForceComputations::computeMembraneNeighborForce(ParticleContainerLinkedCell
     }
 
     // compute repulsive force between all particles
+    std::vector<std::pair<Particle&, Particle&>> pairs = {};
+    for (auto it = particles.beginPairParticle(); *it != *(particles.endPairParticle()); ++*it) {
+        pairs.push_back(**it);
+    }
+
     double epsilon;
     double sigma;
-    for (auto it = particles.beginPairParticle(); *it != *(particles.endPairParticle()); ++*it) {
-        std::pair<Particle &, Particle &> pair = **it;
+    #pragma omp parallel for num_threads(numThreads)
+    for (size_t i = 0; i < pairs.size(); i++) {
+        std::pair<Particle &, Particle &> pair = pairs[i];
         epsilon = pair.first.getEpsilon();
         sigma = pair.first.getSigma();
-        computeLennardJonesPotentialRepulsiveHelper(pair, epsilon, sigma);
+        computeLennardJonesPotentialRepulsiveHelper(pair, epsilon, sigma, false);
     }
 }
 
@@ -216,7 +228,7 @@ void ForceComputations::computeLennardJonesPotentialCutoffHelperCell(ParticleCon
     }
 }
 
-void ForceComputations::computeLennardJonesPotentialRepulsiveHelper(std::pair<Particle&, Particle&>& pair, double epsilon, double sigma) {
+void ForceComputations::computeLennardJonesPotentialRepulsiveHelper(std::pair<Particle&, Particle&>& pair, double epsilon, double sigma, bool critical) {
     std::array<double, 3> distanceVector = ArrayUtils::elementWisePairOp(pair.first.getX(), pair.second.getX(), std::minus<>());
     double distance = ArrayUtils::L2Norm(distanceVector);
     double sigmaDivDistance = sigma / distance;
@@ -226,8 +238,15 @@ void ForceComputations::computeLennardJonesPotentialRepulsiveHelper(std::pair<Pa
     double factor = (-24.0 * epsilon) / std::pow(distance, 2) *
                     (std::pow(sigmaDivDistance, 6) - 2 * std::pow(sigmaDivDistance, 12));
     std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(factor, distanceVector, std::multiplies<>());
-    pair.first.setF(ArrayUtils::elementWisePairOp(pair.first.getF(), force, std::plus<>()));
     std::array<double, 3> revForce = ArrayUtils::elementWiseScalarOp(-1, force, std::multiplies<>());
+    if (critical) {
+        #pragma omp critical 
+        {
+            pair.first.setF(ArrayUtils::elementWisePairOp(pair.first.getF(), force, std::plus<>()));
+            pair.second.setF(ArrayUtils::elementWisePairOp(pair.second.getF(), revForce, std::plus<>()));
+        }
+    }
+    pair.first.setF(ArrayUtils::elementWisePairOp(pair.first.getF(), force, std::plus<>()));
     pair.second.setF(ArrayUtils::elementWisePairOp(pair.second.getF(), revForce, std::plus<>()));
 }
 
