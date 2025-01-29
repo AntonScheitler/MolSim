@@ -92,17 +92,20 @@ private:
      * @param particles the container for the particles that the pair is a part of
      * @param pair the pair of particles to compute the forces between
      * @param cutoff the cutoff radius past which no forces are computed
+     * @param critical specifies if changing the forces of particles is a critical operation that should be synchronized
+     * when using multiple threads
      */
-    static void computeLennardJonesPotentialCutoffHelper(ParticleContainerLinkedCell& particles, std::pair<Particle&, Particle&>& pair, double cutoff);
+    static void computeLennardJonesPotentialCutoffHelperPair(ParticleContainerLinkedCell& particles, std::pair<Particle&, Particle&>& pair, double cutoff, bool critical);
 
     /**
-     * @brief a helper function for computing the lenndard jones potential between two particles. Updating the particles
-     * is marked as an omp critical section in order to avoid race conditions
-     * @param particles the container for the particles that the pair is a part of
-     * @param pair the pair of particles to compute the forces between
+     * @brief a helper function for computing the lenndard jones for a cell and all it's neighbor cells
+     * @param particles the container for the particles that the cell is a part of
+     * @param cellIdx the id of the cell for which the forces must be computed
      * @param cutoff the cutoff radius past which no forces are computed
+     * @param critical specifies if changing the forces of particles is a critical operation that should be synchronized
+     * when using multiple threads
      */
-    static void computeLennardJonesPotentialCutoffHelperCritical(ParticleContainerLinkedCell& particles, std::pair<Particle&, Particle&>& pair, double cutoff);
+    static void computeLennardJonesPotentialCutoffHelperCell(ParticleContainerLinkedCell& particles, size_t cellIdx, double cutoff, bool critical);
 
     /**
      * @brief a helper function for computing the harmonic potential between two particles

@@ -10,7 +10,7 @@
 #include <omp.h>
 
 ParticleContainerLinkedCell::ParticleContainerLinkedCell(std::array<double, 3> domainSizeArg, double cutoffRadiusArg,
-                                                         struct boundaryConfig boundaryConfigArg, size_t numThreads) {
+                                                         struct boundaryConfig boundaryConfigArg) {
     domainSize = domainSizeArg;
     cutoffRadius = cutoffRadiusArg;
     boundaryConfig = boundaryConfigArg;
@@ -41,7 +41,6 @@ ParticleContainerLinkedCell::ParticleContainerLinkedCell(std::array<double, 3> d
         }
     }
     computeNeighborCellsMatrix();
-    computeMeshPartition(numThreads);
 }
 
 void ParticleContainerLinkedCell::addParticle(const Particle &particle) {

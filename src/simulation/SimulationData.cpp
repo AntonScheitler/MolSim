@@ -1,6 +1,5 @@
 #include "particle/container/ParticleContainerDirectSum.h"
 #include "spdlog/spdlog.h"
-#include <iostream>
 #include <simulation/SimulationData.h>
 #include <getopt.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
@@ -33,7 +32,7 @@ SimulationData::SimulationData() {
     movingMembranePartIndices = std::vector<size_t>(); // default empty vector
 
     threadVersion = -1; // no parallelization
-    numberThreads = 4;
+    numberThreads = 1;
 }
 
 int SimulationData::parseOptions(int argc, char *argsv[]) {

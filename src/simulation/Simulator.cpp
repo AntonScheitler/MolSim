@@ -61,6 +61,16 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                     VelocityComputations::applyBrownianMotion2D(simData.getParticles(),
                                                                 simData.getAverageVelocity());
                 }
+                if (simData.getThreadVersion() == 0) {
+                    auto containerLinkedCell = dynamic_cast<ParticleContainerLinkedCell *>(&(simData.getParticles()));
+                    if (containerLinkedCell) {
+                        containerLinkedCell->computeMeshPartition(simData.getNumberThreads());
+                    } else {
+                        SPDLOG_ERROR("Linked Cell Simulation is not using Linked Cell Container. Aborting...");
+                        exit(EXIT_FAILURE);
+                    }
+
+                }
             };
             step = [this](size_t iteration, double currentTime) {
                 // save previous position and update the position of particles in the mesh based on the new one
@@ -70,29 +80,17 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                 if (containerLinkedCell) {
                     containerLinkedCell->correctCellMembershipAllParticles();
                     ForceComputations::resetForces(simData.getParticles());
-
-
                     switch(simData.getThreadVersion()) {
                         case 0:
                             ForceComputations::computeLennardJonesPotentialCutoffMeshPart(*containerLinkedCell,containerLinkedCell->getCutoffRadius(), simData.getNumberThreads());
                             break;
                         case 1:
-                            ForceComputations::computeLennardJonesPotentialCutoffCellIter(*containerLinkedCell,
-                                                                                          containerLinkedCell->getCutoffRadius());
+                            ForceComputations::computeLennardJonesPotentialCutoffCellIter(*containerLinkedCell, containerLinkedCell->getCutoffRadius());
                             break;
                         default:
                             ForceComputations::computeLennardJonesPotentialCutoff(*containerLinkedCell, containerLinkedCell->getCutoffRadius());
                     }
-                    // schlechter:
-                    //ForceComputations::computeLennardJonesPotentialCutoff(*containerLinkedCell, containerLinkedCell->getCutoffRadius());
-                    // besser:
-                    //ForceComputations::computeLennardJonesPotentialCutoffCellIter(*containerLinkedCell,containerLinkedCell->getCutoffRadius());
-                    // noch besser?:
-                    //ForceComputations::computeLennardJonesPotentialCutoffMeshPart(*containerLinkedCell,
-                    //                                                      containerLinkedCell->getCutoffRadius(), 4);
 
-
-                    SPDLOG_DEBUG("computing ghost particle repulsion...");
                     ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell);
 
 
@@ -119,8 +117,7 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                     exit(EXIT_FAILURE);
                 }
             };
-            after = [this]() {
-            };
+            after = [this]() {};
             logger = spdlog::stdout_color_mt("CollisionSimulationLinkedCell");
             SPDLOG_LOGGER_INFO(logger, "Simulating body collision with linked cell algorithm");
             break;
