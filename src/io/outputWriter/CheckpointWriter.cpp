@@ -54,6 +54,8 @@ namespace outputWriter {
 
         particleParams << p.getSigma();
 
+        particleParams << p.isFixed();
+
         return particleParams.str();
     }
 

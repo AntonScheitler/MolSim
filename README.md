@@ -84,4 +84,30 @@ To output a velocity - density profile, please include the following elements to
       <base_name>string</base_name>
 </bin_profile>
 ```
-While the the number of iteration after which a profile should be created must be given, the base name and the number of bins(defaul: 50) are optional.
+While the number of iteration after which a profile should be created must be given, the base name and the number of bins(defaul: 50) are optional.
+
+
+### Parallelization
+
+To parallelize the computations, please include the following elements into the xml-file
+
+```
+<simulation>
+...
+      <parallelization>
+            <strategy>integer value</strategy>
+            <threadNumber>integer value</threadNumber>
+      </parallelization>
+</simulation>
+```
+Note: the position of the element is at the bottom of <simulation></simulation>
+strategies: 
+- `0`: Parallelization of iteration over cells 
+- `1`: Parallelization of iteration over particles
+
+threadNumber (optional):
+sets number of thread used for strategy 0 (default: 4). Strategy 1 uses always the maximum.
+
+
+
+                            

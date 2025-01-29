@@ -27,6 +27,7 @@ namespace inputReader {
         int type;
         double epsilon;
         double sigma;
+        bool fixed;
 
         int numParticles = 0;
 
@@ -75,6 +76,8 @@ namespace inputReader {
 
                 datastream >> sigma;
 
+                datastream >> fixed;
+
 
                 if (maxType < type) {
                     maxType = type;
@@ -87,6 +90,7 @@ namespace inputReader {
                 p.setType(type);
                 p.setEpsilon(epsilon);
                 p.setSigma(sigma);
+                p.setFixed(fixed);
 
                 simData.getParticles().addParticle(p);
 
