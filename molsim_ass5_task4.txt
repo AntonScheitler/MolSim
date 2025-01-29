@@ -7,7 +7,7 @@ format of velocity-density-profile:
 var1: higher gravity
 - gravity = -8 (before -0.8)
 - expected result: higher velocities
-[USEFUL RESULT]
+[USEFUL RESULT]5
 
 var2: higher particle mass
 - only fluid particles have m=3 (before m=1)

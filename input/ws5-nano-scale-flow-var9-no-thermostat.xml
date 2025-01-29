@@ -25,7 +25,7 @@
             <z>0</z>
         </grav>
         <bin_profile>
-            <iteration>10000</iteration>
+            <iteration>20000</iteration>
             <base_name>profile_var9</base_name>
         </bin_profile>
     </parameters>

@@ -53,7 +53,8 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
         // use lennard-jones for the molecule collision
         case collision:
             before = [this]() {
-                VelocityComputations::applyBrownianMotion2D(simData.getParticles(), simData.getAverageVelocity());
+                VelocityComputations::applyBrownianMotion(simData.getParticles(), simData.getAverageVelocity(),
+                                                          simData.getNumberDimensions());
             };
             step = [this](size_t iteration, double currentTime) {
                 PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
@@ -73,8 +74,9 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                     TemperatureComputations::initTemp(simData.getParticles(), simData.getInitialTemp(),
                                                       simData.getNumberDimensions());
                 } else {
-                    VelocityComputations::applyBrownianMotion2D(simData.getParticles(),
-                                                                simData.getAverageVelocity());
+                    VelocityComputations::applyBrownianMotion(simData.getParticles(),
+                                                              simData.getAverageVelocity(),
+                                                              simData.getNumberDimensions());
                 }
             };
             step = [this, thermoUpdate](size_t iteration, double currentTime) {
@@ -92,7 +94,7 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                     //                                                       containerLinkedCell->getCutoffRadius());
                     // noch besser?:
                     ForceComputations::computeLennardJonesPotentialCutoffMeshPart(*containerLinkedCell,
-                                                                          containerLinkedCell->getCutoffRadius(), 4);
+                        containerLinkedCell->getCutoffRadius(), 4);
 
 
                     SPDLOG_DEBUG("computing ghost particle repulsion...");
@@ -164,7 +166,6 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
 void Simulator::simulate() {
     std::chrono::high_resolution_clock::rep totalDuration;
     size_t numIterations;
-
 
 
     if (simData.getBench()) {
@@ -245,11 +246,13 @@ size_t Simulator::runSimulationLoop() {
             writer.plotParticles(simData.getParticles(), iteration);
         }
 
-        if (simData.getProfileIterationNumber() != -1 && iteration % simData.getProfileIterationNumber() == 0 && ! simData.getBench()) {            // write output on every 10th iteration
+        if (simData.getProfileIterationNumber() != -1 && iteration % simData.getProfileIterationNumber() == 0 && !
+            simData.getBench()) {
+            // write output on every 10th iteration
             try {
-                auto& linkedCellContainer = dynamic_cast<ParticleContainerLinkedCell&>(simData.getParticles());
+                auto &linkedCellContainer = dynamic_cast<ParticleContainerLinkedCell &>(simData.getParticles());
                 profileWriter.profileBins(linkedCellContainer, iteration, simData.getProfileBinNumber());
-            } catch (const std::bad_cast& e) {
+            } catch (const std::bad_cast &e) {
                 SPDLOG_LOGGER_ERROR(logger, "ParticleContainer is not of type ParticleContainerLinkedCell: ", e.what());
             }
         }
