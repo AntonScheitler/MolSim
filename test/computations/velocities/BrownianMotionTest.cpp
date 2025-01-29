@@ -22,7 +22,7 @@ TEST_F(BrownianMotionTest, BrownianMotion2DTest) {
     std::vector<Particle> particles{particle};
     ParticleContainerDirectSum container{particles};
 
-    VelocityComputations::applyBrownianMotion(container, averageVelocity, 2);
+    VelocityComputations::applyBrownianMotion(container, averageVelocity, 1, 2);
 
     Particle &p = container.getParticle(0);
 
@@ -41,7 +41,7 @@ TEST_F(BrownianMotionTest, BrownianMotion3DTest) {
     std::vector<Particle> particles{particle};
     ParticleContainerDirectSum container{particles};
 
-    VelocityComputations::applyBrownianMotion(container, averageVelocity, 3);
+    VelocityComputations::applyBrownianMotion(container, averageVelocity, 1, 3);
 
     Particle &p = container.getParticle(0);
 

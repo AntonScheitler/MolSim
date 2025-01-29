@@ -12,7 +12,6 @@
 #include <particle/container/ParticleContainerLinkedCell.h>
 #include <particle/container/ParticleContainerDirectSum.h>
 #include "../CheckpointReader.h"
-#include "spdlog/fmt/bundled/os.h"
 
 
 namespace inputReader {
@@ -35,7 +34,6 @@ namespace inputReader {
         double h;
         double r;
         int type = 0;
-
 
         SPDLOG_LOGGER_DEBUG(logger, "entering XML parsing with filename {0}", filename);
 

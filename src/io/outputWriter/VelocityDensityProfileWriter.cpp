@@ -1,5 +1,4 @@
 #include "VelocityDensityProfileWriter.h"
-
 #include "spdlogConfig.h"
 #include <fstream>
 #include <iomanip>

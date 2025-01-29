@@ -1,6 +1,5 @@
 #include "particle/container/ParticleContainerDirectSum.h"
 #include "spdlog/spdlog.h"
-#include <iostream>
 #include <simulation/SimulationData.h>
 #include <getopt.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
@@ -28,13 +27,12 @@ SimulationData::SimulationData() {
     thermostat = false;
     thermoVersion = 1; // TODO: default thermo version for testing purpose set to 2
     numberDimensions = 2; //default 2, will be set by XMLFileReader
-
+    profilingBaseName = "profile";
+    movingMembranePartIndices = std::vector<size_t>(); // default empty vector
     binNumber = 50;
     profileIterationNumber = -1;
-    movingMembranePartIndices = std::vector<size_t>(); // default empty vector
-
-    profilingBaseName = "profile";
-
+    threadVersion = -1; // no parallelization
+    numberThreads = 1;
 }
 
 int SimulationData::parseOptions(int argc, char *argsv[]) {
@@ -355,6 +353,22 @@ void SimulationData::setProfileIterationNumber(int iterationArg) {
 
 int SimulationData::getProfileIterationNumber() {
     return profileIterationNumber;
+}
+
+int SimulationData::getNumberThreads() {
+    return numberThreads;
+}
+
+void SimulationData::setNumberThreads(int numThreadsArg) {
+    this->numberThreads = numThreadsArg;
+}
+
+void SimulationData::setThreadVersion(int threadVersionArg) {
+    this->threadVersion = threadVersionArg;
+}
+
+int SimulationData::getThreadVersion() {
+    return threadVersion;
 }
 
 std::string SimulationData::getProfilingBaseName() {

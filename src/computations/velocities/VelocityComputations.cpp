@@ -6,8 +6,8 @@
 #include "spdlogConfig.h"
 #include <omp.h>
 
-void VelocityComputations::stoermerVerlet(ParticleContainer &particles, double deltaT) {
-    #pragma omp parallel for
+void VelocityComputations::stoermerVerlet(ParticleContainer &particles, double deltaT, size_t numThreads) {
+    #pragma omp parallel for num_threads(numThreads)
     for (size_t i = 0; i < particles.size(); i++) {
         Particle &particle = particles.getParticle(i);
         if (particle.isFixed() || !(particle.getActive())) continue;
@@ -22,8 +22,8 @@ void VelocityComputations::stoermerVerlet(ParticleContainer &particles, double d
     }
 }
 
-void VelocityComputations::applyBrownianMotion(ParticleContainer &particles, double averageVelocity, int dimensions) {
-    #pragma omp parallel for
+void VelocityComputations::applyBrownianMotion(ParticleContainer &particles, double averageVelocity, size_t numThreads, int dimensions) {
+    #pragma omp parallel for num_threads(numThreads)
     for (size_t i = 0; i < particles.size(); i++) {
         Particle &particle = particles.getParticle(i);
         if (particle.isFixed() || !(particle.getActive())) continue;

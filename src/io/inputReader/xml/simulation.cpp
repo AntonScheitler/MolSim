@@ -245,6 +245,36 @@ membraneArgs (::std::unique_ptr< membraneArgs_type > x)
   this->membraneArgs_.set (std::move (x));
 }
 
+const simulation::parallelization_optional& simulation::
+parallelization () const
+{
+  return this->parallelization_;
+}
+
+simulation::parallelization_optional& simulation::
+parallelization ()
+{
+  return this->parallelization_;
+}
+
+void simulation::
+parallelization (const parallelization_type& x)
+{
+  this->parallelization_.set (x);
+}
+
+void simulation::
+parallelization (const parallelization_optional& x)
+{
+  this->parallelization_ = x;
+}
+
+void simulation::
+parallelization (::std::unique_ptr< parallelization_type > x)
+{
+  this->parallelization_.set (std::move (x));
+}
+
 
 // output
 // 
@@ -887,6 +917,52 @@ void membraneArgs::
 customForce (::std::unique_ptr< customForce_type > x)
 {
   this->customForce_.set (std::move (x));
+}
+
+
+// parallelization
+// 
+
+const parallelization::strategy_type& parallelization::
+strategy () const
+{
+  return this->strategy_.get ();
+}
+
+parallelization::strategy_type& parallelization::
+strategy ()
+{
+  return this->strategy_.get ();
+}
+
+void parallelization::
+strategy (const strategy_type& x)
+{
+  this->strategy_.set (x);
+}
+
+const parallelization::threadNumber_optional& parallelization::
+threadNumber () const
+{
+  return this->threadNumber_;
+}
+
+parallelization::threadNumber_optional& parallelization::
+threadNumber ()
+{
+  return this->threadNumber_;
+}
+
+void parallelization::
+threadNumber (const threadNumber_type& x)
+{
+  this->threadNumber_.set (x);
+}
+
+void parallelization::
+threadNumber (const threadNumber_optional& x)
+{
+  this->threadNumber_ = x;
 }
 
 
@@ -1829,7 +1905,8 @@ simulation (const clusters_type& clusters)
   parameters_ (this),
   clusters_ (clusters, this),
   thermo_ (this),
-  membraneArgs_ (this)
+  membraneArgs_ (this),
+  parallelization_ (this)
 {
 }
 
@@ -1840,7 +1917,8 @@ simulation (::std::unique_ptr< clusters_type > clusters)
   parameters_ (this),
   clusters_ (std::move (clusters), this),
   thermo_ (this),
-  membraneArgs_ (this)
+  membraneArgs_ (this),
+  parallelization_ (this)
 {
 }
 
@@ -1853,7 +1931,8 @@ simulation (const simulation& x,
   parameters_ (x.parameters_, f, this),
   clusters_ (x.clusters_, f, this),
   thermo_ (x.thermo_, f, this),
-  membraneArgs_ (x.membraneArgs_, f, this)
+  membraneArgs_ (x.membraneArgs_, f, this),
+  parallelization_ (x.parallelization_, f, this)
 {
 }
 
@@ -1866,7 +1945,8 @@ simulation (const ::xercesc::DOMElement& e,
   parameters_ (this),
   clusters_ (this),
   thermo_ (this),
-  membraneArgs_ (this)
+  membraneArgs_ (this),
+  parallelization_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -1955,6 +2035,20 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // parallelization
+    //
+    if (n.name () == "parallelization" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< parallelization_type > r (
+        parallelization_traits::create (i, f, this));
+
+      if (!this->parallelization_)
+      {
+        this->parallelization_.set (::std::move (r));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -1984,6 +2078,7 @@ operator= (const simulation& x)
     this->clusters_ = x.clusters_;
     this->thermo_ = x.thermo_;
     this->membraneArgs_ = x.membraneArgs_;
+    this->parallelization_ = x.parallelization_;
   }
 
   return *this;
@@ -2789,6 +2884,110 @@ operator= (const membraneArgs& x)
 
 membraneArgs::
 ~membraneArgs ()
+{
+}
+
+// parallelization
+//
+
+parallelization::
+parallelization (const strategy_type& strategy)
+: ::xml_schema::type (),
+  strategy_ (strategy, this),
+  threadNumber_ (this)
+{
+}
+
+parallelization::
+parallelization (const parallelization& x,
+                 ::xml_schema::flags f,
+                 ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  strategy_ (x.strategy_, f, this),
+  threadNumber_ (x.threadNumber_, f, this)
+{
+}
+
+parallelization::
+parallelization (const ::xercesc::DOMElement& e,
+                 ::xml_schema::flags f,
+                 ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  strategy_ (this),
+  threadNumber_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void parallelization::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // strategy
+    //
+    if (n.name () == "strategy" && n.namespace_ ().empty ())
+    {
+      if (!strategy_.present ())
+      {
+        this->strategy_.set (strategy_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // threadNumber
+    //
+    if (n.name () == "threadNumber" && n.namespace_ ().empty ())
+    {
+      if (!this->threadNumber_)
+      {
+        this->threadNumber_.set (threadNumber_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    break;
+  }
+
+  if (!strategy_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "strategy",
+      "");
+  }
+}
+
+parallelization* parallelization::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class parallelization (*this, f, c);
+}
+
+parallelization& parallelization::
+operator= (const parallelization& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->strategy_ = x.strategy_;
+    this->threadNumber_ = x.threadNumber_;
+  }
+
+  return *this;
+}
+
+parallelization::
+~parallelization ()
 {
 }
 
@@ -4496,6 +4695,18 @@ operator<< (::xercesc::DOMElement& e, const simulation& i)
 
     s << *i.membraneArgs ();
   }
+
+  // parallelization
+  //
+  if (i.parallelization ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "parallelization",
+        e));
+
+    s << *i.parallelization ();
+  }
 }
 
 void
@@ -4838,6 +5049,35 @@ operator<< (::xercesc::DOMElement& e, const membraneArgs& i)
         e));
 
     s << i.customForce ();
+  }
+}
+
+void
+operator<< (::xercesc::DOMElement& e, const parallelization& i)
+{
+  e << static_cast< const ::xml_schema::type& > (i);
+
+  // strategy
+  //
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "strategy",
+        e));
+
+    s << i.strategy ();
+  }
+
+  // threadNumber
+  //
+  if (i.threadNumber ())
+  {
+    ::xercesc::DOMElement& s (
+      ::xsd::cxx::xml::dom::create_element (
+        "threadNumber",
+        e));
+
+    s << *i.threadNumber ();
   }
 }
 

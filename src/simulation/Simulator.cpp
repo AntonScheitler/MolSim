@@ -39,11 +39,14 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
             before = [this]() {
             };
             step = [this](size_t iteration, double currentTime) {
-                PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
-                ForceComputations::resetForces(simData.getParticles());
+                PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT(),
+                                                     simData.getNumberThreads());
+                ForceComputations::resetForces(simData.getParticles(), simData.getNumberThreads());
                 ForceComputations::computeGravity(simData.getParticles());
-                ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav());
-                VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
+                ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav(),
+                                                     simData.getNumberThreads());
+                VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT(),
+                                                     simData.getNumberThreads());
             };
             after = [this]() {
             };
@@ -54,14 +57,17 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
         case collision:
             before = [this]() {
                 VelocityComputations::applyBrownianMotion(simData.getParticles(), simData.getAverageVelocity(),
-                                                          simData.getNumberDimensions());
+                                                          simData.getNumberThreads(), 2);
             };
             step = [this](size_t iteration, double currentTime) {
-                PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
-                ForceComputations::resetForces(simData.getParticles());
+                PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT(),
+                                                     simData.getNumberThreads());
+                ForceComputations::resetForces(simData.getParticles(), simData.getNumberThreads());
                 ForceComputations::computeLennardJonesPotential(simData.getParticles());
-                ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav());
-                VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
+                ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav(),
+                                                     simData.getNumberThreads());
+                VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT(),
+                                                     simData.getNumberThreads());
             };
             after = [this]() {
             };
@@ -75,35 +81,55 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                                                       simData.getNumberDimensions());
                 } else {
                     VelocityComputations::applyBrownianMotion(simData.getParticles(),
-                                                              simData.getAverageVelocity(),
+                                                              simData.getAverageVelocity(), simData.getNumberThreads(),
                                                               simData.getNumberDimensions());
+                }
+                if (simData.getThreadVersion() == 0) {
+                    auto containerLinkedCell = dynamic_cast<ParticleContainerLinkedCell *>(&(simData.getParticles()));
+                    if (containerLinkedCell) {
+                        containerLinkedCell->computeMeshPartition(simData.getNumberThreads());
+                    } else {
+                        SPDLOG_ERROR("Linked Cell Simulation is not using Linked Cell Container. Aborting...");
+                        exit(EXIT_FAILURE);
+                    }
                 }
             };
             step = [this, thermoUpdate](size_t iteration, double currentTime) {
                 // save previous position and update the position of particles in the mesh based on the new one
-                PositionComputations::updateOldX(simData.getParticles());
-                PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
+                PositionComputations::updateOldX(simData.getParticles(), simData.getNumberThreads());
+                PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT(),
+                                                     simData.getNumberThreads());
                 auto containerLinkedCell = dynamic_cast<ParticleContainerLinkedCell *>(&(simData.getParticles()));
                 if (containerLinkedCell) {
                     containerLinkedCell->correctCellMembershipAllParticles();
-                    ForceComputations::resetForces(simData.getParticles());
-                    // schlechter:
-                    //ForceComputations::computeLennardJonesPotentialCutoff(*containerLinkedCell, containerLinkedCell->getCutoffRadius());
-                    // besser:
-                    // ForceComputations::computeLennardJonesPotentialCutoffCellIter(*containerLinkedCell,
-                    //                                                       containerLinkedCell->getCutoffRadius());
-                    // noch besser?:
-                    ForceComputations::computeLennardJonesPotentialCutoffMeshPart(*containerLinkedCell,
-                        containerLinkedCell->getCutoffRadius(), 4);
+                    ForceComputations::resetForces(simData.getParticles(), simData.getNumberThreads());
+                    switch (simData.getThreadVersion()) {
+                        case 0:
+                            ForceComputations::computeLennardJonesPotentialCutoffMeshPart(
+                                *containerLinkedCell, containerLinkedCell->getCutoffRadius(),
+                                simData.getNumberThreads());
+                            break;
+                        case 1:
+                            ForceComputations::computeLennardJonesPotentialCutoffCellIter(
+                                *containerLinkedCell, containerLinkedCell->getCutoffRadius(),
+                                simData.getNumberThreads());
+                            break;
+                        default:
+                            ForceComputations::computeLennardJonesPotentialCutoff(
+                                *containerLinkedCell, containerLinkedCell->getCutoffRadius(),
+                                simData.getNumberThreads());
+                    }
 
 
                     SPDLOG_DEBUG("computing ghost particle repulsion...");
                     ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell);
 
 
-                    ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav());
+                    ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav(),
+                                                         simData.getNumberThreads());
 
-                    VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
+                    VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT(),
+                                                         simData.getNumberThreads());
 
                     // apply thermostat
                     if (simData.isThermostat() && iteration % simData.getThermoFrequency() == 0) {
@@ -128,20 +154,22 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
             step = [this](size_t iteration, double currentTime) {
                 // save previous position and update the position of particles in the mesh based on the new one
 
-                PositionComputations::updateOldX(simData.getParticles());
-                PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
+                PositionComputations::updateOldX(simData.getParticles(), simData.getNumberThreads());
+                PositionComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT(),
+                                                     simData.getNumberThreads());
                 auto containerLinkedCell = dynamic_cast<ParticleContainerLinkedCell *>(&(simData.getParticles()));
                 if (containerLinkedCell) {
                     containerLinkedCell->correctCellMembershipAllParticles();
 
-                    ForceComputations::resetForces(simData.getParticles());
+                    ForceComputations::resetForces(simData.getParticles(), simData.getNumberThreads());
 
                     ForceComputations::computeMembraneNeighborForce(*containerLinkedCell,
                                                                     simData.getK(), simData.getR0());
 
                     ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell);
 
-                    ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav());
+                    ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav(),
+                                                         simData.getNumberThreads());
 
                     if (currentTime <= 150) {
                         ForceComputations::applyCustomForceVector(*containerLinkedCell,
@@ -149,7 +177,8 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                                                                   simData.getCustomForce());
                     }
 
-                    VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT());
+                    VelocityComputations::stoermerVerlet(simData.getParticles(), simData.getDeltaT(),
+                                                         simData.getNumberThreads());
                 } else {
                     SPDLOG_LOGGER_ERROR(logger, "Membrane simulation is not using Linked Cell Container. Aborting...");
                     exit(EXIT_FAILURE);
@@ -248,7 +277,6 @@ size_t Simulator::runSimulationLoop() {
 
         if (simData.getProfileIterationNumber() != -1 && iteration % simData.getProfileIterationNumber() == 0 && !
             simData.getBench()) {
-            // write output on every 10th iteration
             try {
                 auto &linkedCellContainer = dynamic_cast<ParticleContainerLinkedCell &>(simData.getParticles());
                 profileWriter.profileBins(linkedCellContainer, iteration, simData.getProfileBinNumber());

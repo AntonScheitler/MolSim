@@ -47,7 +47,7 @@ protected:
  */
 TEST_F(VelocityComputationsTest, StoermerVerletVelocityCalcTest) {
 
-    VelocityComputations::stoermerVerlet(particles, 0.1);
+    VelocityComputations::stoermerVerlet(particles, 0.1, 1);
 
     // particle a
     EXPECT_NEAR(particles.getParticle(0).getV()[0], 7.083333333, 0.00000001);
