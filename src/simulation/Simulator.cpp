@@ -229,11 +229,12 @@ size_t Simulator::runSimulationLoop() {
             writer.plotParticles(simData.getParticles(), iteration);
         }
 
-        if (simData.getBinProfilingIterations() != -1 && iteration % simData.getBinProfilingIterations() == 0 && !simData.getBench()) {
+
+        if (simData.getProfileIterationNumber() != -1 && iteration % simData.getProfileIterationNumber() == 0 && !simData.getBench()) {
             // write output on every 10th iteration
             try {
                 auto& linkedCellContainer = dynamic_cast<ParticleContainerLinkedCell&>(simData.getParticles());
-                profileWriter.profileBins(linkedCellContainer, iteration, simData.getBinNumber());
+                profileWriter.profileBins(linkedCellContainer, iteration, simData.getProfileBinNumber());
             } catch (const std::bad_cast& e) {
                 SPDLOG_LOGGER_ERROR(logger, "ParticleContainer is not of type ParticleContainerLinkedCell: ", e.what());
             }

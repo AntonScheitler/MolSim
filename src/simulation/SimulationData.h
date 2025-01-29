@@ -312,26 +312,26 @@ public:
     int getNumberDimensions();
 
     /**
-     * @brief set the number of bins used for profiling
-     * @param numberBinArg number of bins
-     */
-    void setBinNumber(int numberBinArg);
+    * @brief set the number of bins used for profiling
+    * @param binNumberArg number of bins
+    */
+    void setProfileBinNumber(int binNumberArg);
 
     /**
-     * @param returns the number of bins for profiling
-     */
-    int getBinNumber();
+    * @param returns the number of bins used for profiling
+    */
+    int getProfileBinNumber();
 
     /**
-     * @brief set the number of iterations after which the bins are profiled
-     * @param iterationArg number of iterations
-     */
-    void setBinProfilingIterations(int iterationArg);
+    * @brief set the number of iterations after which the state is profiled
+    * @param iterationArg number of iterations
+    */
+    void setProfileIterationNumber(int iterationArg);
 
     /**
-     * @param returns the iteration after which the bins should be profiled
-     */
-    int getBinProfilingIterations();
+    * @param returns the number of iterations after which the state is profiled
+    */
+    int getProfileIterationNumber();
 
 
 private:
@@ -367,6 +367,7 @@ private:
 
     int numberDimensions;
 
-    int numberBins;
-    int binProfilingIterations;
+
+    int profileIterationNumber;
+    int binNumber;
 };

@@ -31,6 +31,9 @@ SimulationData::SimulationData() {
     numberBins = 50;
     binProfilingIterations = -1;
 
+    binNumber = 50;
+    profileIterationNumber = -1;
+
 }
 
 int SimulationData::parseOptions(int argc, char *argsv[]) {
@@ -337,18 +340,19 @@ int SimulationData::getNumberDimensions() {
     return numberDimensions;
 }
 
-void SimulationData::setBinNumber(int numberBinArg) {
-    this->numberBins = numberBinArg;
+
+void SimulationData::setProfileBinNumber(int binNumberArg) {
+    this->binNumber = binNumberArg;
 }
 
-int SimulationData::getBinNumber() {
-    return numberBins;
+int SimulationData::getProfileBinNumber() {
+    return binNumber;
 }
 
-void SimulationData::setBinProfilingIterations(int iterationArg) {
-    this->binProfilingIterations = iterationArg;
+void SimulationData::setProfileIterationNumber(int iterationArg) {
+    this->profileIterationNumber = iterationArg;
 }
 
-int SimulationData::getBinProfilingIterations() {
-    return binProfilingIterations;
+void SimulationData::getProfileIterationNumber() {
+    return profileIterationNumber;
 }
