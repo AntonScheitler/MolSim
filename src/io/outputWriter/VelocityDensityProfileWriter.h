@@ -3,7 +3,7 @@
 
 namespace outputWriter {
 
-    class VelocityDensityProfileWriter : public FileWriter {
+    class VelocityDensityProfileWriter  {
     public:
 
         VelocityDensityProfileWriter(std::string baseName);
@@ -14,7 +14,7 @@ namespace outputWriter {
          * @param iteration number of the current iteration
          * @param bins number of bins to separate the domain into
          */
-        void profileBins( std::vector<VelocityDensityProfile::binInfo> &binInfos, int iteration);
+        void profileBins(ParticleContainerLinkedCell& particles, int iteration, int bins);
 
     private:
 
