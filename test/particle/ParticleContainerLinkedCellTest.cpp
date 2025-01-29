@@ -216,7 +216,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellGhostParticle
     std::unordered_set<std::pair<Particle, Particle>, PairHash, PairEqual> pairsSet;
 
     for (double y = 0; y < 3; y++) {
-        for (double x = 0; x < 3; x++) {
+for (double x = 0; x < 3; x++) {
             std::array<double, 3> pos1 = {x * container.getCellSize()[0] + 7, y * container.getCellSize()[1] + 7, 0.5};
             // all particles move to the top-right 
             Particle p1 = {pos1, {1, 1, 0}, 1};
@@ -335,7 +335,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellPeriodicBound
     Particle& particleLeft = container.getParticles()[0];
     Particle& particleRight = container.getParticles()[1];
 
-    ForceComputations::computeLennardJonesPotentialCutoff(container, 33);
+    ForceComputations::computeLennardJonesPotentialCutoff(container, 33, 1);
     std::array<double, 3> distanceVector = {1, 0, 0};
     double distance = 1;
     // don't consider particles which are further apart than the cutoff radius
@@ -388,14 +388,14 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryOutfl
     // run simulation step
     int iterations = 2000;
     for (int i = 0; i < iterations; i++) {
-        PositionComputations::updateOldX(container);
-        PositionComputations::stoermerVerlet(container, deltaT);
+        PositionComputations::updateOldX(container, 1);
+        PositionComputations::stoermerVerlet(container, deltaT, 1);
         container.correctCellMembershipAllParticles();
 
-        ForceComputations::resetForces(container);
+        ForceComputations::resetForces(container, 1);
         ForceComputations::computeLennardJonesPotential(container);
         ForceComputations::computeGhostParticleRepulsion(container);
-        VelocityComputations::stoermerVerlet(container, deltaT);
+        VelocityComputations::stoermerVerlet(container, deltaT, 1);
     }
 
     // check
@@ -439,14 +439,14 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryRefle
     // run simulation step
     int iterations = 100;
     for (int i = 0; i < iterations; i++) {
-        PositionComputations::updateOldX(container);
-        PositionComputations::stoermerVerlet(container, deltaT);
+        PositionComputations::updateOldX(container, 1);
+        PositionComputations::stoermerVerlet(container, deltaT, 1);
         container.correctCellMembershipAllParticles();
 
-        ForceComputations::resetForces(container);
+        ForceComputations::resetForces(container, 1);
         ForceComputations::computeLennardJonesPotential(container);
         ForceComputations::computeGhostParticleRepulsion(container);
-        VelocityComputations::stoermerVerlet(container, deltaT);
+        VelocityComputations::stoermerVerlet(container, deltaT, 1);
     }
 
     // check that particle is present
@@ -492,14 +492,14 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellDiagonalBound
     // run simulation step
     int iterations = 2000;
     for (int i = 0; i < iterations; i++) {
-        PositionComputations::updateOldX(container);
-        PositionComputations::stoermerVerlet(container, deltaT);
+        PositionComputations::updateOldX(container, 1);
+        PositionComputations::stoermerVerlet(container, deltaT, 1);
         container.correctCellMembershipAllParticles();
 
-        ForceComputations::resetForces(container);
+        ForceComputations::resetForces(container, 1);
         ForceComputations::computeLennardJonesPotential(container);
         ForceComputations::computeGhostParticleRepulsion(container);
-        VelocityComputations::stoermerVerlet(container, deltaT);
+        VelocityComputations::stoermerVerlet(container, deltaT, 1);
     }
 
     // check that particle is present
@@ -514,4 +514,22 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellDiagonalBound
     }
     // particle should still be in the container
     EXPECT_TRUE(particlePresent);
+}
+
+/**
+ * @brief checks if the container is paritioned correctly for multiple threads
+ */
+TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellMeshPartitionTest)  {
+    ParticleContainerLinkedCell container{{6, 3, 1}, 1, {{reflect, reflect}, {reflect, reflect}, {outflow, outflow}}};
+    container.computeMeshPartition(2);
+    auto matrixPair = container.getMeshPartition();
+    std::vector<size_t> p1 = {1, 7, 13};
+    std::vector<size_t> p2 = {4, 10, 16};
+    std::vector<size_t> b1 = {0, 6, 12, 5, 11, 17};
+    std::vector<size_t> b2 = {2, 8, 14, 3, 9, 15};
+    EXPECT_TRUE(matrixPair.first.size() == 2);
+    EXPECT_TRUE(matrixPair.first[0] == p1);
+    EXPECT_TRUE(matrixPair.first[1] == p2);
+    EXPECT_TRUE(matrixPair.second[0] == b1);
+    EXPECT_TRUE(matrixPair.second[1] == b2);
 }

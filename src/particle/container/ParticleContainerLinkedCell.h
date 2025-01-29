@@ -28,6 +28,8 @@ public:
                                 struct boundaryConfig boundaryConfigArg = {{outflow, outflow},
                                                                            {outflow, outflow},
                                                                            {outflow, outflow}});
+                                                                           
+
 
     void addParticle(const Particle &particle) override;
 
@@ -122,6 +124,13 @@ public:
      */
     void computeNeighborCellsMatrix();
 
+    /**
+     * @brief computes the partitions of the mesh, so that each each thread can be assigned a partition and work on it
+     * without interfering with other threads.
+     * @param numThreads the number of threads available for the simulation
+     */
+    void computeMeshPartition(size_t numThreads);
+
     std::vector<Cell> &getMesh();
 
     std::vector<Particle> &getParticles();
@@ -142,6 +151,8 @@ public:
 
     std::vector<std::vector<size_t>>& getNeighborCellsMatrix();
 
+    std::pair<std::vector<std::vector<size_t>>, std::vector<std::vector<size_t>>>& getMeshPartition();
+
 private:
     /**
      * @brief mesh contains all grid cells
@@ -157,6 +168,11 @@ private:
      * @brief a vector of vectors containing indices for the neighborCells of the cell at the given index 
      */
     std::vector<std::vector<size_t>> neighborCellsMatrix;
+
+    /**
+     * @brief a pair of matricies storing the partitioned mesh for race-free multithreading 
+     */
+    std::pair<std::vector<std::vector<size_t>>, std::vector<std::vector<size_t>>> meshPartition;
     /**
      * @brief the size of the domain for the container
      */
