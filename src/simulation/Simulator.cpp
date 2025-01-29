@@ -211,7 +211,7 @@ void Simulator::simulate() {
         logger->info("Commencing Simulation...");
 
         totalDuration = 0;
-        numIterations = 10;
+        numIterations = 1;
     }
 
     if (simData.getBench()) {
