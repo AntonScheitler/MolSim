@@ -102,31 +102,7 @@
             <sigma>1.0</sigma>
         </cuboid>
 
-<!--        <cuboid>-->
-<!--&lt;!&ndash;            collision &ndash;&gt;-->
-<!--            <cornerCoordinates>-->
-<!--                <x>13</x>-->
-<!--                <y>13</y>-->
-<!--                <z>2</z>-->
-<!--            </cornerCoordinates>-->
-<!--            <dimensions>-->
-<!--                <x>4</x>-->
-<!--                <y>4</y>-->
-<!--                <z>4</z>-->
-<!--            </dimensions>-->
-<!--            <velocity>-->
-<!--                <x>0.0</x>-->
-<!--                <y>0.0</y>-->
-<!--                <z>0.0</z>-->
-<!--            </velocity>-->
-<!--            <meshWidth>1.0</meshWidth>-->
-<!--            <mass>1.0</mass>-->
-<!--            <brownianMotion>0.0</brownianMotion>-->
-<!--            <epsilon>2.0</epsilon>-->
-<!--            <sigma>1.1</sigma>-->
-<!--            <fixed>false</fixed>-->
-<!--        </cuboid>-->
-
+        <!--  3 discs in the middle of the tube create turbulences-->
         <disc>
             <!-- collision sphere in the middle of the nano tube-->
             <center>
@@ -139,47 +115,83 @@
                 <y>0</y>
                 <z>0</z>
             </velocity>
-            <mass>1.0</mass>
-            <meshWidth>0.9</meshWidth>
-            <radius>4</radius>
+            <mass>5.0</mass>
+            <meshWidth>0.8</meshWidth>
+            <radius>8</radius>
             <fixed>true</fixed>
         </disc>
 
-<!--        <disc>-->
-<!--            &lt;!&ndash; collision sphere in the middle of the nano tube&ndash;&gt;-->
-<!--            <center>-->
-<!--                <x>15</x>-->
-<!--                <y>15</y>-->
-<!--                <z>2</z>-->
-<!--            </center>-->
-<!--            <velocity>-->
-<!--                <x>0</x>-->
-<!--                <y>0</y>-->
-<!--                <z>0</z>-->
-<!--            </velocity>-->
-<!--            <mass>1.0</mass>-->
-<!--            <meshWidth>0.9</meshWidth>-->
-<!--            <radius>4</radius>-->
-<!--            <fixed>true</fixed>-->
-<!--        </disc>-->
+        <disc>
+            <!-- collision sphere in the middle of the nano tube-->
+            <center>
+                <x>15</x>
+                <y>15</y>
+                <z>7.2</z>
+            </center>
+            <velocity>
+                <x>0</x>
+                <y>0</y>
+                <z>0</z>
+            </velocity>
+            <mass>5.0</mass>
+            <meshWidth>0.8</meshWidth>
+            <radius>8</radius>
+            <fixed>true</fixed>
+        </disc>
 
-<!--        <disc>-->
-<!--            &lt;!&ndash; collision sphere in the middle of the nano tube&ndash;&gt;-->
-<!--            <center>-->
-<!--                <x>15</x>-->
-<!--                <y>15</y>-->
-<!--                <z>3</z>-->
-<!--            </center>-->
-<!--            <velocity>-->
-<!--                <x>0</x>-->
-<!--                <y>0</y>-->
-<!--                <z>0</z>-->
-<!--            </velocity>-->
-<!--            <mass>1.0</mass>-->
-<!--            <meshWidth>0.9</meshWidth>-->
-<!--            <radius>4</radius>-->
-<!--            <fixed>true</fixed>-->
-<!--        </disc>-->
+        <disc>
+            <!-- collision sphere in the middle of the nano tube-->
+            <center>
+                <x>15</x>
+                <y>15</y>
+                <z>4.8</z>
+            </center>
+            <velocity>
+                <x>0</x>
+                <y>0</y>
+                <z>0</z>
+            </velocity>
+            <mass>5.0</mass>
+            <meshWidth>0.8</meshWidth>
+            <radius>8</radius>
+            <fixed>true</fixed>
+        </disc>
+
+        <disc>
+            <!-- collision sphere in the middle of the nano tube-->
+            <center>
+                <x>15</x>
+                <y>15</y>
+                <z>3.6</z>
+            </center>
+            <velocity>
+                <x>0</x>
+                <y>0</y>
+                <z>0</z>
+            </velocity>
+            <mass>5.0</mass>
+            <meshWidth>0.8</meshWidth>
+            <radius>8</radius>
+            <fixed>true</fixed>
+        </disc>
+
+        <disc>
+            <!-- collision sphere in the middle of the nano tube-->
+            <center>
+                <x>15</x>
+                <y>15</y>
+                <z>2.4</z>
+            </center>
+            <velocity>
+                <x>0</x>
+                <y>0</y>
+                <z>0</z>
+            </velocity>
+            <mass>5.0</mass>
+            <meshWidth>0.8</meshWidth>
+            <radius>8</radius>
+            <fixed>true</fixed>
+        </disc>
 
     </clusters>
     <thermo>

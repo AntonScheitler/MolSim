@@ -7,6 +7,7 @@ format of velocity-density-profile:
 var1: higher gravity
 - gravity = -8 (before -0.8)
 - expected result: higher velocities
+[USEFUL RESULT]
 
 var2: higher particle mass
 - only fluid particles have m=3 (before m=1)
@@ -16,17 +17,19 @@ var3: higher epsilon
 - eps = 3 (before eps=1)
 - expected result: higher attraction between the fluid particles
 
-var4: higher sigma
-- sigma=3 (before sigma=1)
-(sigma: distance at wich potential between 2 particles is zero)
-expected result: more (bigger) forces are acting on particles (effect: ?)
+deleted        var4: higher sigma
+        - sigma=3 (before sigma=1)
+        (sigma: distance at which potential between 2 particles is zero)
+        expected result: more (bigger) forces are acting on particles (effect: ?)
 
 var5: fixed sphere in the tube
 - expected result: turbulences
+[USEFUL RESULT]
 
 var6: higher density of the fluid (smaller meshwidth h)
 - h = 1 (before h=1.2)
 - expected result: higher density
+[USEFUL RESULT]
 
 var7: smaller distance to the walls (tube narrower)
 - expected result: ?

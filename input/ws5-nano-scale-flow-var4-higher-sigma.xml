@@ -99,6 +99,7 @@
             <mass>1.0</mass>
             <brownianMotion>0.0</brownianMotion>
             <epsilon>1.0</epsilon>
+            <!-- sigma changed from 1 to 3-->
             <sigma>3.0</sigma>
         </cuboid>
     </clusters>
