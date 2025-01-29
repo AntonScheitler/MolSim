@@ -53,15 +53,6 @@ namespace inputReader {
             std::unique_ptr<simulation> simParser = simulation_(inputFile, xml_schema::flags::dont_validate);
             SPDLOG_LOGGER_DEBUG(logger, "opened simparser");
 
-            //            std::ostringstream command;
-            //            command << "xmllint --noout --schema ../src/io/inputReader/xml/simulation.xsd " << filename;
-            //            int result = std::system(command.str().c_str());
-
-            //            if (!(result == 0 || result == 32512)) {
-            //                std::cerr << "Error in xml file: scheme does not validate ";
-            //                exit(-1);
-            //            }
-
             // use linked cell if specified
 
             auto parameters = simParser->parameters();
@@ -176,12 +167,9 @@ namespace inputReader {
                 simData.setMovingMembranePartIndices(movingMembranePartIndicesArgs);
 
 
-
                 double epsilon = cuboid.epsilon().present() ? cuboid.epsilon().get() : simData.getEpsilon();
                 double sigma = cuboid.sigma().present() ? cuboid.sigma().get() : simData.getSigma();
 
-
-                //TODO: also add 'fixed' param for each particle in checkpointing
                 bool fixed = false;
                 if(cuboid.fixed().present()) {
                     fixed = cuboid.fixed().get();

@@ -18,8 +18,6 @@ namespace inputReader {
                     tempx[0] = dx * h + x[0];
 
                     Particle temp = Particle(tempx, v, m, type, e, s, fixed);
-                    temp.setSigma(s);
-                    temp.setEpsilon(e);
 
                     if(simType == 3) {
                         addNeighbors(temp, dx, dy, dz, d);

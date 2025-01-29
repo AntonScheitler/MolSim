@@ -27,6 +27,7 @@
     </parameters>
     <clusters>
         <cuboid>
+        <!-- cuboid 1  -->
             <cornerCoordinates>
                 <x>1</x>
                 <y>2</y>
@@ -42,13 +43,14 @@
                 <y>2</y>
                 <z>1</z>
             </velocity>
-            <meshWidth>2</meshWidth>
+            <meshWidth>1</meshWidth>
             <mass>1.0</mass>
-            <brownianMotion>1.4</brownianMotion>
+            <averageVelocity>1.4</averageVelocity>
             <epsilon>1.0</epsilon>
             <sigma>1.2</sigma>
         </cuboid>
         <cuboid>
+        <!--  cuboid 2   -->
             <cornerCoordinates>
                 <x>20</x>
                 <y>21</y>
@@ -64,9 +66,9 @@
                 <y>6.6</y>
                 <z>5.5</z>
             </velocity>
-            <meshWidth>1.2</meshWidth>
+            <meshWidth>1</meshWidth>
             <mass>2.0</mass>
-            <brownianMotion>0.726</brownianMotion>
+            <averageVelocity>0.726</averageVelocity>
             <epsilon>2.0</epsilon>
             <sigma>1.1</sigma>
         </cuboid>
