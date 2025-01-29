@@ -17,6 +17,8 @@
             <xBottom>outflow</xBottom>
             <yLeft>periodic</yLeft>
             <yRight>periodic</yRight>
+            <zFront>outflow</zFront>
+            <zBehind>outflow</zBehind>
         </boundary>
     </parameters>
     <clusters>

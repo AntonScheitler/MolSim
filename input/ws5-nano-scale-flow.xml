@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <simulation>
+    <output>
+        <writeFrequency>10</writeFrequency>
+        <baseName>MD_nano_var0</baseName>
+    </output>
     <parameters>
         <delta_t>0.0005</delta_t>
         <t_end>500</t_end>

@@ -37,7 +37,7 @@ SimulationData::SimulationData() {
 
 int SimulationData::parseOptions(int argc, char *argsv[]) {
     // define usage text
-    std::string usageText = "Usage: ./MolSim [OPTIONS] INPUT_FILE\n"
+    std::string usageText = "Usage: ./molsim [OPTIONS] INPUT_FILE\n"
                             "-d, --delta_t\t\tsize of each timestep. Defaults to 0.014\n"
                             "-e, --t_end\t\ttime at which to stop the simulation. Defaults to 1000\n"
                             "-l, --log\t\tlog level, default value: 'info'. valid values (high to low):\n\t\t\t\t'trace', 'debug', 'info', 'warn', 'err', 'critical', 'off'\n\t\t\t\t (using any other string will result in logging turned 'off')\n"

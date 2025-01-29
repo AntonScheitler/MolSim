@@ -45,7 +45,6 @@
             </velocity>
             <meshWidth>1.0</meshWidth>
             <mass>1.0</mass>
-            <brownianMotion>0.0</brownianMotion>
             <epsilon>2.0</epsilon>
             <sigma>1.1</sigma>
             <fixed>true</fixed>
@@ -69,7 +68,6 @@
             </velocity>
             <meshWidth>1.0</meshWidth>
             <mass>1.0</mass>
-            <brownianMotion>0.0</brownianMotion>
             <epsilon>2.0</epsilon>
             <sigma>1.1</sigma>
             <fixed>true</fixed>
@@ -93,7 +91,6 @@
             </velocity>
             <meshWidth>1.2</meshWidth>
             <mass>1.0</mass>
-            <brownianMotion>0.0</brownianMotion>
             <epsilon>1.0</epsilon>
             <sigma>1.0</sigma>
         </cuboid>

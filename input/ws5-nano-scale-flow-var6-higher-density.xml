@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <simulation>
+    <output>
+        <writeFrequency>10</writeFrequency>
+        <baseName>MD_nano_var6</baseName>
+    </output>
     <parameters>
         <delta_t>0.0005</delta_t>
         <t_end>500</t_end>
@@ -49,7 +53,6 @@
             </velocity>
             <meshWidth>1.0</meshWidth>
             <mass>1.0</mass>
-            <brownianMotion>0.0</brownianMotion>
             <epsilon>2.0</epsilon>
             <sigma>1.1</sigma>
             <fixed>true</fixed>
@@ -73,7 +76,6 @@
             </velocity>
             <meshWidth>1.0</meshWidth>
             <mass>1.0</mass>
-            <brownianMotion>0.0</brownianMotion>
             <epsilon>2.0</epsilon>
             <sigma>1.1</sigma>
             <fixed>true</fixed>
@@ -98,7 +100,6 @@
             <!-- meshWidth changed from 1.2 to 1-->
             <meshWidth>1</meshWidth>
             <mass>1.0</mass>
-            <brownianMotion>0.0</brownianMotion>
             <epsilon>1.0</epsilon>
             <sigma>1.0</sigma>
         </cuboid>

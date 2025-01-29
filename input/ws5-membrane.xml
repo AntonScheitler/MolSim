@@ -47,7 +47,6 @@
             </velocity>
             <meshWidth>2.2</meshWidth>
             <mass>1.0</mass>
-            <brownianMotion>0.0</brownianMotion>
             <epsilon>1.0</epsilon>
             <sigma>1.0</sigma>
 

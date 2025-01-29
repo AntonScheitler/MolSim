@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <simulation>
+    <output>
+        <writeFrequency>10</writeFrequency>
+        <baseName>MD_rt_3d_small</baseName>
+    </output>
     <parameters>
         <delta_t>0.0005</delta_t>
         <t_end>20</t_end>
@@ -44,7 +48,6 @@
             </velocity>
             <meshWidth>1.2</meshWidth>
             <mass>1.0</mass>
-            <brownianMotion>0.0</brownianMotion>
             <epsilon>1.0</epsilon>
             <sigma>1.2</sigma>
         </cuboid>
@@ -66,7 +69,6 @@
             </velocity>
             <meshWidth>1.2</meshWidth>
             <mass>2.0</mass>
-            <brownianMotion>0.0</brownianMotion>
             <epsilon>1.0</epsilon>
             <sigma>1.1</sigma>
             </cuboid>
