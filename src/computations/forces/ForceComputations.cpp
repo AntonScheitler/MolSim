@@ -58,7 +58,7 @@ void ForceComputations::computeLennardJonesPotential(ParticleContainer &particle
     }
 }
 
-void ForceComputations::computeLennardJonesPotentialCutoff(ParticleContainerLinkedCell &particles, double cutoff) {
+void ForceComputations::computeLennardJonesPotentialCutoff(ParticleContainerLinkedCell &particles, double cutoff, size_t numThreads) {
     double epsilon;
     double sigma;
     std::vector<std::pair<Particle&, Particle&>> particlePairs = {};
@@ -67,7 +67,7 @@ void ForceComputations::computeLennardJonesPotentialCutoff(ParticleContainerLink
     }
     // iterate through all pairs of particles and calculate lennard-jones potential
 
-    #pragma omp parallel for
+    #pragma omp parallel for num_threads(numThreads)
     for (size_t i = 0; i < particlePairs.size(); i++) {
         std::pair<Particle &, Particle &> pair = particlePairs[i];
         computeLennardJonesPotentialCutoffHelperPair(particles, pair, cutoff, true);
@@ -75,9 +75,9 @@ void ForceComputations::computeLennardJonesPotentialCutoff(ParticleContainerLink
 }
 
 
-void ForceComputations::computeLennardJonesPotentialCutoffCellIter(ParticleContainerLinkedCell &particles, double cutoff) {
+void ForceComputations::computeLennardJonesPotentialCutoffCellIter(ParticleContainerLinkedCell &particles, double cutoff, size_t numThreads) {
     // iterate through every cell
-    #pragma omp parallel for
+    #pragma omp parallel for num_threads(numThreads)
     for (size_t cellIdx = 0; cellIdx < particles.getMesh().size(); cellIdx++) {
         computeLennardJonesPotentialCutoffHelperCell(particles, cellIdx, cutoff, true);
     }
@@ -107,8 +107,8 @@ void ForceComputations::computeLennardJonesPotentialCutoffMeshPart(ParticleConta
 }
 
 
-void ForceComputations::resetForces(ParticleContainer &particles) {
-    #pragma omp parallel for
+void ForceComputations::resetForces(ParticleContainer &particles, size_t numThreads) {
+    #pragma omp parallel for num_threads(numThreads)
     for (size_t i = 0; i < particles.size(); i++) {
         Particle& particle = particles.getParticle(i);
         if (particle.isFixed() || !(particle.getActive())) continue;
@@ -118,7 +118,7 @@ void ForceComputations::resetForces(ParticleContainer &particles) {
 }
 
 
-void ForceComputations::addExternalForces(ParticleContainer &particles, std::array<double, 3> grav) {
+void ForceComputations::addExternalForces(ParticleContainer &particles, std::array<double, 3> grav, size_t numThreads) {
     #pragma omp parallel for
     for (size_t i = 0; i < particles.size(); i++) {
         Particle& particle = particles.getParticle(i);

@@ -335,7 +335,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellPeriodicBound
     Particle& particleLeft = container.getParticles()[0];
     Particle& particleRight = container.getParticles()[1];
 
-    ForceComputations::computeLennardJonesPotentialCutoff(container, 33);
+    ForceComputations::computeLennardJonesPotentialCutoff(container, 33, 1);
     std::array<double, 3> distanceVector = {1, 0, 0};
     double distance = 1;
     // don't consider particles which are further apart than the cutoff radius
@@ -388,14 +388,14 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryOutfl
     // run simulation step
     int iterations = 2000;
     for (int i = 0; i < iterations; i++) {
-        PositionComputations::updateOldX(container);
-        PositionComputations::stoermerVerlet(container, deltaT);
+        PositionComputations::updateOldX(container, 1);
+        PositionComputations::stoermerVerlet(container, deltaT, 1);
         container.correctCellMembershipAllParticles();
 
-        ForceComputations::resetForces(container);
+        ForceComputations::resetForces(container, 1);
         ForceComputations::computeLennardJonesPotential(container);
         ForceComputations::computeGhostParticleRepulsion(container);
-        VelocityComputations::stoermerVerlet(container, deltaT);
+        VelocityComputations::stoermerVerlet(container, deltaT, 1);
     }
 
     // check
@@ -439,14 +439,14 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryRefle
     // run simulation step
     int iterations = 100;
     for (int i = 0; i < iterations; i++) {
-        PositionComputations::updateOldX(container);
-        PositionComputations::stoermerVerlet(container, deltaT);
+        PositionComputations::updateOldX(container, 1);
+        PositionComputations::stoermerVerlet(container, deltaT, 1);
         container.correctCellMembershipAllParticles();
 
-        ForceComputations::resetForces(container);
+        ForceComputations::resetForces(container, 1);
         ForceComputations::computeLennardJonesPotential(container);
         ForceComputations::computeGhostParticleRepulsion(container);
-        VelocityComputations::stoermerVerlet(container, deltaT);
+        VelocityComputations::stoermerVerlet(container, deltaT, 1);
     }
 
     // check that particle is present
@@ -492,14 +492,14 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellDiagonalBound
     // run simulation step
     int iterations = 2000;
     for (int i = 0; i < iterations; i++) {
-        PositionComputations::updateOldX(container);
-        PositionComputations::stoermerVerlet(container, deltaT);
+        PositionComputations::updateOldX(container, 1);
+        PositionComputations::stoermerVerlet(container, deltaT, 1);
         container.correctCellMembershipAllParticles();
 
-        ForceComputations::resetForces(container);
+        ForceComputations::resetForces(container, 1);
         ForceComputations::computeLennardJonesPotential(container);
         ForceComputations::computeGhostParticleRepulsion(container);
-        VelocityComputations::stoermerVerlet(container, deltaT);
+        VelocityComputations::stoermerVerlet(container, deltaT, 1);
     }
 
     // check that particle is present

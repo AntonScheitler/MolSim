@@ -3,8 +3,8 @@
 #include "PositionComputations.h"
 #include <omp.h>
 
-void PositionComputations::stoermerVerlet(ParticleContainer& particles, double deltaT) {
-    #pragma omp parallel for
+void PositionComputations::stoermerVerlet(ParticleContainer& particles, double deltaT, size_t numThreads) {
+    #pragma omp parallel for num_threads(numThreads)
     for (size_t i = 0; i < particles.size(); i++) {
         Particle& particle = particles.getParticle(i);
         if(particle.isFixed() || (!particle.getActive())) continue;
@@ -17,7 +17,7 @@ void PositionComputations::stoermerVerlet(ParticleContainer& particles, double d
     }
 }
 
-void PositionComputations::updateOldX(ParticleContainer &particles) {
+void PositionComputations::updateOldX(ParticleContainer &particles, size_t numThreads) {
     #pragma omp parallel for
     for (size_t i = 0; i < particles.size(); i++) {
         Particle& particle = particles.getParticle(i);

@@ -179,7 +179,7 @@ TEST_F(ForceComputationsTest, ExternalGravityTest) {
 
     ParticleContainerDirectSum particles = ParticleContainerDirectSum{std::vector{a, b}};
 
-    ForceComputations::addExternalForces(particles, {5, 5, 5});
+    ForceComputations::addExternalForces(particles, {5, 5, 5}, 1);
 
     // particle a
     EXPECT_DOUBLE_EQ(particles.getParticle(0).getF()[0], 31);
@@ -216,9 +216,8 @@ TEST_F(ForceComputationsTest, LennardJonesPotentialCutoffVariantsTest) {
         }
     }
 
-    ForceComputations::computeLennardJonesPotentialCutoff(containerRegular, 1);
-    omp_set_num_threads(2);
-    ForceComputations::computeLennardJonesPotentialCutoffCellIter(containerCellIter, 1);
+    ForceComputations::computeLennardJonesPotentialCutoff(containerRegular, 1, 1);
+    ForceComputations::computeLennardJonesPotentialCutoffCellIter(containerCellIter, 1, 2);
     containerMeshPart.computeMeshPartition(2);
     ForceComputations::computeLennardJonesPotentialCutoffMeshPart(containerMeshPart, 1, 2);
 
