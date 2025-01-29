@@ -2,7 +2,9 @@
 #include "FileWriter.h"
 
 namespace outputWriter {
-
+    /**
+   * @brief This class implements the functionality to create csv files that profile the particles
+   */
     class VelocityDensityProfileWriter  {
     public:
 

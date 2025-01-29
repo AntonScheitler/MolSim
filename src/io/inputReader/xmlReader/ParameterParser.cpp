@@ -3,7 +3,9 @@
 #include <iostream>
 #include "io/inputReader/xmlReader/xmlScheme/simulation.h"
 
-
+/**
+ * @brief namespace that wraps different methods to help parsing the XML input file
+ */
 namespace ParameterParser {
 
     void readParams(SimulationData &simData, const std::unique_ptr<simulation> &xmlParser) {

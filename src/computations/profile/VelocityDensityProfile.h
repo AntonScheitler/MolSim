@@ -1,6 +1,10 @@
 #pragma once
 #include "particle/container/ParticleContainerLinkedCell.h"
 
+
+/**
+* @brief This class provides the method to calculate the bin-profiles
+*/
 class VelocityDensityProfile {
     public:
 
