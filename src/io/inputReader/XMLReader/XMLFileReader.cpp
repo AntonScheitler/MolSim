@@ -189,7 +189,7 @@ namespace inputReader {
                 if(cuboid.fixed().present()) {
                     fixed = cuboid.fixed().get();
                 }
-                ParticleGenerator::generateCuboid(simData.getParticles(), x, v, d, m, h, type, epsilon, sigma, fixed);
+                ParticleGenerator::generateCuboid(simData.getParticles(), x, v, d, m, h, type, epsilon, sigma, fixed, simData.getSimType());
 
 
                 type++;
