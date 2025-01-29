@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include "spdlogConfig.h"
-#include "io/inputReader/xml/simulation.h"
+#include "io/inputReader/xmlReader/xmlScheme/simulation.h"
 #include <array>
 #include "io/inputReader/ParticleGenerator.h"
 #include "ParameterParser.h"
@@ -176,7 +176,6 @@ namespace inputReader {
                 simData.setMovingMembranePartIndices(movingMembranePartIndicesArgs);
 
 
-                simData.setAverageVelocity(cuboid.brownianMotion());
 
                 double epsilon = cuboid.epsilon().present() ? cuboid.epsilon().get() : simData.getEpsilon();
                 double sigma = cuboid.sigma().present() ? cuboid.sigma().get() : simData.getSigma();

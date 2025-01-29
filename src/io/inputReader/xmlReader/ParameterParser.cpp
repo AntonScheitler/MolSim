@@ -1,7 +1,7 @@
 #include "ParameterParser.h"
 #include "simulation/SimulationData.h"
 #include <iostream>
-#include "io/inputReader/xml/simulation.h"
+#include "io/inputReader/xmlReader/xmlScheme/simulation.h"
 
 
 namespace ParameterParser {
@@ -27,6 +27,9 @@ namespace ParameterParser {
                 if (xmlParser->parameters()->grav().present()) {
                     auto grav = xmlParser->parameters()->grav();
                     simData.setGrav({grav->x(), grav->y(), grav->z()});
+                }
+                if (xmlParser->parameters()->averageVelocity().present()){
+                    simData.setAverageVelocity(xmlParser->parameters()->averageVelocity().get());
                 }
                 if (xmlParser->parameters()->bin_profile().present()){
                     simData.setProfileIterationNumber(xmlParser->parameters()->bin_profile()->iteration());
