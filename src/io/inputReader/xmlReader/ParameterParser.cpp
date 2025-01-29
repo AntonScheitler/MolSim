@@ -126,6 +126,5 @@ namespace ParameterParser {
             SPDLOG_ERROR("Standard exception: {0}", e.what());
             exit(EXIT_FAILURE);
         }
-
     }
 }

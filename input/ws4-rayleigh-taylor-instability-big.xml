@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <simulation>
+    <output>
+        <writeFrequency>10</writeFrequency>
+        <baseName>MD_rt_2d</baseName>
+    </output>
     <parameters>
         <delta_t>0.0005</delta_t>
         <t_end>50</t_end>
@@ -74,4 +78,8 @@
         <init_T>40</init_T>
         <n>1000</n>
     </thermo>
+    <parallelization>
+        <strategy>0</strategy>
+        <threadNumber>6</threadNumber>
+    </parallelization>
 </simulation>
