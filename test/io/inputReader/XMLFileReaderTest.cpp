@@ -1,4 +1,4 @@
-#include <io/inputReader/XMLReader/XMLFileReader.h>
+#include <io/inputReader/xmlReader/XMLFileReader.h>
 #include <gtest/gtest.h>
 #include <particle/container/ParticleContainerLinkedCell.h>
 #include <particle/boundary/Boundary.h>
