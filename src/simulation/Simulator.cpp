@@ -6,7 +6,6 @@
 #include "io/outputWriter/VTKWriter.h"
 #include <io/outputWriter/CheckpointWriter.h>
 #include "../io/outputWriter/VelocityDensityProfileWriter.h"
-#include "io/outputWriter/vtk-unstructured.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/spdlog.h"
 #include "particle/container/ParticleContainer.h"
@@ -120,9 +119,7 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                                 simData.getNumberThreads());
                     }
 
-
-                    SPDLOG_DEBUG("computing ghost particle repulsion...");
-                    ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell);
+                    ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell, simData.getNumberThreads());
 
 
                     ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav(),
@@ -164,9 +161,9 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                     ForceComputations::resetForces(simData.getParticles(), simData.getNumberThreads());
 
                     ForceComputations::computeMembraneNeighborForce(*containerLinkedCell,
-                                                                    simData.getK(), simData.getR0());
+                                                                    simData.getK(), simData.getR0(), simData.getNumberThreads());
 
-                    ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell);
+                    ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell, simData.getNumberThreads());
 
                     ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav(),
                                                          simData.getNumberThreads());
