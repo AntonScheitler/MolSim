@@ -156,12 +156,13 @@ TEST_F(VelocityDensityProfilingTest, ProfileReaderCalculatesTheCorrectAverageVel
 
 
     for(int i = 0; i < 20; i++){
-        int sum = 0;
+        double sum = 0.0;
         for(int j = 0; j < i; j++){
             sum += j;
         }
-
-        EXPECT_EQ(csvData[i][2], sum / i);
+        if(i != 0){
+            EXPECT_EQ(csvData[i][2], sum/ i);
+        }
         EXPECT_EQ(csvData[i][3], i );
         EXPECT_EQ(csvData[i][4], 0);
 
