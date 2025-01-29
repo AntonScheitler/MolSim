@@ -6,7 +6,7 @@
 namespace inputReader {
     void
     ParticleGenerator::generateCuboid(ParticleContainer &particles, std::array<double, 3> x, std::array<double, 3> v,
-                                      std::array<int, 3> d, double m, double h, int type, double e, double s, bool fixed) {
+                                      std::array<int, 3> d, double m, double h, int type, double e, double s, bool fixed, int simType) {
 
 
         std::array<double, 3> tempx{};
@@ -20,7 +20,10 @@ namespace inputReader {
                     Particle temp = Particle(tempx, v, m, type, e, s, fixed);
                     temp.setSigma(s);
                     temp.setEpsilon(e);
-                    addNeighbors(temp, dx, dy, dz, d);
+
+                    if(simType == 3) {
+                        addNeighbors(temp, dx, dy, dz, d);
+                    }
 
                     particles.addParticle(temp);
                     SPDLOG_DEBUG("adding particle at {0}, {1}, {2}", tempx[0], tempx[1], tempx[2]);

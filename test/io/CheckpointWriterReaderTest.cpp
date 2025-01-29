@@ -28,7 +28,7 @@ protected:
         double epsilon = 1.0;
         double sigma = 1.0;
 
-        inputReader::ParticleGenerator::generateCuboid(particles, p, v, d, mass, h, type, epsilon, sigma, false);
+        inputReader::ParticleGenerator::generateCuboid(particles, p, v, d, mass, h, type, epsilon, sigma, false, 2);
 
         p = {0.0, 15, 0.0};
         v = {0.0, -2, 0.0};

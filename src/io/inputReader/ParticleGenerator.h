@@ -24,7 +24,7 @@ namespace inputReader {
          * @param s sigma value of particles
          */
         static void generateCuboid(ParticleContainer& particles, std::array<double, 3> x, std::array<double, 3> v,
-                                      std::array<int, 3> d, double m, double h, int type, double e, double s, bool fixed);
+                                      std::array<int, 3> d, double m, double h, int type, double e, double s, bool fixed, int simType);
         /**
          * @brief generates a disc consisting of particles
          * @param particle the container to write the particles into

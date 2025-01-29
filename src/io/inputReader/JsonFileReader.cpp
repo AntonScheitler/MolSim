@@ -54,7 +54,7 @@ namespace inputReader {
                 simData.setAverageVelocity(bm);
 
                 ParticleGenerator::generateCuboid(simData.getParticles(), x, v, d, m, h, type, simData.getEpsilon(),
-                                                  simData.getSigma(), false);
+                                                  simData.getSigma(), false, simData.getSimType());
 
                 type++;
 

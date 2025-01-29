@@ -15,6 +15,8 @@ file(GLOB_RECURSE INPUT_OUTPUT_TESTS
     "${CMAKE_CURRENT_SOURCE_DIR}/io/inputReader/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/io/inputReader/*.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/io/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/io/outputWriter/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/io/outputWriter/*.h"
 
 )
 
