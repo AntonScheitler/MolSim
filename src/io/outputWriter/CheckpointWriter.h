@@ -6,7 +6,9 @@
 
 
 namespace outputWriter {
-
+    /**
+  * @brief This class implements the functionality to create a checkpoint file
+  */
     class CheckpointWriter : public FileWriter {
     public:
 

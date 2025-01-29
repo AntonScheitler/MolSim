@@ -45,7 +45,6 @@
             </velocity>
             <meshWidth>1</meshWidth>
             <mass>1.0</mass>
-            <averageVelocity>1.4</averageVelocity>
             <epsilon>1.0</epsilon>
             <sigma>1.2</sigma>
         </cuboid>
@@ -68,7 +67,6 @@
             </velocity>
             <meshWidth>1</meshWidth>
             <mass>2.0</mass>
-            <averageVelocity>0.726</averageVelocity>
             <epsilon>2.0</epsilon>
             <sigma>1.1</sigma>
         </cuboid>
