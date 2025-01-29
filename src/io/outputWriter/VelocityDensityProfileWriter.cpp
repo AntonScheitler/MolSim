@@ -1,6 +1,4 @@
 #include "VelocityDensityProfileWriter.h"
-
-#include "particle/container/ParticleContainer.h"
 #include "spdlogConfig.h"
 
 #include <fstream>
@@ -17,11 +15,7 @@ namespace outputWriter {
     }
 
 
-<<<<<<< Updated upstream
     void VelocityDensityProfileWriter::profileBins(ParticleContainerLinkedCell& particles, int iteration, int bins) {
-=======
-    void VelocityDensityProfileWriter::profileBins(std::vector<VelocityDensityProfile::binInfo> &binInfos, int iteration) {
->>>>>>> Stashed changes
         std::stringstream strstr;
         strstr << baseName << "_" << std::setfill('0') << std::setw(4) << iteration
                << ".csv";
@@ -31,10 +25,7 @@ namespace outputWriter {
         if (!file.is_open()) {
             throw std::runtime_error("Failed to open file");
         }
-<<<<<<< Updated upstream
         std::vector<VelocityDensityProfile::binInfo> binInfos = VelocityDensityProfile::determineProfile(particles, bins);
-=======
->>>>>>> Stashed changes
 
         for (const VelocityDensityProfile::binInfo& binInfo: binInfos) {
             file << plotBin(binInfo) << "\n";
