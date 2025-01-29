@@ -254,6 +254,7 @@ size_t Simulator::runSimulationLoop() {
     outputWriter::VTKWriter writer(simData.getBaseName());
     outputWriter::VelocityDensityProfileWriter profileWriter(simData.getProfilingBaseName());
 
+    SPDLOG_LOGGER_INFO(logger, "Using parallelization strategy {0}", simData.getThreadVersion());
     SPDLOG_LOGGER_INFO(logger, "delta_t={0}, t_end={1}, total number of iterations: {2}", simData.getDeltaT(),
                        simData.getEndTime(),
                        simData.getEndTime() / simData.getDeltaT());

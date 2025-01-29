@@ -107,6 +107,9 @@ namespace inputReader {
             ParameterParser::readMembrane(simData, simParser);
             SPDLOG_LOGGER_DEBUG(logger, "finished reading membrane");
 
+            ParameterParser::readParallelization(simData, simParser);
+            SPDLOG_LOGGER_DEBUG(logger, "finished reading parallelization");
+
             SPDLOG_LOGGER_DEBUG(logger, "read all params");
 
             if (simParser->parameters()->import_checkpoint().present()) {
