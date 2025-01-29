@@ -334,6 +334,28 @@ public:
     int getProfileIterationNumber();
 
     /**
+     * @brief set the number of threads used for parallelization
+     * @param numThreadsArg number of thrads
+     */
+    void setNumberThreads(int numThreadsArg);
+
+    /**
+     * @param returns the number of Threads that should be used
+     */
+    int getNumberThreads();
+
+    /**
+     * @brief set the strategy that should be used for parallelization
+     * @param threadVersionArg strategy: allowed values 0-1
+     */
+    void setThreadVersion(int threadVersionArg);
+
+    /**
+     * @param returns the strategy that should be used for parallelization
+     */
+    int getThreadVersion();
+
+    /**
     * @brief set the baseName for the profiling csv-file
     * @param baseNameArg file-name
     */
@@ -375,9 +397,9 @@ private:
     std::array<double, 3> customForce;
 
     int numberDimensions;
-
+    std::string profilingBaseName;
     int profileIterationNumber;
     int binNumber;
-
-    std::string profilingBaseName;
+    int numberThreads;
+    int threadVersion;
 };

@@ -25,7 +25,7 @@ std::vector<VelocityDensityProfile::binInfo>  VelocityDensityProfile::determineP
     }
 
 
-    for (struct binInfo& binInfo : binInfos) {
+    for (binInfo& binInfo : binInfos) {
         binInfo.avgDensity = binInfo.numParticles / binSize;
         if(binInfo.numParticles == 0){
             binInfo.avgVelocity = {0, 0, 0};
@@ -37,5 +37,15 @@ std::vector<VelocityDensityProfile::binInfo>  VelocityDensityProfile::determineP
         }
     }
 
+<<<<<<< Updated upstream
+=======
+
+    for (struct binInfo& binInfo : binInfos) {
+        binInfo.avgDensity = binInfo.numParticles / binSize;
+        binInfo.avgVelocity = ArrayUtils::elementWiseScalarOp(1.0 / binInfo.numParticles, binInfo.sumVelocities, std::multiplies<>());
+
+    }
+
+>>>>>>> Stashed changes
     return binInfos;
 }

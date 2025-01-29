@@ -27,9 +27,9 @@ public:
     ParticleContainerLinkedCell(std::array<double, 3> domainSizeArg, double cutoffRadiusArg,
                                 struct boundaryConfig boundaryConfigArg = {{outflow, outflow},
                                                                            {outflow, outflow},
-                                                                           {outflow, outflow}},
-                                                                           size_t numThreads = 4);
-    // TODO change default thread num to 1?
+                                                                           {outflow, outflow}});
+                                                                           
+
 
     void addParticle(const Particle &particle) override;
 
