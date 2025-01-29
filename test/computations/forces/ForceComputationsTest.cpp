@@ -1,7 +1,9 @@
 #include "../../../../src/computations/forces/ForceComputations.h"
 #include <gtest/gtest.h>
+#include <omp.h>
 #include "../../../src/spdlogConfig.h"
 #include "../../../src/particle/container/ParticleContainerDirectSum.h"
+#include "particle/boundary/Boundary.h"
 #include "particle/container/ParticleContainerLinkedCell.h"
 
 /**
@@ -73,6 +75,9 @@ TEST_F(ForceComputationsTest, GravityCalcTest) {
 }
 
 
+/**
+ * @brief check if the force between direct neighbors of the membrane is caluclated correctly
+ */
 TEST_F(ForceComputationsTest, HarmonicPotentialDirectNeighborTest) {
     ParticleContainerLinkedCell container{{2, 1, 1}, 1, {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}};
     // create first neighbor
@@ -114,6 +119,9 @@ TEST_F(ForceComputationsTest, HarmonicPotentialDirectNeighborTest) {
     EXPECT_NEAR(container.getParticle(1).getF()[2], 0, 0.00000001);
 }
 
+/**
+ * @brief check if the force between diagonal neighbors of the membrane is caluclated correctly
+ */
 TEST_F(ForceComputationsTest, HarmonicPotentialDiagonalNeighborTest) {
     ParticleContainerLinkedCell container{{2, 2, 1}, 1, {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}};
     // create first neighbor
@@ -183,4 +191,41 @@ TEST_F(ForceComputationsTest, ExternalGravityTest) {
     EXPECT_DOUBLE_EQ(particles.getParticle(1).getF()[1], 7);
     EXPECT_DOUBLE_EQ(particles.getParticle(1).getF()[2], 6);
 
+}
+
+/**
+ * @brief checks if the three different lennard jones potential cutoff variants (regular, cellIter, meshpart) yield the same results
+ */
+TEST_F(ForceComputationsTest, LennardJonesPotentialCutoffVariantsTest) {
+    // create container for each type
+    ParticleContainerLinkedCell containerRegular{{10, 10, 10}, 1, {{periodic, periodic}, {outflow, outflow}, {reflect, reflect}}};
+    ParticleContainerLinkedCell containerCellIter{{10, 10, 10}, 1, {{periodic, periodic}, {outflow, outflow}, {reflect, reflect}}};
+    ParticleContainerLinkedCell containerMeshPart{{10, 10, 10}, 1, {{periodic, periodic}, {outflow, outflow}, {reflect, reflect}}};
+
+    // add the same particles to each container
+    for (double z = 0.5; z < 10; z += 1) {
+        for (double y = 0.5; y < 10; y += 1) {
+            for (double x = 0.5; x < 10; x += 1) {
+                Particle particleRegular{{x, y, z}, {0, 0, 0}, 1, 0, 1.0, 1.2, false};
+                containerRegular.addParticle(particleRegular);
+                Particle particleCellIter{{x, y, z}, {0, 0, 0}, 1, 0, 1.0, 1.2, false};
+                containerCellIter.addParticle(particleRegular);
+                Particle particleMeshPart{{x, y, z}, {0, 0, 0}, 1, 0, 1.0, 1.2, false};
+                containerMeshPart.addParticle(particleRegular);
+            }
+        }
+    }
+
+    ForceComputations::computeLennardJonesPotentialCutoff(containerRegular, 1);
+    omp_set_num_threads(2);
+    ForceComputations::computeLennardJonesPotentialCutoffCellIter(containerCellIter, 1);
+    containerMeshPart.computeMeshPartition(2);
+    ForceComputations::computeLennardJonesPotentialCutoffMeshPart(containerMeshPart, 1, 2);
+
+    EXPECT_TRUE(containerRegular.size() == containerCellIter.size());
+    EXPECT_TRUE(containerRegular.size() == containerMeshPart.size());
+    for (size_t i = 0; i < 1000; i++) {
+        EXPECT_TRUE(containerRegular.getParticle(i).getF() == containerCellIter.getParticle(i).getF());
+        EXPECT_TRUE(containerRegular.getParticle(i).getF() == containerMeshPart.getParticle(i).getF());
+    }
 }

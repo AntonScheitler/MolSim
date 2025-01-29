@@ -99,8 +99,6 @@ TEST_F(TemperatureComputationsTest, HoldingTempTest) {
     // check that temp is equal to target temp
     double currentTemp = TemperatureComputations::calculateCurrentSystemTemp(simData.getParticles(), 2);
     EXPECT_DOUBLE_EQ(currentTemp, simData.getTargetTemp());
-
-    //TODO: run simulation loop with bench=true instead of copying loop
 }
 
 /**

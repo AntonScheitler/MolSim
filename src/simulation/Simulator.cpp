@@ -61,6 +61,9 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                     VelocityComputations::applyBrownianMotion2D(simData.getParticles(),
                                                                 simData.getAverageVelocity());
                 }
+                if (simData.getThreadVersion() != -1) {
+                    omp_set_num_threads(simData.getNumberThreads());
+                }
                 if (simData.getThreadVersion() == 0) {
                     auto containerLinkedCell = dynamic_cast<ParticleContainerLinkedCell *>(&(simData.getParticles()));
                     if (containerLinkedCell) {
