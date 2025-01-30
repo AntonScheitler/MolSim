@@ -79,6 +79,6 @@
     </thermo>
     <parallelization>
         <strategy>0</strategy>
-        <threadNumber>112</threadNumber>
+        <threadNumber>5</threadNumber>
     </parallelization>
 </simulation>
