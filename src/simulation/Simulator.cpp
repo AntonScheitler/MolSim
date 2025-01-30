@@ -119,7 +119,7 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                                 simData.getNumberThreads());
                     }
 
-                    ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell, simData.getNumberThreads());
+                    ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell);
 
 
                     ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav(),
@@ -161,9 +161,9 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
                     ForceComputations::resetForces(simData.getParticles(), simData.getNumberThreads());
 
                     ForceComputations::computeMembraneNeighborForce(*containerLinkedCell,
-                                                                    simData.getK(), simData.getR0(), simData.getNumberThreads());
+                                                                    simData.getK(), simData.getR0());
 
-                    ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell, simData.getNumberThreads());
+                    ForceComputations::computeGhostParticleRepulsion(*containerLinkedCell);
 
                     ForceComputations::addExternalForces(simData.getParticles(), simData.getGrav(),
                                                          simData.getNumberThreads());

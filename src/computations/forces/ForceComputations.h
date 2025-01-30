@@ -64,18 +64,16 @@ public:
     /**
      * @brief computes the repulsion, the boundary particles suffer from the ghost particles
      * @param particles the particles to get the boundary particles from
-     * @param numThreads the number of threads to use for this simulation
      */
-    static void computeGhostParticleRepulsion(ParticleContainerLinkedCell &particles, size_t numThreads);
+    static void computeGhostParticleRepulsion(ParticleContainerLinkedCell &particles);
 
     /**
      * @brief computes the repulsive force between neighboring particles in a membrane
      * @param particles the particles to get the boundary particles from
      * @param k the stiffness constant for force computation
      * @param r0 the average bond length for force computation
-     * @param numThreads the number of threads to use for this simulation
      */
-    static void computeMembraneNeighborForce(ParticleContainerLinkedCell &particles, double k, double r0, size_t numThreads);
+    static void computeMembraneNeighborForce(ParticleContainerLinkedCell &particles, double k, double r0);
 
     /**
      * @brief applies a custom force vector to a selection of particles in the container
