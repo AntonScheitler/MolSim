@@ -132,9 +132,9 @@ TEST_F(VelocityDensityProfilingTest, ProfileReaderCalculatesTheCorrectAverageVel
                                                                         {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}});
     double binSize = 0.5;
 
-    for(int i = 0; i < 20; i++){
+    for(double i = 0; i < 20; i++){
 
-        for(int j = 0; j < i; j++){
+        for(double j = 0; j < i; j++){
 
             Particle p = Particle({binSize * i, 0, 0}, {j, i, 0}, 1);
             particles.addParticle(p);
