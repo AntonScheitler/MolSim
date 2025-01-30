@@ -523,10 +523,10 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellMeshPartition
     ParticleContainerLinkedCell container{{6, 3, 1}, 1, {{reflect, reflect}, {reflect, reflect}, {outflow, outflow}}};
     container.computeMeshPartition(2);
     auto matrixPair = container.getMeshPartition();
-    std::vector<size_t> p1 = {1, 7, 13};
-    std::vector<size_t> p2 = {4, 10, 16};
-    std::vector<size_t> b1 = {0, 6, 12, 5, 11, 17};
-    std::vector<size_t> b2 = {2, 8, 14, 3, 9, 15};
+    std::vector<size_t> p1 = {0, 6, 12};
+    std::vector<size_t> p2 = {3, 9, 15};
+    std::vector<size_t> b1 = {1, 2, 7, 8, 13, 14};
+    std::vector<size_t> b2 = {4, 5, 10, 11, 16, 17};
     EXPECT_TRUE(matrixPair.first.size() == 2);
     EXPECT_TRUE(matrixPair.first[0] == p1);
     EXPECT_TRUE(matrixPair.first[1] == p2);

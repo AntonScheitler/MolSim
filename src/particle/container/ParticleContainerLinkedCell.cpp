@@ -210,40 +210,52 @@ void ParticleContainerLinkedCell::computeNeighborCellsMatrix() {
 }
 
 void ParticleContainerLinkedCell::computeMeshPartition(size_t numThreads) {
-    size_t partitionLength = ceil((1.0 * numCells[0]) / numThreads);
-    meshPartition = {{}, {}};
+    // for every thread there is a partition and a border
+    // each border is two cells wide
 
     // allocate partition for every thread
+    meshPartition = {{}, {}};
     for (size_t p = 0; p < numThreads; p++) {
         meshPartition.first.push_back({});
         meshPartition.second.push_back({});
     }
 
+    size_t partitionsCombinedLength = numCells[0] - (2 * numThreads);
+    
     // don't create partitions if there are too many threads on too small of a domain
-    if (partitionLength < 3) {
+    if (partitionsCombinedLength < numThreads) {
         for (Cell& cell : mesh) {
             meshPartition.second[0].push_back(cell.getId());
         }
         return;
     }
 
+    size_t partitionLength = ceil((1.0 * partitionsCombinedLength) / numThreads);
+    size_t partitionsCombinedLengthLeft = partitionsCombinedLength;
+    size_t numThreadsLeft = numThreads;
+    size_t partitionStart = 0;
+
     // create partition for each threanumd
     for (size_t p = 0; p < numThreads; p++) {
+        partitionLength = (partitionsCombinedLengthLeft - partitionLength) < (numThreadsLeft - 1) ? partitionLength - 1 : partitionLength;
         for (int z = 0; z < numCells[2]; z++) {
             for (int y = 0; y < numCells[1]; y++) {
                 // add all the cells to the partition
                 // adding/subtractin 1 from the start/end point excludes the border from the partition
-                for (int x = p * partitionLength + 1; x < std::min((p + 1) * partitionLength - 1, numCells[0] - 1); x++) {
+                for (int x = partitionStart; x < partitionStart + partitionLength; x++) {
                     size_t cellIdx = x + (y * numCells[0]) + (z * numCells[0] * numCells[1]);
                     meshPartition.first[p].push_back(cellIdx);
                 }
                 // add the border cells to a separate partition 
-                size_t leftBorderCellIdx = p * partitionLength + (y * numCells[0]) + (z * numCells[0] * numCells[1]);
-                size_t rightBorderCellIdx = std::min(((p + 1) * partitionLength - 1), numCells[0] - 1) + (y * numCells[0]) + (z * numCells[0] * numCells[1]);
-                meshPartition.second[p].push_back(leftBorderCellIdx);
-                meshPartition.second[(p + 1) % numThreads].push_back(rightBorderCellIdx);
+                size_t firstBorderCell = partitionStart + partitionLength + (y * numCells[0]) + (z * numCells[0] * numCells[1]);
+                size_t secondBorderCell = partitionStart + partitionLength + 1 + (y * numCells[0]) + (z * numCells[0] * numCells[1]);
+                meshPartition.second[p].push_back(firstBorderCell);
+                meshPartition.second[p].push_back(secondBorderCell);
             }
         }
+        numThreadsLeft--;
+        partitionsCombinedLengthLeft -= partitionLength;
+        partitionStart = partitionStart + partitionLength + 2;
     }
 }
 
