@@ -75,7 +75,7 @@ To add a checkpoint file to a new simulation, please include the filepath of the
 ```
 
 ### Velocity-density profile
-To output a velocity - density profile, please include the following elements to the parameters of the xml-input-file
+To output a velocity - density profile, please include the following elements to the parameters of the xml-input-file:
 
 ```
 <bin_profile>
@@ -85,7 +85,7 @@ To output a velocity - density profile, please include the following elements to
 </bin_profile>
 ```
 While the number of iteration after which a profile should be created must be given, the base name and the number of bins (default: 50) are optional.
-
+The format in the csv-file is: *number_of_particles, density, x-velocity, y-velocity, z-velocity*
 
 ### Parallelization
 
