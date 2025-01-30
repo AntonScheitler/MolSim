@@ -108,4 +108,8 @@
         <init_T>40</init_T>
         <n>10</n>
     </thermo>
+    <parallelization>
+        <strategy>0</strategy>
+        <threadNumber>5</threadNumber>
+    </parallelization>
 </simulation>
