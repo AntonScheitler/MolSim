@@ -117,3 +117,75 @@ TEST_F(TemperatureComputationsTest, BrownianMotionInitialVelocityTest) {
     double initializedTemp = TemperatureComputations::calculateCurrentSystemTemp(simData.getParticles(), 2);
     EXPECT_NE(initializedTemp, 0);
 }
+
+/**
+ * @brief a simple test testing that the thermo update of the thermostat v2 works correctly.
+ * the average velocity is just the velocity of that one single particle so the thermal motion is 0
+ */
+TEST_F(TemperatureComputationsTest, ThermoV2SimpleTest) {
+    ParticleContainerLinkedCell container{{10, 10, 10}, 10,
+                                              {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}};
+
+    Particle p1{{2, 2, 2}, {10, 10, 10}, 1, 0};
+
+    container.addParticle(p1);
+
+    simData = SimulationData{};
+    simData.setParticles(std::make_unique<ParticleContainerLinkedCell>(container));
+
+    simData.activateThermostat();
+    simData.setThermoVersion(2);
+    simData.setInitialTemp(10);
+    simData.setMaxDeltaTemp(1);
+    simData.setNumberDimensions(3);
+
+    TemperatureComputations::updateTempV2(simData.getParticles(), simData.getTargetTemp(), simData.getMaxDeltaTemp(), simData.getNumberDimensions());
+
+    auto containerLinkedCell = dynamic_cast<ParticleContainerLinkedCell *>(&(simData.getParticles()));
+    int index = containerLinkedCell->continuousCoordsToIndex({2, 2, 2});
+    EXPECT_EQ(containerLinkedCell->getParticle(index).getV()[0], 10);
+    EXPECT_EQ(containerLinkedCell->getParticle(index).getV()[1], 10);
+    EXPECT_EQ(containerLinkedCell->getParticle(index).getV()[2], 10);
+}
+
+/**
+ * @brief a simple test testing that the thermo update of the thermostat v2 works correctly.
+ * two particles with average velocity 15
+ * the first particle should get scaled to a lower velocity and the second particle to a higher velocity
+ */
+TEST_F(TemperatureComputationsTest, ThermoV2Test) {
+    ParticleContainerLinkedCell container{{100, 100, 100}, 10,
+                                              {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}};
+
+    Particle p1{{10, 10, 10}, {10, 10, 10}, 1, 0};
+    Particle p2{{50, 50, 50}, {20, 20, 20}, 1, 1};
+
+    container.addParticle(p1);
+    container.addParticle(p2);
+
+    simData = SimulationData{};
+    simData.setParticles(std::make_unique<ParticleContainerLinkedCell>(container));
+
+    simData.activateThermostat();
+    simData.setThermoVersion(2);
+    simData.setInitialTemp(10);
+    simData.setTargetTemp(30);
+    simData.setMaxDeltaTemp(10);
+    simData.setNumberDimensions(3);
+
+    auto containerLinkedCell = dynamic_cast<ParticleContainerLinkedCell *>(&(simData.getParticles()));
+
+    TemperatureComputations::updateTempV2(simData.getParticles(), simData.getTargetTemp(), simData.getMaxDeltaTemp(), simData.getNumberDimensions());
+
+    Particle& a = containerLinkedCell->getParticle(0);
+    EXPECT_EQ(a.getType(), 0);
+    EXPECT_LT(a.getV()[0], 10);
+    EXPECT_LT(a.getV()[1], 10);
+    EXPECT_LT(a.getV()[2], 10);
+
+    Particle& b = containerLinkedCell->getParticle(1);
+    EXPECT_EQ(b.getType(), 1);
+    EXPECT_GT(b.getV()[0], 20);
+    EXPECT_GT(b.getV()[1], 20);
+    EXPECT_GT(b.getV()[2], 20);
+}
