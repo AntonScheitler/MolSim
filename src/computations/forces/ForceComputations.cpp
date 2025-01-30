@@ -8,6 +8,11 @@
 #include "spdlogConfig.h"
 #include <omp.h>
 
+#ifdef _OPENMP
+#else
+    #define omp_get_thread_num() 0
+#endif
+
 void ForceComputations::computeGravity(ParticleContainer &particles) {
     for (auto it = particles.beginPairParticle(); *it != *(particles.endPairParticle()); it->operator++()) {
         std::pair<Particle &, Particle &> pair = **it;
