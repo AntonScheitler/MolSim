@@ -223,7 +223,7 @@ void ParticleContainerLinkedCell::computeMeshPartition(size_t numThreads) {
     size_t partitionsCombinedLength = numCells[0] - (2 * numThreads);
     
     // don't create partitions if there are too many threads on too small of a domain
-    if (partitionsCombinedLength < numThreads) {
+    if (partitionsCombinedLength < numThreads * 2) {
         for (Cell& cell : mesh) {
             meshPartition.second[0].push_back(cell.getId());
         }

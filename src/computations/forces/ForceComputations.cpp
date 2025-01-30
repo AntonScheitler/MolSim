@@ -136,24 +136,20 @@ void ForceComputations::addExternalForces(ParticleContainer &particles, std::arr
     }
 }
 
-void ForceComputations::computeGhostParticleRepulsion(ParticleContainerLinkedCell &particles, size_t numThreads) {
+void ForceComputations::computeGhostParticleRepulsion(ParticleContainerLinkedCell &particles) {
     double epsilon;
     double sigma;
     std::vector<std::pair<Particle&, Particle&>> pairs = {};
-    for (auto it = particles.beginPairGhost(); it != particles.endPairGhost(); ++it) {
-        pairs.push_back(*it);
-    }
 
-    #pragma omp parallel for num_threads(numThreads)
-    for (size_t i = 0; i < pairs.size(); i++) {
-        std::pair<Particle &, Particle &> pair = pairs[i];
+    for (auto it = particles.beginPairGhost(); it != particles.endPairGhost(); ++it) {
+        std::pair<Particle &, Particle &> pair = *it;
         epsilon = pair.first.getEpsilon();
         sigma = pair.first.getSigma();
         computeLennardJonesPotentialRepulsiveHelper(pair, epsilon, sigma, true);
     }
 }
 
-void ForceComputations::computeMembraneNeighborForce(ParticleContainerLinkedCell &particles, double k, double r0, size_t numThreads) {
+void ForceComputations::computeMembraneNeighborForce(ParticleContainerLinkedCell &particles, double k, double r0) {
     for (auto it = particles.beginMembraneDirectNeighbor(); it != particles.endMembraneDirectNeighbor(); ++it) {
         std::pair<Particle&, Particle&> pair = *it;
         computeHaromicPotentialHelper(pair, k, r0);
@@ -166,16 +162,10 @@ void ForceComputations::computeMembraneNeighborForce(ParticleContainerLinkedCell
     }
 
     // compute repulsive force between all particles
-    std::vector<std::pair<Particle&, Particle&>> pairs = {};
-    for (auto it = particles.beginPairParticle(); *it != *(particles.endPairParticle()); ++*it) {
-        pairs.push_back(**it);
-    }
-
     double epsilon;
     double sigma;
-    #pragma omp parallel for num_threads(numThreads)
-    for (size_t i = 0; i < pairs.size(); i++) {
-        std::pair<Particle &, Particle &> pair = pairs[i];
+    for (auto it = particles.beginPairParticle(); *it != *(particles.endPairParticle()); ++*it) {
+        std::pair<Particle &, Particle &> pair = **it;
         epsilon = pair.first.getEpsilon();
         sigma = pair.first.getSigma();
         computeLennardJonesPotentialRepulsiveHelper(pair, epsilon, sigma, false);
