@@ -520,13 +520,13 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellDiagonalBound
  * @brief checks if the container is paritioned correctly for multiple threads
  */
 TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellMeshPartitionTest)  {
-    ParticleContainerLinkedCell container{{6, 3, 1}, 1, {{reflect, reflect}, {reflect, reflect}, {outflow, outflow}}};
+    ParticleContainerLinkedCell container{{8, 3, 1}, 1, {{reflect, reflect}, {reflect, reflect}, {outflow, outflow}}};
     container.computeMeshPartition(2);
     auto matrixPair = container.getMeshPartition();
-    std::vector<size_t> p1 = {0, 6, 12};
-    std::vector<size_t> p2 = {3, 9, 15};
-    std::vector<size_t> b1 = {1, 2, 7, 8, 13, 14};
-    std::vector<size_t> b2 = {4, 5, 10, 11, 16, 17};
+    std::vector<size_t> p1 = {0, 1, 8, 9, 16, 17};
+    std::vector<size_t> p2 = {4, 5, 12, 13, 20, 21};
+    std::vector<size_t> b1 = {2, 3, 10, 11, 18, 19};
+    std::vector<size_t> b2 = {6, 7, 14, 15, 22, 23};
     EXPECT_TRUE(matrixPair.first.size() == 2);
     EXPECT_TRUE(matrixPair.first[0] == p1);
     EXPECT_TRUE(matrixPair.first[1] == p2);
