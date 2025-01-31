@@ -28,7 +28,9 @@ class ParticleNeighborsTest : public testing::Test {
         }
 };
 
-// Test bottom left corner
+/**
+ * @brief checks if the the neighbors of the bottom-left-corner particle are stored correctly
+ */
 TEST_F(ParticleNeighborsTest, BottomLeftCornerStoresNeighborsCorrectly) {
 
     generateCuboidParticles();
@@ -45,7 +47,9 @@ TEST_F(ParticleNeighborsTest, BottomLeftCornerStoresNeighborsCorrectly) {
     EXPECT_EQ(p.getDiagNeighborIdx(topRight), 4);
 }
 
-// Test middle
+/**
+ * @brief checks if the the neighbors of a particle in the middle are stored correctly
+ */
 TEST_F(ParticleNeighborsTest, MiddleStoresNeighborsCorrectly) {
 
     generateCuboidParticles();
@@ -62,7 +66,9 @@ TEST_F(ParticleNeighborsTest, MiddleStoresNeighborsCorrectly) {
     EXPECT_EQ(p.getDiagNeighborIdx(topRight), 8);
 }
 
-//Test upper middle
+/**
+ * @brief checks if the the neighbors of the upper-middle particle are stored correctly
+ */
 TEST_F(ParticleNeighborsTest, UpperMiddleStoresNeighborsCorrectly) {
     generateCuboidParticles();
     Particle p = particles.getParticle(7);

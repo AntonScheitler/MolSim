@@ -73,4 +73,8 @@
             <sigma>1.1</sigma>
             </cuboid>
     </clusters>
+    <thermo>
+        <init_T>40</init_T>
+        <n>1000</n>
+    </thermo>
 </simulation>

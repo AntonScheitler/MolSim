@@ -47,7 +47,9 @@ protected:
 };
 
 
-
+/**
+ * @brief checks if the VelocityDensityProfileReader uses the correct number of bins and stores the correct number of particles
+ */
 TEST_F(VelocityDensityProfilingTest, ProfileReaderUsesTheCorrectNumberOfBinsAndStoresTheCorrectNumberOfParticles) {
 
 
@@ -84,7 +86,9 @@ ParticleContainerLinkedCell particles = ParticleContainerLinkedCell({10, 10, 10}
 
 }
 
-
+/**
+ * @brief checks if the VelocityDensityProfileReader stores the correct density for every bin
+ */
 TEST_F(VelocityDensityProfilingTest, ProfileReaderCalculatesTheCorrectDensity) {
 
 
@@ -124,7 +128,9 @@ TEST_F(VelocityDensityProfilingTest, ProfileReaderCalculatesTheCorrectDensity) {
 }
 
 
-
+/**
+ * @brief checks if the VelocityDensityProfileReader stores the correct average velocity for every bin
+ */
 TEST_F(VelocityDensityProfilingTest, ProfileReaderCalculatesTheCorrectAverageVelocity) {
 
 

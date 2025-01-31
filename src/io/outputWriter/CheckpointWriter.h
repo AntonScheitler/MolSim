@@ -27,8 +27,6 @@ namespace outputWriter {
 
         /**
          * @brief plot type, mass, position, velocity and force of a particle.
-         *
-         * @note: initializeOutput() must have been called before.
          */
         std::string plotParticle(Particle &p);
 

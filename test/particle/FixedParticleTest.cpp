@@ -34,6 +34,9 @@ protected:
     }
 };
 
+/**
+ * @brief checks the values of the position and force of a fixed particle stay the same after multiple iterations
+ */
 TEST_F(FixedParticleTest, FixedParticlesForcesAndPositionsAreUnchanged) {
     std::unique_ptr<ParticleContainer> particlesBeforePtr = particles.copy();
     auto* particlesBefore = dynamic_cast<ParticleContainerLinkedCell*>(particlesBeforePtr.get());

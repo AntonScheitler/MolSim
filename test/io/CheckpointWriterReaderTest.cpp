@@ -40,7 +40,9 @@ protected:
     }
 };
 
-// Test bottom left corner
+/**
+ * @brief checks if the CheckpoinWriter stores the correct values to reproduce the same Particlecontainer via CheckpointReader
+ */
 TEST_F(CheckpointWriterReaderTest, ParticleContainerIsTheSameAfterCheckpointing) {
 
     generateParticles();
