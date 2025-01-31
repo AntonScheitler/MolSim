@@ -10,6 +10,10 @@ cd build
 cmake ..
 make
 ```
+If you want to use the Intel® oneAPI DPC++/C++ (icpx) compiler change the cmake command to
+```
+cmake .. -DCMAKE_C_COMPILER=icx -DCMAKE_CXX_COMPILER=icpx
+```
 
 ### Documentation
 To enable the make target for building a documentation with doxygen, run cmake with the option (this option is turned `OFF` by default)
