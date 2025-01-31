@@ -107,7 +107,3 @@ strategies:
 
 threadNumber (optional):
 sets number of thread used for strategy 0 (default: 4). Strategy 1 uses always the maximum.
-
-
-
-                            

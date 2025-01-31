@@ -103,13 +103,14 @@ public:
      * or the boundary is non-periodic, the supplied vector remains unchanged
      * @param point1 the first point
      * @param point2 the second point
-     * @param v the non-periodic vector that points from point1 to point2
+     * @param distanceVector the non-periodic vector that points from point1 to point2
      */
     void getPeriodicDistanceVector(const std::array<double, 3> &point1, const std::array<double, 3> &point2,
-                                   std::array<double, 3> &v);
+                                   std::array<double, 3> &distanceVector);
 
     /**
-     * @brief applies periodic boundaries to the specified array
+     * @brief applies periodic boundaries to the specified coordinate array, so that if the coordinate goes out of
+     * bounds on a periodic boundary, it is reinserted at the periodic boundary on the opposite side
      * @param coord the coordinate array to apply the periodic boundaries to 
      */
     std::array<double, 3> applyPeriodicBoundaries(std::array<double, 3> coord);

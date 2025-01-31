@@ -13,12 +13,6 @@ Cell::Cell(bool isBoundaryArg, size_t cellIdArg) {
 }
 
 void Cell::addParticleIdx(const size_t idx) {
-    //auto it = std::find_if(particleIndices.begin(), particleIndices.end(),
-    //                       [idx](const size_t currIdx) { return currIdx == idx; });
-    //if (it != particleIndices.end()) {
-    //    SPDLOG_ERROR("SOMETHING TERRIBLE HAS HAPPENED :(");
-    //    exit(EXIT_FAILURE);
-    //}
     particleIndices.push_back(idx);
 }
 
