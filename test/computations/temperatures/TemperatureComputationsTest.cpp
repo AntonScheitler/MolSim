@@ -10,14 +10,14 @@
  */
 class TemperatureComputationsTest : public testing::Test {
 protected:
-
     SimulationData simData;
 
     // executed before each test
     void SetUp() override {
-
-        ParticleContainerLinkedCell container{{10, 10, 10}, 11,
-                                              {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}};
+        ParticleContainerLinkedCell container{
+            {10, 10, 10}, 11,
+            {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}
+        };
 
         Particle p{{5, 5, 5}, {0, 0, 0}, 1, 0};
         container.addParticle(p);
@@ -45,13 +45,12 @@ protected:
  * @brief checks that the system heats up to the target temperature when targetTemp > initialTemp
  */
 TEST_F(TemperatureComputationsTest, HeatingTest) {
-
     simData.setTargetTemp(20);
     Simulator simulator{simData};
 
     simulator.before();
     int iterations = 100;
-    for(int i = 0; i < iterations; i++) {
+    for (int i = 0; i < iterations; i++) {
         simulator.step(i, i);
     }
     simulator.after();
@@ -65,13 +64,12 @@ TEST_F(TemperatureComputationsTest, HeatingTest) {
  * @brief checks that the system cools down to the target temperature when targetTemp < initialTemp
  */
 TEST_F(TemperatureComputationsTest, CoolingTest) {
-
     simData.setTargetTemp(0);
     Simulator simulator{simData};
 
     simulator.before();
     int iterations = 100;
-    for(int i = 0; i < iterations; i++) {
+    for (int i = 0; i < iterations; i++) {
         simulator.step(i, i);
     }
     simulator.after();
@@ -85,13 +83,12 @@ TEST_F(TemperatureComputationsTest, CoolingTest) {
  * @brief checks that the system holds its temperature up to the target temperature when targetTemp = initialTemp
  */
 TEST_F(TemperatureComputationsTest, HoldingTempTest) {
-
     simData.setTargetTemp(simData.getInitialTemp());
     Simulator simulator{simData};
 
     simulator.before();
     int iterations = 100;
-    for(int i = 0; i < iterations; i++) {
+    for (int i = 0; i < iterations; i++) {
         simulator.step(i, i);
     }
     simulator.after();
@@ -123,8 +120,10 @@ TEST_F(TemperatureComputationsTest, BrownianMotionInitialVelocityTest) {
  * the average velocity is just the velocity of that one single particle so the thermal motion is 0
  */
 TEST_F(TemperatureComputationsTest, ThermoV2SimpleTest) {
-    ParticleContainerLinkedCell container{{10, 10, 10}, 10,
-                                              {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}};
+    ParticleContainerLinkedCell container{
+        {10, 10, 10}, 10,
+        {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}
+    };
 
     Particle p1{{2, 2, 2}, {10, 10, 10}, 1, 0};
 
@@ -139,7 +138,8 @@ TEST_F(TemperatureComputationsTest, ThermoV2SimpleTest) {
     simData.setMaxDeltaTemp(1);
     simData.setNumberDimensions(3);
 
-    TemperatureComputations::updateTempV2(simData.getParticles(), simData.getTargetTemp(), simData.getMaxDeltaTemp(), simData.getNumberDimensions());
+    TemperatureComputations::updateTempV2(simData.getParticles(), simData.getTargetTemp(), simData.getMaxDeltaTemp(),
+                                          simData.getNumberDimensions());
 
     auto containerLinkedCell = dynamic_cast<ParticleContainerLinkedCell *>(&(simData.getParticles()));
     int index = containerLinkedCell->continuousCoordsToIndex({2, 2, 2});
@@ -154,8 +154,10 @@ TEST_F(TemperatureComputationsTest, ThermoV2SimpleTest) {
  * the first particle should get scaled to a lower velocity and the second particle to a higher velocity
  */
 TEST_F(TemperatureComputationsTest, ThermoV2Test) {
-    ParticleContainerLinkedCell container{{100, 100, 100}, 10,
-                                              {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}};
+    ParticleContainerLinkedCell container{
+        {100, 100, 100}, 10,
+        {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}
+    };
 
     Particle p1{{10, 10, 10}, {10, 10, 10}, 1, 0};
     Particle p2{{50, 50, 50}, {20, 20, 20}, 1, 1};
@@ -175,15 +177,16 @@ TEST_F(TemperatureComputationsTest, ThermoV2Test) {
 
     auto containerLinkedCell = dynamic_cast<ParticleContainerLinkedCell *>(&(simData.getParticles()));
 
-    TemperatureComputations::updateTempV2(simData.getParticles(), simData.getTargetTemp(), simData.getMaxDeltaTemp(), simData.getNumberDimensions());
+    TemperatureComputations::updateTempV2(simData.getParticles(), simData.getTargetTemp(), simData.getMaxDeltaTemp(),
+                                          simData.getNumberDimensions());
 
-    Particle& a = containerLinkedCell->getParticle(0);
+    Particle &a = containerLinkedCell->getParticle(0);
     EXPECT_EQ(a.getType(), 0);
     EXPECT_LT(a.getV()[0], 10);
     EXPECT_LT(a.getV()[1], 10);
     EXPECT_LT(a.getV()[2], 10);
 
-    Particle& b = containerLinkedCell->getParticle(1);
+    Particle &b = containerLinkedCell->getParticle(1);
     EXPECT_EQ(b.getType(), 1);
     EXPECT_GT(b.getV()[0], 20);
     EXPECT_GT(b.getV()[1], 20);

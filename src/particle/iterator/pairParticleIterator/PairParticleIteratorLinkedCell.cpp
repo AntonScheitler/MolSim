@@ -5,9 +5,13 @@
 #include <unordered_set>
 
 
-PairParticleIteratorLinkedCell::PairParticleIteratorLinkedCell(std::vector<Cell>::iterator it, std::vector<Cell>::iterator endArg, std::vector<Cell> &meshArg,
-            std::vector<Particle>& particlesArg, std::vector<std::vector<size_t>>& neighborCellsMatrixArg): 
-                mesh(meshArg), particles(particlesArg), neighborCellsMatrix(neighborCellsMatrixArg) {
+PairParticleIteratorLinkedCell::PairParticleIteratorLinkedCell(std::vector<Cell>::iterator it,
+                                                               std::vector<Cell>::iterator endArg,
+                                                               std::vector<Cell> &meshArg,
+                                                               std::vector<Particle> &particlesArg,
+                                                               std::vector<std::vector<size_t> > &
+                                                               neighborCellsMatrixArg): mesh(meshArg),
+    particles(particlesArg), neighborCellsMatrix(neighborCellsMatrixArg) {
     completedParticles.clear();
     currentCellIdx = 0;
     currentCell = it;
@@ -93,7 +97,7 @@ void PairParticleIteratorLinkedCell::neighborStepToViableCell(bool stepBefore) {
 
 void PairParticleIteratorLinkedCell::neighborStepToViableParticle() {
     while (neighborParticleIdx != mesh[*neighborCell].getParticlesIndices().end() &&
-               ((*currentParticleIdx) == (*neighborParticleIdx) || (completedParticles.count(*neighborParticleIdx) > 0))) {
+           ((*currentParticleIdx) == (*neighborParticleIdx) || (completedParticles.count(*neighborParticleIdx) > 0))) {
         ++neighborParticleIdx;
     }
 }

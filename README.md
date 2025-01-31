@@ -10,6 +10,10 @@ cd build
 cmake ..
 make
 ```
+To compile using Intel® oneAPI DPC++/C++ Compiler (icpx) compiler append the following to the cmake command:
+```
+-DCMAKE\_C\_COMPILER=icx -DCMAKE\_CXX\_COMPILER=icpx
+```
 
 ### Documentation
 To enable the make target for building a documentation with doxygen, run cmake with the option (this option is turned `OFF` by default)
@@ -41,6 +45,7 @@ The executable offers the following options:
   - 0 - Planet Simulation (simulation of some planets from our solar system and Halley's Comet which also spins around the sun with a high revolution period)
   - 1 - Collision of Cuboids (simulation of 2 (or more) 2-dimensional cuboids consisting of molecules colliding)
   - 2 - Collision of cuboids using the (performance-enhancing) linked-cell algorithm
+  - 3 - membrane simulation
 - `-b, --bench`: Activates benchmarking: The simulation will be run 10 times without producing any file output or logging. The execution times for all simulations will then be averaged
 - `-E, --epsilon`: Epsilon parameter for Lennard-Jones potential
 - `-S, --sigma`: Sigma parameter for Lennard-Jones potential

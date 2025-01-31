@@ -1,7 +1,5 @@
-#include "spdlogConfig.h"
+#pragma once
 #include <simulation/SimulationData.h>
-
-#include "io/outputWriter/VTKWriter.h"
 
 
 /**
@@ -9,7 +7,6 @@
  * automatically chooses the necessary computation methods based on the type of simulation desired
  */
 class Simulator {
-
 public:
     /**
      * @brief creates an instance of the simulator class
@@ -45,7 +42,7 @@ public:
      * @param duration the duration to convert
      * @return human-readable time string
      */
-    std::string formatTime(std::chrono::duration<long, std::ratio<1, 1000>> duration);
+    std::string formatTime(std::chrono::duration<long, std::ratio<1, 1000> > duration);
 
 private:
     SimulationData &simData;
@@ -57,5 +54,4 @@ private:
      * @return the number of particles updated during the simulation
      */
     size_t runSimulationLoop();
-
 };

@@ -11,47 +11,48 @@
 #include "vtk-unstructured.h"
 #include <particle/container/ParticleContainer.h>
 
+/**
+ * @brief contains functionality for writing output files
+ */
 namespace outputWriter {
     /**
      * @brief This class implements the functionality to generate vtk output from
      * particles.
      */
     class VTKWriter : public FileWriter {
-        public:
+    public:
+        VTKWriter(std::string baseName);
 
-            VTKWriter(std::string baseName);
-            /**
-             * @brief plots particles and writes them to a vtk file 
-             */
-            void plotParticles(ParticleContainer &particles, int iteration);
+        /**
+         * @brief plots particles and writes them to a vtk file
+         */
+        void plotParticles(ParticleContainer &particles, int iteration);
 
-        private:
+    private:
+        std::string baseName = "MD_vtk";
+        std::shared_ptr<spdlog::logger> logger;
 
-            std::string baseName = "MD_vtk";
-            std::shared_ptr<spdlog::logger> logger;
+        /**
+         * @brief set up internal data structures and prepare to plot a particle.
+         */
+        void initializeOutput(int numParticles);
 
-            /**
-             * @brief set up internal data structures and prepare to plot a particle.
-             */
-            void initializeOutput(int numParticles);
+        /**
+         * @brief plot type, mass, position, velocity and force of a particle.
+         *
+         * @note: initializeOutput() must have been called before.
+         */
+        void plotParticle(Particle &p);
 
-            /**
-             * @brief plot type, mass, position, velocity and force of a particle.
-             *
-             * @note: initializeOutput() must have been called before.
-             */
-            void plotParticle(Particle &p);
+        /**
+         * @brief writes the final output file.
+         *
+         * @param filename the base name of the file to be written.
+         * @param iteration the number of the current iteration,
+         *        which is used to generate an unique filename
+         */
+        void writeFile(const std::string &filename, int iteration);
 
-            /**
-             * @brief writes the final output file.
-             *
-             * @param filename the base name of the file to be written.
-             * @param iteration the number of the current iteration,
-             *        which is used to generate an unique filename
-             */
-            void writeFile(const std::string &filename, int iteration);
-
-            VTKFile_t *vtkFile{};
+        VTKFile_t *vtkFile{};
     };
-
 } // namespace outputWriter

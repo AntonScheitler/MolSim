@@ -145,7 +145,6 @@ Simulator::Simulator(SimulationData &simDataArg) : simData(simDataArg) {
             SPDLOG_LOGGER_INFO(logger, "Simulating body collision with linked cell algorithm");
             break;
         case membrane:
-            // TODO no brownian motion?
             before = [this]() {
             };
             step = [this](size_t iteration, double currentTime) {

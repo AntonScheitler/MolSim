@@ -23,5 +23,6 @@ public:
      * @param numThreads the number of threads to use for this simulation
      * @param dimensions number of dimensions (2 or 3)
      */
-    static void applyBrownianMotion(ParticleContainer &particles, double averageVelocity, size_t numThreads, int dimensions);
+    static void applyBrownianMotion(ParticleContainer &particles, double averageVelocity, size_t numThreads,
+                                    int dimensions);
 };

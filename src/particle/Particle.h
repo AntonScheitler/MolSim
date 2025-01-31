@@ -31,7 +31,6 @@ enum DiagonalNeighborPos {
  * particles and iterating over them.
  */
 class Particle {
-
 private:
     std::array<double, 3> oldX;
     /**
@@ -113,10 +112,10 @@ public:
     Particle(const Particle &other);
 
     Particle(
-            // for visualization, we need always 3 coordinates
-            // -> in case of 2d, we use only the first and the second
-            std::array<double, 3> xArg, std::array<double, 3> vArg, double mArg,
-            int typeArg = 0);
+        // for visualization, we need always 3 coordinates
+        // -> in case of 2d, we use only the first and the second
+        std::array<double, 3> xArg, std::array<double, 3> vArg, double mArg,
+        int typeArg = 0);
 
     Particle(std::array<double, 3> xArg, std::array<double, 3> vArg,
              double mArg, int typeArg, double epsilonArg, double sigmaArg, bool fixedArg);
@@ -266,6 +265,7 @@ public:
      * @brief returns true if this particle is fixed and therefore does not change its position
      */
     bool isFixed();
+
     /**
      * @brief specify whether this particle should be fixed or not
      * @param fixedArg true : fixed, false : not fixed
@@ -301,13 +301,13 @@ public:
      * @brief returns a vector of indices for the direct neighbors of this particle
      * @retrun a vector of indices for the direct neighbors of this particle
      */
-    std::vector<int>& getAllDirectNeighborIndices();
+    std::vector<int> &getAllDirectNeighborIndices();
 
     /**
      * @brief returns a vector of indices for the diagonal neighbors of this particle
      * @retrun a vector of indices for the direct neighbors of this particle
      */
-    std::vector<int>& getAllDiagonalNeighborIndices();
+    std::vector<int> &getAllDiagonalNeighborIndices();
 
     /**
      * @brief debugging function to print particle values

@@ -5,7 +5,6 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <particle/container/ParticleContainer.h>
 #include <io/inputReader/FileReader.h>
-#include <spdlogConfig.h>
 
 
 SimulationData::SimulationData() {
@@ -25,7 +24,7 @@ SimulationData::SimulationData() {
     grav = {0, 0, 0};
 
     thermostat = false;
-    thermoVersion = 1; // TODO: default thermo version for testing purpose set to 2
+    thermoVersion = 1;
     numberDimensions = 2; //default 2, will be set by XMLFileReader
     profilingBaseName = "profile";
     movingMembranePartIndices = std::vector<size_t>(); // default empty vector
@@ -38,28 +37,28 @@ SimulationData::SimulationData() {
 int SimulationData::parseOptions(int argc, char *argsv[]) {
     // define usage text
     std::string usageText = "Usage: ./molsim [OPTIONS] INPUT_FILE\n"
-                            "-d, --delta_t\t\tsize of each timestep. Defaults to 0.014\n"
-                            "-e, --t_end\t\ttime at which to stop the simulation. Defaults to 1000\n"
-                            "-l, --log\t\tlog level, default value: 'info'. valid values (high to low):\n\t\t\t\t'trace', 'debug', 'info', 'warn', 'err', 'critical', 'off'\n\t\t\t\t (using any other string will result in logging turned 'off')\n"
-                            "-s, --sim_type\t\ttype of simulation to run:\n\t\t\t\t0 - Planets\n\t\t\t\t1 - Collision\n\t\t\t\t2 - Collision with linked cell\n\t\t\t3 - Membrane\n\t\t\t Defaults to 2\n"
-                            "-b, --bench\t\tactivates benchmarking\n"
-                            "-S, --sigma\t\tinput sigma for Lennard-Jones potential. Defaults to 1\n"
-                            "-E, --epsilon\t\tinput epsilon for Lennard-Jones potential. Defaults to 5";
+            "-d, --delta_t\t\tsize of each timestep. Defaults to 0.014\n"
+            "-e, --t_end\t\ttime at which to stop the simulation. Defaults to 1000\n"
+            "-l, --log\t\tlog level, default value: 'info'. valid values (high to low):\n\t\t\t\t'trace', 'debug', 'info', 'warn', 'err', 'critical', 'off'\n\t\t\t\t (using any other string will result in logging turned 'off')\n"
+            "-s, --sim_type\t\ttype of simulation to run:\n\t\t\t\t0 - Planets\n\t\t\t\t1 - Collision\n\t\t\t\t2 - Collision with linked cell\n\t\t\t3 - Membrane\n\t\t\t Defaults to 2\n"
+            "-b, --bench\t\tactivates benchmarking\n"
+            "-S, --sigma\t\tinput sigma for Lennard-Jones potential. Defaults to 1\n"
+            "-E, --epsilon\t\tinput epsilon for Lennard-Jones potential. Defaults to 5";
 
     // setup option parsing
     int c;
     int simTypeNum;
     const char *const shortOpts = "d:e:l:s:hbE:S:";
     const option longOpts[] = {
-            {"delta_t",  required_argument, nullptr, 'd'},
-            {"t_end",    required_argument, nullptr, 'e'},
-            {"log",      required_argument, nullptr, 'l'},
-            {"sim_type", required_argument, nullptr, 's'},
-            {"help",     no_argument,       nullptr, 'h'},
-            {"bench",    no_argument,       nullptr, 'b'},
-            {"epsilon",  required_argument, nullptr, 'E'},
-            {"sigma",    required_argument, nullptr, 'S'},
-            {nullptr,    no_argument,       nullptr, 0}
+        {"delta_t", required_argument, nullptr, 'd'},
+        {"t_end", required_argument, nullptr, 'e'},
+        {"log", required_argument, nullptr, 'l'},
+        {"sim_type", required_argument, nullptr, 's'},
+        {"help", no_argument, nullptr, 'h'},
+        {"bench", no_argument, nullptr, 'b'},
+        {"epsilon", required_argument, nullptr, 'E'},
+        {"sigma", required_argument, nullptr, 'S'},
+        {nullptr, no_argument, nullptr, 0}
     };
 
     auto logger = spdlog::stdout_color_mt("Parsing");
@@ -233,12 +232,15 @@ double SimulationData::getAverageVelocity() {
 double SimulationData::getInitialTemp() {
     return this->initialTemp;
 }
+
 double SimulationData::getMaxDeltaTemp() {
     return this->maxDeltaTemp;
 }
+
 double SimulationData::getTargetTemp() {
     return this->targetTemp;
 }
+
 size_t SimulationData::getThermoFrequency() {
     return this->thermoFrequency;
 }
@@ -246,14 +248,16 @@ size_t SimulationData::getThermoFrequency() {
 void SimulationData::activateThermostat() {
     this->thermostat = true;
 }
+
 void SimulationData::deactivateThermostat() {
     this->thermostat = false;
 }
+
 bool SimulationData::isThermostat() {
     return this->thermostat;
 }
 
-void SimulationData::setInitialTemp(double initialTempArg){
+void SimulationData::setInitialTemp(double initialTempArg) {
     this->initialTemp = initialTempArg;
 }
 
@@ -273,7 +277,7 @@ void SimulationData::setGrav(std::array<double, 3> gravArg) {
     this->grav = gravArg;
 }
 
-std::array<double, 3> SimulationData::getGrav(){
+std::array<double, 3> SimulationData::getGrav() {
     return this->grav;
 }
 
@@ -324,11 +328,10 @@ std::array<double, 3> SimulationData::getCustomForce() {
 
 void SimulationData::setCustomForce(std::array<double, 3> newCustomForce) {
     customForce = newCustomForce;
-
 }
 
 void SimulationData::setNumberDimensions(int numberDimensionsArg) {
-    if(numberDimensionsArg < 1 || numberDimensionsArg > 3) {
+    if (numberDimensionsArg < 1 || numberDimensionsArg > 3) {
         SPDLOG_ERROR("Invalid number of dimensions: {0}", numberDimensionsArg);
         exit(EXIT_FAILURE);
     }

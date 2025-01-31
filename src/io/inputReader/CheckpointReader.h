@@ -1,4 +1,4 @@
-#include "spdlogConfig.h"
+#pragma once
 #include <simulation/SimulationData.h>
 
 

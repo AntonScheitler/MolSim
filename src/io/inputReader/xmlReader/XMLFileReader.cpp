@@ -174,10 +174,11 @@ namespace inputReader {
                 double sigma = cuboid.sigma().present() ? cuboid.sigma().get() : simData.getSigma();
 
                 bool fixed = false;
-                if(cuboid.fixed().present()) {
+                if (cuboid.fixed().present()) {
                     fixed = cuboid.fixed().get();
                 }
-                ParticleGenerator::generateCuboid(simData.getParticles(), x, v, d, m, h, type, epsilon, sigma, fixed, simData.getSimType());
+                ParticleGenerator::generateCuboid(simData.getParticles(), x, v, d, m, h, type, epsilon, sigma, fixed,
+                                                  simData.getSimType());
 
 
                 type++;
@@ -202,7 +203,7 @@ namespace inputReader {
                 double sigma = disc.sigma().present() ? disc.sigma().get() : simData.getSigma();
 
                 bool fixed = false;
-                if(disc.fixed().present()) {
+                if (disc.fixed().present()) {
                     fixed = disc.fixed().get();
                 }
                 ParticleGenerator::generateDisc(simData.getParticles(), x, v, r, m, h, type, epsilon, sigma, fixed);
@@ -212,10 +213,9 @@ namespace inputReader {
             SPDLOG_LOGGER_INFO(logger, "finished reading discs ");
 
             // mark special particles (if present) as different type
-            for (auto index : simData.getMovingMembranePartIndices()) {
+            for (auto index: simData.getMovingMembranePartIndices()) {
                 simData.getParticles().getParticle(index).setType(type);
             }
-
         } catch (const xml_schema::exception &e) {
             SPDLOG_LOGGER_ERROR(logger, "XML parsing error: {0}", e.what());
             exit(EXIT_FAILURE);

@@ -101,7 +101,7 @@ namespace inputReader {
             SPDLOG_LOGGER_DEBUG(logger, "Successfully read {0} particles", simData.getParticles().size());
         } else {
             SPDLOG_LOGGER_ERROR(logger, "Error: could not open file {0}", filename);
-            exit(-1);
+            exit(EXIT_FAILURE);
         }
 
         return maxType;

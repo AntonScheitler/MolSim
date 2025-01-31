@@ -6,33 +6,31 @@
 #include "spdlogConfig.h"
 
 class ParticleNeighborsTest : public testing::Test {
-    protected:
+protected:
+    ParticleContainerLinkedCell particles;
 
-        ParticleContainerLinkedCell particles;
+    ParticleNeighborsTest()
+        : particles({10, 10, 10}, 3, {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}) {
+    }
 
-        ParticleNeighborsTest()
-            : particles({10, 10, 10}, 3, {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}) {}
+    void generateCuboidParticles() {
+        std::array<double, 3> p = {0.0, 0.0, 0.0};
+        std::array<double, 3> v = {0.0, 0.0, 0.0};
+        std::array<int, 3> d = {3, 3, 1};
+        double mass = 1.0;
+        double h = 1.0;
+        int type = 0;
+        double epsilon = 1.0;
+        double sigma = 1.0;
 
-        void generateCuboidParticles() {
-
-            std::array<double, 3> p = {0.0, 0.0, 0.0};
-            std::array<double, 3> v = {0.0, 0.0, 0.0};
-            std::array<int, 3> d = {3, 3, 1};
-            double mass = 1.0;
-            double h = 1.0;
-            int type = 0;
-            double epsilon = 1.0;
-            double sigma = 1.0;
-
-            inputReader::ParticleGenerator::generateCuboid(particles, p, v, d, mass, h, type, epsilon, sigma, false, 3);
-        }
+        inputReader::ParticleGenerator::generateCuboid(particles, p, v, d, mass, h, type, epsilon, sigma, false, 3);
+    }
 };
 
 /**
  * @brief checks if the the neighbors of the bottom-left-corner particle are stored correctly
  */
 TEST_F(ParticleNeighborsTest, BottomLeftCornerStoresNeighborsCorrectly) {
-
     generateCuboidParticles();
     Particle p = particles.getParticle(0);
 
@@ -51,7 +49,6 @@ TEST_F(ParticleNeighborsTest, BottomLeftCornerStoresNeighborsCorrectly) {
  * @brief checks if the the neighbors of a particle in the middle are stored correctly
  */
 TEST_F(ParticleNeighborsTest, MiddleStoresNeighborsCorrectly) {
-
     generateCuboidParticles();
     Particle p = particles.getParticle(4);
 

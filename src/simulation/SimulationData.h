@@ -243,7 +243,7 @@ public:
 
     /**
      * @brief sets the version of the thermostat to use
-     * @param thermoVersionArg thermostat version number (TODO: valid range)
+     * @param thermoVersionArg thermostat version number (valid range: 1, 2, 3)
      */
     void setThermoVersion(int thermoVersionArg);
 
@@ -365,6 +365,7 @@ public:
     * @param returns the baseName for the profiling csv-file
     */
     std::string getProfilingBaseName();
+
 private:
     SimulationType simType;
     double startTime;

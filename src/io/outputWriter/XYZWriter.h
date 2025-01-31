@@ -10,17 +10,18 @@
 #include "particle/container/ParticleContainer.h"
 #include "./FileWriter.h"
 
+/**
+ * @brief contains functionality for writing output files
+ */
 namespace outputWriter {
     /**
      * @brief file writer, which specializes in xyz outputs
      */
     class XYZWriter : public FileWriter {
-
-        public:
-            /** 
-             * @brief plots the particles and writes them to an xyz file
-             */
-            void plotParticles(ParticleContainer &particles, int iteration);
+    public:
+        /**
+         * @brief plots the particles and writes them to an xyz file
+         */
+        void plotParticles(ParticleContainer &particles, int iteration);
     };
-
 } // namespace outputWriter

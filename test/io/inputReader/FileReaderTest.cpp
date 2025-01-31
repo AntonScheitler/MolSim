@@ -3,7 +3,6 @@
 #include "../../../../src/particle/container/ParticleContainerDirectSum.h"
 
 class FileReaderTest : public testing::Test {
-
 protected:
     SimulationData simulationData{};
 
@@ -14,7 +13,6 @@ protected:
     void SetUp() override {
         simulationData = SimulationData();
     }
-
 };
 
 /**
@@ -93,7 +91,7 @@ void FileReaderTest::testCometSim(char *inputFile) {
     simulationData.setSimType(SimulationType::comet);
     inputReader::FileReader fileReader = inputReader::FileReader(simulationData);
     fileReader.readFile(inputFile);
-    auto* containerDirectSum = dynamic_cast<ParticleContainerDirectSum *>(&(simulationData.getParticles()));
+    auto *containerDirectSum = dynamic_cast<ParticleContainerDirectSum *>(&(simulationData.getParticles()));
     expectParticlesCometSimCorrect(*containerDirectSum);
 }
 
@@ -106,7 +104,7 @@ void FileReaderTest::testCollisionSim(char *inputFile) {
     simulationData.setSimType(SimulationType::collision);
     inputReader::FileReader fileReader = inputReader::FileReader(simulationData);
     fileReader.readFile(inputFile);
-    auto* containerDirectSum = dynamic_cast<ParticleContainerDirectSum *>(&(simulationData.getParticles()));
+    auto *containerDirectSum = dynamic_cast<ParticleContainerDirectSum *>(&(simulationData.getParticles()));
     expectParticlesCollisionSimCorrect(*containerDirectSum);
 }
 
@@ -137,5 +135,3 @@ TEST_F(FileReaderTest, JsonFileReaderCollisionSimInputTest) {
 TEST_F(FileReaderTest, TxtFileReaderCollisionSimInputTest) {
     testCollisionSim((char *) "../../testInput/test-input-cuboids.txt");
 }
-
-

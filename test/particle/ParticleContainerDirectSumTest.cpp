@@ -3,18 +3,18 @@
 
 
 class ParticleContainerDirectSumTest : public testing::Test {
-    protected:
-        ParticleContainerDirectSum empty;
-        ParticleContainerDirectSum container;
+protected:
+    ParticleContainerDirectSum empty;
+    ParticleContainerDirectSum container;
 
-        void SetUp() override {
-            empty = ParticleContainerDirectSum();
-            container = ParticleContainerDirectSum();
-            for (int i = 0; i < 4; i++) {
-                double d = i;
-                container.addParticle(Particle({d, d, d}, {d, d, d}, d));
-            }
+    void SetUp() override {
+        empty = ParticleContainerDirectSum();
+        container = ParticleContainerDirectSum();
+        for (int i = 0; i < 4; i++) {
+            double d = i;
+            container.addParticle(Particle({d, d, d}, {d, d, d}, d));
         }
+    }
 };
 
 /**
@@ -22,7 +22,7 @@ class ParticleContainerDirectSumTest : public testing::Test {
  * ParticleContainerDirectSum
  */
 TEST_F(ParticleContainerDirectSumTest, EmptyParticleContainerDirectSumIteratorTest) {
-    for (Particle& particle : empty) {
+    for (Particle &particle: empty) {
         EXPECT_TRUE(false);
     }
 }
@@ -33,7 +33,7 @@ TEST_F(ParticleContainerDirectSumTest, EmptyParticleContainerDirectSumIteratorTe
  */
 TEST_F(ParticleContainerDirectSumTest, ParticleContainerDirectSumIteratorTest) {
     double d = -1; // dummy value for x, v and m
-    for (Particle& particle : container){
+    for (Particle &particle: container) {
         EXPECT_TRUE(particle.getId() > d);
         d = particle.getId();
     }
@@ -54,7 +54,7 @@ TEST_F(ParticleContainerDirectSumTest, EmptyParticleContainerDirectSumPairIterat
  * is correct
  */
 TEST_F(ParticleContainerDirectSumTest, ParticleContainerDirectSumPairIteratorTest) {
-    std::vector<std::pair<Particle, Particle>> otherPairs = {};
+    std::vector<std::pair<Particle, Particle> > otherPairs = {};
     for (double i = 0; i < 3; i++) {
         for (double j = i + 1; j < 4; j++) {
             otherPairs.push_back(std::make_pair(container.getParticle(i), container.getParticle(j)));

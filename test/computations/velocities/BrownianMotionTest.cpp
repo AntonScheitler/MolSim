@@ -6,9 +6,9 @@
  * @brief Tests the brownian motion that is applied on particles
  */
 class BrownianMotionTest : public testing::Test {
-
 protected:
-    void SetUp() override {};
+    void SetUp() override {
+    };
 };
 
 /**

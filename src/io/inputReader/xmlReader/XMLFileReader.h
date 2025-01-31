@@ -1,3 +1,4 @@
+#pragma once
 #include "simulation/SimulationData.h"
 #include "spdlogConfig.h"
 #include "particle/boundary/Boundary.h"
@@ -25,7 +26,6 @@ namespace inputReader {
         void readFile(char *filename);
 
     private:
-
         /**
          * @brief a specific logger for the XMLFileReader
          */
@@ -42,6 +42,5 @@ namespace inputReader {
          * @return the BoundaryType enum value
          */
         static BoundaryType getEnum(const std::string &b);
-
     };
 } // namespace inputReader

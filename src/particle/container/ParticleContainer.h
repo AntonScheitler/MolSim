@@ -1,10 +1,10 @@
+#pragma once
 #include "../Particle.h"
 #include "particle/iterator/pairParticleIterator/PairParticleIterator.h"
 #include "particle/iterator/particleIterator/ParticleIterator.h"
 #include "particle/iterator/particleIterator/ParticleIteratorNonFixedParticles.h"
 #include <memory>
 
-#pragma once
 
 /**
  * @brief base class for different types of particle containers
@@ -47,6 +47,7 @@ public:
      * @return the non-fixed-particle iterator
      */
     virtual ParticleIteratorNonFixedParticles beginNonFixedParticles() = 0;
+
     /**
      * @brief provides an iterator pointing to the end of the particles that are not fixed
      * @return the end of the non-fixed-particle iterator
@@ -57,5 +58,5 @@ public:
      * @brief returns the particle at the specified index
      * @param index the index of the particle to return
      */
-    virtual Particle& getParticle(size_t index) = 0;
+    virtual Particle &getParticle(size_t index) = 0;
 };

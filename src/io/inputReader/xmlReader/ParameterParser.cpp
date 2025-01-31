@@ -7,7 +7,6 @@
  * @brief namespace that wraps different methods to help parsing the XML input file
  */
 namespace ParameterParser {
-
     void readParams(SimulationData &simData, const std::unique_ptr<simulation> &xmlParser) {
         try {
             if (xmlParser->parameters().present()) {
@@ -30,19 +29,18 @@ namespace ParameterParser {
                     auto grav = xmlParser->parameters()->grav();
                     simData.setGrav({grav->x(), grav->y(), grav->z()});
                 }
-                if (xmlParser->parameters()->averageVelocity().present()){
+                if (xmlParser->parameters()->averageVelocity().present()) {
                     simData.setAverageVelocity(xmlParser->parameters()->averageVelocity().get());
                 }
-                if (xmlParser->parameters()->bin_profile().present()){
+                if (xmlParser->parameters()->bin_profile().present()) {
                     simData.setProfileIterationNumber(xmlParser->parameters()->bin_profile()->iteration());
-                    if(xmlParser->parameters()->bin_profile()->bin_number().present()){
+                    if (xmlParser->parameters()->bin_profile()->bin_number().present()) {
                         simData.setProfileBinNumber(xmlParser->parameters()->bin_profile()->bin_number().get());
                     }
-                    if(xmlParser->parameters()->bin_profile()->base_name().present()){
+                    if (xmlParser->parameters()->bin_profile()->base_name().present()) {
                         simData.setProfilingBaseName(xmlParser->parameters()->bin_profile()->base_name().get());
                     }
                 }
-
             }
             if (xmlParser->output().present()) {
                 if (xmlParser->output()->baseName().present()) {
@@ -69,18 +67,21 @@ namespace ParameterParser {
     void readThermo(SimulationData &simData, const std::unique_ptr<simulation> &xmlParser) {
         try {
             if (xmlParser->thermo().present()) {
-                if(xmlParser->thermo()->version().present()) {
+                if (xmlParser->thermo()->version().present()) {
                     simData.setThermoVersion(xmlParser->thermo()->version().get());
                     SPDLOG_INFO("Using thermostat v{0}", simData.getThermoVersion());
-                } else SPDLOG_INFO("thermostat is disabled");
+                } else
+                    SPDLOG_INFO("thermostat is disabled");
                 simData.activateThermostat();
                 simData.setInitialTemp(xmlParser->thermo()->init_T());
                 simData.setThermoFrequency(xmlParser->thermo()->n());
-                double targetTempArg = (xmlParser->thermo()->target().present()) ? (xmlParser->thermo()->target().get())
-                                                                                 : xmlParser->thermo()->init_T();
+                double targetTempArg = (xmlParser->thermo()->target().present())
+                                           ? (xmlParser->thermo()->target().get())
+                                           : xmlParser->thermo()->init_T();
                 simData.setTargetTemp(targetTempArg);
-                double maxStep = (xmlParser->thermo()->maxStep().present()) ? (xmlParser->thermo()->maxStep().get())
-                                                                            : std::numeric_limits<double>::infinity();
+                double maxStep = (xmlParser->thermo()->maxStep().present())
+                                     ? (xmlParser->thermo()->maxStep().get())
+                                     : std::numeric_limits<double>::infinity();
                 simData.setMaxDeltaTemp(maxStep);
             }
         } catch (const xml_schema::exception &e) {
@@ -92,8 +93,7 @@ namespace ParameterParser {
         }
     }
 
-    void readMembrane(SimulationData &simData, const std::unique_ptr<simulation> &xmlParser){
-
+    void readMembrane(SimulationData &simData, const std::unique_ptr<simulation> &xmlParser) {
         try {
             if (xmlParser->membraneArgs().present()) {
                 simData.setK(xmlParser->membraneArgs()->k());
@@ -111,7 +111,6 @@ namespace ParameterParser {
     }
 
     void readParallelization(SimulationData &simData, const std::unique_ptr<simulation> &xmlParser) {
-
         try {
             if (xmlParser->parallelization().present()) {
                 simData.setThreadVersion(xmlParser->parallelization()->strategy());

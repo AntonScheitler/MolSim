@@ -18,10 +18,11 @@ protected:
         spdlog::drop("VelocityDensityProfileWriter");
     }
 
-    VelocityDensityProfilingTest() : profileWriter("profileTest") {}
+    VelocityDensityProfilingTest() : profileWriter("profileTest") {
+    }
 
-    std::vector<std::vector<double>> readCSV(const std::string& filename) {
-        std::vector<std::vector<double>> data;
+    std::vector<std::vector<double> > readCSV(const std::string &filename) {
+        std::vector<std::vector<double> > data;
         std::ifstream file(filename);
 
         if (!file.is_open()) {
@@ -51,80 +52,66 @@ protected:
  * @brief checks if the VelocityDensityProfileReader uses the correct number of bins and stores the correct number of particles
  */
 TEST_F(VelocityDensityProfilingTest, ProfileReaderUsesTheCorrectNumberOfBinsAndStoresTheCorrectNumberOfParticles) {
-
-
-ParticleContainerLinkedCell particles = ParticleContainerLinkedCell({10, 10, 10}, 3,
-                                    {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}});
+    ParticleContainerLinkedCell particles = ParticleContainerLinkedCell({10, 10, 10}, 3,
+                                                                        {
+                                                                            {outflow, outflow}, {outflow, outflow},
+                                                                            {outflow, outflow}
+                                                                        });
 
     double binSize = 0.5;
 
-    for(int i = 0; i < 20; i++){
-
-        for(int j = 0; j < i; j++){
-
+    for (int i = 0; i < 20; i++) {
+        for (int j = 0; j < i; j++) {
             Particle p = Particle({binSize * i, 0, 0}, {0, 0, 0}, 1);
             particles.addParticle(p);
         }
-
     }
 
     SimulationData simulationData1 = SimulationData();
     simulationData1.setProfileBinNumber(20);
 
 
+    profileWriter.profileBins(particles, 1, simulationData1.getProfileBinNumber());
 
 
-    profileWriter.profileBins(particles,1, simulationData1.getProfileBinNumber());
-
-
-    std::vector<std::vector<double>> csvData = readCSV("./profileTest_0001.csv");
-    for(int i = 0; i < 20; i++){
+    std::vector<std::vector<double> > csvData = readCSV("./profileTest_0001.csv");
+    for (int i = 0; i < 20; i++) {
         EXPECT_EQ(csvData[i][0], i);
     }
-
-
-
 }
 
 /**
  * @brief checks if the VelocityDensityProfileReader stores the correct density for every bin
  */
 TEST_F(VelocityDensityProfilingTest, ProfileReaderCalculatesTheCorrectDensity) {
-
-
     ParticleContainerLinkedCell particles = ParticleContainerLinkedCell({10, 10, 10}, 3,
-                                                                        {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}});
+                                                                        {
+                                                                            {outflow, outflow}, {outflow, outflow},
+                                                                            {outflow, outflow}
+                                                                        });
     double binSize = 0.5;
 
-    for(int i = 0; i < 20; i++){
-
-        for(int j = 0; j < i; j++){
-
+    for (int i = 0; i < 20; i++) {
+        for (int j = 0; j < i; j++) {
             Particle p = Particle({binSize * i, 0, 0}, {0, 0, 0}, 1);
             particles.addParticle(p);
         }
-
     }
 
     SimulationData simulationData1 = SimulationData();
     simulationData1.setProfileBinNumber(20);
 
 
+    profileWriter.profileBins(particles, 1, simulationData1.getProfileBinNumber());
 
 
-    profileWriter.profileBins(particles,1, simulationData1.getProfileBinNumber());
-
-
-    std::vector<std::vector<double>> csvData = readCSV("./profileTest_0001.csv");
+    std::vector<std::vector<double> > csvData = readCSV("./profileTest_0001.csv");
 
     double binVolume = binSize * 10 * 10;
 
-    for(int i = 0; i < 20; i++){
-       EXPECT_EQ(csvData[i][1], i / binVolume);
-
+    for (int i = 0; i < 20; i++) {
+        EXPECT_EQ(csvData[i][1], i / binVolume);
     }
-
-
 }
 
 
@@ -132,47 +119,39 @@ TEST_F(VelocityDensityProfilingTest, ProfileReaderCalculatesTheCorrectDensity) {
  * @brief checks if the VelocityDensityProfileReader stores the correct average velocity for every bin
  */
 TEST_F(VelocityDensityProfilingTest, ProfileReaderCalculatesTheCorrectAverageVelocity) {
-
-
     ParticleContainerLinkedCell particles = ParticleContainerLinkedCell({10, 10, 10}, 3,
-                                                                        {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}});
+                                                                        {
+                                                                            {outflow, outflow}, {outflow, outflow},
+                                                                            {outflow, outflow}
+                                                                        });
     double binSize = 0.5;
 
-    for(double i = 0; i < 20; i++){
-
-        for(double j = 0; j < i; j++){
-
+    for (double i = 0; i < 20; i++) {
+        for (double j = 0; j < i; j++) {
             Particle p = Particle({binSize * i, 0, 0}, {j, i, 0}, 1);
             particles.addParticle(p);
-
         }
-
     }
 
     SimulationData simulationData1 = SimulationData();
     simulationData1.setProfileBinNumber(20);
 
 
+    profileWriter.profileBins(particles, 1, simulationData1.getProfileBinNumber());
 
 
-    profileWriter.profileBins(particles,1, simulationData1.getProfileBinNumber());
+    std::vector<std::vector<double> > csvData = readCSV("./profileTest_0001.csv");
 
 
-    std::vector<std::vector<double>> csvData = readCSV("./profileTest_0001.csv");
-
-
-    for(int i = 0; i < 20; i++){
+    for (int i = 0; i < 20; i++) {
         double sum = 0.0;
-        for(int j = 0; j < i; j++){
+        for (int j = 0; j < i; j++) {
             sum += j;
         }
-        if(i != 0){
+        if (i != 0) {
             EXPECT_EQ(csvData[i][2], sum/ i);
         }
-        EXPECT_EQ(csvData[i][3], i );
+        EXPECT_EQ(csvData[i][3], i);
         EXPECT_EQ(csvData[i][4], 0);
-
     }
-
-
 }

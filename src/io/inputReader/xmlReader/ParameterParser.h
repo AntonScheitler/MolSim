@@ -1,3 +1,4 @@
+#pragma once
 #include "simulation/SimulationData.h"
 #include "io/inputReader/xmlReader/xmlScheme/simulation.h"
 
@@ -31,8 +32,4 @@ namespace ParameterParser {
      * @param xmlParser pointer to xml-file
      */
     void readParallelization(SimulationData &simData, const std::unique_ptr<simulation> &xmlParser);
-
 };
-
-
-

@@ -1,20 +1,20 @@
+#pragma once
+
 #include <particle/Particle.h>
 #include <vector>
 
-#pragma once
 
 /**
  * @brief an iterator which enables iteration over each particle separately
  */
 class ParticleIterator {
-
 public:
     using iterator_category = std::forward_iterator_tag;
     using reference = Particle &;
     /**
      * @brief create an instance of a ParticleIterator
      * @param it the vector iterator to build the ParticleIterator upon
-     * @param end an iterator that points to the end of the particle vector
+     * @param endArg an iterator that points to the end of the particle vector
      * @return an instance of a ParticleIterator
      */
     ParticleIterator(std::vector<Particle>::iterator it, std::vector<Particle>::iterator endArg);

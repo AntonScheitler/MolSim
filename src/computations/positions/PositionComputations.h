@@ -1,3 +1,4 @@
+#pragma once
 #include "particle/container/ParticleContainer.h"
 
 /**
@@ -7,8 +8,8 @@ class PositionComputations {
 public:
     /**
      * @brief computes the updated positions for the given particleContainer of planets in-place
-     * @param particles_arg the particles to compute the positions of
-     * @param deltaT_arg the timestep size used by the simulation
+     * @param particles the particles to compute the positions of
+     * @param deltaT the timestep size used by the simulation
      * @param numThreads the number of threads to use for this simulation
      */
     static void stoermerVerlet(ParticleContainer &particles, double deltaT, size_t numThreads);

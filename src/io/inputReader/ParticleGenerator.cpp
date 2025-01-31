@@ -6,9 +6,8 @@
 namespace inputReader {
     void
     ParticleGenerator::generateCuboid(ParticleContainer &particles, std::array<double, 3> x, std::array<double, 3> v,
-                                      std::array<int, 3> d, double m, double h, int type, double e, double s, bool fixed, int simType) {
-
-
+                                      std::array<int, 3> d, double m, double h, int type, double e, double s,
+                                      bool fixed, int simType) {
         std::array<double, 3> tempx{};
         for (int dz = 0; dz < d[2]; ++dz) {
             tempx[2] = dz * h + x[2];
@@ -19,7 +18,7 @@ namespace inputReader {
 
                     Particle temp = Particle(tempx, v, m, type, e, s, fixed);
 
-                    if(simType == 3) {
+                    if (simType == 3) {
                         addNeighbors(temp, dx, dy, dz, d);
                     }
 
@@ -29,7 +28,6 @@ namespace inputReader {
             }
         }
     }
-
 
 
     void ParticleGenerator::addNeighbors(Particle &particle, int dx, int dy, int dz, std::array<int, 3> d) {
@@ -48,12 +46,9 @@ namespace inputReader {
                     if (neighborX >= 0 && neighborX < d[0] &&
                         neighborY >= 0 && neighborY < d[1] &&
                         neighborZ >= 0 && neighborZ < d[2]) {
-
                         int neighborIndex = neighborX +
                                             neighborY * d[0] +
                                             neighborZ * d[1] * d[0];
-
-
 
 
                         int diffCount = (x != 0) + (y != 0) + (z != 0);
@@ -76,8 +71,8 @@ namespace inputReader {
     }
 
     void ParticleGenerator::generateDisc(ParticleContainer &particles, std::array<double, 3> center,
-                                         std::array<double, 3> v, double r, double m, double h, int type, double e, double s, bool fixed) {
-
+                                         std::array<double, 3> v, double r, double m, double h, int type, double e,
+                                         double s, bool fixed) {
         SPDLOG_INFO("starting disc generator");
         for (int i = 0; i <= r; ++i) {
             double currentRadius = i * h;

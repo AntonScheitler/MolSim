@@ -1,4 +1,3 @@
-
 #include "CheckpointWriter.h"
 #include "particle/container/ParticleContainer.h"
 #include "spdlogConfig.h"
@@ -8,7 +7,6 @@
 
 
 namespace outputWriter {
-
     CheckpointWriter::CheckpointWriter(std::string baseName) : baseName(baseName) {
         this->logger = spdlog::stdout_color_st("CheckpointWriter");
         SPDLOG_LOGGER_DEBUG(logger, "Initialized CheckpointWriter");
@@ -26,7 +24,7 @@ namespace outputWriter {
         }
         file << particles.size() << "\n";
 
-        for (Particle& particle : particles) {
+        for (Particle &particle: particles) {
             file << plotParticle(particle) << "\n";
         }
 
@@ -58,5 +56,4 @@ namespace outputWriter {
 
         return particleParams.str();
     }
-
 } // namespace outputWriter

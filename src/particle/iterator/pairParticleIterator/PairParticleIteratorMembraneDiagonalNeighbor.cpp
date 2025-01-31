@@ -1,6 +1,8 @@
 #include "PairParticleIteratorMembraneDiagonalNeighbor.h"
-PairParticleIteratorMembraneDiagonalNeighbor::PairParticleIteratorMembraneDiagonalNeighbor(std::vector<Particle>::iterator it, 
-        std::vector<Particle>::iterator end, std::vector<Particle>& particlesArg): particles(particlesArg) {
+
+PairParticleIteratorMembraneDiagonalNeighbor::PairParticleIteratorMembraneDiagonalNeighbor(
+    std::vector<Particle>::iterator it,
+    std::vector<Particle>::iterator end, std::vector<Particle> &particlesArg): particles(particlesArg) {
     curr = it;
     currNeighborPos = topLeft;
     this->end = end;
@@ -12,7 +14,7 @@ PairParticleIterator::reference PairParticleIteratorMembraneDiagonalNeighbor::op
     return {*curr, particles[curr->getDiagNeighborIdx(currNeighborPos)]};
 }
 
-PairParticleIteratorMembraneDiagonalNeighbor& PairParticleIteratorMembraneDiagonalNeighbor::operator++() {
+PairParticleIteratorMembraneDiagonalNeighbor &PairParticleIteratorMembraneDiagonalNeighbor::operator++() {
     if (currNeighborPos == topRight) {
         ++curr;
     }
@@ -23,9 +25,7 @@ PairParticleIteratorMembraneDiagonalNeighbor& PairParticleIteratorMembraneDiagon
 
 
 void PairParticleIteratorMembraneDiagonalNeighbor::stepToNextViableParticle() {
-
     while (curr != end && curr->getDiagNeighborIdx(currNeighborPos) == -1) {
-
         if (currNeighborPos == topRight) {
             ++curr;
         }
@@ -34,7 +34,7 @@ void PairParticleIteratorMembraneDiagonalNeighbor::stepToNextViableParticle() {
 }
 
 bool PairParticleIteratorMembraneDiagonalNeighbor::operator!=(const PairParticleIterator &other) {
-    auto casted = dynamic_cast<const PairParticleIteratorMembraneDiagonalNeighbor*>(&other);
+    auto casted = dynamic_cast<const PairParticleIteratorMembraneDiagonalNeighbor *>(&other);
     if (casted) {
         return curr != casted->curr || currNeighborPos != casted->currNeighborPos;
     }

@@ -1,8 +1,9 @@
+#pragma once
+
 #include "particle/iterator/pairParticleIterator/PairParticleIterator.h"
 #include <particle/Particle.h>
 #include <vector>
 
-#pragma once
 
 /**
  * @brief an iterator which enables iteration over pairs of particles. The elements of those pairs are always
@@ -10,7 +11,6 @@
  * iterating. <b, a> will never show itself in an iteration
  */
 class PairParticleIteratorDirectSum : public PairParticleIterator {
-
 public:
     /**
      * @brief create an instance of a PairParticleIterator

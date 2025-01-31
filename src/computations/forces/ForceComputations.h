@@ -27,7 +27,8 @@ public:
      * @param cutoff the radius past which particles are not considered for the force computation
      * @param numThreads the number of threads to use for this simulation
      */
-    static void computeLennardJonesPotentialCutoff(ParticleContainerLinkedCell &particles, double cutoff, size_t numThreads);
+    static void computeLennardJonesPotentialCutoff(ParticleContainerLinkedCell &particles, double cutoff,
+                                                   size_t numThreads);
 
     /**
      * @brief an alternative to computeLennardJonesPotentialCutoff with an iteration optimized for parallelism 
@@ -35,7 +36,8 @@ public:
      * @param cutoff the radius past which particles are not considered for the force computation
      * @param numThreads the number of threads to use for this simulation
      */
-    static void computeLennardJonesPotentialCutoffCellIter(ParticleContainerLinkedCell& particles, double cutoff, size_t numThreads);
+    static void computeLennardJonesPotentialCutoffCellIter(ParticleContainerLinkedCell &particles, double cutoff,
+                                                           size_t numThreads);
 
     /**
      * @brief an alternative to computeLennardJonesPotentialCutoff with an iteration optimized for parallelism and a
@@ -44,7 +46,8 @@ public:
      * @param cutoff the radius past which particles are not considered for the force computation
      * @param numThreads the number of threads to use for this simulation
      */
-    static void computeLennardJonesPotentialCutoffMeshPart(ParticleContainerLinkedCell& particles, double cutoff, size_t numThreads);
+    static void computeLennardJonesPotentialCutoffMeshPart(ParticleContainerLinkedCell &particles, double cutoff,
+                                                           size_t numThreads);
 
     /**
      * @brief updates the old force and resets the current force for all particles
@@ -81,7 +84,8 @@ public:
      * @param indices the indices of the particles to apply the force to
      * @param f the custom force vector to apply to the particles
      */
-    static void applyCustomForceVector(ParticleContainerLinkedCell& particles, std::vector<size_t> indices, std::array<double, 3> f);
+    static void applyCustomForceVector(ParticleContainerLinkedCell &particles, std::vector<size_t> indices,
+                                       std::array<double, 3> f);
 
 private:
     /**
@@ -92,7 +96,8 @@ private:
      * @param critical specifies if changing the forces of particles is a critical operation that should be synchronized
      * when using multiple threads
      */
-    static void computeLennardJonesPotentialRepulsiveHelper(std::pair<Particle&, Particle&>& pair, double epsilon, double sigma, bool critical);
+    static void computeLennardJonesPotentialRepulsiveHelper(std::pair<Particle &, Particle &> &pair, double epsilon,
+                                                            double sigma, bool critical);
 
     /**
      * @brief a helper function for computing the lenndard jones potential between two particles
@@ -102,7 +107,9 @@ private:
      * @param critical specifies if changing the forces of particles is a critical operation that should be synchronized
      * when using multiple threads
      */
-    static void computeLennardJonesPotentialCutoffHelperPair(ParticleContainerLinkedCell& particles, std::pair<Particle&, Particle&>& pair, double cutoff, bool critical);
+    static void computeLennardJonesPotentialCutoffHelperPair(ParticleContainerLinkedCell &particles,
+                                                             std::pair<Particle &, Particle &> &pair, double cutoff,
+                                                             bool critical);
 
     /**
      * @brief a helper function for computing the lenndard jones for a cell and all it's neighbor cells
@@ -112,7 +119,8 @@ private:
      * @param critical specifies if changing the forces of particles is a critical operation that should be synchronized
      * when using multiple threads
      */
-    static void computeLennardJonesPotentialCutoffHelperCell(ParticleContainerLinkedCell& particles, size_t cellIdx, double cutoff, bool critical);
+    static void computeLennardJonesPotentialCutoffHelperCell(ParticleContainerLinkedCell &particles, size_t cellIdx,
+                                                             double cutoff, bool critical);
 
     /**
      * @brief a helper function for computing the harmonic potential between two particles
@@ -120,5 +128,5 @@ private:
      * @param k the stiffness constant for force computation
      * @param bondLength the bond length for force computation
      */
-    static void computeHaromicPotentialHelper(std::pair<Particle&, Particle&>& pair, double k, double bondLength);
+    static void computeHaromicPotentialHelper(std::pair<Particle &, Particle &> &pair, double k, double bondLength);
 };

@@ -11,14 +11,13 @@
 
 class CheckpointWriterReaderTest : public testing::Test {
 protected:
-
     ParticleContainerLinkedCell particles;
 
     CheckpointWriterReaderTest()
-            : particles({10, 10, 10}, 3, {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}) {}
+        : particles({10, 10, 10}, 3, {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}) {
+    }
 
     void generateParticles() {
-
         std::array<double, 3> p = {0.0, 0.0, 0.0};
         std::array<double, 3> v = {0.0, 0.0, 0.0};
         std::array<int, 3> d = {3, 3, 1};
@@ -44,15 +43,16 @@ protected:
  * @brief checks if the CheckpoinWriter stores the correct values to reproduce the same Particlecontainer via CheckpointReader
  */
 TEST_F(CheckpointWriterReaderTest, ParticleContainerIsTheSameAfterCheckpointing) {
-
     generateParticles();
 
     outputWriter::CheckpointWriter checkpointWriter("checkerTest");
     checkpointWriter.plotParticles(particles, 0);
 
     auto tmpParticles = std::make_unique<ParticleContainerLinkedCell>(
-            ParticleContainerLinkedCell{{10, 10, 10}, 3,
-                                        {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}});
+        ParticleContainerLinkedCell{
+            {10, 10, 10}, 3,
+            {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}
+        });
     SimulationData simulationData = SimulationData();
     simulationData.setParticles(std::move(tmpParticles));
     inputReader::CheckpointReader checkpointReader(simulationData);
@@ -60,15 +60,10 @@ TEST_F(CheckpointWriterReaderTest, ParticleContainerIsTheSameAfterCheckpointing)
     checkpointReader.readCheckpointFile(simulationData, "./checkerTest.txt");
 
     int i = 0;
-    for (Particle& particle : simulationData.getParticles()) {
+    for (Particle &particle: simulationData.getParticles()) {
         EXPECT_TRUE(particle.getM() == particles.getParticle(i).getM());
         EXPECT_TRUE(particle.getX() == particles.getParticle(i).getX());
         EXPECT_TRUE(particle.getV() == particles.getParticle(i).getV());
         i++;
     }
-
 }
-
-
-
-

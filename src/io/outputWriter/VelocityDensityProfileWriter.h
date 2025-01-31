@@ -1,3 +1,4 @@
+#pragma once
 #include "../../computations/profile/VelocityDensityProfile.h"
 #include "FileWriter.h"
 
@@ -5,9 +6,8 @@ namespace outputWriter {
     /**
    * @brief This class implements the functionality to create csv files that profile the particles
    */
-    class VelocityDensityProfileWriter  {
+    class VelocityDensityProfileWriter {
     public:
-
         VelocityDensityProfileWriter(std::string baseName);
 
         /**
@@ -16,10 +16,9 @@ namespace outputWriter {
          * @param iteration number of the current iteration
          * @param bins number of bins to separate the domain into
          */
-        void profileBins(ParticleContainerLinkedCell& particles, int iteration, int bins);
+        void profileBins(ParticleContainerLinkedCell &particles, int iteration, int bins);
 
     private:
-
         std::string baseName = "profile";
         std::shared_ptr<spdlog::logger> logger;
 
@@ -29,10 +28,5 @@ namespace outputWriter {
          *
          */
         std::string plotBin(const VelocityDensityProfile::binInfo &binInfo);
-
-
-
     };
-
 } // namespace outputWriter
-

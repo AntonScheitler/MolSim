@@ -1,6 +1,5 @@
 #include "../../../../src/computations/forces/ForceComputations.h"
 #include <gtest/gtest.h>
-#include <omp.h>
 #include "../../../src/spdlogConfig.h"
 #include "../../../src/particle/container/ParticleContainerDirectSum.h"
 #include "particle/boundary/Boundary.h"
@@ -168,7 +167,6 @@ TEST_F(ForceComputationsTest, HarmonicPotentialDiagonalNeighborTest) {
  * direct sum ParticleContainer
  */
 TEST_F(ForceComputationsTest, ExternalGravityTest) {
-
     Particle a{0};
     a.setF({1, 2, 3});
     a.setM(6);
@@ -190,7 +188,6 @@ TEST_F(ForceComputationsTest, ExternalGravityTest) {
     EXPECT_DOUBLE_EQ(particles.getParticle(1).getF()[0], 8);
     EXPECT_DOUBLE_EQ(particles.getParticle(1).getF()[1], 7);
     EXPECT_DOUBLE_EQ(particles.getParticle(1).getF()[2], 6);
-
 }
 
 /**
@@ -198,9 +195,15 @@ TEST_F(ForceComputationsTest, ExternalGravityTest) {
  */
 TEST_F(ForceComputationsTest, LennardJonesPotentialCutoffVariantsTest) {
     // create container for each type
-    ParticleContainerLinkedCell containerRegular{{10, 10, 10}, 1, {{periodic, periodic}, {outflow, outflow}, {reflect, reflect}}};
-    ParticleContainerLinkedCell containerCellIter{{10, 10, 10}, 1, {{periodic, periodic}, {outflow, outflow}, {reflect, reflect}}};
-    ParticleContainerLinkedCell containerMeshPart{{10, 10, 10}, 1, {{periodic, periodic}, {outflow, outflow}, {reflect, reflect}}};
+    ParticleContainerLinkedCell containerRegular{
+        {10, 10, 10}, 1, {{periodic, periodic}, {outflow, outflow}, {reflect, reflect}}
+    };
+    ParticleContainerLinkedCell containerCellIter{
+        {10, 10, 10}, 1, {{periodic, periodic}, {outflow, outflow}, {reflect, reflect}}
+    };
+    ParticleContainerLinkedCell containerMeshPart{
+        {10, 10, 10}, 1, {{periodic, periodic}, {outflow, outflow}, {reflect, reflect}}
+    };
 
     // add the same particles to each container
     for (double z = 0.5; z < 10; z += 1) {

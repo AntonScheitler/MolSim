@@ -44,19 +44,19 @@ ParticleIterator ParticleContainerDirectSum::end() {
 std::unique_ptr<PairParticleIterator> ParticleContainerDirectSum::beginPairParticle() {
     if (particles.empty()) {
         return std::make_unique<PairParticleIteratorDirectSum>(
-                PairParticleIteratorDirectSum(particles.begin(), particles.begin(), particles.end()));
+            PairParticleIteratorDirectSum(particles.begin(), particles.begin(), particles.end()));
     }
     return std::make_unique<PairParticleIteratorDirectSum>(
-            PairParticleIteratorDirectSum(particles.begin(), ++(particles.begin()), particles.end()));
+        PairParticleIteratorDirectSum(particles.begin(), ++(particles.begin()), particles.end()));
 }
 
 std::unique_ptr<PairParticleIterator> ParticleContainerDirectSum::endPairParticle() {
     if (particles.empty()) {
         return std::make_unique<PairParticleIteratorDirectSum>(
-                PairParticleIteratorDirectSum(particles.end(), particles.end(), particles.end()));
+            PairParticleIteratorDirectSum(particles.end(), particles.end(), particles.end()));
     }
     return std::make_unique<PairParticleIteratorDirectSum>(
-            PairParticleIteratorDirectSum(--(particles.end()), particles.end(), particles.end()));
+        PairParticleIteratorDirectSum(--(particles.end()), particles.end(), particles.end()));
 }
 
 ParticleIteratorNonFixedParticles ParticleContainerDirectSum::beginNonFixedParticles() {

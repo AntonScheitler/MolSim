@@ -17,7 +17,8 @@ protected:
 
     struct PairEqual {
         bool operator()(const std::pair<Particle, Particle> &p1, const std::pair<Particle, Particle> &p2) const {
-            return (p1.first.getX() == p2.first.getX() && p1.second.getX() == p2.second.getX()) || (p1.first.getX() == p2.second.getX() && p1.second.getX() == p2.first.getX());
+            return (p1.first.getX() == p2.first.getX() && p1.second.getX() == p2.second.getX()) || (
+                       p1.first.getX() == p2.second.getX() && p1.second.getX() == p2.first.getX());
         }
     };
 
@@ -29,8 +30,10 @@ protected:
  * @brief checks if the neighboring particles of a membrane are returned correctly by the iterator
  */
 TEST_F(ParticleMembraneTest, ParticleMembraneNeighborIterationTest) {
-    ParticleContainerLinkedCell container{{99, 99, 1}, 33,
-                                          {{periodic, periodic}, {outflow, outflow}, {outflow, outflow}}};
+    ParticleContainerLinkedCell container{
+        {99, 99, 1}, 33,
+        {{periodic, periodic}, {outflow, outflow}, {outflow, outflow}}
+    };
     std::unordered_set<std::pair<Particle, Particle>, PairHash, PairEqual> pairsSet{};
     for (int y = 0; y < 3; y++) {
         for (int x = 0; x < 3; x++) {
@@ -61,14 +64,14 @@ TEST_F(ParticleMembraneTest, ParticleMembraneNeighborIterationTest) {
     }
 
     // insert all expected pairs
-    for (Particle& particle : container) {
-        for (int directIdx : particle.getAllDirectNeighborIndices()) {
+    for (Particle &particle: container) {
+        for (int directIdx: particle.getAllDirectNeighborIndices()) {
             if (directIdx != -1) {
                 pairsSet.insert(std::make_pair(particle, container.getParticle(directIdx)));
             }
         }
 
-        for (int diagIdx : particle.getAllDiagonalNeighborIndices()) {
+        for (int diagIdx: particle.getAllDiagonalNeighborIndices()) {
             if (diagIdx != -1) {
                 pairsSet.insert(std::make_pair(particle, container.getParticle(diagIdx)));
             }

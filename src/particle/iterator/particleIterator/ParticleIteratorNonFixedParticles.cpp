@@ -1,6 +1,7 @@
 #include "ParticleIteratorNonFixedParticles.h"
 
-ParticleIteratorNonFixedParticles::ParticleIteratorNonFixedParticles(std::vector<Particle>::iterator it, std::vector<Particle>::iterator endArg) {
+ParticleIteratorNonFixedParticles::ParticleIteratorNonFixedParticles(std::vector<Particle>::iterator it,
+                                                                     std::vector<Particle>::iterator endArg) {
     current = it;
     end = endArg;
     while (current != end && (!(current->getActive()) || current->isFixed())) {

@@ -80,7 +80,6 @@ TEST_F(XMLFileReaderTest, XMlFileReaderCorrectInputTest) {
         EXPECT_NEAR(simData.getThermoFrequency(), 1000, precision);
 
         EXPECT_EQ(p.getType(), 2);
-
     } else
         EXPECT_TRUE(false);
 }

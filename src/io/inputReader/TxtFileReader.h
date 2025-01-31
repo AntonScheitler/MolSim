@@ -1,6 +1,5 @@
-#include "spdlogConfig.h"
+#pragma once
 #include <simulation/SimulationData.h>
-
 
 namespace inputReader {
     /**
@@ -20,20 +19,19 @@ namespace inputReader {
 
         /**
          * @brief txt file reader specifically for the Comet Simulation
-         * @param particles the particles to store the information in
+         * @param simData the particles to store the information in
          * @param filename the name of the file to read from
          */
         void readCometFile(SimulationData &simData, char *filename);
 
         /**
          * @brief txt file reader specifically for the Collision Simulation
-         * @param particles the particles to store the information in
+         * @param simData the simData to store the information in
          * @param filename the name of the file to read from
          */
         void readCollisionFile(SimulationData &simData, char *filename);
 
     private:
-
         /**
          * @brief a specific logger for the TxtFileReader
          */

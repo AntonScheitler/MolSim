@@ -1,18 +1,16 @@
+#pragma once
+
 #include <memory>
 #include <vector>
 #include "../Particle.h"
 #include "particle/iterator/pairParticleIterator/PairParticleIterator.h"
 #include "particle/iterator/particleIterator/ParticleIteratorNonFixedParticles.h"
-#include <particle/iterator/pairParticleIterator/PairParticleIteratorDirectSum.h>
 #include <particle/container/ParticleContainer.h>
-
-#pragma once
 
 /**
  * @brief wrapper for a vector of particles, enabling iteration over separate particles or particle pairs
  */
 class ParticleContainerDirectSum : public ParticleContainer {
-
 public:
     /**
      * @brief creates an empty ParticleContainer

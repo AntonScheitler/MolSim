@@ -7,7 +7,6 @@
 
 
 namespace inputReader {
-
     TxtFileReader::TxtFileReader(SimulationData &simulationDataArg) : simData(simulationDataArg) {
         this->logger = spdlog::stdout_color_st("TxtFileReader");
         SPDLOG_LOGGER_DEBUG(logger, "Initialized TxtFileReader");
@@ -28,11 +27,7 @@ namespace inputReader {
         std::ifstream inputFile(filename);
         std::string tmpString;
 
-        // TODO create correct ParticleContainer
-//        simData.setParticles
-
         if (inputFile.is_open()) {
-
             getline(inputFile, tmpString);
             SPDLOG_LOGGER_DEBUG(logger, "Read line: {0}", tmpString);
             while (tmpString.empty() or tmpString[0] == '#') {
@@ -85,7 +80,6 @@ namespace inputReader {
         std::string tmpString;
 
         if (inputFile.is_open()) {
-
             getline(inputFile, tmpString);
             SPDLOG_LOGGER_DEBUG(logger, "Read line: {0}", tmpString);
             while (tmpString.empty() or tmpString[0] == '#') {
@@ -120,7 +114,8 @@ namespace inputReader {
                 datastream >> bm;
                 simData.setAverageVelocity(bm);
 
-                ParticleGenerator::generateCuboid(simData.getParticles(), x, v, d, m, h, type, simData.getEpsilon(), simData.getSigma(), false, simData.getSimType());
+                ParticleGenerator::generateCuboid(simData.getParticles(), x, v, d, m, h, type, simData.getEpsilon(),
+                                                  simData.getSigma(), false, simData.getSimType());
 
 
                 getline(inputFile, tmpString);

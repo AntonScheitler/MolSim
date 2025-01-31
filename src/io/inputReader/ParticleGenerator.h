@@ -1,15 +1,14 @@
 #pragma once
-//#include <particle/container/ParticleContainer.h>
-
 #include <array>
+
 namespace inputReader {
     /**
      * @brief class for generating specific structures consisting of particles
      */
     class ParticleGenerator {
-
     private:
         static void addNeighbors(Particle &particle, int j, int k, int l, std::array<int, 3> d);
+
     public:
         /**
          * @brief generates a cuboid consisting of particles
@@ -23,8 +22,10 @@ namespace inputReader {
          * @param e epsilon value of particles
          * @param s sigma value of particles
          */
-        static void generateCuboid(ParticleContainer& particles, std::array<double, 3> x, std::array<double, 3> v,
-                                      std::array<int, 3> d, double m, double h, int type, double e, double s, bool fixed, int simType);
+        static void generateCuboid(ParticleContainer &particles, std::array<double, 3> x, std::array<double, 3> v,
+                                   std::array<int, 3> d, double m, double h, int type, double e, double s, bool fixed,
+                                   int simType);
+
         /**
          * @brief generates a disc consisting of particles
          * @param particle the container to write the particles into
@@ -37,7 +38,8 @@ namespace inputReader {
          * @param e epsilon value of particles
          * @param s sigma value of particles
          */
-        static void generateDisc(ParticleContainer& particles, std::array<double, 3> center,
-                                            std::array<double, 3> v, double r, double m, double h, int type, double e, double s, bool fixed);
+        static void generateDisc(ParticleContainer &particles, std::array<double, 3> center,
+                                 std::array<double, 3> v, double r, double m, double h, int type, double e, double s,
+                                 bool fixed);
     };
 }
