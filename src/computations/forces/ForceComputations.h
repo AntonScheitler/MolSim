@@ -129,4 +129,6 @@ private:
      * @param bondLength the bond length for force computation
      */
     static void computeHaromicPotentialHelper(std::pair<Particle &, Particle &> &pair, double k, double bondLength);
+    // constant for sqrt(2)
+    static constexpr double sqrt2 = 1.4142135623730950488;
 };

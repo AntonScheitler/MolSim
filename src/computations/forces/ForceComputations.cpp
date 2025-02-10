@@ -165,7 +165,7 @@ void ForceComputations::computeMembraneNeighborForce(ParticleContainerLinkedCell
     // compute harmonic potential for diagonal neighbors
     for (auto it = particles.beginMembraneDiagonalNeighbor(); it != particles.endMembraneDiagonalNeighbor(); ++it) {
         std::pair<Particle &, Particle &> pair = *it;
-        computeHaromicPotentialHelper(pair, k, sqrt(2.0) * r0);
+        computeHaromicPotentialHelper(pair, k, sqrt2 * r0);
     }
 
     // compute repulsive force between all particles
