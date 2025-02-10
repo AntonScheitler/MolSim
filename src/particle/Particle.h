@@ -299,7 +299,7 @@ public:
 
     /**
      * @brief returns a vector of indices for the direct neighbors of this particle
-     * @retrun a vector of indices for the direct neighbors of this particle
+     * @return a vector of indices for the direct neighbors of this particle
      */
     std::vector<int> &getAllDirectNeighborIndices();
 
