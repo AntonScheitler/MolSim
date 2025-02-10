@@ -258,7 +258,7 @@ private:
     /**
      * @brief the boundary configuration for this linked cell container
      */
-    boundaryConfig boundaryConfig;
+    struct boundaryConfig boundaryConfig;
 
     /**
      * @brief corrects the index of a particle in the linked cell container mesh based on it's position
