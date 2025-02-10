@@ -249,7 +249,7 @@ void ForceComputations::computeLennardJonesPotentialRepulsiveHelper(std::pair<Pa
     double sigmaDivDistance = sigma / distance;
 
     // don't compute force if it is not repulsive
-    if (distance == 0 || distance >= (std::pow(2.0, 1.0 / 6.0) * sigma)) return;
+    if (distance == 0 || distance >= (lennardJonesFactor * sigma)) return;
     double factor = (-24.0 * epsilon) / std::pow(distance, 2) *
                     (std::pow(sigmaDivDistance, 6) - 2 * std::pow(sigmaDivDistance, 12));
     std::array<double, 3> force = ArrayUtils::elementWiseScalarOp(factor, distanceVector, std::multiplies<>());

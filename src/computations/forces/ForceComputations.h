@@ -2,6 +2,7 @@
 #include "particle/container/ParticleContainer.h"
 #include "particle/container/ParticleContainerLinkedCell.h"
 #include <utility>
+#include <cmath>
 
 /**
  * @brief a class wrapping force-computing functions and their utility functions
@@ -130,5 +131,6 @@ private:
      */
     static void computeHaromicPotentialHelper(std::pair<Particle &, Particle &> &pair, double k, double bondLength);
     // constant for sqrt(2)
-    static constexpr double sqrt2 = 1.4142135623730950488;
+    inline static const double sqrt2 = sqrt(2.0);
+    inline static const double lennardJonesFactor = std::pow(2.0, 1.0 / 6.0);
 };
