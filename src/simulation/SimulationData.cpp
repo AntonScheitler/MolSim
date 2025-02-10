@@ -1,6 +1,5 @@
 #include "particle/container/ParticleContainerDirectSum.h"
 #include "spdlog/spdlog.h"
-#include <iostream>
 #include <simulation/SimulationData.h>
 #include <getopt.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
@@ -22,37 +21,44 @@ SimulationData::SimulationData() {
     writeFrequency = 10;
     averageVelocity = 0;
 
-    grav = 0;
+    grav = {0, 0, 0};
 
     thermostat = false;
-
+    thermoVersion = 1;
+    numberDimensions = 2; //default 2, will be set by XMLFileReader
+    profilingBaseName = "profile";
+    movingMembranePartIndices = std::vector<size_t>(); // default empty vector
+    binNumber = 50;
+    profileIterationNumber = -1;
+    threadVersion = -1; // no parallelization
+    numberThreads = 1;
 }
 
 int SimulationData::parseOptions(int argc, char *argsv[]) {
     // define usage text
-    std::string usageText = "Usage: ./MolSim [OPTIONS] INPUT_FILE\n"
-                            "-d, --delta_t\t\tsize of each timestep. Defaults to 0.014\n"
-                            "-e, --t_end\t\ttime at which to stop the simulation. Defaults to 1000\n"
-                            "-l, --log\t\tlog level, default value: 'info'. valid values (high to low):\n\t\t\t\t'trace', 'debug', 'info', 'warn', 'err', 'critical', 'off'\n\t\t\t\t (using any other string will result in logging turned 'off')\n"
-                            "-s, --sim_type\t\ttype of simulation to run:\n\t\t\t\t0 - Planets\n\t\t\t\t1 - Collision\n\t\t\t\t2 - Collision with linked cell.  Defaults to 2\n"
-                            "-b, --bench\t\tactivates benchmarking\n"
-                            "-S, --sigma\t\tinput sigma for Lennard-Jones potential. Defaults to 1\n"
-                            "-E, --epsilon\t\tinput epsilon for Lennard-Jones potential. Defaults to 5";
+    std::string usageText = "Usage: ./molsim [OPTIONS] INPUT_FILE\n"
+            "-d, --delta_t\t\tsize of each timestep. Defaults to 0.014\n"
+            "-e, --t_end\t\ttime at which to stop the simulation. Defaults to 1000\n"
+            "-l, --log\t\tlog level, default value: 'info'. valid values (high to low):\n\t\t\t\t'trace', 'debug', 'info', 'warn', 'err', 'critical', 'off'\n\t\t\t\t (using any other string will result in logging turned 'off')\n"
+            "-s, --sim_type\t\ttype of simulation to run:\n\t\t\t\t0 - Planets\n\t\t\t\t1 - Collision\n\t\t\t\t2 - Collision with linked cell\n\t\t\t3 - Membrane\n\t\t\t Defaults to 2\n"
+            "-b, --bench\t\tactivates benchmarking\n"
+            "-S, --sigma\t\tinput sigma for Lennard-Jones potential. Defaults to 1\n"
+            "-E, --epsilon\t\tinput epsilon for Lennard-Jones potential. Defaults to 5";
 
     // setup option parsing
     int c;
     int simTypeNum;
     const char *const shortOpts = "d:e:l:s:hbE:S:";
     const option longOpts[] = {
-            {"delta_t",  required_argument, nullptr, 'd'},
-            {"t_end",    required_argument, nullptr, 'e'},
-            {"log",      required_argument, nullptr, 'l'},
-            {"sim_type", required_argument, nullptr, 's'},
-            {"help",     no_argument,       nullptr, 'h'},
-            {"bench",    no_argument,       nullptr, 'b'},
-            {"epsilon",  required_argument, nullptr, 'E'},
-            {"sigma",    required_argument, nullptr, 'S'},
-            {nullptr,    no_argument,       nullptr, 0}
+        {"delta_t", required_argument, nullptr, 'd'},
+        {"t_end", required_argument, nullptr, 'e'},
+        {"log", required_argument, nullptr, 'l'},
+        {"sim_type", required_argument, nullptr, 's'},
+        {"help", no_argument, nullptr, 'h'},
+        {"bench", no_argument, nullptr, 'b'},
+        {"epsilon", required_argument, nullptr, 'E'},
+        {"sigma", required_argument, nullptr, 'S'},
+        {nullptr, no_argument, nullptr, 0}
     };
 
     auto logger = spdlog::stdout_color_mt("Parsing");
@@ -75,8 +81,8 @@ int SimulationData::parseOptions(int argc, char *argsv[]) {
                 break;
             case 's':
                 simTypeNum = std::stoi(optarg);
-                if (simTypeNum < 0 || simTypeNum > 2) {
-                    SPDLOG_LOGGER_ERROR(logger, "simulation type must be between 0-2!");
+                if (simTypeNum < 0 || simTypeNum > 3) {
+                    SPDLOG_LOGGER_ERROR(logger, "simulation type must be between 0-3!");
                     exit(EXIT_FAILURE);
                 }
                 simType = SimulationType(simTypeNum);
@@ -122,7 +128,7 @@ int SimulationData::parseOptions(int argc, char *argsv[]) {
     }
     // check if an input file has been supplied
     if (argc - optind != 1) {
-        std::cerr << usageText << std::endl;
+        SPDLOG_LOGGER_ERROR(logger, usageText);
         exit(EXIT_FAILURE);
     }
 
@@ -226,12 +232,15 @@ double SimulationData::getAverageVelocity() {
 double SimulationData::getInitialTemp() {
     return this->initialTemp;
 }
+
 double SimulationData::getMaxDeltaTemp() {
     return this->maxDeltaTemp;
 }
+
 double SimulationData::getTargetTemp() {
     return this->targetTemp;
 }
+
 size_t SimulationData::getThermoFrequency() {
     return this->thermoFrequency;
 }
@@ -239,14 +248,16 @@ size_t SimulationData::getThermoFrequency() {
 void SimulationData::activateThermostat() {
     this->thermostat = true;
 }
+
 void SimulationData::deactivateThermostat() {
     this->thermostat = false;
 }
+
 bool SimulationData::isThermostat() {
     return this->thermostat;
 }
 
-void SimulationData::setInitialTemp(double initialTempArg){
+void SimulationData::setInitialTemp(double initialTempArg) {
     this->initialTemp = initialTempArg;
 }
 
@@ -262,11 +273,11 @@ void SimulationData::setThermoFrequency(size_t thermoFrequencyArg) {
     this->thermoFrequency = thermoFrequencyArg;
 }
 
-void SimulationData::setGrav(double gravArg) {
+void SimulationData::setGrav(std::array<double, 3> gravArg) {
     this->grav = gravArg;
 }
 
-double SimulationData::getGrav(){
+std::array<double, 3> SimulationData::getGrav() {
     return this->grav;
 }
 
@@ -276,4 +287,97 @@ bool SimulationData::getCheckpoint() {
 
 void SimulationData::setCheckpoint(bool checkpoingArg) {
     this->checkpoint = checkpoingArg;
+}
+
+
+void SimulationData::setThermoVersion(int thermoVersionArg) {
+    thermoVersion = thermoVersionArg;
+}
+
+int SimulationData::getThermoVersion() {
+    return thermoVersion;
+}
+
+double SimulationData::getK() {
+    return k;
+}
+
+void SimulationData::setK(double newK) {
+    k = newK;
+}
+
+double SimulationData::getR0() {
+    return r0;
+}
+
+void SimulationData::setR0(double newR0) {
+    r0 = newR0;
+}
+
+std::vector<size_t> SimulationData::getMovingMembranePartIndices() {
+    return movingMembranePartIndices;
+}
+
+void SimulationData::setMovingMembranePartIndices(std::vector<size_t> newMovingMembranePartIndices) {
+    movingMembranePartIndices = newMovingMembranePartIndices;
+}
+
+std::array<double, 3> SimulationData::getCustomForce() {
+    return customForce;
+}
+
+void SimulationData::setCustomForce(std::array<double, 3> newCustomForce) {
+    customForce = newCustomForce;
+}
+
+void SimulationData::setNumberDimensions(int numberDimensionsArg) {
+    if (numberDimensionsArg < 1 || numberDimensionsArg > 3) {
+        SPDLOG_ERROR("Invalid number of dimensions: {0}", numberDimensionsArg);
+        exit(EXIT_FAILURE);
+    }
+    this->numberDimensions = numberDimensionsArg;
+}
+
+int SimulationData::getNumberDimensions() {
+    return numberDimensions;
+}
+
+void SimulationData::setProfileBinNumber(int binNumberArg) {
+    this->binNumber = binNumberArg;
+}
+
+int SimulationData::getProfileBinNumber() {
+    return binNumber;
+}
+
+void SimulationData::setProfileIterationNumber(int iterationArg) {
+    this->profileIterationNumber = iterationArg;
+}
+
+int SimulationData::getProfileIterationNumber() {
+    return profileIterationNumber;
+}
+
+int SimulationData::getNumberThreads() {
+    return numberThreads;
+}
+
+void SimulationData::setNumberThreads(int numThreadsArg) {
+    this->numberThreads = numThreadsArg;
+}
+
+void SimulationData::setThreadVersion(int threadVersionArg) {
+    this->threadVersion = threadVersionArg;
+}
+
+int SimulationData::getThreadVersion() {
+    return threadVersion;
+}
+
+std::string SimulationData::getProfilingBaseName() {
+    return profilingBaseName;
+}
+
+void SimulationData::setProfilingBaseName(std::string baseNameArg) {
+    this->profilingBaseName = baseNameArg;
 }

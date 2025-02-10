@@ -1,7 +1,8 @@
+#pragma once
+
 #include <particle/Particle.h>
 #include <iterator>
 
-#pragma once
 
 /**
  * @brief an iterator which enables iteration over pairs of particles. The elements of those pairs are always
@@ -9,7 +10,6 @@
  * iterating. <b, a> will never show itself in an iteration
  */
 class PairParticleIterator {
-
 public:
     using iterator_category = std::forward_iterator_tag;
     using reference = std::pair<Particle &, Particle &>;

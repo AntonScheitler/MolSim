@@ -7,7 +7,6 @@
 
 #pragma once
 
-#include "spdlogConfig.h"
 #include "simulation/SimulationData.h"
 #include <memory>
 
@@ -15,12 +14,10 @@
  * @brief namespace that wraps different readers which parse input from a file. All of those readers inherit from the abstract FileReader
  */
 namespace inputReader {
-
     /**
      * @brief superclass for all file readers
      */
     class FileReader {
-
     public:
         /**
          * @brief creates an instance of a FileReader
@@ -35,7 +32,6 @@ namespace inputReader {
 
         /**
          * @brief reads a file and fills a ParticleContainer accordingly
-         * @param particles the particles to be filled up
          * @param filename the file to read the particle information from
          */
         void readFile(char *filename);
@@ -52,7 +48,7 @@ namespace inputReader {
 
         /**
          * @brief reads a json file and writes the particle information into the particleContainer
-         * @param particles the particleContainer to write into
+         * @param simData the simulationData to write information to
          * @param filename the file to read from
          */
         void readJson(SimulationData &simData, char *filename);

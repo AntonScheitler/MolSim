@@ -1,4 +1,4 @@
-#include "spdlogConfig.h"
+#pragma once
 #include <simulation/SimulationData.h>
 
 
@@ -7,7 +7,6 @@
  * automatically chooses the necessary computation methods based on the type of simulation desired
  */
 class Simulator {
-
 public:
     /**
      * @brief creates an instance of the simulator class
@@ -32,11 +31,18 @@ public:
     /**
      * @brief pointer to a function to run in every step of a simulation
      */
-    std::function<void(size_t)> step;
+    std::function<void(size_t, double)> step;
     /**
      * @brief pointer to a function to run after a simulation
      */
     std::function<void(void)> after;
+
+    /**
+     * @brief formats the given chrono duration in to hours, minutes, seconds and milliseconds
+     * @param duration the duration to convert
+     * @return human-readable time string
+     */
+    std::string formatTime(std::chrono::duration<long, std::ratio<1, 1000> > duration);
 
 private:
     SimulationData &simData;
@@ -48,5 +54,4 @@ private:
      * @return the number of particles updated during the simulation
      */
     size_t runSimulationLoop();
-
 };

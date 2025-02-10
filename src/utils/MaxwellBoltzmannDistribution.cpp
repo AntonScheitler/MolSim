@@ -1,4 +1,5 @@
 #include "MaxwellBoltzmannDistribution.h"
+#include <random>
 
 std::array<double, 3> maxwellBoltzmannDistributedVelocity(double averageVelocity, size_t dimensions) {
     // we use a constant seed for repeatability.

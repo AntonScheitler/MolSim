@@ -6,7 +6,6 @@
 
 
 namespace inputReader {
-
     CheckpointReader::CheckpointReader(SimulationData &simulationDataArg) : simData(simulationDataArg) {
         this->logger = spdlog::stdout_color_st("CheckpointReader");
         SPDLOG_LOGGER_DEBUG(logger, "Initialized CheckpointReader");
@@ -15,7 +14,6 @@ namespace inputReader {
     CheckpointReader::~CheckpointReader() {
         spdlog::drop("CheckpointReader");
     }
-
 
     int CheckpointReader::readCheckpointFile(SimulationData &simData, const char *filename) {
         int maxType = 0;
@@ -29,15 +27,14 @@ namespace inputReader {
         int type;
         double epsilon;
         double sigma;
+        bool fixed;
 
         int numParticles = 0;
 
         std::ifstream inputFile(filename);
         std::string tmpString;
 
-
         if (inputFile.is_open()) {
-
             getline(inputFile, tmpString);
             SPDLOG_LOGGER_DEBUG(logger, "Read line: {0}", tmpString);
             while (tmpString.empty() or tmpString[0] == '#') {
@@ -50,6 +47,7 @@ namespace inputReader {
             SPDLOG_LOGGER_DEBUG(logger, "Reading {0}.", numParticles);
             getline(inputFile, tmpString);
             SPDLOG_LOGGER_DEBUG(logger, "Read line: {0}", tmpString);
+
 
             for (int i = 0; i < numParticles; i++) {
                 std::istringstream datastream(tmpString);
@@ -78,6 +76,9 @@ namespace inputReader {
 
                 datastream >> sigma;
 
+                datastream >> fixed;
+
+
                 if (maxType < type) {
                     maxType = type;
                 }
@@ -89,18 +90,19 @@ namespace inputReader {
                 p.setType(type);
                 p.setEpsilon(epsilon);
                 p.setSigma(sigma);
+                p.setFixed(fixed);
 
                 simData.getParticles().addParticle(p);
 
                 getline(inputFile, tmpString);
                 SPDLOG_LOGGER_DEBUG(logger, "Read line: {0}", tmpString);
             }
+
             SPDLOG_LOGGER_DEBUG(logger, "Successfully read {0} particles", simData.getParticles().size());
         } else {
             SPDLOG_LOGGER_ERROR(logger, "Error: could not open file {0}", filename);
-            exit(-1);
+            exit(EXIT_FAILURE);
         }
-
 
         return maxType;
     }

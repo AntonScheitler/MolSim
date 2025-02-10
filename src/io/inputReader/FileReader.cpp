@@ -1,12 +1,11 @@
 #include "FileReader.h"
 #include "JsonFileReader.h"
 #include "TxtFileReader.h"
-#include "io/inputReader/XMLReader/XMLFileReader.h"
+#include "io/inputReader/xmlReader/XMLFileReader.h"
 #include "spdlogConfig.h"
 
 
 namespace inputReader {
-
     FileReader::FileReader(SimulationData &simDataArg) : simData(simDataArg) {
         this->logger = spdlog::stdout_color_st("FileReader");
         SPDLOG_LOGGER_DEBUG(logger, "Initialized FileReader");
@@ -52,5 +51,4 @@ namespace inputReader {
         XMLFileReader xmlFileReader(simData);
         xmlFileReader.readFile(filename);
     }
-
 } // namespace inputReader

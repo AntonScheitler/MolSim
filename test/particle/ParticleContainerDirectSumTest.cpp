@@ -1,18 +1,20 @@
 #include "../src/particle/container/ParticleContainerDirectSum.h"
 #include <gtest/gtest.h>
 
-class ParticleContainerDirectSumTest : public testing::Test {
-    protected:
-        ParticleContainerDirectSum empty;
-        ParticleContainerDirectSum container;
 
-        void SetUp() override {
-            empty = ParticleContainerDirectSum();
-            container = ParticleContainerDirectSum();
-            for (double d = 0; d < 4; d++) {
-                container.addParticle(Particle({d, d, d}, {d, d, d}, d));
-            }
+class ParticleContainerDirectSumTest : public testing::Test {
+protected:
+    ParticleContainerDirectSum empty;
+    ParticleContainerDirectSum container;
+
+    void SetUp() override {
+        empty = ParticleContainerDirectSum();
+        container = ParticleContainerDirectSum();
+        for (int i = 0; i < 4; i++) {
+            double d = i;
+            container.addParticle(Particle({d, d, d}, {d, d, d}, d));
         }
+    }
 };
 
 /**
@@ -20,7 +22,7 @@ class ParticleContainerDirectSumTest : public testing::Test {
  * ParticleContainerDirectSum
  */
 TEST_F(ParticleContainerDirectSumTest, EmptyParticleContainerDirectSumIteratorTest) {
-    for (auto it = empty.begin(); *it != *(empty.end()); ++*it) {
+    for (Particle &particle: empty) {
         EXPECT_TRUE(false);
     }
 }
@@ -30,12 +32,10 @@ TEST_F(ParticleContainerDirectSumTest, EmptyParticleContainerDirectSumIteratorTe
  * order
  */
 TEST_F(ParticleContainerDirectSumTest, ParticleContainerDirectSumIteratorTest) {
-    double d = 0; // dummy value for x, v and m
-    for (auto it = empty.begin(); *it != *(empty.end()); ++*it) {
-        Particle particle = **it;
-        Particle otherParticle = Particle({d, d, d}, {d, d, d}, d);
-        EXPECT_TRUE(particle == otherParticle);
-        d++;
+    double d = -1; // dummy value for x, v and m
+    for (Particle &particle: container) {
+        EXPECT_TRUE(particle.getId() > d);
+        d = particle.getId();
     }
 }
 
@@ -54,11 +54,10 @@ TEST_F(ParticleContainerDirectSumTest, EmptyParticleContainerDirectSumPairIterat
  * is correct
  */
 TEST_F(ParticleContainerDirectSumTest, ParticleContainerDirectSumPairIteratorTest) {
-    std::vector<std::pair<Particle, Particle>> otherPairs = {};
+    std::vector<std::pair<Particle, Particle> > otherPairs = {};
     for (double i = 0; i < 3; i++) {
         for (double j = i + 1; j < 4; j++) {
-            otherPairs.push_back(std::pair(Particle({i, i, i}, {i, i, i}, i),
-                        Particle({j, j, j}, {j, j, j}, j)));
+            otherPairs.push_back(std::make_pair(container.getParticle(i), container.getParticle(j)));
         }
     }
     size_t pairIndex = 0;

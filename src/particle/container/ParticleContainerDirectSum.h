@@ -1,17 +1,16 @@
+#pragma once
+
 #include <memory>
 #include <vector>
 #include "../Particle.h"
 #include "particle/iterator/pairParticleIterator/PairParticleIterator.h"
-#include <particle/iterator/pairParticleIterator/PairParticleIteratorDirectSum.h>
+#include "particle/iterator/particleIterator/ParticleIteratorNonFixedParticles.h"
 #include <particle/container/ParticleContainer.h>
-
-#pragma once
 
 /**
  * @brief wrapper for a vector of particles, enabling iteration over separate particles or particle pairs
  */
 class ParticleContainerDirectSum : public ParticleContainer {
-
 public:
     /**
      * @brief creates an empty ParticleContainer
@@ -32,11 +31,11 @@ public:
 
     std::unique_ptr<ParticleContainer> copy() override;
 
-    Particle &getParticle(int index);
+    Particle &getParticle(size_t index) override;
 
-    std::unique_ptr<ParticleIterator> begin() override;
+    ParticleIterator begin() override;
 
-    std::unique_ptr<ParticleIterator> end() override;
+    ParticleIterator end() override;
 
     /**
      * @brief provides an iterator for iterating through pairs of particles
@@ -49,6 +48,10 @@ public:
      * @return the end of the pair particle iterator
      */
     std::unique_ptr<PairParticleIterator> endPairParticle() override;
+
+    ParticleIteratorNonFixedParticles beginNonFixedParticles() override;
+
+    ParticleIteratorNonFixedParticles endNonFixedParticles() override;
 
 protected:
     /**

@@ -1,13 +1,11 @@
 #pragma once
 
 #include "vector"
-#include <particle/Particle.h>
 
 /**
  * @brief class for representing a single cell of the mesh of the ParticleContainerLinkedCell
  */
 class Cell {
-
 public:
     /**
      * @brief create a cell
@@ -46,6 +44,12 @@ public:
      * @return
      */
     bool operator==(const Cell &other);
+
+    /**
+     * @brief returns the id of this cell
+     * @return the id of this cell
+     */
+    size_t getId();
 
     /**
      * @brief the flag which specifies whether this cell is a boundary cell

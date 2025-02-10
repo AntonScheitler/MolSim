@@ -10,6 +10,10 @@ cd build
 cmake ..
 make
 ```
+To compile using Intel® oneAPI DPC++/C++ Compiler (icpx) compiler append the following to the cmake command:
+```
+-DCMAKE\_C\_COMPILER=icx -DCMAKE\_CXX\_COMPILER=icpx
+```
 
 ### Documentation
 To enable the make target for building a documentation with doxygen, run cmake with the option (this option is turned `OFF` by default)
@@ -20,7 +24,7 @@ If doxygen is installed and the option is enabled, you can then build the doxyge
 ```
 make doc_doxygen
 ```
-The doxygen documentation will be generated in the directory `doxys_documentation`
+The doxygen documentation will be generated in the directory `doxys_documentation` (which is inside the project directory)
 
 
 ### Execution
@@ -41,6 +45,7 @@ The executable offers the following options:
   - 0 - Planet Simulation (simulation of some planets from our solar system and Halley's Comet which also spins around the sun with a high revolution period)
   - 1 - Collision of Cuboids (simulation of 2 (or more) 2-dimensional cuboids consisting of molecules colliding)
   - 2 - Collision of cuboids using the (performance-enhancing) linked-cell algorithm
+  - 3 - membrane simulation
 - `-b, --bench`: Activates benchmarking: The simulation will be run 10 times without producing any file output or logging. The execution times for all simulations will then be averaged
 - `-E, --epsilon`: Epsilon parameter for Lennard-Jones potential
 - `-S, --sigma`: Sigma parameter for Lennard-Jones potential
@@ -73,3 +78,37 @@ To add a checkpoint file to a new simulation, please include the filepath of the
       <file_path>../input/checker.txt</file_path>
 </import_checkpoint>
 ```
+
+### Velocity-density profile
+To output a velocity - density profile, please include the following elements to the parameters of the xml-input-file:
+
+```
+<bin_profile>
+      <iteration>integer value</iteration>
+      <bin_number>integer value</bin_number>
+      <base_name>string</base_name>
+</bin_profile>
+```
+While the number of iteration after which a profile should be created must be given, the base name and the number of bins (default: 50) are optional.
+The format in the csv-file is: *number_of_particles, density, x-velocity, y-velocity, z-velocity*
+
+### Parallelization
+
+To parallelize the computations, please include the following elements into the xml-file
+
+```
+<simulation>
+...
+      <parallelization>
+            <strategy>integer value</strategy>
+            <threadNumber>integer value</threadNumber>
+      </parallelization>
+</simulation>
+```
+Note: the position of the element is at the bottom of <simulation></simulation>
+strategies: 
+- `0`: Parallelization of iteration over cells 
+- `1`: Parallelization of iteration over particles
+
+threadNumber (optional):
+sets number of thread used for strategy 0 (default: 4). Strategy 1 uses always the maximum.

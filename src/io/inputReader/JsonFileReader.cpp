@@ -8,7 +8,6 @@
 using json = nlohmann::json;
 
 namespace inputReader {
-
     JsonFileReader::JsonFileReader(SimulationData &simDataArg) : simData(simDataArg) {
         this->logger = spdlog::stdout_color_st("JsonFileReader");
         SPDLOG_LOGGER_DEBUG(logger, "Initialized JsonFileReader");
@@ -35,9 +34,8 @@ namespace inputReader {
 
         if (inputFile.is_open()) {
             for (const auto &planet: data["planets"]) {
-
-                x = planet["coordinates"].get<std::array<double, 3>>();
-                v = planet["velocity"].get<std::array<double, 3>>();
+                x = planet["coordinates"].get<std::array<double, 3> >();
+                v = planet["velocity"].get<std::array<double, 3> >();
                 m = planet["mass"].get<double>();
 
                 simData.getParticles().addParticle(Particle{x, v, m});
@@ -45,25 +43,22 @@ namespace inputReader {
             }
 
             for (const auto &cuboid: data["cuboids"]) {
-                x = cuboid["cornerCoordinates"].get<std::array<double, 3>>();
-                v = cuboid["velocity"].get<std::array<double, 3>>();
-                d = cuboid["dimensions"].get<std::array<int, 3>>();
+                x = cuboid["cornerCoordinates"].get<std::array<double, 3> >();
+                v = cuboid["velocity"].get<std::array<double, 3> >();
+                d = cuboid["dimensions"].get<std::array<int, 3> >();
                 m = cuboid["mass"].get<double>();
                 h = cuboid["meshWidth"].get<double>();
                 bm = cuboid["brownianMotion"].get<double>();
                 simData.setAverageVelocity(bm);
 
                 ParticleGenerator::generateCuboid(simData.getParticles(), x, v, d, m, h, type, simData.getEpsilon(),
-                                                  simData.getSigma());
+                                                  simData.getSigma(), false, simData.getSimType());
 
                 type++;
-
             }
         } else {
             SPDLOG_LOGGER_ERROR(logger, "Error: could not open file {0}", filename);
-            exit(-1);
+            exit(EXIT_FAILURE);
         }
     }
-
-
 } // namespace inputReader

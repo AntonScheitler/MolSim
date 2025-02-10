@@ -1,4 +1,4 @@
-#include "spdlogConfig.h"
+#pragma once
 #include <simulation/SimulationData.h>
 
 
@@ -21,13 +21,13 @@ namespace inputReader {
 
         /**
          * @brief txt file reader specifically for the Collision Simulation
-         * @param particles the particles to store the information in
+         * @param simData the simulationData to store the information in
          * @param filename the name of the file to read from
+         * @return max particle type (different types for different objects)
          */
         int readCheckpointFile(SimulationData &simData, const char *filename);
 
     private:
-
         /**
          * @brief a specific logger for the TxtFileReader
          */

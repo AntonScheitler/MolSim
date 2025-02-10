@@ -1,5 +1,4 @@
-#include "particle/container/ParticleContainer.h"
-#include "spdlogConfig.h"
+#pragma once
 #include <simulation/SimulationData.h>
 
 
@@ -25,15 +24,8 @@ namespace inputReader {
          * @param filename the name of the file to read from
          */
         void readFile(SimulationData &simData, char *filename);
-        /**
-         * @brief json file reader specifically for the Comet simulation
-         * @param particles the particles to store the information in
-         * @param filename the name of the file to read from
-         */
-
 
     private:
-
         /**
          * @brief a specific logger for the JsonFileReader
          */

@@ -1,8 +1,7 @@
 #pragma once
 
-#include <spdlog/common.h>
-#include <spdlog/spdlog.h>
 #include <particle/container/ParticleContainer.h>
+#include <spdlogConfig.h>
 
 /**
  * @brief an enum which describes the type of simulation to run
@@ -10,7 +9,8 @@
 enum SimulationType : int {
     comet = 0,
     collision = 1,
-    collisionLinkedCell = 2
+    collisionLinkedCell = 2,
+    membrane = 3,
 };
 
 /**
@@ -222,13 +222,13 @@ public:
     /**
      * @brief returns the gravitational acceleration
      */
-    double getGrav();
+    std::array<double, 3> getGrav();
 
     /**
      * @brief sets the gravitational acceleration
      * @param gravArg new gravity
      */
-    void setGrav(double gravArg);
+    void setGrav(std::array<double, 3> gravArg);
 
     /**
      * @brief returns true if checkpoint is activated
@@ -240,6 +240,131 @@ public:
      * @param checkpoingArg if checkpointing should be activated
      */
     void setCheckpoint(bool checkpoingArg);
+
+    /**
+     * @brief sets the version of the thermostat to use
+     * @param thermoVersionArg thermostat version number (valid range: 1, 2, 3)
+     */
+    void setThermoVersion(int thermoVersionArg);
+
+    /**
+     * @brief returns the version number of the used thermostat for this simulation
+     */
+    int getThermoVersion();
+
+    /**
+     * @brief returns the stiffness constant for membrane neighbor force computation
+     * @return the stiffness constant
+     */
+    double getK();
+
+    /**
+     * @brief sets the stiffness constant for membrane neighbor force computation
+     * @param newK the value to set the stiffness constant of the simulation to
+     */
+    void setK(double newK);
+
+    /**
+     * @brief returns the average bond length between membrane neighbors
+     * @return the bond length
+     */
+    double getR0();
+
+    /**
+     * @brief sets the average bond length between membrane neighbors
+     * @param newR0 the value to set the average bond length of the simulation to
+     */
+    void setR0(double newR0);
+
+    /**
+     * @brief returns the indices of the parts of the membrane that are pulled by some custom force
+     * @return the indices of the parts of the membrane
+     */
+    std::vector<size_t> getMovingMembranePartIndices();
+
+    /**
+     * @brief sets the indices of the parts of the membrane that are pulled by some custom force
+     * @param newMovingMembranePartIndices the indices to set movingMembranePartIndices to
+     */
+    void setMovingMembranePartIndices(std::vector<size_t> newMovingMembranePartIndices);
+
+    /**
+     * @brief returns the custom force that will be applied to a selection of particles
+     * @return the custom force
+     */
+    std::array<double, 3> getCustomForce();
+
+    /**
+     * @brief sets the custom force that will be applied to a selection of particles
+     * @param newCustomForce the force to set the custom force to
+     */
+    void setCustomForce(std::array<double, 3> newCustomForce);
+
+    /**
+     * @brief set the number of dimensions that this simulation uses
+     * @param numberDimensionsArg number of dimensions, valid values: 2, 3
+     */
+    void setNumberDimensions(int numberDimensionsArg);
+
+    /**
+     * @param returns the number of dimensions that this simulation uses (either 2 or 3)
+     */
+    int getNumberDimensions();
+
+    /**
+    * @brief set the number of bins used for profiling
+    * @param binNumberArg number of bins
+    */
+    void setProfileBinNumber(int binNumberArg);
+
+    /**
+    * @param returns the number of bins used for profiling
+    */
+    int getProfileBinNumber();
+
+    /**
+    * @brief set the number of iterations after which the state is profiled
+    * @param iterationArg number of iterations
+    */
+    void setProfileIterationNumber(int iterationArg);
+
+    /**
+    * @param returns the number of iterations after which the state is profiled
+    */
+    int getProfileIterationNumber();
+
+    /**
+     * @brief set the number of threads used for parallelization
+     * @param numThreadsArg number of thrads
+     */
+    void setNumberThreads(int numThreadsArg);
+
+    /**
+     * @param returns the number of Threads that should be used
+     */
+    int getNumberThreads();
+
+    /**
+     * @brief set the strategy that should be used for parallelization
+     * @param threadVersionArg strategy: allowed values 0-1
+     */
+    void setThreadVersion(int threadVersionArg);
+
+    /**
+     * @param returns the strategy that should be used for parallelization
+     */
+    int getThreadVersion();
+
+    /**
+    * @brief set the baseName for the profiling csv-file
+    * @param baseNameArg file-name
+    */
+    void setProfilingBaseName(std::string baseNameArg);
+
+    /**
+    * @param returns the baseName for the profiling csv-file
+    */
+    std::string getProfilingBaseName();
 
 private:
     SimulationType simType;
@@ -261,7 +386,21 @@ private:
     double maxDeltaTemp;
     bool thermostat;
 
-    double grav;
+    std::array<double, 3> grav;
     bool checkpoint;
 
+    int thermoVersion;
+
+    // membrane
+    double k;
+    double r0;
+    std::vector<size_t> movingMembranePartIndices;
+    std::array<double, 3> customForce;
+
+    int numberDimensions;
+    std::string profilingBaseName;
+    int profileIterationNumber;
+    int binNumber;
+    int numberThreads;
+    int threadVersion;
 };

@@ -9,6 +9,21 @@
 
 #include <array>
 #include <string>
+#include <vector>
+
+enum DirectNeighborPos {
+    left,
+    right,
+    top,
+    bottom,
+};
+
+enum DiagonalNeighborPos {
+    topLeft,
+    topRight,
+    bottomLeft,
+    bottomRight,
+};
 
 /**
  * @brief Class for modeling particles, where each Particle has three-dimensional position, velocity and force that is
@@ -16,7 +31,6 @@
  * particles and iterating over them.
  */
 class Particle {
-
 private:
     std::array<double, 3> oldX;
     /**
@@ -38,6 +52,16 @@ private:
      * @brief Force which was effective on this particle
      */
     std::array<double, 3> oldF;
+
+    /**
+     * @brief direct Neigbors of Cell
+     */
+    std::vector<int> directNeighborsIndices;
+
+    /**
+    * @brief diagonal Neigbors of Cell
+    */
+    std::vector<int> diagonalNeighborsIndices;
 
     /**
      * @brief Mass of this particle
@@ -77,16 +101,24 @@ private:
      */
     bool active;
 
+    /**
+     * @brief specifies whether this particle should not change its position
+     */
+    bool fixed;
+
 public:
     explicit Particle(int typeArg = 0);
 
     Particle(const Particle &other);
 
     Particle(
-            // for visualization, we need always 3 coordinates
-            // -> in case of 2d, we use only the first and the second
-            std::array<double, 3> xArg, std::array<double, 3> vArg, double mArg,
-            int typeArg = 0);
+        // for visualization, we need always 3 coordinates
+        // -> in case of 2d, we use only the first and the second
+        std::array<double, 3> xArg, std::array<double, 3> vArg, double mArg,
+        int typeArg = 0);
+
+    Particle(std::array<double, 3> xArg, std::array<double, 3> vArg,
+             double mArg, int typeArg, double epsilonArg, double sigmaArg, bool fixedArg);
 
     /**
      * @brief destruct the Particle
@@ -228,6 +260,59 @@ public:
      * @param typeArg the type of this particle
      */
     void setType(int typeArg);
+
+    /**
+     * @brief returns true if this particle is fixed and therefore does not change its position
+     */
+    bool isFixed();
+
+    /**
+     * @brief specify whether this particle should be fixed or not
+     * @param fixedArg true : fixed, false : not fixed
+     */
+    void setFixed(bool fixedArg);
+
+
+    /**
+     * @brief adds the index of a particle as a direct neighbor to this particle 
+     * @param particleIdx the index of the particle to add as a direct neighbor
+     */
+    void addNeighborIdx(int particleIdx);
+
+    /**
+     * @brief adds the index of a particle as a diagonal neighbor to this particle 
+     * @param particleIdx the index of the particle to add as a diagonal neighbor
+     */
+    void addDiagNeighborIdx(int particleIdx);
+
+    /**
+     * @brief returns the index of a direct neighbor particle
+     * @param pos the relative position of the neighbor particle
+     */
+    int getNeighborIdx(DirectNeighborPos pos);
+
+    /**
+     * @brief returns the index of a diagonal neighbor particle
+     * @param pos the relative position of the neighbor particle
+     */
+    int getDiagNeighborIdx(DiagonalNeighborPos pos);
+
+    /**
+     * @brief returns a vector of indices for the direct neighbors of this particle
+     * @return a vector of indices for the direct neighbors of this particle
+     */
+    std::vector<int> &getAllDirectNeighborIndices();
+
+    /**
+     * @brief returns a vector of indices for the diagonal neighbors of this particle
+     * @retrun a vector of indices for the direct neighbors of this particle
+     */
+    std::vector<int> &getAllDiagonalNeighborIndices();
+
+    /**
+     * @brief debugging function to print particle values
+     */
+    void print();
 };
 
 std::ostream &operator<<(std::ostream &stream, Particle &p);

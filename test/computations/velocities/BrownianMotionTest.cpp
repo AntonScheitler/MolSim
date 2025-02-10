@@ -6,9 +6,9 @@
  * @brief Tests the brownian motion that is applied on particles
  */
 class BrownianMotionTest : public testing::Test {
-
 protected:
-    void SetUp() override {};
+    void SetUp() override {
+    };
 };
 
 /**
@@ -22,7 +22,7 @@ TEST_F(BrownianMotionTest, BrownianMotion2DTest) {
     std::vector<Particle> particles{particle};
     ParticleContainerDirectSum container{particles};
 
-    VelocityComputations::applyBrownianMotion2D(container, averageVelocity);
+    VelocityComputations::applyBrownianMotion(container, averageVelocity, 1, 2);
 
     Particle &p = container.getParticle(0);
 
@@ -41,7 +41,7 @@ TEST_F(BrownianMotionTest, BrownianMotion3DTest) {
     std::vector<Particle> particles{particle};
     ParticleContainerDirectSum container{particles};
 
-    VelocityComputations::applyBrownianMotion3D(container, averageVelocity);
+    VelocityComputations::applyBrownianMotion(container, averageVelocity, 1, 3);
 
     Particle &p = container.getParticle(0);
 

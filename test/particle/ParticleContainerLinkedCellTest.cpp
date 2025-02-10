@@ -32,7 +32,8 @@ protected:
 
     struct PairEqual {
         bool operator()(const std::pair<Particle, Particle> &p1, const std::pair<Particle, Particle> &p2) const {
-            return (p1.first.getX() == p2.first.getX() && p1.second.getX() == p2.second.getX()) || (p1.first.getX() == p2.second.getX() && p1.second.getX() == p2.first.getX());
+            return (p1.first.getX() == p2.first.getX() && p1.second.getX() == p2.second.getX()) || (
+                       p1.first.getX() == p2.second.getX() && p1.second.getX() == p2.first.getX());
         }
     };
 
@@ -46,7 +47,7 @@ protected:
  * @brief checks if there is nothing returned when iterating through an empty ParticleContainerLinkedCell
  */
 TEST_F(ParticleContainerLinkedCellTest, EmptyParticleContainerLinkedCellIteratorTest) {
-    for (auto it = empty.begin(); *it != *(empty.end()); ++*it) {
+    for (Particle &particle: empty) {
         EXPECT_TRUE(false);
     }
 }
@@ -62,8 +63,10 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellIteratorTest)
     for (double y = 0; y < 3; y++) {
         for (double x = 0; x < 3; x++) {
             std::array<double, 3> pos1 = {x * container.getCellSize()[0] + 7, y * container.getCellSize()[1] + 7, 0.5};
-            std::array<double, 3> pos2 = {x * container.getCellSize()[0] + 10, y * container.getCellSize()[1] + 10,
-                                          0.5};
+            std::array<double, 3> pos2 = {
+                x * container.getCellSize()[0] + 10, y * container.getCellSize()[1] + 10,
+                0.5
+            };
             Particle p1 = {pos1, {0, 0, 0}, 1};
             Particle p2 = {pos2, {0, 0, 0}, 1};
             container.addParticle(p1);
@@ -75,8 +78,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellIteratorTest)
     }
 
     size_t count = 0;
-    for (auto it = container.begin(); *it != *(container.end()); ++*it) {
-        Particle particle = **it;
+    for (Particle &particle: container) {
         EXPECT_TRUE(particlesSet.count(particle) == 1);
         particlesSet.erase(particle);
         count++;
@@ -93,11 +95,14 @@ TEST_F(ParticleContainerLinkedCellTest, EmptyParticleContainerLinkedCellPairIter
         EXPECT_TRUE(false);
     }
 }
+
 /**
  * @brief checks if the number of pairs returned by the pair iterator is correct
  */
 TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellPairIteratorNumPairsTest) {
-    ParticleContainerLinkedCell pairsContainer{{8, 8, 1}, 2, {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}};
+    ParticleContainerLinkedCell pairsContainer{
+        {8, 8, 1}, 2, {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}
+    };
     for (double y = 0; y < 4; y++) {
         for (double x = 0; x < 4; x++) {
             pairsContainer.addParticle({{2 * x + 1, 2 * y + 1, 0.5}, {0, 0, 0}, 1});
@@ -115,15 +120,17 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellPairIteratorN
 }
 
 /**
- * @brief checks if all particle pairs are returned by the iterator 
+ * @brief checks if all particle pairs are returned by the iterator
  */
 TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellPairIteratorTest) {
     // contains all pairs that should be returned by the iterator
     std::unordered_set<std::pair<Particle, Particle>, PairHash, PairEqual> pairsSet{};
-    // a helper vector to create pairs 
+    // a helper vector to create pairs
     std::vector<Particle> particlesVector{};
     // single row of cells, 2 particles per cell
-    ParticleContainerLinkedCell pairsContainer{{99, 33, 1}, 33, {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}};
+    ParticleContainerLinkedCell pairsContainer{
+        {99, 33, 1}, 33, {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}
+    };
     for (double x = 0; x < 3; x++) {
         std::array<double, 3> pos1 = {x * pairsContainer.getCellSize()[0] + 7, 7, 0.5};
         std::array<double, 3> pos2 = {x * pairsContainer.getCellSize()[0] + 10, 7, 0.5};
@@ -210,44 +217,56 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellPairIteratorS
  * @brief checks the ghost particles for all particles in the boundary are computed correctly
  */
 TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellGhostParticleTest) {
-    // 3x3 mesh of cells, 1 particle per cell 
-    ParticleContainerLinkedCell container{{99, 99, 1}, 33,
-                                          {{reflect, reflect}, {reflect, reflect}, {outflow, outflow}}};
+    // 3x3 mesh of cells, 1 particle per cell
+    ParticleContainerLinkedCell container{
+        {99, 99, 1}, 33,
+        {{reflect, reflect}, {reflect, reflect}, {outflow, outflow}}
+    };
     // set of expected ghost/particle pairs
     std::unordered_set<std::pair<Particle, Particle>, PairHash, PairEqual> pairsSet;
 
     for (double y = 0; y < 3; y++) {
         for (double x = 0; x < 3; x++) {
             std::array<double, 3> pos1 = {x * container.getCellSize()[0] + 7, y * container.getCellSize()[1] + 7, 0.5};
-            // all particles move to the top-right 
+            // all particles move to the top-right
             Particle p1 = {pos1, {1, 1, 0}, 1};
             container.addParticle(p1);
             // add ghost to the left
             if (x == 0) {
                 pairsSet.insert(
-                        std::make_pair(p1, Particle{{-7, y * container.getCellSize()[1] + 7, 0.5}, {-1, 1, 0}, 1}));
+                    std::make_pair(p1, Particle{{-7, y * container.getCellSize()[1] + 7, 0.5}, {-1, 1, 0}, 1}));
             }
             // add ghost to the right
             if (x == 2) {
                 pairsSet.insert(std::make_pair(p1, Particle{
-                        {(x + 2) * container.getCellSize()[0] - 7, y * container.getCellSize()[1] + 7, 0.5}, {-1, 1, 0},
-                        1}));
+                                                   {
+                                                       (x + 2) * container.getCellSize()[0] - 7,
+                                                       y * container.getCellSize()[1] + 7, 0.5
+                                                   },
+                                                   {-1, 1, 0},
+                                                   1
+                                               }));
             }
             // add ghost to the bottom
             if (y == 0) {
                 pairsSet.insert(
-                        std::make_pair(p1, Particle{{x * container.getCellSize()[0] + 7, -7, 0.5}, {1, -1, 0}, 1}));
+                    std::make_pair(p1, Particle{{x * container.getCellSize()[0] + 7, -7, 0.5}, {1, -1, 0}, 1}));
             }
             // add ghost to the top
             if (y == 2) {
                 pairsSet.insert(std::make_pair(p1, Particle{
-                        {x * container.getCellSize()[0] + 7, (y + 2) * container.getCellSize()[1] - 7, 0.5}, {1, -1, 0},
-                        1}));
+                                                   {
+                                                       x * container.getCellSize()[0] + 7,
+                                                       (y + 2) * container.getCellSize()[1] - 7, 0.5
+                                                   },
+                                                   {1, -1, 0},
+                                                   1
+                                               }));
             }
         }
     }
 
-    // count the number of ghost-particle pairs returned by the iterator 
+    // count the number of ghost-particle pairs returned by the iterator
     size_t count = 0;
     for (auto it = container.beginPairGhost(); it != (container.endPairGhost()); ++it) {
         std::pair<Particle &, Particle &> pair = *it;
@@ -261,32 +280,34 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellGhostParticle
  * @brief checks the ghost particles for all particles in the boundary are computed correctly
  */
 TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellGhostParticleTestWithSpecialBoundary) {
-    // 3x3 mesh of cells, 1 particle per cell 
-    ParticleContainerLinkedCell container{{99, 99, 1}, 33,
-                                          {{reflect, outflow}, {reflect, outflow}, {outflow, outflow}}};
+    // 3x3 mesh of cells, 1 particle per cell
+    ParticleContainerLinkedCell container{
+        {99, 99, 1}, 33,
+        {{reflect, outflow}, {reflect, outflow}, {outflow, outflow}}
+    };
     // set of expected ghost/particle pairs
     std::unordered_set<std::pair<Particle, Particle>, PairHash, PairEqual> pairsSet;
 
     for (double y = 0; y < 3; y++) {
         for (double x = 0; x < 3; x++) {
             std::array<double, 3> pos1 = {x * container.getCellSize()[0] + 7, y * container.getCellSize()[1] + 7, 0.5};
-            // all particles move to the top-right 
+            // all particles move to the top-right
             Particle p1 = {pos1, {1, 1, 0}, 1};
             container.addParticle(p1);
             // add ghost to the left
             if (x == 0) {
                 pairsSet.insert(
-                        std::make_pair(p1, Particle{{-7, y * container.getCellSize()[1] + 7, 0.5}, {-1, 1, 0}, 1}));
+                    std::make_pair(p1, Particle{{-7, y * container.getCellSize()[1] + 7, 0.5}, {-1, 1, 0}, 1}));
             }
             // add ghost to the bottom
             if (y == 0) {
                 pairsSet.insert(
-                        std::make_pair(p1, Particle{{x * container.getCellSize()[0] + 7, -7, 0.5}, {1, -1, 0}, 1}));
+                    std::make_pair(p1, Particle{{x * container.getCellSize()[0] + 7, -7, 0.5}, {1, -1, 0}, 1}));
             }
         }
     }
 
-    // count the number of ghost-particle pairs returned by the iterator 
+    // count the number of ghost-particle pairs returned by the iterator
     size_t count = 0;
     for (auto it = container.beginPairGhost(); it != (container.endPairGhost()); ++it) {
         std::pair<Particle &, Particle &> pair = *it;
@@ -301,8 +322,10 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellGhostParticle
  * through a periodic boundary
  */
 TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellPeriodicBoundaryPositionTest) {
-    ParticleContainerLinkedCell container{{99, 33, 1}, 33,
-                                          {{periodic, periodic}, {outflow, outflow}, {outflow, outflow}}};
+    ParticleContainerLinkedCell container{
+        {99, 33, 1}, 33,
+        {{periodic, periodic}, {outflow, outflow}, {outflow, outflow}}
+    };
     Particle particle = Particle({98, 10, 0}, {0, 0, 0}, 1);
     container.addParticle(particle);
     // make sure the particle is inserted correctly
@@ -329,14 +352,16 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellPeriodicBound
 TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellPeriodicBoundaryForceTest) {
     double sigma = 1;
     double epsilon = 5;
-    ParticleContainerLinkedCell container{{99, 33, 1}, 33,
-                                          {{periodic, periodic}, {outflow, outflow}, {outflow, outflow}}};
-    container.addParticle({{0.5, 10, 0}, {0, 0, 0}, 1});
-    container.addParticle({{98.5, 10, 0}, {0, 0, 0}, 1});
-    Particle& particleLeft = container.getParticles()[0];
-    Particle& particleRight = container.getParticles()[1];
+    ParticleContainerLinkedCell container{
+        {99, 33, 1}, 33,
+        {{periodic, periodic}, {outflow, outflow}, {outflow, outflow}}
+    };
+    container.addParticle({{0.5, 10, 0}, {0, 0, 0}, 1, 0, 5, 1, false});
+    container.addParticle({{98.5, 10, 0}, {0, 0, 0}, 1, 0, 5, 1, false});
+    Particle &particleLeft = container.getParticles()[0];
+    Particle &particleRight = container.getParticles()[1];
 
-    ForceComputations::computeLennardJonesPotentialCutoff(container, epsilon, sigma, 33);
+    ForceComputations::computeLennardJonesPotentialCutoff(container, 33, 1);
     std::array<double, 3> distanceVector = {1, 0, 0};
     double distance = 1;
     // don't consider particles which are further apart than the cutoff radius
@@ -344,9 +369,11 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellPeriodicBound
 
     double factor = (-24.0 * epsilon) / std::pow(distance, 2) * (std::pow(dist, 3) - 2 * std::pow(dist, 6));
 
-    std::array<double, 3> forceOnParticleLeft = ArrayUtils::elementWiseScalarOp(factor, distanceVector, std::multiplies<>());
+    std::array<double, 3> forceOnParticleLeft = ArrayUtils::elementWiseScalarOp(
+        factor, distanceVector, std::multiplies<>());
     EXPECT_TRUE(forceOnParticleLeft == particleLeft.getF());
-    std::array<double, 3> forceOnParticleRight = ArrayUtils::elementWiseScalarOp(-1, forceOnParticleLeft, std::multiplies<>());
+    std::array<double, 3> forceOnParticleRight = ArrayUtils::elementWiseScalarOp(
+        -1, forceOnParticleLeft, std::multiplies<>());
     EXPECT_TRUE(forceOnParticleRight == particleRight.getF());
 }
 
@@ -366,7 +393,6 @@ TEST_F(ParticleContainerLinkedCellTest, CellRemoveParticleTest) {
  * @brief checks that the particle flows out of the mesh when all boundaries are outflowing
  */
 TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryOutflowTest) {
-
     ParticleContainerLinkedCell container{{3, 3, 1}, 1, {{outflow, outflow}, {outflow, outflow}, {outflow, outflow}}};
 
     /*            outflow
@@ -378,7 +404,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryOutfl
      */
 
     // particle a should move out of the high x boundary (outflow) (cell 17)
-    Particle a{{1.0, 1.0, 0}, {1.0, 0, 0}, 1, 0};
+    Particle a{{1.0, 1.0, 0}, {1.0, 0, 0}, 1, 0, 5, 1, false};
 
     container.addParticle(a);
 
@@ -389,24 +415,22 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryOutfl
     // run simulation step
     int iterations = 2000;
     for (int i = 0; i < iterations; i++) {
-        PositionComputations::updateOldX(container);
-        PositionComputations::stoermerVerlet(container, deltaT);
+        PositionComputations::updateOldX(container, 1);
+        PositionComputations::stoermerVerlet(container, deltaT, 1);
         container.correctCellMembershipAllParticles();
 
-        ForceComputations::resetForces(container);
-        ForceComputations::computeLennardJonesPotential(container, epsilon,
-                                                        sigma);
-        ForceComputations::computeGhostParticleRepulsion(container, epsilon,
-                                                         sigma);
-        VelocityComputations::stoermerVerlet(container, deltaT);
+        ForceComputations::resetForces(container, 1);
+        ForceComputations::computeLennardJonesPotential(container);
+        ForceComputations::computeGhostParticleRepulsion(container);
+        VelocityComputations::stoermerVerlet(container, deltaT, 1);
     }
 
     // check
     bool particlePresent = false;
-    for(int i = 0; i < container.getMesh().size(); i++) {
-        Cell& c = container.getCell(i);
+    for (int i = 0; i < container.getMesh().size(); i++) {
+        Cell &c = container.getCell(i);
         auto particles = c.getParticlesIndices();
-        if(!particles.empty()) {
+        if (!particles.empty()) {
             particlePresent = true;
         }
     }
@@ -418,7 +442,6 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryOutfl
  * @brief checks that the particles stays in the mesh when all boundaries are reflecting
  */
 TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryReflectTest) {
-
     ParticleContainerLinkedCell container{{3, 3, 1}, 1, {{reflect, reflect}, {reflect, reflect}, {outflow, outflow}}};
 
     /*            reflect
@@ -430,7 +453,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryRefle
      */
 
     // particle b should reflect at the low y boundary (cell 12)
-    Particle b{{1.0, 1.0, 0}, {0, 1.0, 0}, 1, 1};
+    Particle b{{1.0, 1.0, 0}, {0, 1.0, 0}, 1, 1, 5, 1, false};
 
     container.addParticle(b);
 
@@ -442,16 +465,14 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryRefle
     // run simulation step
     int iterations = 100;
     for (int i = 0; i < iterations; i++) {
-        PositionComputations::updateOldX(container);
-        PositionComputations::stoermerVerlet(container, deltaT);
+        PositionComputations::updateOldX(container, 1);
+        PositionComputations::stoermerVerlet(container, deltaT, 1);
         container.correctCellMembershipAllParticles();
 
-        ForceComputations::resetForces(container);
-        ForceComputations::computeLennardJonesPotential(container, epsilon,
-                                                        sigma);
-        ForceComputations::computeGhostParticleRepulsion(container, epsilon,
-                                                         sigma);
-        VelocityComputations::stoermerVerlet(container, deltaT);
+        ForceComputations::resetForces(container, 1);
+        ForceComputations::computeLennardJonesPotential(container);
+        ForceComputations::computeGhostParticleRepulsion(container);
+        VelocityComputations::stoermerVerlet(container, deltaT, 1);
     }
 
     // check that particle is present
@@ -473,7 +494,6 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellBoundaryRefle
  * moves diagonally onto one corner
  */
 TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellDiagonalBoundaryTest) {
-
     ParticleContainerLinkedCell container{{3, 3, 1}, 1, {{reflect, reflect}, {reflect, reflect}, {outflow, outflow}}};
 
     /*            reflect
@@ -485,7 +505,7 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellDiagonalBound
      */
 
     // particle b should reflect at the corner (high x, high y) boundary
-    Particle b{{1.5, 1.5, 0}, {10.0, 10.0, 0}, 1, 1};
+    Particle b{{1.5, 1.5, 0}, {10.0, 10.0, 0}, 1, 1, 5, 1, false};
 
     container.addParticle(b);
 
@@ -497,16 +517,14 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellDiagonalBound
     // run simulation step
     int iterations = 2000;
     for (int i = 0; i < iterations; i++) {
-        PositionComputations::updateOldX(container);
-        PositionComputations::stoermerVerlet(container, deltaT);
+        PositionComputations::updateOldX(container, 1);
+        PositionComputations::stoermerVerlet(container, deltaT, 1);
         container.correctCellMembershipAllParticles();
 
-        ForceComputations::resetForces(container);
-        ForceComputations::computeLennardJonesPotential(container, epsilon,
-                                                        sigma);
-        ForceComputations::computeGhostParticleRepulsion(container, epsilon,
-                                                         sigma);
-        VelocityComputations::stoermerVerlet(container, deltaT);
+        ForceComputations::resetForces(container, 1);
+        ForceComputations::computeLennardJonesPotential(container);
+        ForceComputations::computeGhostParticleRepulsion(container);
+        VelocityComputations::stoermerVerlet(container, deltaT, 1);
     }
 
     // check that particle is present
@@ -521,4 +539,22 @@ TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellDiagonalBound
     }
     // particle should still be in the container
     EXPECT_TRUE(particlePresent);
+}
+
+/**
+ * @brief checks if the container is paritioned correctly for multiple threads
+ */
+TEST_F(ParticleContainerLinkedCellTest, ParticleContainerLinkedCellMeshPartitionTest) {
+    ParticleContainerLinkedCell container{{8, 3, 1}, 1, {{reflect, reflect}, {reflect, reflect}, {outflow, outflow}}};
+    container.computeMeshPartition(2);
+    auto matrixPair = container.getMeshPartition();
+    std::vector<size_t> p1 = {0, 1, 8, 9, 16, 17};
+    std::vector<size_t> p2 = {4, 5, 12, 13, 20, 21};
+    std::vector<size_t> b1 = {2, 3, 10, 11, 18, 19};
+    std::vector<size_t> b2 = {6, 7, 14, 15, 22, 23};
+    EXPECT_TRUE(matrixPair.first.size() == 2);
+    EXPECT_TRUE(matrixPair.first[0] == p1);
+    EXPECT_TRUE(matrixPair.first[1] == p2);
+    EXPECT_TRUE(matrixPair.second[0] == b1);
+    EXPECT_TRUE(matrixPair.second[1] == b2);
 }

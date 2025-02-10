@@ -1,22 +1,12 @@
-/*
- * VTKWriter.cpp
- *
- *  Created on: 01.03.2010
- *      Author: eckhardw
- */
-
 #include "CheckpointWriter.h"
 #include "particle/container/ParticleContainer.h"
 #include "spdlogConfig.h"
-
 #include <fstream>
 #include <iomanip>
-#include <iostream>
 #include <string>
 
 
 namespace outputWriter {
-
     CheckpointWriter::CheckpointWriter(std::string baseName) : baseName(baseName) {
         this->logger = spdlog::stdout_color_st("CheckpointWriter");
         SPDLOG_LOGGER_DEBUG(logger, "Initialized CheckpointWriter");
@@ -34,8 +24,8 @@ namespace outputWriter {
         }
         file << particles.size() << "\n";
 
-        for (auto it = particles.begin(); *it != *(particles.end()); it->operator++()) {
-            file << plotParticle(**it) << "\n";
+        for (Particle &particle: particles) {
+            file << plotParticle(particle) << "\n";
         }
 
         file.close();
@@ -62,7 +52,8 @@ namespace outputWriter {
 
         particleParams << p.getSigma();
 
+        particleParams << p.isFixed();
+
         return particleParams.str();
     }
-
 } // namespace outputWriter

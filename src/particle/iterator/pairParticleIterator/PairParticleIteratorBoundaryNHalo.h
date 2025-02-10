@@ -1,7 +1,6 @@
 #pragma once
 
 #include "particle/iterator/pairParticleIterator/PairParticleIterator.h"
-#include <algorithm>
 #include <cstddef>
 #include <memory>
 #include <particle/Particle.h>
@@ -85,16 +84,16 @@ private:
     /**
      * @brief a vector of the ghost particles of the current particle
      */
-    std::vector<std::unique_ptr<Particle>> ghostsVector;
+    std::vector<std::unique_ptr<Particle> > ghostsVector;
     /**
      * @brief an iterator pointing to the ghost particles for the currentParticle
      */
-    std::vector<std::unique_ptr<Particle>>::iterator currentGhost;
+    std::vector<std::unique_ptr<Particle> >::iterator currentGhost;
 
     /**
      * @brief an iterator pointing to the end of the ghost particles for the currentParticle
      */
-    std::vector<std::unique_ptr<Particle>>::iterator currentGhostEnd;
+    std::vector<std::unique_ptr<Particle> >::iterator currentGhostEnd;
     /**
      * @brief the number of cells per dimension
      */

@@ -7,12 +7,10 @@
  */
 class PositionComputationsTest : public testing::Test {
 protected:
-
     ParticleContainerDirectSum particles;
 
     // executed before each test
     void SetUp() override {
-
         Particle a{0};
         Particle b{0};
 
@@ -32,7 +30,7 @@ protected:
         a.setF({{9, 0, 7}});
         b.setF({{2, 10, 6}});
 
-        particles = ParticleContainerDirectSum({std::vector<Particle>{a,b}});
+        particles = ParticleContainerDirectSum({std::vector<Particle>{a, b}});
     }
 };
 
@@ -42,8 +40,7 @@ protected:
  * (modulo rounding/discretization errors)
  */
 TEST_F(PositionComputationsTest, StoermerVerletPositionCalcTest) {
-
-    PositionComputations::stoermerVerlet(particles, 0.1);
+    PositionComputations::stoermerVerlet(particles, 0.1, 1);
     // particle a
     EXPECT_NEAR(particles.getParticle(0).getX()[0], 3.7075, 0.00000001);
     EXPECT_NEAR(particles.getParticle(0).getX()[1], 5.1, 0.00000001);
@@ -53,4 +50,3 @@ TEST_F(PositionComputationsTest, StoermerVerletPositionCalcTest) {
     EXPECT_NEAR(particles.getParticle(1).getX()[1], 4.05, 0.00000001);
     EXPECT_NEAR(particles.getParticle(1).getX()[2], 0.53, 0.00000001);
 }
-

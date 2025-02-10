@@ -41,7 +41,10 @@ protected:
     }
 };
 
-// Test bottom left corner
+/**
+* @brief Test bottom left corner
+*/
+
 TEST_F(CheckpointWriterReaderTest, ParticleContainerIsTheSameAfterCheckpointing) {
 
     generateParticles();
@@ -68,7 +71,3 @@ TEST_F(CheckpointWriterReaderTest, ParticleContainerIsTheSameAfterCheckpointing)
     }
 
 }
-
-
-
-
