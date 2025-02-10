@@ -125,8 +125,8 @@ public:
      * @brief converts the continuous coordinates (which can be anywhere in the
      * mesh) to the index of the cell in the mesh vector where these coordinates
      * (e.g. of a vector) lie in
-     * @param coord
-     * @return
+     * @param coord continuous coordinates
+     * @return index
      */
     int continuousCoordsToIndex(std::array<double, 3> coord);
 
@@ -143,7 +143,8 @@ public:
     /**
      * @brief applies periodic boundaries to the specified coordinate array, so that if the coordinate goes out of
      * bounds on a periodic boundary, it is reinserted at the periodic boundary on the opposite side
-     * @param coord the coordinate array to apply the periodic boundaries to 
+     * @param coord the coordinate array to apply the periodic boundaries to
+     * @return updated coordinates
      */
     std::array<double, 3> applyPeriodicBoundaries(std::array<double, 3> coord);
 
@@ -216,7 +217,8 @@ public:
     std::vector<std::vector<size_t> > &getNeighborCellsMatrix();
 
     /**
-     * @brief returns mesh partition
+     * @brief Getter function for mesh partition
+     * @return returns a pair of matrices storing the partitioned mesh for race-free multithreading
      */
     std::pair<std::vector<std::vector<size_t> >, std::vector<std::vector<size_t> > > &getMeshPartition();
 
@@ -237,7 +239,7 @@ private:
     std::vector<std::vector<size_t> > neighborCellsMatrix;
 
     /**
-     * @brief a pair of matricies storing the partitioned mesh for race-free multithreading 
+     * @brief a pair of matrices storing the partitioned mesh for race-free multithreading
      */
     std::pair<std::vector<std::vector<size_t> >, std::vector<std::vector<size_t> > > meshPartition;
     /**
@@ -256,7 +258,7 @@ private:
     /**
      * @brief the boundary configuration for this linked cell container
      */
-    struct boundaryConfig boundaryConfig;
+    boundaryConfig boundaryConfig;
 
     /**
      * @brief corrects the index of a particle in the linked cell container mesh based on it's position

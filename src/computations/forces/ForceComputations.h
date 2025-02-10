@@ -130,7 +130,12 @@ private:
      * @param bondLength the bond length for force computation
      */
     static void computeHaromicPotentialHelper(std::pair<Particle &, Particle &> &pair, double k, double bondLength);
+
+    /*
+     * precomputed constants
+     */
     // constant for sqrt(2)
     inline static const double sqrt2 = sqrt(2.0);
+    // constant for function: computeLennardJonesPotentialRepulsiveHelper
     inline static const double lennardJonesFactor = std::pow(2.0, 1.0 / 6.0);
 };

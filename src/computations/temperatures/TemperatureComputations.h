@@ -82,7 +82,7 @@ private:
      * @param currentTemp current temperature of the whole system
      * @param targetTemp target temperature of the whole system
      * @param maxDeltaTemp the maximum allowed temperature change for one application of the thermostat
-     * @return
+     * @return velocity scaling factor beta
      */
-    static double calculateVelocityScalingVector(double currentTemp, double targetTemp, double maxDeltaTemp);
+    static double calculateVelocityScalingFactor(double currentTemp, double targetTemp, double maxDeltaTemp);
 };
